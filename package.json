@@ -1,0 +1,16 @@
+{
+   "name": "brosbook",
+   "version": "1.0.0",
+   "main": "index.js",
+   "repository": "https://github.com/shohelrrrana/brosbook.git",
+   "author": "Shohel Rana <shohelrrrana@gmail.com>",
+   "license": "MIT",
+   "scripts": {
+      "server:start": "cd server && npm run start",
+      "server:dev": "cd server && npm run dev",
+      "client:start": "cd client && npm run start",
+      "client:dev": "cd client && npm run dev",
+      "start": "(npm run server:start) & (npm run client:start)",
+      "dev": "(npm run server:dev) & (npm run client:dev)"
+   }
+}

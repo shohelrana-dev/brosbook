@@ -1,0 +1,9 @@
+/server/dist
+/client/.next
+**/node_modules
+.idea
+
+*.env.local
+*.env
+*yarn.lock
+*yarn-error.log
