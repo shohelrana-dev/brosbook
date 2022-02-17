@@ -4,13 +4,12 @@ import { io }                                                from "socket.io-cli
 
 import { checkAuthAction } from "@actions/authActions"
 import { selectAuth }      from "@slices/authSlice"
-import { LinearProgress }  from "@mui/material"
 
 export const socket = io( process.env.NEXT_PUBLIC_SERVER_BASE_URL! )
 
 export default function AuthCheck( { children }: PropsWithChildren<{}> ): ReactElement {
-    const { user, isAuthenticated, isCheckedAuth } = useSelector( selectAuth )
-    const dispatch                                 = useDispatch()
+    const { user, isAuthenticated } = useSelector( selectAuth )
+    const dispatch                  = useDispatch()
 
     useEffect( () => {
         dispatch( checkAuthAction() )
@@ -22,9 +21,5 @@ export default function AuthCheck( { children }: PropsWithChildren<{}> ): ReactE
         }
     }, [ isAuthenticated ] )
 
-    if ( isCheckedAuth ) {
-        return children as ReactElement
-    }
-    return <LinearProgress/>
-
+    return children as ReactElement
 }

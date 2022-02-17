@@ -1,37 +1,31 @@
-import React, { useEffect }         from 'react'
-import Link                         from "next/link"
-import { SRLWrapper }               from "simple-react-lightbox"
-import Image                        from "next/image"
-import { useRouter }                from "next/router"
-import LocationIcon                 from "@mui/icons-material/LocationOnOutlined"
-import CakeIcon                     from "@mui/icons-material/CakeOutlined"
-import ScheduleIcon                 from "@mui/icons-material/Schedule"
-import { Button }                   from "@mui/material"
-import MainLayout                   from "@components/layouts/MainLayout"
-import { fetchUserAction }          from "@actions/profileActions"
-import { useDispatch, useSelector } from "react-redux"
-import { RootState }                from "@store/index"
-import moment                       from "moment"
-import api                          from "@api/index";
-import { toast }                    from "react-toastify";
-import NotFound                     from "@pages/404";
+import React           from 'react'
+import Link            from "next/link"
+import { SRLWrapper }  from "simple-react-lightbox"
+import Image           from "next/image"
+import { useRouter }   from "next/router"
+import LocationIcon    from "@mui/icons-material/LocationOnOutlined"
+import CakeIcon        from "@mui/icons-material/CakeOutlined"
+import ScheduleIcon    from "@mui/icons-material/Schedule"
+import { Button }      from "@mui/material"
+import MainLayout      from "@components/layouts/MainLayout"
+import { useSelector } from "react-redux"
+import { RootState }   from "@store/index"
+import moment          from "moment"
+import api             from "@api/index"
+import { toast }       from "react-toastify"
+import { User }        from "@interfaces/user.interfaces"
 
 interface ProfileLayoutProps {
     children: React.ReactElement
+    user: User
 }
 
-export default function ProfileLayout( { children }: ProfileLayoutProps ) {
+export default function ProfileLayout( props: ProfileLayoutProps ) {
+    const { children, user } = props
+
     //hooks
     const router                                 = useRouter()
-    const dispatch                               = useDispatch()
     const { user: currentUser, isAuthenticated } = useSelector( ( state: RootState ) => state.auth )
-    const { user, isLoadingUser }                = useSelector( ( state: RootState ) => state.profile )
-
-    useEffect( () => {
-        if ( router.query.username ) {
-            dispatch( fetchUserAction( router.query.username as string ) )
-        }
-    }, [ router ] )
 
     async function handleFollowClick( user: any ) {
         try {
@@ -40,10 +34,6 @@ export default function ProfileLayout( { children }: ProfileLayoutProps ) {
         } catch ( err: any ) {
             toast.error( err.response?.data.message )
         }
-    }
-
-    if ( !isLoadingUser && !user ) {
-        return <NotFound/>
     }
 
     return (

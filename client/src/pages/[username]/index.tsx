@@ -1,39 +1,49 @@
-import React, { useEffect }         from "react"
-import { withAuth }                 from '@utils/withAuth'
-import ProfileLayout                from "@components/layouts/ProfileLayout"
-import { useDispatch, useSelector } from "react-redux"
-import { RootState }                from "@store/index"
-import { fetchPostsAction }         from "@actions/profileActions"
-import useInfiniteScroll            from "react-infinite-scroll-hook"
-import PostCard                     from "@components/home/PostCard"
-import { CircularProgress }         from "@mui/material"
-import { useRouter }                from "next/router"
-import { clearData }                from "@slices/profileSlice"
+import React, { useState }                               from "react"
+import useInfiniteScroll                                 from "react-infinite-scroll-hook"
+import { CircularProgress }                              from "@mui/material"
+import { useRouter }                                     from "next/router"
+import { GetServerSideProps, GetServerSidePropsContext } from "next"
 
-function Index() {
+import ProfileLayout    from "@components/layouts/ProfileLayout"
+import { withAuth }     from '@utils/withAuth'
+import PostCard         from "@components/home/PostCard"
+import { Post }         from "@interfaces/posts.interfaces"
+import { User }         from "@interfaces/user.interfaces"
+import { PaginateMeta } from "@interfaces/index.interfaces"
+import api              from "@api/index"
+
+interface ProfileProps {
+    posts: Post[],
+    user: User,
+    postsMeta: PaginateMeta
+}
+
+function Index( props: ProfileProps ) {
     //hooks
-    const { posts, isLoadingPosts, postsMeta } = useSelector( ( state: RootState ) => state.profile )
-    const dispatch                             = useDispatch()
-    const router                               = useRouter()
+    const [ isLoadingPosts, setIsLoadingPosts ] = useState<boolean>( false )
+    const [ posts, setPosts ]                   = useState<Post[]>( props.posts )
+    const [ postsMeta, setPostsMeta ]           = useState<PaginateMeta>( props.postsMeta )
+    const router                                = useRouter()
 
     const username = router.query.username as string
-
-    useEffect( () => {
-        dispatch( clearData() )
-        if ( username ) {
-            dispatch( fetchPostsAction( username, 1 ) )
-        }
-    }, [ dispatch, username ] )
-
 
     const [ scrollBottomRef ] = useInfiniteScroll( {
         loading: isLoadingPosts,
         hasNextPage: !!postsMeta?.nextPage,
-        onLoadMore: () => dispatch( fetchPostsAction( username, postsMeta?.nextPage ) ),
+        onLoadMore: async () => {
+            setIsLoadingPosts( true )
+            try {
+                const { data } = await api.profile.fetchPosts( username, postsMeta.nextPage )
+                setPosts( [ ...posts, ...data.posts ] )
+                setPostsMeta( data.meta )
+            } finally {
+                setIsLoadingPosts( false )
+            }
+        },
     } )
 
     return (
-        <ProfileLayout>
+        <ProfileLayout user={ props.user }>
             <>
                 { posts.length > 0 && posts.map( post => (
                     <PostCard post={ post } key={ post.id }/>
@@ -49,6 +59,32 @@ function Index() {
             </>
         </ProfileLayout>
     )
+}
+
+export const getServerSideProps: GetServerSideProps = async ( context: GetServerSidePropsContext ) => {
+    const username = context.params?.username as string
+
+    try {
+        const { data: postsData } = await api.profile.fetchPosts( username, 1 )
+        const { data: userData }  = await api.profile.fetchUser( username )
+        return {
+            props: {
+                user: userData.user || {},
+                posts: postsData.posts || [],
+                postsMeta: postsData?.meta || {}
+            }
+        }
+    } catch ( e ) {
+
+    }
+
+    return {
+        props: {
+            user: {},
+            posts: [],
+            postsMeta: {}
+        }
+    }
 }
 
 export default withAuth( Index )

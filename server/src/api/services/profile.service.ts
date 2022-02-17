@@ -74,12 +74,13 @@ export default class ProfileService {
 
             //check and set current user like
             for ( let post of posts ) {
-                const like              = await LikeEntity.findOne( { username: req.user.username, postId: post.id } )
+                const like              = await LikeEntity.findOne( { username, postId: post.id } )
                 post.hasCurrentUserLike = like ? true : false
             }
 
             return { posts, meta: paginateMeta( count, page, limit ) }
         } catch ( e ) {
+            console.log(e)
             throw new HttpException( "posts could not be fetched", HTTP_CONFLICT )
         }
     }

@@ -70,7 +70,9 @@ export default class PostService {
         try {
             await post.save()
         } catch ( err ) {
-            throw new HttpException( "Post couldn't be saved", HTTP_CONFLICT )
+            err.message = "Post couldn't be saved"
+            err.status  = HTTP_CONFLICT
+            throw err
         }
 
     }
