@@ -76,11 +76,11 @@ class AuthService {
     }
 
     public async google( req: Request ): Promise<TokenData> {
-        const { tokenId } = req.body
+        const { token } = req.body
 
         const authClient          = new OAuth2Client( process.env.GOOGLE_CLIENT_ID )
         const ticket: LoginTicket = await authClient.verifyIdToken( {
-            idToken: tokenId,
+            idToken: token,
             audience: process.env.GOOGLE_CLIENT_ID
         } )
 
@@ -188,7 +188,7 @@ class AuthService {
             photo: user.photo
         }
         const secretKey: string = process.env.JWT_SECRET!
-        const expiresIn: number = Number( process.env.JWT_EXPIRY! )
+        const expiresIn: number = Number( process.env.JWT_EXPIRY! ) || 3600
 
         let access_token = jwt.sign( dataStoredInToken, secretKey, { expiresIn } )
 

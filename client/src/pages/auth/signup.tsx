@@ -1,7 +1,7 @@
 import React, { ChangeEvent, FormEvent, Fragment, useEffect, useState } from 'react'
 import Head                                                             from 'next/head'
 import Link                                                             from 'next/link'
-import { Alert, Divider, Fade, LinearProgress }                         from '@mui/material'
+import { Alert, Divider, LinearProgress }                         from '@mui/material'
 import { useDispatch, useSelector }                                     from 'react-redux'
 import zxcvbn                                                           from 'zxcvbn-typescript'
 

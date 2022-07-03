@@ -215,7 +215,7 @@ class AuthController {
             httpOnly: true,
             secure: true,
             sameSite: 'strict',
-            maxAge: Number( process.env.JWT_EXPIRY ),
+            maxAge: Number( process.env.JWT_EXPIRY ) || 3600,
             path: '/'
         } )
     }

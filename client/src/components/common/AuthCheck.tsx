@@ -15,11 +15,11 @@ export default function AuthCheck( { children }: PropsWithChildren<{}> ): ReactE
         dispatch( checkAuthAction() )
     }, [ dispatch ] )
 
-    useEffect( () => {
+    /*useEffect( () => {
         if ( isAuthenticated ) {
             socket.emit( 'user_connected', user.id )
         }
-    }, [ isAuthenticated ] )
+    }, [ isAuthenticated ] )*/
 
     return children as ReactElement
 }

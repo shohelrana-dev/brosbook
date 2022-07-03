@@ -26,7 +26,7 @@ const app: Application = express()
 //create server
 const server = http.createServer( app )
 //socket server init
-socketInit( server )
+//socketInit( server )
 
 //initial configs
 app.use( morgan( 'dev' ) )
