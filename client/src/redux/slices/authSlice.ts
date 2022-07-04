@@ -1,7 +1,24 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { AuthState }                  from "@interfaces/auth.interfaces"
+import { LoginFormData }   from "@interfaces/auth.interfaces"
 import { User }                       from "@interfaces/user.interfaces"
-import { RootState }                  from "@store/index";
+import { RootState }                  from "@store/index"
+import { createAsyncThunk }           from "@reduxjs/toolkit"
+import api                            from "@api/index"
+
+export interface AuthState {
+    isCheckedAuth: boolean
+    isLoading: boolean
+    errors: {
+        firstName?: { msg: string }
+        lastName?: { msg: string }
+        email?: { msg: string }
+        username?: { msg: string }
+        password?: { msg: string }
+        confirmPassword?: { msg: string }
+    }
+    isAuthenticated: boolean
+    user: User
+}
 
 const initialState: AuthState = {
     isCheckedAuth: false,
@@ -10,6 +27,15 @@ const initialState: AuthState = {
     isAuthenticated: false,
     user: <User>{}
 }
+
+export const login = createAsyncThunk( 'auth/login', async( formData: LoginFormData, thunkAPI ) => {
+    try {
+        const { data } = await api.auth.login( formData )
+        return data.user
+    } catch ( err ) {
+        return thunkAPI.rejectWithValue( err )
+    }
+} )
 
 export const authSlice = createSlice( {
     name: 'auth',
@@ -29,6 +55,20 @@ export const authSlice = createSlice( {
             state.isCheckedAuth   = true
         }
     },
+    extraReducers: ( builder ) => {
+        builder.addCase( login.pending, ( state ) => {
+            state.isLoading = true
+        } )
+        builder.addCase( login.fulfilled, ( state, action ) => {
+            state.isLoading       = false
+            state.isAuthenticated = true
+            state.user            = action.payload
+        } )
+        builder.addCase( login.rejected, ( state, action ) => {
+            state.isLoading = false
+            state.errors    = action?.payload?.response?.data?.errors || {}
+        } )
+    }
 } )
 
 export const selectAuth = ( state: RootState ) => state.auth

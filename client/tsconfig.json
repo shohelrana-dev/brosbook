@@ -25,6 +25,7 @@
          "@store/*": ["redux/store/*"],
          "@styles/*": ["styles/*"],
          "@interfaces/*": ["interfaces/*"],
+         "@hooks/*": ["hooks/*"],
          "@utils/*": ["utils/*"]
       }
    },

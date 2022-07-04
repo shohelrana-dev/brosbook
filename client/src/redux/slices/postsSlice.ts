@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { Post, PostsState }           from "@interfaces/posts.interfaces"
 import { PaginateMeta }               from "@interfaces/index.interfaces"
+import { RootState }                  from "@store/index";
 
 const initialState: PostsState = {
     isLoadingPosts: false,
@@ -27,5 +28,7 @@ export const postsSlice = createSlice( {
         }
     }
 } )
+
+export const selectPosts = ( state: RootState ) => state.posts
 
 export const { setLoading, setPostsData } = postsSlice.actions

@@ -6,14 +6,6 @@ import {ChangePasswordFormData} from "@interfaces/user.interfaces"
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_SERVER_API_URL!
 axios.defaults.withCredentials = true
 axios.defaults.headers.common['Content-Type'] = 'application/json'
-/*axios.interceptors.response.use( res => res, err => {
-    if ( err.response.status === 401 && !location.pathname.startsWith( '/auth' ) ) {
-        setTimeout( () => {
-            location.pathname = '/auth/login'
-        }, 500 )
-    }
-    return Promise.reject( err )
-} )*/
 
 //All api endpoints
 const api = {

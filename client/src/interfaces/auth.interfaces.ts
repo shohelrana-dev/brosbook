@@ -18,18 +18,3 @@ export interface ResetPassFormData {
     confirmPassword: string
     token: string
 }
-
-export interface AuthState {
-    isCheckedAuth: boolean
-    isLoading: boolean
-    errors: {
-        firstName?: { msg: string }
-        lastName?: { msg: string }
-        email?: { msg: string }
-        username?: { msg: string }
-        password?: { msg: string }
-        confirmPassword?: { msg: string }
-    }
-    isAuthenticated: boolean
-    user: User
-}

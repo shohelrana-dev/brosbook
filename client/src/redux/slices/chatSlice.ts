@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction }                 from "@reduxjs/toolkit"
 import { ChatState, Conversation, Message, Reaction } from "@interfaces/chat.interfaces"
+import { RootState }                                  from "@store/index";
 
 const initialState: ChatState = {
     isLoadingConversations: false,
@@ -67,6 +68,8 @@ export const chatSlice = createSlice( {
         }
     }
 } )
+
+export const selectChat = ( state: RootState ) => state.chat
 
 export const {
                  setLoadingMessages,

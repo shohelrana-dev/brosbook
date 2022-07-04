@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { SettingsState, User }        from "@interfaces/user.interfaces"
+import { RootState }                  from "@store/index";
 
 const initialState: SettingsState = {
     isLoading: false,
@@ -21,5 +22,7 @@ export const settingsSlice = createSlice( {
 
     }
 } )
+
+export const selectSettings = ( state: RootState ) => state.settings
 
 export const { setLoading, setErrors } = settingsSlice.actions

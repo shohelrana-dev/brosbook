@@ -4,7 +4,7 @@ import {createTheme, ThemeProvider} from '@mui/material/styles'
 import {ToastContainer} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import SimpleReactLightbox from 'simple-react-lightbox'
-import {GoogleOAuthProvider} from '@react-oauth/google';
+import {GoogleOAuthProvider} from '@react-oauth/google'
 
 import '@styles/app.css'
 import {store} from '@store/index'
