@@ -1,14 +1,15 @@
+
 import { useRouter }              from 'next/router'
 import { ElementType, useEffect } from 'react'
 import { useSelector }            from 'react-redux'
 
 import { GetServerSideProps, GetServerSidePropsContext } from "next"
-import { selectAuth }                                    from "@slices/authSlice"
+import { selectAuthState }                                    from "@slices/authSlice"
 
 export function withGuest( Component: ElementType ) {
     return function Guest( props: unknown ) {
         const router              = useRouter()
-        const { isAuthenticated } = useSelector( selectAuth )
+        const { isAuthenticated } = useSelector( selectAuthState )
 
         useEffect( () => {
             if ( isAuthenticated ) router.push( '/' )

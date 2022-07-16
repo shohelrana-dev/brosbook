@@ -2,9 +2,9 @@ import React, { useState } from 'react'
 import { useRouter }       from "next/router"
 
 import { User }                         from "@interfaces/user.interfaces"
-import Avatar                           from "@components/common/Avatar"
-import api                              from "@api/index"
-import { Conversation }                 from "@interfaces/chat.interfaces"
+import Avatar           from "@components/common/Avatar"
+import api              from "../../../api/index"
+import { Conversation } from "@interfaces/chat.interfaces"
 
 
 interface SingleSearchUserProps {

@@ -8,7 +8,7 @@ import MessageBox                       from "@components/messages/MessageBox"
 import Information                      from "@components/messages/Information"
 import { withAuth }                     from "@utils/withAuth"
 import { setCurrentConversationAction } from "@actions/chatActions"
-import api                              from "@api/index"
+import api                              from "../../api/index"
 import NavBar                           from "@components/common/NavBar";
 
 function Identifier() {

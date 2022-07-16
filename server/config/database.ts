@@ -28,9 +28,9 @@ const databaseConfig: ConnectionOptions = {
         path.join( __dirname, '/../api/database/subscribers/**/*.{ts,js}' )
     ],
     cli: {
-        entitiesDir: 'src/api/database/entities',
-        migrationsDir: 'src/api/database/migrations',
-        subscribersDir: 'src/api/database/subscribers'
+        entitiesDir: 'server/api/database/entities',
+        migrationsDir: 'server/api/database/migrations',
+        subscribersDir: 'server/api/database/subscribers'
     }
 }
 

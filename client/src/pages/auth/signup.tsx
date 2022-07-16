@@ -1,52 +1,62 @@
 import React, { ChangeEvent, FormEvent, Fragment, useEffect, useState } from 'react'
 import Head                                                             from 'next/head'
 import Link                                                             from 'next/link'
-import { Alert, Divider, LinearProgress }                         from '@mui/material'
-import { useDispatch, useSelector }                                     from 'react-redux'
+import { Alert, Divider, LinearProgress }                               from '@mui/material'
 import zxcvbn                                                           from 'zxcvbn-typescript'
+import { toast }                                                        from "react-toastify"
+import { useRouter }                                                    from "next/router"
 
-import InputGroup                           from '@components/common/InputGroup'
-import { removeErrorsAction, signupAction } from '@actions/authActions'
-import { withGuest }                        from '@utils/withAuth'
-import GoogleLoginButton                    from "@components/common/GoogleLoginButton"
-import PrimaryButton                        from "@components/common/PrimaryButton"
-import { SignupFormData }                   from "@interfaces/auth.interfaces"
-import { RootState }                        from "@store/index"
+import InputGroup                                           from '@components/common/InputGroup'
+import GoogleLoginButton                                    from "@components/common/GoogleLoginButton"
+import PrimaryButton                                        from "@components/common/PrimaryButton"
+import { clearInputErrors, reset, selectAuthState, signup } from "@slices/authSlice"
+import { useAppDispatch, useAppSelector }                   from "@store/index"
+import { object }                                           from "prop-types";
 
-function Signup() {
+function Signup(){
     //hooks
-    const dispatch              = useDispatch()
-    const { errors, isLoading } = useSelector( ( state: RootState ) => state.auth )
+    const router                                                                   = useRouter()
+    const dispatch                                                                 = useAppDispatch()
+    const { isLoading, inputErrors, isSuccess, isError, isAuthenticated, message } = useAppSelector( selectAuthState )
 
-    const [ passwordWarning, setPasswordWarning ] = useState( '' )
+    const [firstName, setFirstName] = useState<string>( '' )
+    const [lastName, setLastName]   = useState<string>( '' )
+    const [email, setEmail]         = useState<string>( '' )
+    const [username, setUsername]   = useState<string>( '' )
+    const [password, setPassword]   = useState<string>( '' )
+
+    const [passwordWarning, setPasswordWarning] = useState( '' )
 
     useEffect( () => {
-        if ( Object.keys( errors ).length > 0 ) {
-            dispatch( removeErrorsAction() )
+        if( Object.keys( inputErrors ).length > 0 ){
+            dispatch( clearInputErrors() )
         }
-    }, [ dispatch ] )
+    }, [dispatch] )
+
+    useEffect( () => {
+        if( isSuccess ){
+            toast.success( message )
+        } else if( isError ){
+            toast.error( message )
+        }
+
+        if( isSuccess && isAuthenticated ){
+            router.push( '/' )
+        }
+
+        dispatch( reset() )
+    }, [isSuccess, isError, isAuthenticated, router] )
 
     //handle form submit
-    async function submitSignupForm( event: FormEvent<HTMLFormElement> ) {
+    async function onSubmit( event: FormEvent<HTMLFormElement> ){
         event.preventDefault()
 
-        const formData: SignupFormData = {
-            firstName: event.currentTarget.firstName.value,
-            lastName: event.currentTarget.lastName.value,
-            email: event.currentTarget.email.value,
-            username: event.currentTarget.username.value,
-            password: event.currentTarget.password.value
-        }
-
-        dispatch( signupAction( formData ) )
-
+        dispatch( signup( { firstName, lastName, email, username, password } ) )
     }
 
-    function passwordChangeHandle( event: ChangeEvent<HTMLInputElement> ) {
-        setPasswordWarning( zxcvbn( event.currentTarget.value, [] )?.feedback?.warning )
+    function checkPasswordWarning(){
+        setPasswordWarning( zxcvbn( password, [] )?.feedback?.warning )
     }
-
-    console.log( passwordWarning )
 
     return (
         <Fragment>
@@ -67,15 +77,46 @@ function Signup() {
                             OR
                         </Divider>
 
-                        <form method="post" onSubmit={ submitSignupForm }>
-                            <InputGroup label="First Name" name="firstName" className="mb-2"
-                                        error={ errors.firstName }/>
-                            <InputGroup label="Last Name" name="lastName" className="mb-2" error={ errors.lastName }/>
-                            <InputGroup label="Email" name="email" className="mb-2" error={ errors.email }/>
-                            <InputGroup label="Username" name="username" className="mb-2" error={ errors.username }/>
-                            <InputGroup onChange={ passwordChangeHandle } label="Password" name="password"
-                                        type="password" className="mb-2"
-                                        error={ errors.password }/>
+                        <form method="post" onSubmit={ onSubmit }>
+                            <InputGroup
+                                label="First Name"
+                                name="firstName"
+                                className="mb-2"
+                                error={ inputErrors.firstName }
+                                onChange={ ( e => setFirstName( e.target.value ) ) }
+                            />
+                            <InputGroup
+                                label="Last Name"
+                                name="lastName"
+                                className="mb-2"
+                                error={ inputErrors.lastName }
+                                onChange={ ( e => setLastName( e.target.value ) ) }
+                            />
+                            <InputGroup
+                                label="Email"
+                                name="email"
+                                className="mb-2"
+                                error={ inputErrors.email }
+                                onChange={ ( e => setEmail( e.target.value ) ) }
+                            />
+                            <InputGroup
+                                label="Username"
+                                name="username"
+                                className="mb-2"
+                                error={ inputErrors.username }
+                                onChange={ ( e => setUsername( e.target.value ) ) }
+                            />
+                            <InputGroup
+                                label="Password"
+                                name="password"
+                                type="password"
+                                className="mb-2"
+                                error={ inputErrors.password }
+                                onChange={ ( e ) => {
+                                    setPassword( e.target.value )
+                                    checkPasswordWarning()
+                                } }
+                            />
                             { passwordWarning && (
                                 <Alert className="mb-2" variant="outlined"
                                        severity="warning">{ passwordWarning }</Alert>
@@ -108,4 +149,4 @@ function Signup() {
     )
 }
 
-export default withGuest( Signup )
+export default Signup

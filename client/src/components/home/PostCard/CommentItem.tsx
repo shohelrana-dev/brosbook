@@ -7,20 +7,20 @@ import OutlinedFavoriteIcon from "@mui/icons-material/FavoriteBorderOutlined"
 
 import Avatar      from "@components/common/Avatar"
 import { Comment } from "@interfaces/posts.interfaces"
-import api         from "@api/index"
+import commentsApi from "@api/comments";
 
 interface CommentItemState {
     comment: Comment
 }
 
-function CommentItem( { comment }: CommentItemState ) {
+function CommentItem( { comment }: CommentItemState ){
     //hooks
-    const [ hasCurrentUserLike, setHasCurrentUserLike ] = useState<boolean>( comment.hasCurrentUserLike )
-    const [ likeCount, setLikeCount ]                   = useState<number>( comment.likeCount || 0 )
+    const [hasCurrentUserLike, setHasCurrentUserLike] = useState<boolean>( comment.hasCurrentUserLike )
+    const [likeCount, setLikeCount]                   = useState<number>( comment.likeCount || 0 )
 
-    async function saveCommentLike() {
+    async function saveCommentLike(){
         try {
-            await api.comments.saveCommentLike( comment.postId, comment.id )
+            await commentsApi.saveCommentLike( comment.postId, comment.id )
             setHasCurrentUserLike( true )
             setLikeCount( likeCount + 1 )
         } catch ( err: any ) {
@@ -30,9 +30,9 @@ function CommentItem( { comment }: CommentItemState ) {
         }
     }
 
-    async function removeCommentLike() {
+    async function removeCommentLike(){
         try {
-            await api.comments.removeCommentLike( comment.postId, comment.id )
+            await commentsApi.removeCommentLike( comment.postId, comment.id )
             setHasCurrentUserLike( false )
             setLikeCount( likeCount - 1 )
         } catch ( err: any ) {
@@ -73,7 +73,7 @@ function CommentItem( { comment }: CommentItemState ) {
                             <FavoriteIcon fontSize="small"/>
                         </button>
                     </Zoom>
-                    <Zoom in={ !hasCurrentUserLike }>
+                    <Zoom in={ ! hasCurrentUserLike }>
                         <button onClick={ saveCommentLike }
                                 className="mr-1 hover:bg-pink-100 rounded-full p-2 duration-300">
                             <OutlinedFavoriteIcon fontSize="small"/>

@@ -2,33 +2,40 @@ import React, { FormEvent, Fragment, useEffect } from 'react'
 import Head                                      from "next/head"
 import { LinearProgress }                        from "@mui/material"
 import Link                                      from "next/link"
-import { useDispatch, useSelector }              from "react-redux"
 import { Lock }                                  from '@mui/icons-material'
+import { toast }                                 from "react-toastify"
+import { useRouter }                             from "next/router"
 
-import InputGroup                                   from "@components/common/InputGroup"
-import { removeErrorsAction, forgotPasswordAction } from "@actions/authActions"
-import { withGuest }                                from "@utils/withAuth"
-import PrimaryButton                                from "@components/common/PrimaryButton"
-import { RootState }                                from "@store/index"
+import InputGroup                                            from "@components/common/InputGroup"
+import PrimaryButton                                         from "@components/common/PrimaryButton"
+import { clearInputErrors, forgotPassword, selectAuthState } from "@slices/authSlice"
+import { useAppDispatch, useAppSelector }                    from "@store/index"
 
-function ForgotPassword() {
+function ForgotPassword(){
     //hooks
-    const dispatch              = useDispatch()
-    const { isLoading, errors } = useSelector( ( state: RootState ) => state.auth )
+    const router                     = useRouter()
+    const dispatch                   = useAppDispatch()
+    const { isLoading, inputErrors } = useAppSelector( selectAuthState )
 
     useEffect( () => {
-        if ( Object.keys( errors ).length > 0 ) {
-            dispatch( removeErrorsAction() )
+        if( Object.keys( inputErrors ).length > 0 ){
+            dispatch( clearInputErrors() )
         }
-    }, [ dispatch ] )
+    }, [dispatch] )
 
     //handle form submit
-    async function submitForm( event: FormEvent<HTMLFormElement> ) {
+    async function submitForm( event: FormEvent<HTMLFormElement> ){
         event.preventDefault()
 
         const email: string = event.currentTarget.email.value
 
-        dispatch( forgotPasswordAction( email ) )
+        try {
+            const data = await dispatch( forgotPassword( email ) ).unwrap()
+            toast.success( data.message )
+            await router.push( '/auth/login' )
+        } catch ( err: any ) {
+            toast.error( err?.message || 'Something went wrong' )
+        }
     }
 
     return (
@@ -51,7 +58,7 @@ function ForgotPassword() {
                         </small>
 
                         <form method="post" onSubmit={ submitForm }>
-                            <InputGroup label="Email" name="email" className="mb-3" error={ errors.email }/>
+                            <InputGroup label="Email" name="email" className="mb-3" error={ inputErrors.email }/>
                             <PrimaryButton type="submit" buttonTitle="Send Login Link" isLoading={ isLoading }/>
                         </form>
                     </div>
@@ -73,4 +80,4 @@ function ForgotPassword() {
     )
 }
 
-export default withGuest( ForgotPassword )
+export default ForgotPassword

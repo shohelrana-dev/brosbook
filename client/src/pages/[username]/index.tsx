@@ -5,12 +5,11 @@ import { useRouter }                                     from "next/router"
 import { GetServerSideProps, GetServerSidePropsContext } from "next"
 
 import ProfileLayout    from "@components/layouts/ProfileLayout"
-import { withAuth }     from '@utils/withAuth'
 import PostCard         from "@components/home/PostCard"
 import { Post }         from "@interfaces/posts.interfaces"
 import { User }         from "@interfaces/user.interfaces"
 import { PaginateMeta } from "@interfaces/index.interfaces"
-import api              from "@api/index"
+import profileApi       from "@api/profile"
 
 interface ProfileProps {
     posts: Post[],
@@ -18,23 +17,23 @@ interface ProfileProps {
     postsMeta: PaginateMeta
 }
 
-function Index( props: ProfileProps ) {
+function Index( props: ProfileProps ){
     //hooks
-    const [ isLoadingPosts, setIsLoadingPosts ] = useState<boolean>( false )
-    const [ posts, setPosts ]                   = useState<Post[]>( props.posts )
-    const [ postsMeta, setPostsMeta ]           = useState<PaginateMeta>( props.postsMeta )
-    const router                                = useRouter()
+    const [isLoadingPosts, setIsLoadingPosts] = useState<boolean>( false )
+    const [posts, setPosts]                   = useState<Post[]>( props.posts )
+    const [postsMeta, setPostsMeta]           = useState<PaginateMeta>( props.postsMeta )
+    const router                              = useRouter()
 
     const username = router.query.username as string
 
-    const [ scrollBottomRef ] = useInfiniteScroll( {
+    const [scrollBottomRef] = useInfiniteScroll( {
         loading: isLoadingPosts,
-        hasNextPage: !!postsMeta?.nextPage,
-        onLoadMore: async () => {
+        hasNextPage: !! postsMeta?.nextPage,
+        onLoadMore: async() => {
             setIsLoadingPosts( true )
             try {
-                const { data } = await api.profile.fetchPosts( username, postsMeta.nextPage )
-                setPosts( [ ...posts, ...data.posts ] )
+                const { data } = await profileApi.fetchPosts( username, postsMeta.nextPage )
+                setPosts( [...posts, ...data.posts] )
                 setPostsMeta( data.meta )
             } finally {
                 setIsLoadingPosts( false )
@@ -49,7 +48,7 @@ function Index( props: ProfileProps ) {
                     <PostCard post={ post } key={ post.id }/>
                 ) ) }
 
-                { !!postsMeta?.nextPage ? (
+                { !! postsMeta?.nextPage ? (
                     <div className="flex justify-center min-h-[300px] items-center" ref={ scrollBottomRef }>
                         <CircularProgress/>
                     </div>
@@ -61,12 +60,12 @@ function Index( props: ProfileProps ) {
     )
 }
 
-export const getServerSideProps: GetServerSideProps = async ( context: GetServerSidePropsContext ) => {
+export const getServerSideProps: GetServerSideProps = async( context: GetServerSidePropsContext ) => {
     const username = context.params?.username as string
 
     try {
-        const { data: postsData } = await api.profile.fetchPosts( username, 1 )
-        const { data: userData }  = await api.profile.fetchUser( username )
+        const { data: postsData } = await profileApi.fetchPosts( username, 1 )
+        const { data: userData }  = await profileApi.fetchUser( username )
         return {
             props: {
                 user: userData.user || {},
@@ -87,4 +86,4 @@ export const getServerSideProps: GetServerSideProps = async ( context: GetServer
     }
 }
 
-export default withAuth( Index )
+export default Index

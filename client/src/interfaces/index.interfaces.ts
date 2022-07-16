@@ -22,3 +22,12 @@ export interface ProfileState {
     followersMeta: PaginateMeta
     followingMeta: PaginateMeta
 }
+
+export interface InputErrors {
+    firstName?: { msg: string }
+    lastName?: { msg: string }
+    email?: { msg: string }
+    username?: { msg: string }
+    password?: { msg: string }
+    confirmPassword?: { msg: string }
+}

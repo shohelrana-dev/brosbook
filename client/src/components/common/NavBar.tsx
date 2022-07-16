@@ -1,30 +1,30 @@
-import React             from 'react'
-import Link              from 'next/link'
-import AppBar            from '@mui/material/AppBar'
-import Box               from '@mui/material/Box'
-import Toolbar           from '@mui/material/Toolbar'
-import IconButton        from '@mui/material/IconButton'
-import Typography        from '@mui/material/Typography'
-import Badge             from '@mui/material/Badge'
-import MenuItem          from '@mui/material/MenuItem'
-import Menu              from '@mui/material/Menu'
-import AccountCircle     from '@mui/icons-material/AccountCircle'
-import MailIcon          from '@mui/icons-material/Mail'
-import NotificationsIcon from '@mui/icons-material/Notifications'
-import MoreIcon          from '@mui/icons-material/MoreVert'
-import { Container }     from "@mui/material"
-import PermIdentityIcon  from '@mui/icons-material/PermIdentity'
-import LogoutIcon        from '@mui/icons-material/Logout'
-import { useSelector }   from "react-redux"
-import SettingsIcon      from '@mui/icons-material/Settings'
-import { selectAuth }    from "@slices/authSlice"
+import React               from 'react'
+import Link                from 'next/link'
+import AppBar              from '@mui/material/AppBar'
+import Box                 from '@mui/material/Box'
+import Toolbar             from '@mui/material/Toolbar'
+import IconButton          from '@mui/material/IconButton'
+import Typography          from '@mui/material/Typography'
+import Badge               from '@mui/material/Badge'
+import MenuItem            from '@mui/material/MenuItem'
+import Menu                from '@mui/material/Menu'
+import AccountCircle       from '@mui/icons-material/AccountCircle'
+import MailIcon            from '@mui/icons-material/Mail'
+import NotificationsIcon   from '@mui/icons-material/Notifications'
+import MoreIcon            from '@mui/icons-material/MoreVert'
+import { Container }       from "@mui/material"
+import PermIdentityIcon    from '@mui/icons-material/PermIdentity'
+import LogoutIcon          from '@mui/icons-material/Logout'
+import SettingsIcon        from '@mui/icons-material/Settings'
+import { selectAuthState } from "@slices/authSlice"
+import { useAppSelector }  from "@store/index"
 
-function NavBar() {
-    const [ anchorEl, setAnchorEl ]                     = React.useState<null | HTMLElement>( null )
-    const [ mobileMoreAnchorEl, setMobileMoreAnchorEl ] = React.useState<null | HTMLElement>( null )
-    const { user, isAuthenticated }                     = useSelector( selectAuth )
+function NavBar(){
+    const [anchorEl, setAnchorEl]                     = React.useState<null | HTMLElement>( null )
+    const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState<null | HTMLElement>( null )
+    const { user, isAuthenticated }                   = useAppSelector( selectAuthState )
 
-    if ( !isAuthenticated ) return null
+    if( ! isAuthenticated ) return null
 
     const isMenuOpen       = Boolean( anchorEl )
     const isMobileMenuOpen = Boolean( mobileMoreAnchorEl )

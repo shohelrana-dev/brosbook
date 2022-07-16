@@ -1,7 +1,7 @@
 import { Dispatch } from "redux"
 
-import api                          from "@api/index"
-import { toast }                    from "react-toastify"
+import api       from "../../api/index"
+import { toast } from "react-toastify"
 import { setLoading, setPostsData } from "@slices/postsSlice"
 
 export const createPost = async ( content: string, image: Blob ) => {

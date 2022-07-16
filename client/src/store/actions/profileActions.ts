@@ -1,5 +1,5 @@
 import { Dispatch } from "redux"
-import api          from "@api/index"
+import api          from "../../api/index"
 import {
     startLoadingPosts,
     startLoadingUser,

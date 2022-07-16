@@ -6,37 +6,37 @@ import { CircularProgress }                      from "@mui/material"
 import Avatar           from "@components/common/Avatar"
 import CommentsSkeleton from "@components/home/Skeletons/CommentsSkeleton"
 import CommentItem      from "@components/home/PostCard/CommentItem"
-import api              from "@api/index"
 import { Comment }      from "@interfaces/posts.interfaces"
 import { RootState }    from "@store/index"
 import { PaginateMeta } from "@interfaces/index.interfaces"
+import commentsApi      from "@api/comments"
 
 interface CommentListPost {
     postId: number
     clickComment: boolean
 }
 
-function CommentList( { postId, clickComment }: CommentListPost ) {
+function CommentList( { postId, clickComment }: CommentListPost ){
     //hooks
-    const currentUser                               = useSelector( ( state: RootState ) => state.auth.user )
-    const [ comments, setComments ]                 = useState<Comment[]>( [] )
-    const [ commentsMeta, setCommentsMeta ]         = useState<PaginateMeta>( {} as PaginateMeta )
-    const [ isLoadingComments, setLoadingComments ] = useState<boolean>( false )
-    const [ isShowComment, setShowComment ]         = useState<boolean>( false )
+    const currentUser                             = useSelector( ( state: RootState ) => state.auth.user )
+    const [comments, setComments]                 = useState<Comment[]>( [] )
+    const [commentsMeta, setCommentsMeta]         = useState<PaginateMeta>( {} as PaginateMeta )
+    const [isLoadingComments, setLoadingComments] = useState<boolean>( false )
+    const [isShowComment, setShowComment]         = useState<boolean>( false )
 
     // @ts-ignore
     useEffect( () => {
-        if ( !isShowComment && clickComment ) {
+        if( ! isShowComment && clickComment ){
             fetchComments( 1 )
         }
-    }, [ isShowComment, clickComment ] )
+    }, [isShowComment, clickComment] )
 
-    async function fetchComments( page: number, postsParPage?: number ) {
+    async function fetchComments( page: number, postsParPage?: number ){
         setLoadingComments( true )
 
         try {
-            const { data } = await api.comments.fetchComments( postId, page, postsParPage )
-            setComments( [ ...comments, ...data?.comments ] )
+            const { data } = await commentsApi.fetchComments( postId, page, postsParPage )
+            setComments( [...comments, ...data?.comments] )
             setCommentsMeta( data?.meta || {} )
         } catch ( err: any ) {
             console.error( err?.response?.data?.message )
@@ -46,17 +46,17 @@ function CommentList( { postId, clickComment }: CommentListPost ) {
         }
     }
 
-    async function handleSaveComment( event: FormEvent<HTMLFormElement> ) {
+    async function handleSaveComment( event: FormEvent<HTMLFormElement> ){
         event.preventDefault()
 
         const form    = event.target as HTMLFormElement
         const comment = form.comment.value?.trim()
-        if ( !comment ) return
+        if( ! comment ) return
 
         try {
-            const { data } = await api.comments.saveComment( comment, postId )
+            const { data } = await commentsApi.saveComment( comment, postId )
             //set comment and show success message
-            setComments( [ ...comments, data.comment ] )
+            setComments( [...comments, data.comment] )
             toast.success( data.message )
             form.reset()
         } catch ( err: any ) {
@@ -77,7 +77,7 @@ function CommentList( { postId, clickComment }: CommentListPost ) {
                 <CommentItem comment={ comment } key={ comment.id }/>
             ) ) }
 
-            { isShowComment && !!commentsMeta.nextPage && (
+            { isShowComment && !! commentsMeta.nextPage && (
                 <button
                     className="button mt-2 py-2 disabled:cursor-default min-w-[150px]"
                     disabled={ isLoadingComments }

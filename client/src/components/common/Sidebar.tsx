@@ -3,18 +3,18 @@ import Link                from "next/link"
 import { toast }           from "react-toastify"
 import useAsyncEffect      from "use-async-effect"
 
-import Avatar   from "@components/common/Avatar"
-import { User } from '@interfaces/user.interfaces'
-import api      from "@api/index"
+import Avatar     from "@components/common/Avatar"
+import { User }   from '@interfaces/user.interfaces'
+import followsApi from "@api/follows"
 
 
-export default function Sidebar() {
+export default function Sidebar(){
 
-    const [ users, setUsers ] = useState<User[]>( [] )
+    const [users, setUsers] = useState<User[]>( [] )
 
     useAsyncEffect( fetchSuggestedUsers, [] )
 
-    async function fetchSuggestedUsers() {
+    async function fetchSuggestedUsers(){
         /*try {
          const { data } = await api.users.fetchSuggestedUsers()
          setUsers( data.users )
@@ -23,9 +23,9 @@ export default function Sidebar() {
          }*/
     }
 
-    async function handleFollowClick( user: User ) {
+    async function handleFollowClick( user: User ){
         try {
-            const { data } = await api.follows.addFollowing( user.username )
+            const { data } = await followsApi.addFollowing( user.username )
             toast.success( data.message )
         } catch ( err: any ) {
             toast.error( err.response?.data?.message )

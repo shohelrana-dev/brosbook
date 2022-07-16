@@ -1,7 +1,7 @@
 import { Dispatch } from "redux"
 
 import { setLoading, setErrors }  from "@slices/settingsSlice"
-import api                        from "@api/index"
+import api                        from "../../api/index"
 import { ChangePasswordFormData } from "@interfaces/user.interfaces"
 import { toast }                  from "react-toastify"
 

@@ -11,9 +11,9 @@ import MainLayout      from "@components/layouts/MainLayout"
 import { useSelector } from "react-redux"
 import { RootState }   from "@store/index"
 import moment          from "moment"
-import api             from "@api/index"
 import { toast }       from "react-toastify"
 import { User }        from "@interfaces/user.interfaces"
+import followsApi      from "@api/follows"
 
 interface ProfileLayoutProps {
     children: React.ReactElement
@@ -29,7 +29,7 @@ export default function ProfileLayout( props: ProfileLayoutProps ) {
 
     async function handleFollowClick( user: any ) {
         try {
-            const { data } = await api.follows.addFollowing( user.username )
+            const { data } = await followsApi.addFollowing( user.username )
             toast.success( data.message )
         } catch ( err: any ) {
             toast.error( err.response?.data.message )

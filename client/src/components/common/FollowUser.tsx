@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import Link                from "next/link";
 import Avatar              from "@components/common/Avatar";
-import { User }            from "@interfaces/user.interfaces"
-import api                 from "@api/index";
-import { toast }           from "react-toastify";
+import { User }  from "@interfaces/user.interfaces"
+import api       from "../../api/index";
+import { toast } from "react-toastify";
 import { useSelector }     from "react-redux";
 import { RootState }       from "@store/index";
 

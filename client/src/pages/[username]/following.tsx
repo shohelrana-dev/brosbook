@@ -7,7 +7,7 @@ import useInfiniteScroll    from "react-infinite-scroll-hook"
 import ProfileLayout    from "@components/layouts/ProfileLayout"
 import FollowUser       from "@components/common/FollowUser"
 import { User }         from "@interfaces/user.interfaces"
-import api              from "@api/index"
+import api              from "../../api/index"
 import { PaginateMeta } from "@interfaces/index.interfaces"
 
 export default function Following() {

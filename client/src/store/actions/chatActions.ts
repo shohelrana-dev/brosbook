@@ -1,6 +1,6 @@
 import { Dispatch }                        from "redux"
 import { Conversation, Message, Reaction } from "@interfaces/chat.interfaces"
-import api                                 from "@api/index"
+import api                                 from "../../api/index"
 import {
     setLoadingMessages,
     setLoadingConversations,

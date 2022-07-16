@@ -1,23 +1,32 @@
-import React from 'react'
-import {useDispatch} from "react-redux"
-import {GoogleLogin, CredentialResponse} from '@react-oauth/google'
+import React                               from 'react'
+import { useRouter }                       from "next/router"
+import { toast }                           from "react-toastify"
+import { GoogleLogin, CredentialResponse } from '@react-oauth/google'
+import { useAppDispatch }                  from "@store/index"
+import { loginWithGoogle }                 from "@slices/authSlice"
 
-import {loginWithGoogleAction} from "@actions/authActions"
-
-function GoogleLoginButton() {
+function GoogleLoginButton(){
     //hooks
-    const dispatch = useDispatch()
+    const router   = useRouter()
+    const dispatch = useAppDispatch()
 
-    const responseGoogle = async (response: CredentialResponse) => {
-        dispatch(loginWithGoogleAction(response.credential!))
+    const responseGoogle = async( response: CredentialResponse ) => {
+        try {
+            const data = await dispatch( loginWithGoogle( response.credential! ) ).unwrap()
+            toast.success( data.message )
+            await router.push( '/' )
+        } catch ( err: any ) {
+            toast.success( err?.message || 'Login failed' )
+            await router.push( '/' )
+        }
     }
 
     return (
         <div className="flex justify-center my-2">
             <GoogleLogin
-                onSuccess={responseGoogle}
-                onError={() => console.log('Google Login Failed')}
-                useOneTap={true}
+                onSuccess={ responseGoogle }
+                onError={ () => console.log( 'Google Login Failed' ) }
+                useOneTap={ true }
             />
         </div>
     )

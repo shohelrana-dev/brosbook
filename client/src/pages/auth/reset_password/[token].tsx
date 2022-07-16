@@ -1,38 +1,36 @@
 import React, { FormEvent, Fragment, useEffect, useState } from 'react'
 import { useRouter }                                       from "next/router"
 import Link                                                from "next/link"
-import { useDispatch, useSelector }                        from "react-redux"
 import Head                                                from "next/head"
 import { LinearProgress }                                  from "@mui/material"
 import { Lock }                                            from "@mui/icons-material"
 
-import { removeErrorsAction, resetPasswordAction } from "@actions/authActions"
-import InputGroup                                  from "@components/common/InputGroup"
-import { withGuest }                               from "@utils/withAuth"
-import PrimaryButton                               from "@components/common/PrimaryButton"
-import api                                         from "@api/index"
-import { toast }                                   from "react-toastify"
-import { RootState }                               from "@store/index"
+import InputGroup                                           from "@components/common/InputGroup"
+import PrimaryButton                                        from "@components/common/PrimaryButton"
+import { toast }                                            from "react-toastify"
+import { useAppDispatch, useAppSelector }                   from "@store/index"
+import authApi                                              from "../../../api/auth"
+import { clearInputErrors, resetPassword, selectAuthState } from "@slices/authSlice"
 
-function Token() {
+function Token(){
     //hooks
-    const [ isTokenVerifying, setIsTokenVerifying ] = useState( true )
-    const router                                    = useRouter()
-    const dispatch                                  = useDispatch()
-    const { isLoading, errors }                     = useSelector( ( state: RootState ) => state.auth )
+    const [isTokenVerifying, setIsTokenVerifying] = useState( true )
+    const router                                  = useRouter()
+    const dispatch                                = useAppDispatch()
+    const { isLoading, inputErrors }              = useAppSelector( selectAuthState )
 
 
     useEffect( () => {
         tokenVerify()
-        dispatch( removeErrorsAction() )
-    }, [ router, dispatch ] )
+        dispatch( clearInputErrors() )
+    }, [router, dispatch] )
 
-    async function tokenVerify() {
-        const token = String( router.query.token )
-        if ( !token || token === 'undefined' ) return
+    async function tokenVerify(){
+        const token = router.query.token as string
+        if( ! token || token === 'undefined' ) return
 
         try {
-            await api.auth.resetPassTokenVerify( token )
+            await authApi.resetPassTokenVerify( token )
             setIsTokenVerifying( false )
         } catch ( e ) {
             toast.error( 'Invalid token!' )
@@ -41,7 +39,7 @@ function Token() {
     }
 
     //handle form submit
-    const submitForm = async ( event: FormEvent<HTMLFormElement> ) => {
+    const submitForm = async( event: FormEvent<HTMLFormElement> ) => {
         event.preventDefault()
 
         const formData = {
@@ -50,10 +48,10 @@ function Token() {
             token: String( router.query.token )
         }
 
-        dispatch( resetPasswordAction( formData ) )
+        dispatch( resetPassword( formData ) )
     }
 
-    if ( isTokenVerifying ) {
+    if( isTokenVerifying ){
         return <LinearProgress/>
     }
 
@@ -78,9 +76,10 @@ function Token() {
                         </small>
 
                         <form method="post" onSubmit={ submitForm }>
-                            <InputGroup label="Password" name="password" className="mb-3" error={ errors.password }/>
+                            <InputGroup label="Password" name="password" className="mb-3"
+                                        error={ inputErrors.password }/>
                             <InputGroup label="Confirm Password" name="confirmPassword" className="mb-3"
-                                        error={ errors.confirmPassword }/>
+                                        error={ inputErrors.confirmPassword }/>
                             <PrimaryButton type="submit" buttonTitle="Reset" isLoading={ isLoading }/>
                         </form>
                     </div>
@@ -102,4 +101,4 @@ function Token() {
     )
 }
 
-export default withGuest( Token )
+export default Token

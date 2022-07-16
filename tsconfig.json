@@ -5,7 +5,7 @@
       "target": "es2017",
       "module": "commonjs",
       "moduleResolution": "node",
-      "outDir": "./dist",
+      "outDir": "server/dist",
       "emitDecoratorMetadata": true,
       "experimentalDecorators": true,
       "sourceMap": true,
@@ -27,7 +27,7 @@
       "noFallthroughCasesInSwitch": true,
       "resolveJsonModule": true,
       "typeRoots": [
-         "src/api/types",
+        "server/api/types",
          "node_modules/@types"
       ],
       "allowJs": false,
@@ -35,21 +35,26 @@
       "allowSyntheticDefaultImports": true,
       "baseUrl": "./",
       "paths": {
-         "@api/*": ["src/api/*"],
-         "@config/*": ["src/config/*"],
-         "@controllers/*": ["src/api/http/controllers/*"],
-         "@database/*": ["src/api/database"],
-         "@exceptions/*": ["src/api/exceptions/*"],
-         "@entities/*": ["src/api/database/entities/*"],
-         "@middleware/*": ["src/api/http/middleware/*"],
-         "@routes/*": ["src/api/http/routes/*"],
-         "@services/*": ["src/api/services/*"],
-         "@validations/*": ["src/api/http/validations/*"],
-         "@interfaces/*": ["src/api/interfaces/*"],
-         "@utils/*": ["src/api/utils/*"]
+         "@api/*": ["server/api/*"],
+         "@config/*": ["server/config/*"],
+         "@controllers/*": ["server/api/http/controllers/*"],
+         "@database/*": ["server/api/database"],
+         "@exceptions/*": ["server/api/exceptions/*"],
+         "@entities/*": ["server/api/database/entities/*"],
+         "@middleware/*": ["server/api/http/middleware/*"],
+         "@routes/*": ["server/api/http/routes/*"],
+         "@services/*": ["server/api/services/*"],
+         "@validations/*": ["server/api/http/validations/*"],
+         "@interfaces/*": ["server/api/interfaces/*"],
+         "@utils/*": ["server/api/utils/*"]
       }
    },
-   "include": ["custom.d.ts", "src/**/*.ts", "src/**/*.json", ".env"],
+   "include": [
+     "custom.d.ts",
+     "server/**/*.ts",
+     "server/**/*.json",
+     ".env"
+   ],
    "exclude": [
       "node_modules",
       "client",
