@@ -6,8 +6,8 @@ import { useSelector }               from "react-redux"
 import { useRouter }                 from "next/router"
 import Image                         from "next/image"
 
-import { RootState } from "@store/index"
-import { Reaction } from "@interfaces/chat.interfaces"
+import { RootState } from "@store/store"
+import { Reaction }  from "@interfaces/chat.interfaces"
 import { socket }   from "@components/common/AuthCheck"
 
 type ReactionsProps = {

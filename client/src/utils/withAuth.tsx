@@ -1,65 +1,52 @@
-
-import { useRouter }              from 'next/router'
-import { ElementType, useEffect } from 'react'
-import { useSelector }            from 'react-redux'
-
 import { GetServerSideProps, GetServerSidePropsContext } from "next"
-import { selectAuthState }                                    from "@slices/authSlice"
 
-export function withGuest( Component: ElementType ) {
-    return function Guest( props: unknown ) {
-        const router              = useRouter()
-        const { isAuthenticated } = useSelector( selectAuthState )
+async function isUserAuthenticated( context: GetServerSidePropsContext ){
+    try {
+        const access_token = context.req.cookies.access_token
 
-        useEffect( () => {
-            if ( isAuthenticated ) router.push( '/' )
-        }, [ router ] )
+        const response = await fetch( `${ process.env.NEXT_PUBLIC_SERVER_API_URL }/auth/me`, {
+            headers: { "Authorization": "Bearer " + access_token }
+        } )
+        const data     = await response.json()
 
-        return <Component { ...props }/>
+        //check user
+        if( data.success && data.user ){
+            return true
+        }
+        await Promise.reject( 'Unauthenticated!' )
+    } catch ( err ) {
+        await Promise.reject( 'Unauthenticated!' )
     }
 }
 
-export function withAuth( Component: ElementType ) {
-    return function Auth( props: unknown ) {
-        const router              = useRouter()
-         const { isAuthenticated } = useSelector( selectAuth )
-
-         useEffect( () => {
-         if ( !isAuthenticated ) router.push( '/auth/login' )
-         }, [ router ] )
-
-        return <Component { ...props }/>
-    }
-}
-
-export function requireAuth( gssp: GetServerSideProps ) {
-    return async ( context: GetServerSidePropsContext ) => {
-        const { req }      = context
-        const access_token = req.cookies.access_token
-
+export function withAuthServerSide( gssp: GetServerSideProps ){
+    return async( context: GetServerSidePropsContext ) => {
         try {
-            //api call
-            const response = await fetch( `${ process.env.NEXT_PUBLIC_SERVER_API_URL }/auth/me`, {
-                headers: { "Authorization": "Bearer " + access_token }
-            } )
-            const data     = await response.json()
-
-            //check user
-            if ( data.success && data.user ) {
-                context.req.user            = data.user
-                context.req.isAuthenticated = true
-                return await gssp( context )
-            }
-
-            //redirect
+            await isUserAuthenticated( context )
+            return await gssp( context )
+        } catch ( err: any ) {
             return {
                 redirect: {
                     destination: '/auth/login',
                     statusCode: 302
                 }
             }
+        }
+    }
+}
+
+export function withGuestServerSide( gssp: GetServerSideProps, redirectUrl: string = '/' ){
+    return async( context: GetServerSidePropsContext ) => {
+        try {
+            await isUserAuthenticated( context )
+            return {
+                redirect: {
+                    destination: redirectUrl,
+                    statusCode: 302
+                }
+            }
         } catch ( err: any ) {
-            console.log( err )
+            return await gssp( context )
         }
     }
 }

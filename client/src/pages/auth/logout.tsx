@@ -1,20 +1,27 @@
 import { useEffect }      from "react"
 import { LinearProgress } from "@mui/material"
-import { useDispatch }    from "react-redux"
+import { toast }          from "react-toastify"
+import { useRouter }      from "next/router"
+import { useLogoutQuery } from "@services/authApi"
 
-import { logoutAction } from "@actions/authActions"
-import { withAuth }     from "@utils/withAuth"
 
-
-function Logout() {
+function Logout(){
     //hooks
-    const dispatch = useDispatch()
+    const router                              = useRouter()
+    const { isError, isSuccess, data, error } = useLogoutQuery()
+
+    const errorData = ( error && 'data' in error && error.data as any ) || {}
 
     useEffect( () => {
-        dispatch( logoutAction() )
-    }, [ dispatch ] )
+        isSuccess && toast.success( data?.message )
+        isError && toast.error( errorData.message )
+
+        if( isSuccess ){
+            router.push( '/auth/login' )
+        }
+    }, [isSuccess, isError, router] )
 
     return <LinearProgress/>
 }
 
-export default withAuth( Logout )
+export default Logout

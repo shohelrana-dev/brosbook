@@ -9,7 +9,6 @@ import PostCard         from "@components/home/PostCard"
 import { Post }         from "@interfaces/posts.interfaces"
 import { User }         from "@interfaces/user.interfaces"
 import { PaginateMeta } from "@interfaces/index.interfaces"
-import profileApi       from "@api/profile"
 
 interface ProfileProps {
     posts: Post[],
@@ -29,16 +28,7 @@ function Index( props: ProfileProps ){
     const [scrollBottomRef] = useInfiniteScroll( {
         loading: isLoadingPosts,
         hasNextPage: !! postsMeta?.nextPage,
-        onLoadMore: async() => {
-            setIsLoadingPosts( true )
-            try {
-                const { data } = await profileApi.fetchPosts( username, postsMeta.nextPage )
-                setPosts( [...posts, ...data.posts] )
-                setPostsMeta( data.meta )
-            } finally {
-                setIsLoadingPosts( false )
-            }
-        },
+        onLoadMore: async() => {},
     } )
 
     return (
@@ -64,8 +54,8 @@ export const getServerSideProps: GetServerSideProps = async( context: GetServerS
     const username = context.params?.username as string
 
     try {
-        const { data: postsData } = await profileApi.fetchPosts( username, 1 )
-        const { data: userData }  = await profileApi.fetchUser( username )
+        const postsData = []
+        const userData  = {}
         return {
             props: {
                 user: userData.user || {},

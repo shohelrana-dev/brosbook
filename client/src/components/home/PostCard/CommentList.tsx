@@ -1,15 +1,14 @@
-import React, { FormEvent, useEffect, useState } from 'react'
-import { useSelector }                           from "react-redux"
-import { toast }                                 from "react-toastify"
-import { CircularProgress }                      from "@mui/material"
+import React, { FormEvent, useState } from 'react'
+import { useSelector }                from "react-redux"
+import { toast }                      from "react-toastify"
+import { CircularProgress }           from "@mui/material"
 
 import Avatar           from "@components/common/Avatar"
 import CommentsSkeleton from "@components/home/Skeletons/CommentsSkeleton"
 import CommentItem      from "@components/home/PostCard/CommentItem"
 import { Comment }      from "@interfaces/posts.interfaces"
-import { RootState }    from "@store/index"
+import { RootState }    from "@store/store"
 import { PaginateMeta } from "@interfaces/index.interfaces"
-import commentsApi      from "@api/comments"
 
 interface CommentListPost {
     postId: number
@@ -24,18 +23,10 @@ function CommentList( { postId, clickComment }: CommentListPost ){
     const [isLoadingComments, setLoadingComments] = useState<boolean>( false )
     const [isShowComment, setShowComment]         = useState<boolean>( false )
 
-    // @ts-ignore
-    useEffect( () => {
-        if( ! isShowComment && clickComment ){
-            fetchComments( 1 )
-        }
-    }, [isShowComment, clickComment] )
-
     async function fetchComments( page: number, postsParPage?: number ){
         setLoadingComments( true )
 
         try {
-            const { data } = await commentsApi.fetchComments( postId, page, postsParPage )
             setComments( [...comments, ...data?.comments] )
             setCommentsMeta( data?.meta || {} )
         } catch ( err: any ) {
@@ -54,7 +45,6 @@ function CommentList( { postId, clickComment }: CommentListPost ){
         if( ! comment ) return
 
         try {
-            const { data } = await commentsApi.saveComment( comment, postId )
             //set comment and show success message
             setComments( [...comments, data.comment] )
             toast.success( data.message )

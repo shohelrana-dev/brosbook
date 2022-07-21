@@ -1,42 +1,54 @@
-import React, { ChangeEvent, FormEvent, useRef, useState } from 'react'
-import Avatar                                              from "@components/common/Avatar"
-import PublicIcon                                          from "@mui/icons-material/Public"
-import InsertPhotoIcon                                     from "@mui/icons-material/InsertPhotoOutlined"
-import { useDispatch, useSelector }                        from "react-redux"
-import { RootState }                                       from "@store/index"
-import { createPost }                                      from "@actions/postsActions"
-import CancelIcon                                          from '@mui/icons-material/Cancel';
+import React, { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react'
+import PublicIcon                                                     from "@mui/icons-material/Public"
+import InsertPhotoIcon                                                from "@mui/icons-material/InsertPhotoOutlined"
+import CancelIcon                                                     from '@mui/icons-material/Cancel'
+import { toast }                                                      from "react-toastify"
+import { CircularProgress }                                           from "@mui/material"
 
-function CreatePostForm() {
+import Avatar                    from "@components/common/Avatar"
+import { useAppSelector }        from "@store/store"
+import { selectAuthState }       from "@features/authSlice"
+import { useCreatePostMutation } from "@services/postsApi"
+
+function CreatePostForm(){
 
     //hooks
-    const user                                = useSelector( ( state: RootState ) => state.auth.user )
-    const inputImageRef                       = useRef<HTMLInputElement | null>( null )
-    const [ selectedImage, setSelectedImage ] = useState<any>( null )
-    const dispatch                            = useDispatch()
+    const { user }                                                     = useAppSelector( selectAuthState )
+    const [createPost, { isLoading, isSuccess, isError, data, error }] = useCreatePostMutation()
+    const inputImageRef                                                = useRef<HTMLInputElement | null>( null )
+    const [selectedImage, setSelectedImage]                            = useState<any>( null )
+    const [content, setContent]                                        = useState<string>( '' )
 
+    const errorData = ( error && 'data' in error && error.data as any ) || {}
 
-    async function submitFormHandle( event: FormEvent<HTMLFormElement> ) {
+    useEffect( () => {
+        isSuccess && toast.success( data?.message )
+        isError && toast.error( errorData?.message )
+    }, [isSuccess, isError] )
+
+    async function submitFormHandle( event: FormEvent ){
         event.preventDefault()
-        const form    = event.target as HTMLFormElement
-        const content = form.content.value
 
-        if ( !content && !selectedImage ) return
+        if( ! content && ! selectedImage ) return
 
-        await createPost( content, selectedImage )
+        createPost( { content, image: selectedImage } )
 
-        form.reset()
+        setContent( '' )
         setSelectedImage( null )
     }
 
-    function fileInputChangeHandle( event: ChangeEvent<HTMLInputElement> ) {
-        if ( event.target.files && event.target.files.length > 0 ) {
+    function fileInputChangeHandle( event: ChangeEvent<HTMLInputElement> ){
+        if( event.target.files && event.target.files.length > 0 ){
             setSelectedImage( event.target.files[0] )
         }
     }
 
     return (
-        <>
+        <div className="relative">
+            { isLoading && <div
+                className="absolute left-0 top-0 w-full h-full bg-gray-100 opacity-50 flex justify-center items-center">
+                <CircularProgress/>
+            </div> }
             <h1 className="text-center text-xl font-bold">Create post</h1>
             <div className="flex items-center">
                 <Avatar src={ user.photo }/>
@@ -50,10 +62,19 @@ function CreatePostForm() {
                 </div>
             </div>
             <form onSubmit={ submitFormHandle }>
-                        <textarea name="content" className="input-basic text-gray-600 text-lg font-medium p-4 my-2"
-                                  placeholder="What's your mind?"/>
-                <input ref={ inputImageRef } type="file" hidden name="image" accept="image/*"
-                       onChange={ fileInputChangeHandle }/>
+                <textarea
+                    name="content"
+                    className="input-basic text-gray-600 text-lg font-medium p-4 my-2"
+                    placeholder="What's your mind?"
+                    onChange={ ( e ) => setContent( e.target.value ) }
+                />
+                <input
+                    ref={ inputImageRef }
+                    type="file"
+                    hidden name="image"
+                    accept="image/*"
+                    onChange={ fileInputChangeHandle }
+                />
 
                 { selectedImage && (
                     <div className="max-w-sm m-auto relative border-4 border-solid border-gray-300 rounded-2xl">
@@ -80,7 +101,7 @@ function CreatePostForm() {
                     </div>
                 </div>
             </form>
-        </>
+        </div>
     )
 }
 

@@ -7,7 +7,7 @@ import { GoogleOAuthProvider }        from '@react-oauth/google'
 import 'react-toastify/dist/ReactToastify.css'
 
 import '@styles/app.css'
-import { store }                      from '@store/index'
+import { store } from '@store/store'
 
 function MyApp( { Component, pageProps }: AppProps ){
     const theme = createTheme( {

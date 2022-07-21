@@ -16,8 +16,8 @@ import { Container }       from "@mui/material"
 import PermIdentityIcon    from '@mui/icons-material/PermIdentity'
 import LogoutIcon          from '@mui/icons-material/Logout'
 import SettingsIcon        from '@mui/icons-material/Settings'
-import { selectAuthState } from "@slices/authSlice"
-import { useAppSelector }  from "@store/index"
+import { selectAuthState } from "@features/authSlice"
+import { useAppSelector }  from "@store/store"
 
 function NavBar(){
     const [anchorEl, setAnchorEl]                     = React.useState<null | HTMLElement>( null )

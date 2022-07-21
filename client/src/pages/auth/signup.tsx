@@ -1,23 +1,21 @@
-import React, { ChangeEvent, FormEvent, Fragment, useEffect, useState } from 'react'
-import Head                                                             from 'next/head'
-import Link                                                             from 'next/link'
-import { Alert, Divider, LinearProgress }                               from '@mui/material'
-import zxcvbn                                                           from 'zxcvbn-typescript'
-import { toast }                                                        from "react-toastify"
-import { useRouter }                                                    from "next/router"
+import React, { FormEvent, Fragment, useEffect, useState } from 'react'
+import Head                                                from 'next/head'
+import Link                                                from 'next/link'
+import { Alert, Divider, LinearProgress }                  from '@mui/material'
+import zxcvbn                                              from 'zxcvbn-typescript'
+import { toast }                                           from "react-toastify"
+import { useRouter }                                       from "next/router"
 
-import InputGroup                                           from '@components/common/InputGroup'
-import GoogleLoginButton                                    from "@components/common/GoogleLoginButton"
-import PrimaryButton                                        from "@components/common/PrimaryButton"
-import { clearInputErrors, reset, selectAuthState, signup } from "@slices/authSlice"
-import { useAppDispatch, useAppSelector }                   from "@store/index"
-import { object }                                           from "prop-types";
+import InputGroup            from '@components/common/InputGroup'
+import GoogleLoginButton     from "@components/common/GoogleLoginButton"
+import PrimaryButton         from "@components/common/PrimaryButton"
+import { useSignupMutation } from "@services/authApi"
+import { InputErrors }       from "@interfaces/index.interfaces";
 
 function Signup(){
     //hooks
-    const router                                                                   = useRouter()
-    const dispatch                                                                 = useAppDispatch()
-    const { isLoading, inputErrors, isSuccess, isError, isAuthenticated, message } = useAppSelector( selectAuthState )
+    const router                                                   = useRouter()
+    const [signup, { isLoading, data, error, isSuccess, isError }] = useSignupMutation()
 
     const [firstName, setFirstName] = useState<string>( '' )
     const [lastName, setLastName]   = useState<string>( '' )
@@ -27,31 +25,24 @@ function Signup(){
 
     const [passwordWarning, setPasswordWarning] = useState( '' )
 
-    useEffect( () => {
-        if( Object.keys( inputErrors ).length > 0 ){
-            dispatch( clearInputErrors() )
-        }
-    }, [dispatch] )
+    const errorData = ( error && 'data' in error && error.data as any ) || {}
+    const inputErrors = errorData.errors || {} as InputErrors
 
     useEffect( () => {
+        isSuccess && toast.success( data?.message )
+        isError && toast.error( errorData?.message )
+
         if( isSuccess ){
-            toast.success( message )
-        } else if( isError ){
-            toast.error( message )
+            router.push( '/auth/login' )
         }
 
-        if( isSuccess && isAuthenticated ){
-            router.push( '/' )
-        }
-
-        dispatch( reset() )
-    }, [isSuccess, isError, isAuthenticated, router] )
+    }, [isSuccess, isError] )
 
     //handle form submit
-    async function onSubmit( event: FormEvent<HTMLFormElement> ){
+    async function onSignupFormSubmit( event: FormEvent ){
         event.preventDefault()
 
-        dispatch( signup( { firstName, lastName, email, username, password } ) )
+        signup( { firstName, lastName, email, username, password } )
     }
 
     function checkPasswordWarning(){
@@ -77,7 +68,7 @@ function Signup(){
                             OR
                         </Divider>
 
-                        <form method="post" onSubmit={ onSubmit }>
+                        <form method="post" onSubmit={ onSignupFormSubmit }>
                             <InputGroup
                                 label="First Name"
                                 name="firstName"

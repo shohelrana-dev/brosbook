@@ -3,8 +3,8 @@ import { Fade }                                                          from "@
 import { useDispatch, useSelector }                                      from "react-redux"
 
 import { fetchConversationsAction } from "@actions/chatActions"
-import { RootState } from "@store/index"
-import api           from "../../api/index"
+import { RootState }                from "@store/store"
+import api                          from "../../api/index"
 import { User }      from "@interfaces/user.interfaces"
 import ConversationItem             from "@components/messages/Conversations/ConversationItem"
 import SearchUserItem               from "@components/messages/Conversations/SearchUserItem"

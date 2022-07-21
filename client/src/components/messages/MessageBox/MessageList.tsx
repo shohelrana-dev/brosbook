@@ -4,7 +4,7 @@ import { useRouter }                from "next/router"
 import { useDispatch, useSelector } from "react-redux"
 
 import SingleMessage           from "@components/messages/MessageBox/SingleMessage"
-import { RootState }           from "@store/index"
+import { RootState }           from "@store/store"
 import { fetchMessagesAction } from "@actions/chatActions"
 import { Message }             from "@interfaces/chat.interfaces"
 import MessagesSkeleton        from "@components/messages/MessageBox/Skeletons/MessagesSkeleton"

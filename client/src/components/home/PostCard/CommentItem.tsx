@@ -7,7 +7,6 @@ import OutlinedFavoriteIcon from "@mui/icons-material/FavoriteBorderOutlined"
 
 import Avatar      from "@components/common/Avatar"
 import { Comment } from "@interfaces/posts.interfaces"
-import commentsApi from "@api/comments";
 
 interface CommentItemState {
     comment: Comment
@@ -20,7 +19,6 @@ function CommentItem( { comment }: CommentItemState ){
 
     async function saveCommentLike(){
         try {
-            await commentsApi.saveCommentLike( comment.postId, comment.id )
             setHasCurrentUserLike( true )
             setLikeCount( likeCount + 1 )
         } catch ( err: any ) {
@@ -32,7 +30,6 @@ function CommentItem( { comment }: CommentItemState ){
 
     async function removeCommentLike(){
         try {
-            await commentsApi.removeCommentLike( comment.postId, comment.id )
             setHasCurrentUserLike( false )
             setLikeCount( likeCount - 1 )
         } catch ( err: any ) {

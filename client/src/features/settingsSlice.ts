@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { SettingsState, User }        from "@interfaces/user.interfaces"
-import { RootState }                  from "@store/index";
+import { SettingsState, User } from "@interfaces/user.interfaces"
+import { RootState }           from "@store/store";
 
 const initialState: SettingsState = {
     isLoading: false,

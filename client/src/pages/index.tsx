@@ -1,29 +1,24 @@
-import { useDispatch, useSelector } from "react-redux"
-import { useEffect }                from "react"
-import useInfiniteScroll            from 'react-infinite-scroll-hook'
-import { CircularProgress }         from "@mui/material"
+import useInfiniteScroll      from 'react-infinite-scroll-hook'
+import { CircularProgress }   from "@mui/material"
+import { GetServerSideProps } from "next"
+import { useState }           from "react"
 
-import MainLayout           from "@components/layouts/MainLayout"
-import { RootState }        from "@store/index"
-import CreatePostForm       from "@components/home/CreatePostForm"
-import { fetchPostsAction } from "@actions/postsActions"
-import PostCard             from "@components/home/PostCard"
-import { withAuth }         from "@utils/withAuth"
+import MainLayout             from "@components/layouts/MainLayout"
+import CreatePostForm         from "@components/home/CreatePostForm"
+import PostCard               from "@components/home/PostCard"
+import { withAuthServerSide } from "@utils/withAuth"
+import { useGetPostsQuery }   from "@services/postsApi"
 
-function Home() {
+function Home(){
     //hooks
-    const { posts, isLoadingPosts, postsMeta } = useSelector( ( state: RootState ) => state.posts )
-    const dispatch                             = useDispatch()
-
-    useEffect( () => {
-        dispatch( fetchPostsAction( 1 ) )
-    }, [ dispatch ] )
+    const [page, setPage]     = useState( 1 )
+    const { isLoading, data } = useGetPostsQuery( { page } )
 
 
-    const [ scrollBottomRef ] = useInfiniteScroll( {
-        loading: isLoadingPosts,
-        hasNextPage: !!postsMeta?.nextPage,
-        onLoadMore: () => dispatch( fetchPostsAction( postsMeta?.nextPage ) ),
+    const [scrollBottomRef] = useInfiniteScroll( {
+        loading: isLoading,
+        hasNextPage: !! data?.postsMeta?.nextPage,
+        onLoadMore: () => setPage( data?.postsMeta?.nextPage ),
     } )
 
     return (
@@ -33,11 +28,11 @@ function Home() {
                     <CreatePostForm/>
                 </div>
 
-                { posts.length > 0 && posts.map( post => (
+                { data?.posts && data?.posts?.length > 0 && data?.posts?.map( post => (
                     <PostCard post={ post } key={ post.id }/>
                 ) ) }
 
-                { !!postsMeta?.nextPage ? (
+                { !! data?.postsMeta?.nextPage ? (
                     <div className="flex justify-center min-h-[300px] items-center" ref={ scrollBottomRef }>
                         <CircularProgress/>
                     </div>
@@ -50,4 +45,13 @@ function Home() {
     )
 }
 
-export default withAuth( Home )
+// @ts-ignore
+export const getServerSideProps: GetServerSideProps = withAuthServerSide( async() => {
+    return {
+        props: {
+            posts: []
+        }
+    }
+} )
+
+export default Home

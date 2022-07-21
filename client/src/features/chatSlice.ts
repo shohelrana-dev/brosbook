@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction }                 from "@reduxjs/toolkit"
 import { ChatState, Conversation, Message, Reaction } from "@interfaces/chat.interfaces"
-import { RootState }                                  from "@store/index";
+import { RootState }                                  from "@store/store";
 
 const initialState: ChatState = {
     isLoadingConversations: false,

@@ -11,7 +11,6 @@ import { Zoom }             from "@mui/material"
 import Avatar      from "@components/common/Avatar"
 import { Post }    from "@interfaces/posts.interfaces"
 import CommentList from "@components/home/PostCard/CommentList"
-import postsApi    from "@api/posts"
 
 interface PostCardProps {
     post: Post
@@ -25,7 +24,6 @@ const PostCard = ( { post }: PostCardProps ) => {
 
     async function savePostLike() {
         try {
-            await postsApi.savePostLike( post.id )
             setHasCurrentUserLike( true )
             setLikeCount( likeCount + 1 )
         } catch ( err: any ) {
@@ -37,7 +35,6 @@ const PostCard = ( { post }: PostCardProps ) => {
 
     async function removePostLike() {
         try {
-            await postsApi.removePostLike( post.id )
             setHasCurrentUserLike( false )
             setLikeCount( likeCount - 1 )
         } catch ( err: any ) {

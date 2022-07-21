@@ -7,13 +7,12 @@ import LocationIcon    from "@mui/icons-material/LocationOnOutlined"
 import CakeIcon        from "@mui/icons-material/CakeOutlined"
 import ScheduleIcon    from "@mui/icons-material/Schedule"
 import { Button }      from "@mui/material"
-import MainLayout      from "@components/layouts/MainLayout"
 import { useSelector } from "react-redux"
-import { RootState }   from "@store/index"
 import moment          from "moment"
-import { toast }       from "react-toastify"
+
+import MainLayout      from "@components/layouts/MainLayout"
+import { RootState }   from "@store/store"
 import { User }        from "@interfaces/user.interfaces"
-import followsApi      from "@api/follows"
 
 interface ProfileLayoutProps {
     children: React.ReactElement
@@ -28,12 +27,7 @@ export default function ProfileLayout( props: ProfileLayoutProps ) {
     const { user: currentUser, isAuthenticated } = useSelector( ( state: RootState ) => state.auth )
 
     async function handleFollowClick( user: any ) {
-        try {
-            const { data } = await followsApi.addFollowing( user.username )
-            toast.success( data.message )
-        } catch ( err: any ) {
-            toast.error( err.response?.data.message )
-        }
+
     }
 
     return (

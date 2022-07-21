@@ -4,33 +4,45 @@ import Link                                                from "next/link"
 import Head                                                from "next/head"
 import { LinearProgress }                                  from "@mui/material"
 import { Lock }                                            from "@mui/icons-material"
+import { toast }                                           from "react-toastify"
+import useAsyncEffect                                      from "use-async-effect"
 
-import InputGroup                                           from "@components/common/InputGroup"
-import PrimaryButton                                        from "@components/common/PrimaryButton"
-import { toast }                                            from "react-toastify"
-import { useAppDispatch, useAppSelector }                   from "@store/index"
-import authApi                                              from "../../../api/auth"
-import { clearInputErrors, resetPassword, selectAuthState } from "@slices/authSlice"
+import InputGroup                   from "@components/common/InputGroup"
+import PrimaryButton                from "@components/common/PrimaryButton"
+import { useAppDispatch }           from "@store/store"
+import { useResetPasswordMutation } from "@services/authApi";
+import { InputErrors }              from "@interfaces/index.interfaces"
+import API                          from "@utils/API"
 
 function Token(){
     //hooks
-    const [isTokenVerifying, setIsTokenVerifying] = useState( true )
-    const router                                  = useRouter()
-    const dispatch                                = useAppDispatch()
-    const { isLoading, inputErrors }              = useAppSelector( selectAuthState )
+    const router                                                          = useRouter()
+    const [resetPassword, { isLoading, isSuccess, isError, data, error }] = useResetPasswordMutation()
 
+    const [isTokenVerifying, setIsTokenVerifying] = useState<boolean>( true )
+    const [password, setPassword]                 = useState<string>( '' )
+    const [confirmPassword, setConfirmPassword]   = useState<string>( '' )
+
+    const errorData   = ( error && 'data' in error && error.data as any ) || {}
+    const inputErrors = errorData.errors || {} as InputErrors
 
     useEffect( () => {
-        tokenVerify()
-        dispatch( clearInputErrors() )
-    }, [router, dispatch] )
+        isSuccess && toast.success( data?.message )
+        isError && toast.error( errorData?.message )
+
+        if( isSuccess ){
+            router.push( '/auth/login' )
+        }
+    }, [isSuccess, isError] )
+
+    useAsyncEffect( tokenVerify, [router] )
 
     async function tokenVerify(){
         const token = router.query.token as string
         if( ! token || token === 'undefined' ) return
 
         try {
-            await authApi.resetPassTokenVerify( token )
+            await API.get( `${ process.env.NEXT_PUBLIC_SERVER_API_URL }/auth/reset_password/${ token }` )
             setIsTokenVerifying( false )
         } catch ( e ) {
             toast.error( 'Invalid token!' )
@@ -42,13 +54,9 @@ function Token(){
     const submitForm = async( event: FormEvent<HTMLFormElement> ) => {
         event.preventDefault()
 
-        const formData = {
-            password: event.currentTarget.password.value,
-            confirmPassword: event.currentTarget.confirmPassword.value,
-            token: String( router.query.token )
-        }
+        const token = router.query.token as string
 
-        dispatch( resetPassword( formData ) )
+        resetPassword( { password, confirmPassword, token } )
     }
 
     if( isTokenVerifying ){
@@ -76,10 +84,20 @@ function Token(){
                         </small>
 
                         <form method="post" onSubmit={ submitForm }>
-                            <InputGroup label="Password" name="password" className="mb-3"
-                                        error={ inputErrors.password }/>
-                            <InputGroup label="Confirm Password" name="confirmPassword" className="mb-3"
-                                        error={ inputErrors.confirmPassword }/>
+                            <InputGroup
+                                label="Password"
+                                name="password"
+                                className="mb-3"
+                                error={ inputErrors.password }
+                                onChange={ ( e ) => setPassword( e.target.value ) }
+                            />
+                            <InputGroup
+                                label="Confirm Password"
+                                name="confirmPassword"
+                                className="mb-3"
+                                error={ inputErrors.confirmPassword }
+                                onChange={ ( e ) => setConfirmPassword( e.target.value ) }
+                            />
                             <PrimaryButton type="submit" buttonTitle="Reset" isLoading={ isLoading }/>
                         </form>
                     </div>

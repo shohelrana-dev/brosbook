@@ -1,13 +1,6 @@
 import { User }         from "@interfaces/user.interfaces"
 import { PaginateMeta } from "@interfaces/index.interfaces"
 
-export interface PostsState {
-    isLoadingPosts: boolean
-    isUpdatingPost: boolean
-    posts: Post[],
-    postsMeta: PaginateMeta
-}
-
 export interface Post {
     id: number
     username: string

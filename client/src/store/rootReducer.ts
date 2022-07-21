@@ -1,16 +1,12 @@
 import { combineReducers } from '@reduxjs/toolkit'
-import { authSlice }       from '@slices/authSlice'
-import { chatSlice }       from "@slices/chatSlice"
-import { settingsSlice }   from "@slices/settingsSlice"
-import { postsSlice }      from "@slices/postsSlice"
-import { profileSlice } from "@slices/profileSlice"
+import { authSlice }       from '@features/authSlice'
+import { authApi }         from "@services/authApi"
+import { postsApi }        from "@services/postsApi"
 
 const rootReducer = combineReducers( {
     auth: authSlice.reducer,
-    chat: chatSlice.reducer,
-    settings: settingsSlice.reducer,
-    posts: postsSlice.reducer,
-    profile: profileSlice.reducer,
+    [authApi.reducerPath]: authApi.reducer,
+    [postsApi.reducerPath]: postsApi.reducer,
 } )
 
 export default rootReducer

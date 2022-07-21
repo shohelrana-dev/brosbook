@@ -1,6 +1,4 @@
-import { User } from "./user.interfaces"
-
-export interface LoginFormData {
+export interface Credentials {
     username: string
     password: string
 }

@@ -10,14 +10,14 @@ import { HTTP_CONFLICT } from "@utils/httpStatusCodes";
 
 class AuthController {
 
-    constructor( private readonly authService: AuthService ) {
+    constructor( private readonly authService: AuthService ){
     }
 
-    public signup = async ( req: Request, res: Response, next: NextFunction ): Promise<Response | void> => {
+    public signup = async( req: Request, res: Response, next: NextFunction ): Promise<Response | void> => {
         try {
             //check errors
             const errors = validationResult( req )
-            if ( !errors.isEmpty() ) {
+            if( ! errors.isEmpty() ){
                 return res.status( 422 ).json( {
                     success: false,
                     message: 'Please fix the errors below.',
@@ -39,11 +39,11 @@ class AuthController {
         }
     }
 
-    public login = async ( req: Request, res: Response, next: NextFunction ): Promise<Response | void> => {
+    public login = async( req: Request, res: Response, next: NextFunction ): Promise<Response | void> => {
         try {
             //check errors
             const errors = validationResult( req )
-            if ( !errors.isEmpty() ) {
+            if( ! errors.isEmpty() ){
                 return res.status( 422 ).json( {
                     success: false,
                     message: 'Please fix the errors below.',
@@ -68,7 +68,7 @@ class AuthController {
         }
     }
 
-    public google = async ( req: Request, res: Response, next: NextFunction ): Promise<Response | void> => {
+    public google = async( req: Request, res: Response, next: NextFunction ): Promise<Response | void> => {
         try {
             const tokenData = await this.authService.google( req )
 
@@ -105,11 +105,11 @@ class AuthController {
         } )
     }
 
-    public me = async ( req: Request, res: Response, next: NextFunction ): Promise<void> => {
+    public me = async( req: Request, res: Response, next: NextFunction ): Promise<void> => {
         try {
             const user = await User.findOneOrFail( {
                 where: { username: req.user.username },
-                relations: [ 'profile' ]
+                relations: ['profile']
             } )
 
             res.json( {
@@ -121,11 +121,11 @@ class AuthController {
         }
     }
 
-    public forgotPassword = async ( req: Request, res: Response, next: NextFunction ): Promise<Response | void> => {
+    public forgotPassword = async( req: Request, res: Response, next: NextFunction ): Promise<Response | void> => {
         try {
             //check errors
             const errors = validationResult( req )
-            if ( !errors.isEmpty() ) {
+            if( ! errors.isEmpty() ){
                 return res.status( 422 ).json( {
                     success: false,
                     message: 'Please fix the input errors below.',
@@ -145,7 +145,7 @@ class AuthController {
         }
     }
 
-    public resetPassTokenVerify = async ( req: Request, res: Response, next: NextFunction ): Promise<void> => {
+    public resetPassTokenVerify = async( req: Request, res: Response, next: NextFunction ): Promise<void> => {
         try {
             const { token } = req.params
 
@@ -160,11 +160,11 @@ class AuthController {
         }
     }
 
-    public resetPassword = async ( req: Request, res: Response, next: NextFunction ): Promise<Response | void> => {
+    public resetPassword = async( req: Request, res: Response, next: NextFunction ): Promise<Response | void> => {
         try {
             //check errors
             const errors = validationResult( req )
-            if ( !errors.isEmpty() ) {
+            if( ! errors.isEmpty() ){
                 return res.status( 422 ).json( {
                     success: false,
                     message: 'Input validation error',
@@ -176,6 +176,7 @@ class AuthController {
             const { password } = req.body
             const user         = await this.authService.tokenVerify( token )
             user.password      = await bcrypt.hash( password, 6 )
+            user.verified      = 1
             await user.save()
 
             res.json( {
@@ -187,19 +188,19 @@ class AuthController {
         }
     }
 
-    public verifyAccount = async ( req: Request, res: Response, next: NextFunction ): Promise<Response | void> => {
+    public verifyAccount = async( req: Request, res: Response, next: NextFunction ): Promise<Response | void> => {
         try {
             const { token } = req.params
 
             const user = await this.authService.tokenVerify( token )
-            if ( user.verified === 0 ) {
+            if( user.verified === 0 ){
                 user.verified = 1
                 await user.save()
                 res.json( {
                     success: true,
                     message: 'Your account has been verified'
                 } )
-            } else {
+            } else{
                 res.json( {
                     success: true,
                     message: 'Your account already verified'
@@ -211,7 +212,7 @@ class AuthController {
     }
 
     private getTokenCookie = ( token: string ) => {
-        return cookie.serialize( process.env.COOKIE_NAME!, token, {
+        return cookie.serialize( 'access_token', token, {
             httpOnly: true,
             secure: true,
             sameSite: 'strict',

@@ -1,5 +1,6 @@
 /server/dist
 /client/.next
+/client/.swc
 **/node_modules
 .idea
 

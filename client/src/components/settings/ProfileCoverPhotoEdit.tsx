@@ -1,9 +1,9 @@
 import React, { createRef, useState } from 'react'
 import { SRLWrapper }                 from "simple-react-lightbox";
 import Image                          from "next/image";
-import { useSelector }                from "react-redux";
-import { RootState }                  from "@store/index";
-import CameraEnhanceOutlinedIcon      from '@mui/icons-material/CameraEnhanceOutlined';
+import { useSelector }           from "react-redux";
+import { RootState }             from "@store/store";
+import CameraEnhanceOutlinedIcon from '@mui/icons-material/CameraEnhanceOutlined';
 
 function ProfileCoverPhotoEdit() {
     const { user }             = useSelector( ( state: RootState ) => state.auth )

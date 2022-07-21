@@ -3,47 +3,47 @@ import Head                                                from 'next/head'
 import Link                                                from 'next/link'
 import { Divider, LinearProgress }                         from '@mui/material'
 
-import InputGroup                                          from '@components/common/InputGroup'
-import GoogleLoginButton                                   from '@components/common/GoogleLoginButton'
-import PrimaryButton                                       from "@components/common/PrimaryButton"
-import { clearInputErrors, login, reset, selectAuthState } from "@slices/authSlice"
-import { useAppDispatch, useAppSelector }                  from "@store/index"
-import { useRouter }                                       from "next/router"
-import { toast }                                           from "react-toastify"
+import InputGroup              from '@components/common/InputGroup'
+import GoogleLoginButton       from '@components/common/GoogleLoginButton'
+import PrimaryButton           from "@components/common/PrimaryButton"
+import { useRouter }           from "next/router"
+import { GetServerSideProps }  from "next"
+import { withGuestServerSide } from "@utils/withAuth"
+import { useLoginMutation }    from "@services/authApi"
+import { InputErrors }         from "@interfaces/index.interfaces"
+import { toast }               from "react-toastify"
+import { selectAuthState }     from "@features/authSlice"
+import { useAppSelector }      from "@store/store"
 
 function Login(){
     //hooks
-    const router                                                                   = useRouter()
-    const dispatch                                                                 = useAppDispatch()
-    const { isLoading, inputErrors, isSuccess, isError, isAuthenticated, message } = useAppSelector( selectAuthState )
-    const [username, setUsername]                                                  = useState<string>( '' )
-    const [password, setPassword]                                                  = useState<string>( '' )
+    const router                                                  = useRouter()
+    const { isAuthenticated }                                     = useAppSelector( selectAuthState )
+    const [login, { isLoading, data, error, isSuccess, isError }] = useLoginMutation()
+    const [username, setUsername]                                 = useState<string>( '' )
+    const [password, setPassword]                                 = useState<string>( '' )
+
+    const errorData   = ( error && 'data' in error && error.data as any ) || {}
+    const inputErrors = errorData.errors || {} as InputErrors
 
     useEffect( () => {
-        if( Object.keys( inputErrors ).length > 0 ){
-            dispatch( clearInputErrors() )
-        }
-    }, [dispatch] )
-
-    useEffect( () => {
-        if( isSuccess ){
-            toast.success( message )
-        } else if( isError ){
-            toast.error( message )
-        }
+        isSuccess && toast.success( data?.message )
+        isError && toast.error( errorData.message )
 
         if( isSuccess && isAuthenticated ){
             router.push( '/' )
         }
-
-        dispatch( reset() )
-    }, [isSuccess, isError, isAuthenticated, router] )
+    }, [isSuccess, isError, isAuthenticated] )
 
     //handle form submit
-    async function onSubmit( event: FormEvent ){
+    function onLoginFormSubmit( event: FormEvent ){
         event.preventDefault()
 
-        dispatch( login( { username, password } ) )
+        login( { username, password } )
+    }
+
+    if( isSuccess ){
+        return <LinearProgress/>
     }
 
     return ( <Fragment>
@@ -58,7 +58,7 @@ function Login(){
                     <div className="bg-white p-8 border border-gray-300">
                         <h1 className="text-xl text-center mb-4 font-medium">Log In</h1>
 
-                        <form method="post" onSubmit={ onSubmit }>
+                        <form method="post" onSubmit={ onLoginFormSubmit }>
                             <InputGroup
                                 label="Username"
                                 name="username" className="mb-3"
@@ -108,5 +108,11 @@ function Login(){
     )
 }
 
+// @ts-ignore
+export const getServerSideProps: GetServerSideProps = withGuestServerSide( async() => {
+    return {
+        props: {}
+    }
+} )
 
 export default Login

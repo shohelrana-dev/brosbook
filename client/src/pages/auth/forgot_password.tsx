@@ -1,41 +1,40 @@
-import React, { FormEvent, Fragment, useEffect } from 'react'
-import Head                                      from "next/head"
-import { LinearProgress }                        from "@mui/material"
-import Link                                      from "next/link"
-import { Lock }                                  from '@mui/icons-material'
-import { toast }                                 from "react-toastify"
-import { useRouter }                             from "next/router"
+import React, { FormEvent, Fragment, useEffect, useState } from 'react'
+import Head                                                from "next/head"
+import { LinearProgress }                                  from "@mui/material"
+import Link                                                from "next/link"
+import { Lock }                                            from '@mui/icons-material'
+import { toast }                                           from "react-toastify"
+import { useRouter }                                       from "next/router"
 
-import InputGroup                                            from "@components/common/InputGroup"
-import PrimaryButton                                         from "@components/common/PrimaryButton"
-import { clearInputErrors, forgotPassword, selectAuthState } from "@slices/authSlice"
-import { useAppDispatch, useAppSelector }                    from "@store/index"
+import InputGroup                    from "@components/common/InputGroup"
+import PrimaryButton                 from "@components/common/PrimaryButton"
+import { useForgotPasswordMutation } from "@services/authApi"
+import { InputErrors }               from "@interfaces/index.interfaces"
 
 function ForgotPassword(){
     //hooks
-    const router                     = useRouter()
-    const dispatch                   = useAppDispatch()
-    const { isLoading, inputErrors } = useAppSelector( selectAuthState )
+    const router                                                           = useRouter()
+    const [forgotPassword, { isLoading, isSuccess, isError, data, error }] = useForgotPasswordMutation()
+    const [email, setEmail]                                                = useState<string>( '' )
+
+    const errorData   = ( error && 'data' in error && error.data as any ) || {}
+    const inputErrors = errorData.errors || {} as InputErrors
 
     useEffect( () => {
-        if( Object.keys( inputErrors ).length > 0 ){
-            dispatch( clearInputErrors() )
+        isSuccess && toast.success( data?.message )
+        isError && toast.error( errorData?.message )
+
+        if( isSuccess ){
+            router.push( '/auth/login' )
         }
-    }, [dispatch] )
+
+    }, [isSuccess, isError] )
 
     //handle form submit
-    async function submitForm( event: FormEvent<HTMLFormElement> ){
+    function submitForm( event: FormEvent ){
         event.preventDefault()
 
-        const email: string = event.currentTarget.email.value
-
-        try {
-            const data = await dispatch( forgotPassword( email ) ).unwrap()
-            toast.success( data.message )
-            await router.push( '/auth/login' )
-        } catch ( err: any ) {
-            toast.error( err?.message || 'Something went wrong' )
-        }
+        forgotPassword( email )
     }
 
     return (
@@ -57,8 +56,14 @@ function ForgotPassword(){
                             Enter your email address and we will send you a link to get back into your account.
                         </small>
 
-                        <form method="post" onSubmit={ submitForm }>
-                            <InputGroup label="Email" name="email" className="mb-3" error={ inputErrors.email }/>
+                        <form onSubmit={ submitForm }>
+                            <InputGroup
+                                label="Email"
+                                name="email"
+                                className="mb-3"
+                                error={ inputErrors.email }
+                                onChange={ ( e ) => setEmail( e.target.value ) }
+                            />
                             <PrimaryButton type="submit" buttonTitle="Send Login Link" isLoading={ isLoading }/>
                         </form>
                     </div>
