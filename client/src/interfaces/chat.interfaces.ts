@@ -1,13 +1,5 @@
 import { User }                           from "@interfaces/user.interfaces"
 
-export interface ChatState {
-    isLoadingConversations: boolean
-    isLoadingMessages: boolean
-    conversations: Conversation[]
-    currentConversation: Conversation
-    messages: Message[]
-}
-
 export interface Conversation {
     id: number
     identifier: string

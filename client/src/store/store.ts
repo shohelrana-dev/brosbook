@@ -1,15 +1,14 @@
 import { configureStore }                                 from '@reduxjs/toolkit'
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux"
 import rootReducer                                        from "@store/rootReducer"
-import { authApi }                                        from "@services/authApi"
-import { postsApi }                                       from "@services/postsApi"
 import { setupListeners }                                 from "@reduxjs/toolkit/query"
 import thunk                                              from "redux-thunk"
+import { appApi }                                         from "@services/appApi"
 
 // creating the store
 export const store = configureStore( {
     reducer: rootReducer,
-    middleware: [thunk, authApi.middleware, postsApi.middleware],
+    middleware: [thunk, appApi.middleware],
     devTools: process.env.NODE_ENV !== "production"
 } )
 

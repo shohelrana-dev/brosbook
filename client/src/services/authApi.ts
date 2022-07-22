@@ -1,8 +1,6 @@
-import { createApi, fetchBaseQuery }                      from '@reduxjs/toolkit/query/react'
 import { Credentials, ResetPassFormData, SignupFormData } from "@interfaces/auth.interfaces"
 import { User }                                           from "@interfaces/user.interfaces"
-
-const baseUrl = `${ process.env.NEXT_PUBLIC_SERVER_API_URL }/auth/`
+import { appApi }                                         from "@services/appApi"
 
 type FetchData = {
     message: string
@@ -10,20 +8,18 @@ type FetchData = {
     user?: User
 }
 
-export const authApi = createApi( {
-    reducerPath: 'authApi',
-    baseQuery: fetchBaseQuery( { baseUrl } ),
+export const authApi = appApi.injectEndpoints( {
     endpoints: ( build ) => ( {
         signup: build.mutation<FetchData, SignupFormData>( {
             query: ( formData ) => ( {
-                url: `signup`,
+                url: `auth/signup`,
                 method: 'POST',
                 body: formData
             } )
         } ),
         login: build.mutation<FetchData, Credentials>( {
             query: ( credentials ) => ( {
-                url: `login`,
+                url: `auth/login`,
                 method: 'POST',
                 body: credentials,
                 credentials: 'include'
@@ -31,35 +27,41 @@ export const authApi = createApi( {
         } ),
         loginWithGoogle: build.mutation<FetchData, string>( {
             query: ( token ) => ( {
-                url: `google`,
+                url: `auth/google`,
                 method: 'POST',
                 body: { token },
                 credentials: 'include'
             } )
         } ),
+        authUser: build.query<FetchData, void>( {
+            query: () => ( {
+                url: `auth/me`,
+                credentials: 'include'
+            } )
+        } ),
         logout: build.query<FetchData, void>( {
             query: () => ( {
-                url: `logout`,
+                url: `auth/logout`,
                 method: 'GET',
                 credentials: 'include'
             } )
         } ),
         forgotPassword: build.mutation<FetchData, string>( {
             query: ( email ) => ( {
-                url: `forgot_password`,
+                url: `auth/forgot_password`,
                 method: 'POST',
                 body: { email }
             } )
         } ),
         resetPassword: build.mutation<FetchData, ResetPassFormData>( {
             query: ( formData ) => ( {
-                url: `reset_password/${ formData.token }`,
+                url: `auth/reset_password/${ formData.token }`,
                 method: 'POST',
                 body: formData
             } )
         } ),
         verifyAccount: build.mutation<FetchData, string>( {
-            query: ( token ) => `reset_password/${ token }`
+            query: ( token ) => `auth/reset_password/${ token }`
         } ),
     } ),
 } )
@@ -68,6 +70,7 @@ export const {
                  useSignupMutation,
                  useLoginMutation,
                  useLoginWithGoogleMutation,
+                 useAuthUserQuery,
                  useLogoutQuery,
                  useForgotPasswordMutation,
                  useResetPasswordMutation,

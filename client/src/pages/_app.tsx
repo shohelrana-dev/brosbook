@@ -7,7 +7,8 @@ import { GoogleOAuthProvider }        from '@react-oauth/google'
 import 'react-toastify/dist/ReactToastify.css'
 
 import '@styles/app.css'
-import { store } from '@store/store'
+import { store }                      from '@store/store'
+import CheckAuth                      from "@components/common/CheckAuth"
 
 function MyApp( { Component, pageProps }: AppProps ){
     const theme = createTheme( {
@@ -23,6 +24,7 @@ function MyApp( { Component, pageProps }: AppProps ){
             <ThemeProvider theme={ theme }>
                 <GoogleOAuthProvider clientId={ process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID! }>
                     <SimpleReactLightbox>
+                        <CheckAuth/>
                         <ToastContainer position="top-right"/>
                         <Component { ...pageProps } />
                     </SimpleReactLightbox>

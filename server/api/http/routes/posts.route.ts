@@ -24,16 +24,16 @@ router.post( '/', ensureAuth, postController.createPost )
 
 /**
  * @desc  save post like
- * @route POST posts/:postId/likes
+ * @route POST posts/:postId/like
  * @access Private
  * */
-router.post( '/:postId/likes', ensureAuth, postController.saveLike )
+router.post( '/:postId/like', ensureAuth, postController.like )
 
 /**
  * @desc  remove post like
- * @route DELETE posts/:postId/likes
+ * @route DELETE posts/:postId/unlike
  * @access Private
  * */
-router.delete( '/:postId/likes', ensureAuth, postController.deleteLike )
+router.post( '/:postId/unlike', ensureAuth, postController.unlike )
 
 export default router

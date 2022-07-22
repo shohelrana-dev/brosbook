@@ -1,34 +1,54 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { Post }                      from "@interfaces/posts.interfaces"
-
-const baseUrl = `${ process.env.NEXT_PUBLIC_SERVER_API_URL }/posts`
+import { authApi }                   from "@services/authApi"
 
 type FetchData = {
     message: string
     success: boolean
     posts?: Post[]
-    post?: Post
+    post?: Post,
+    meta?: {
+        count: number
+        currentPage: number
+        lastPage: number
+        nextPage: number | null
+        prevPage: number | null
+    }
 }
 
-export const postsApi = createApi( {
-    reducerPath: 'postsApi',
-    baseQuery: fetchBaseQuery( { baseUrl } ),
+export const postsApi = authApi.injectEndpoints( {
     endpoints: ( build ) => ( {
         getPosts: build.query<FetchData, { page: number }>( {
             query: () => ( {
-                url: '/',
+                url: 'posts',
                 credentials: 'include'
             } ),
         } ),
+
         createPost: build.mutation<FetchData, { content: string, image: Blob }>( {
             query: ( formData ) => ( {
-                url: '/',
+                url: 'posts',
                 method: 'POST',
                 body: formData,
+                credentials: 'include'
+            } ),
+        } ),
+
+        like: build.mutation<FetchData, number>( {
+            query: ( postId ) => ( {
+                url: `posts/${ postId }/like`,
+                method: 'POST',
+                credentials: 'include'
+            } ),
+        } ),
+
+        unlike: build.mutation<FetchData, number>( {
+            query: ( postId ) => ( {
+                url: `posts/${ postId }/unlike`,
+                method: 'POST',
                 credentials: 'include'
             } ),
         } ),
     } ),
 } )
 
-export const { useGetPostsQuery, useCreatePostMutation } = postsApi
+export const { useGetPostsQuery, useCreatePostMutation, useLikeMutation, useUnlikeMutation } = postsApi

@@ -4,9 +4,9 @@ import { Request }       from "express"
 import Follow            from "@entities/Follow"
 
 
-export default class FollowService {
+export default class UsersService {
 
-    public async addFollowing( req: Request ) {
+    public async follow( req: Request ) {
         const username = req.params.username
 
         if ( !username ) throw new HttpException( 'username is missing', HTTP_CONFLICT )
@@ -20,7 +20,7 @@ export default class FollowService {
         }
     }
 
-    public async removeFollowing( req: Request ) {
+    public async unfollow( req: Request ) {
         const username = req.params.username
 
         if ( !username ) throw new HttpException( 'username is missing', HTTP_CONFLICT )
@@ -29,18 +29,6 @@ export default class FollowService {
             return await Follow.delete( { username, followingUsername: req.user.username } )
         } catch ( e ) {
             throw new HttpException( 'Could not be unfollowing', HTTP_CONFLICT )
-        }
-    }
-
-    public async removeFollower( req: Request ) {
-        const username = req.params.username
-
-        if ( !username ) throw new HttpException( 'username is missing', HTTP_CONFLICT )
-
-        try {
-            return await Follow.delete( { username: req.user.username, followingUsername: username } )
-        } catch ( e ) {
-            throw new HttpException( 'Could not be remove follower', HTTP_CONFLICT )
         }
     }
 

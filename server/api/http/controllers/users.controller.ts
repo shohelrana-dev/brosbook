@@ -1,13 +1,13 @@
 import { NextFunction, Request, Response } from "express"
-import FollowService                       from "@services/follow.service"
+import UsersService                        from "@services/users.service"
 
-export default class FollowController {
-    constructor( private readonly followService: FollowService ) {
+export default class UsersController {
+    constructor( private readonly usersService: UsersService ){
     }
 
-    public addFollowing = async ( req: Request, res: Response, next: NextFunction ) => {
+    public follow = async( req: Request, res: Response, next: NextFunction ) => {
         try {
-            const following = await this.followService.addFollowing( req )
+            const following = await this.usersService.follow( req )
 
             res.json( {
                 success: true,
@@ -19,9 +19,9 @@ export default class FollowController {
         }
     }
 
-    public removeFollowing = async ( req: Request, res: Response, next: NextFunction ) => {
+    public unfollow = async( req: Request, res: Response, next: NextFunction ) => {
         try {
-            const following = await this.followService.removeFollowing( req )
+            const following = await this.usersService.unfollow( req )
 
             res.json( {
                 success: true,

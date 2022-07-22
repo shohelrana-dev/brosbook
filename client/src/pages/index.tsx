@@ -8,17 +8,19 @@ import CreatePostForm         from "@components/home/CreatePostForm"
 import PostCard               from "@components/home/PostCard"
 import { withAuthServerSide } from "@utils/withAuth"
 import { useGetPostsQuery }   from "@services/postsApi"
+import { useAppSelector }     from "@store/store"
+import { selectAuthState }    from "@features/authSlice"
 
 function Home(){
     //hooks
     const [page, setPage]     = useState( 1 )
     const { isLoading, data } = useGetPostsQuery( { page } )
-
+    const { user }            = useAppSelector( selectAuthState )
 
     const [scrollBottomRef] = useInfiniteScroll( {
         loading: isLoading,
-        hasNextPage: !! data?.postsMeta?.nextPage,
-        onLoadMore: () => setPage( data?.postsMeta?.nextPage ),
+        hasNextPage: !! data?.meta?.nextPage,
+        onLoadMore: () => setPage( data?.meta?.nextPage! ),
     } )
 
     return (
@@ -32,7 +34,7 @@ function Home(){
                     <PostCard post={ post } key={ post.id }/>
                 ) ) }
 
-                { !! data?.postsMeta?.nextPage ? (
+                { !! data?.meta?.nextPage ? (
                     <div className="flex justify-center min-h-[300px] items-center" ref={ scrollBottomRef }>
                         <CircularProgress/>
                     </div>

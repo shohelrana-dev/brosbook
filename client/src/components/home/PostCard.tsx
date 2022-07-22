@@ -1,16 +1,17 @@
-import React, { useState }  from 'react'
-import { SRLWrapper }       from "simple-react-lightbox"
-import OutlinedFavoriteIcon from "@mui/icons-material/FavoriteBorderOutlined"
-import FavoriteIcon         from '@mui/icons-material/Favorite'
-import CommentIcon          from "@mui/icons-material/ModeCommentOutlined"
-import IosShareIcon         from "@mui/icons-material/IosShare"
-import moment               from "moment"
-import Link                 from "next/link"
-import { Zoom }             from "@mui/material"
+import React, { useEffect, useState } from 'react'
+import { SRLWrapper }                 from "simple-react-lightbox"
+import OutlinedFavoriteIcon           from "@mui/icons-material/FavoriteBorderOutlined"
+import FavoriteIcon                   from '@mui/icons-material/Favorite'
+import CommentIcon                    from "@mui/icons-material/ModeCommentOutlined"
+import IosShareIcon                   from "@mui/icons-material/IosShare"
+import moment                         from "moment"
+import Link                           from "next/link"
+import { Zoom }                       from "@mui/material"
 
-import Avatar      from "@components/common/Avatar"
-import { Post }    from "@interfaces/posts.interfaces"
-import CommentList from "@components/home/PostCard/CommentList"
+import Avatar                                 from "@components/common/Avatar"
+import { Post }                               from "@interfaces/posts.interfaces"
+import CommentList                            from "@components/home/PostCard/CommentList"
+import { useLikeMutation, useUnlikeMutation } from "@services/postsApi"
 
 interface PostCardProps {
     post: Post
@@ -18,30 +19,33 @@ interface PostCardProps {
 
 const PostCard = ( { post }: PostCardProps ) => {
     //hooks
-    const [ hasCurrentUserLike, setHasCurrentUserLike ] = useState<boolean>( post.hasCurrentUserLike )
-    const [ likeCount, setLikeCount ]                   = useState<number>( post.likeCount )
-    const [ clickComment, setClickComment ]             = useState<boolean>( false )
+    const [like, { isSuccess: isLikeSuccess }]     = useLikeMutation()
+    const [unlike, { isSuccess: isUnlikeSuccess }] = useUnlikeMutation()
 
-    async function savePostLike() {
-        try {
+    const [hasCurrentUserLike, setHasCurrentUserLike] = useState<boolean>( post.hasCurrentUserLike )
+    const [likeCount, setLikeCount]                   = useState<number>( post.likeCount )
+    const [clickComment, setClickComment]             = useState<boolean>( false )
+
+    useEffect( () => {
+        if( isLikeSuccess ){
             setHasCurrentUserLike( true )
             setLikeCount( likeCount + 1 )
-        } catch ( err: any ) {
-            //console error message
-            const message = err?.response?.data.message || ''
-            console.error( message )
         }
-    }
+    }, [isLikeSuccess] )
 
-    async function removePostLike() {
-        try {
+    useEffect( () => {
+        if( isUnlikeSuccess ){
             setHasCurrentUserLike( false )
             setLikeCount( likeCount - 1 )
-        } catch ( err: any ) {
-            //console error message
-            const message = err?.response?.data.message || ''
-            console.error( message )
         }
+    }, [isUnlikeSuccess] )
+
+    async function handlePostLike(){
+        like( post.id )
+    }
+
+    async function handlePostUnlike(){
+        unlike( post.id )
     }
 
     return (
@@ -84,14 +88,18 @@ const PostCard = ( { post }: PostCardProps ) => {
                     className="flex mt-2 border-t-2 border-b-2 border-gray-100 py-1 border-solid justify-around">
                     <div className="flex items-center text-pink-500 relative">
                         <Zoom in={ hasCurrentUserLike }>
-                            <button onClick={ removePostLike }
-                                    className="mr-2 hover:bg-pink-100 rounded-full p-2 duration-300 absolute">
+                            <button
+                                onClick={ handlePostUnlike }
+                                className="mr-2 hover:bg-pink-100 rounded-full p-2 duration-300 absolute"
+                            >
                                 <FavoriteIcon/>
                             </button>
                         </Zoom>
-                        <Zoom in={ !hasCurrentUserLike }>
-                            <button onClick={ savePostLike }
-                                    className="mr-2 hover:bg-pink-100 rounded-full p-2 duration-300">
+                        <Zoom in={ ! hasCurrentUserLike }>
+                            <button
+                                onClick={ handlePostLike }
+                                className="mr-2 hover:bg-pink-100 rounded-full p-2 duration-300"
+                            >
                                 <OutlinedFavoriteIcon/>
                             </button>
                         </Zoom>

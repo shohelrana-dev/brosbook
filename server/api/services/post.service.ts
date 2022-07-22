@@ -13,13 +13,13 @@ import { PaginateMeta }                             from "@interfaces/index.inte
 
 export default class PostService {
 
-    public async getPosts( req: Request ): Promise<{ posts: Post[], meta: PaginateMeta }> {
+    public async getPosts( req: Request ): Promise<{ posts: Post[], meta: PaginateMeta }>{
         const page  = Number( req.query.page ) || 1
         const limit = Number( req.query.limit ) || 6
         const skip  = limit * ( page - 1 )
 
         try {
-            const [ posts, count ] = await getRepository( Post )
+            const [posts, count] = await getRepository( Post )
                 .createQueryBuilder( 'post' )
                 .where( 'post.username != :username', { username: req.user.username } )
                 .leftJoinAndSelect( 'post.user', 'user' )
@@ -43,17 +43,17 @@ export default class PostService {
         }
     }
 
-    public async createPost( req: Request ) {
+    public async createPost( req: Request ){
         const { content } = req.body
 
         const image = req.files?.image as UploadedFile
 
-        if ( !content && !image ) {
+        if( ! content && ! image ){
             throw new HttpException( 'Input field missing', HTTP_UNPROCESSABLE_ENTITY )
         }
 
         let imageUrl
-        if ( image ) {
+        if( image ){
             const imageName = process.env.APP_NAME + '_image_' + uuidv4() + path.extname( image.name )
             imageUrl        = `${ process.env.SERVER_URL }/images/${ imageName }`
             const imagePath = path.resolve( process.cwd(), 'public/images', imageName )
@@ -77,29 +77,29 @@ export default class PostService {
 
     }
 
-    public async saveLike( req: Request ) {
+    public async like( req: Request ){
         const postId = Number( req.params.postId )
 
-        if ( !postId ) throw new HttpException( 'Post id missing', HTTP_CONFLICT )
+        if( ! postId ) throw new HttpException( 'Post id missing', HTTP_CONFLICT )
 
         const like = Like.create( { postId, username: req.user.username } )
 
         try {
             await like.save()
         } catch ( err ) {
-            throw new HttpException( "Like couldn't be save" )
+            throw new HttpException( "The post couldn't be like" )
         }
     }
 
-    public async removeLike( req: Request ) {
+    public async unlike( req: Request ){
         const postId = Number( req.params.postId )
 
-        if ( !postId ) throw new HttpException( 'Post id missing', HTTP_CONFLICT )
+        if( ! postId ) throw new HttpException( 'Post id missing', HTTP_CONFLICT )
 
         try {
             await Like.delete( { postId, username: req.user.username } )
         } catch ( err ) {
-            throw new HttpException( "Like couldn't be remove" )
+            throw new HttpException( "The post couldn't be unlike" )
         }
     }
 }

@@ -1,5 +1,4 @@
 import { User }         from "@interfaces/user.interfaces"
-import { PaginateMeta } from "@interfaces/index.interfaces"
 
 export interface Post {
     id: number
