@@ -5,25 +5,22 @@ import { GoogleLogin, CredentialResponse } from '@react-oauth/google'
 import { CircularProgress }                from "@mui/material"
 
 import { useLoginWithGoogleMutation } from "@services/authApi"
-import { useAppSelector }             from "@store/store"
-import { selectAuthState }            from "@features/authSlice"
 
 function GoogleLoginButton(){
     //hooks
     const router                                                  = useRouter()
-    const { isAuthenticated }                                     = useAppSelector( selectAuthState )
     const [login, { isLoading, isSuccess, isError, data, error }] = useLoginWithGoogleMutation()
 
     const errorData = ( error && 'data' in error && error.data as any ) || {}
 
     useEffect( () => {
-        isSuccess && toast.success( data?.message )
-        isError && toast.error( errorData?.message )
-
-        if( isSuccess && isAuthenticated ){
+        if( isSuccess ){
             router.push( '/' )
+            toast.success( data?.message )
         }
-    }, [isSuccess, isError, isAuthenticated] )
+    }, [isSuccess] )
+
+    useEffect( () => { isError && toast.error( errorData.message )}, [isError] )
 
     const responseGoogle = async( response: CredentialResponse ) => {
         login( response.credential! )

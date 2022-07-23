@@ -13,13 +13,13 @@ function Logout(){
     const errorData = ( error && 'data' in error && error.data as any ) || {}
 
     useEffect( () => {
-        isSuccess && toast.success( data?.message )
-        isError && toast.error( errorData.message )
-
         if( isSuccess ){
-            router.push( '/auth/login' )
+            toast.success( data?.message )
+            location.href = '/auth/login'
         }
-    }, [isSuccess, isError, router] )
+    }, [isSuccess] )
+
+    useEffect( () => { isError && toast.error( errorData.message )}, [isError] )
 
     return <LinearProgress/>
 }

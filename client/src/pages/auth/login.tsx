@@ -12,13 +12,10 @@ import { withGuestServerSide } from "@utils/withAuth"
 import { useLoginMutation }    from "@services/authApi"
 import { InputErrors }         from "@interfaces/index.interfaces"
 import { toast }               from "react-toastify"
-import { selectAuthState }     from "@features/authSlice"
-import { useAppSelector }      from "@store/store"
 
 function Login(){
     //hooks
     const router                                                  = useRouter()
-    const { isAuthenticated }                                     = useAppSelector( selectAuthState )
     const [login, { isLoading, data, error, isSuccess, isError }] = useLoginMutation()
     const [username, setUsername]                                 = useState<string>( '' )
     const [password, setPassword]                                 = useState<string>( '' )
@@ -27,13 +24,13 @@ function Login(){
     const inputErrors = errorData.errors || {} as InputErrors
 
     useEffect( () => {
-        isSuccess && toast.success( data?.message )
-        isError && toast.error( errorData.message )
-
-        if( isSuccess && isAuthenticated ){
+        if( isSuccess ){
             router.push( '/' )
+            toast.success( data?.message )
         }
-    }, [isSuccess, isError, isAuthenticated] )
+    }, [isSuccess] )
+
+    useEffect( () => { isError && toast.error( errorData.message )}, [isError] )
 
     //handle form submit
     function onLoginFormSubmit( event: FormEvent ){
