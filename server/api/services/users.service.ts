@@ -46,7 +46,7 @@ export default class UsersService {
                 .getOne()
         } catch ( e ) {
             console.log( e )
-            throw new HttpException( "posts couldn't be fetched", HTTP_CONFLICT )
+            throw new HttpException( "User couldn't be fetched", HTTP_CONFLICT )
         }
     }
 
@@ -79,7 +79,6 @@ export default class UsersService {
 
             return { posts, meta: paginateMeta( count, page, limit ) }
         } catch ( e ) {
-            console.log(e)
             throw new HttpException( "posts could not be fetched", HTTP_CONFLICT )
         }
     }

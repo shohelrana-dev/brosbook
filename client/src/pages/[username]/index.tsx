@@ -1,14 +1,16 @@
-import React, { useState }                               from "react"
-import useInfiniteScroll                                 from "react-infinite-scroll-hook"
-import { CircularProgress }                              from "@mui/material"
-import { useRouter }                                     from "next/router"
-import { GetServerSideProps, GetServerSidePropsContext } from "next"
+import React                  from "react"
+import useInfiniteScroll      from "react-infinite-scroll-hook"
+import { CircularProgress }   from "@mui/material"
+import { useRouter }          from "next/router"
+import { GetServerSideProps } from "next"
 
-import ProfileLayout    from "@components/layouts/ProfileLayout"
-import PostCard         from "@components/home/PostCard"
-import { Post }         from "@interfaces/posts.interfaces"
-import { User }         from "@interfaces/user.interfaces"
-import { PaginateMeta } from "@interfaces/index.interfaces"
+import ProfileLayout                                       from "@components/layouts/ProfileLayout"
+import PostCard                                            from "@components/home/PostCard"
+import { Post }                                            from "@interfaces/posts.interfaces"
+import { User }                                            from "@interfaces/user.interfaces"
+import { PaginateMeta }                                    from "@interfaces/index.interfaces"
+import { wrapper }                                         from "@store/store"
+import { useGetUserPostsQuery, useGetUserQuery, usersApi } from "@services/usersApi"
 
 interface ProfileProps {
     posts: Post[],
@@ -18,21 +20,22 @@ interface ProfileProps {
 
 function Index( props: ProfileProps ){
     //hooks
-    const [isLoadingPosts, setIsLoadingPosts] = useState<boolean>( false )
-    const [posts, setPosts]                   = useState<Post[]>( props.posts )
-    const [postsMeta, setPostsMeta]           = useState<PaginateMeta>( props.postsMeta )
-    const router                              = useRouter()
+    const router                     = useRouter()
+    const { isLoading, data, error } = useGetUserPostsQuery( { username: router.query.username as string } )
+    const { data: userData }         = useGetUserQuery( router.query.username as string )
 
-    const username = router.query.username as string
+    const posts     = data?.posts || []
+    const postsMeta = data?.meta || {} as PaginateMeta
+    const user      = userData?.user || {} as User
 
     const [scrollBottomRef] = useInfiniteScroll( {
-        loading: isLoadingPosts,
+        loading: isLoading,
         hasNextPage: !! postsMeta?.nextPage,
         onLoadMore: async() => {},
     } )
 
     return (
-        <ProfileLayout user={ props.user }>
+        <ProfileLayout user={ user }>
             <>
                 { posts.length > 0 && posts.map( post => (
                     <PostCard post={ post } key={ post.id }/>
@@ -50,30 +53,11 @@ function Index( props: ProfileProps ){
     )
 }
 
-export const getServerSideProps: GetServerSideProps = async( context: GetServerSidePropsContext ) => {
-    const username = context.params?.username as string
+export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps( store => async( context ) => {
+    await store.dispatch<any>( usersApi.endpoints.getUser.initiate( context.params?.username as string ) )
+    await store.dispatch<any>( usersApi.endpoints.getUserPosts.initiate( { username: context.params?.username as string } ) )
 
-    try {
-        const postsData = []
-        const userData  = {}
-        return {
-            props: {
-                user: userData.user || {},
-                posts: postsData.posts || [],
-                postsMeta: postsData?.meta || {}
-            }
-        }
-    } catch ( e ) {
-
-    }
-
-    return {
-        props: {
-            user: {},
-            posts: [],
-            postsMeta: {}
-        }
-    }
-}
+    return { props: {} }
+} )
 
 export default Index

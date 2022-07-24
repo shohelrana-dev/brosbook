@@ -7,26 +7,26 @@ import LocationIcon    from "@mui/icons-material/LocationOnOutlined"
 import CakeIcon        from "@mui/icons-material/CakeOutlined"
 import ScheduleIcon    from "@mui/icons-material/Schedule"
 import { Button }      from "@mui/material"
-import { useSelector } from "react-redux"
 import moment          from "moment"
+import { useSelector } from "react-redux"
 
-import MainLayout      from "@components/layouts/MainLayout"
-import { RootState }   from "@store/store"
-import { User }        from "@interfaces/user.interfaces"
+import MainLayout          from "@components/layouts/MainLayout"
+import { User }            from "@interfaces/user.interfaces"
+import { selectAuthState } from "@features/authSlice"
 
 interface ProfileLayoutProps {
     children: React.ReactElement
     user: User
 }
 
-export default function ProfileLayout( props: ProfileLayoutProps ) {
+export default function ProfileLayout( props: ProfileLayoutProps ){
     const { children, user } = props
 
     //hooks
     const router                                 = useRouter()
-    const { user: currentUser, isAuthenticated } = useSelector( ( state: RootState ) => state.auth )
+    const { user: currentUser, isAuthenticated } = useSelector( selectAuthState )
 
-    async function handleFollowClick( user: any ) {
+    async function handleFollowClick( user: User ){
 
     }
 

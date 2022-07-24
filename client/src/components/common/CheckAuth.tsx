@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react'
-import { useAuthUserQuery } from "@services/authApi"
-import { useAppDispatch }   from "@store/store"
-import { setAuth }          from "@features/authSlice"
+import React, { useEffect }    from 'react'
+import { useGetAuthUserQuery } from "@services/authApi"
+import { setAuth }             from "@features/authSlice"
+import { useDispatch }         from "react-redux"
 
 function CheckAuth(){
-    const dispatch            = useAppDispatch()
-    const { data, isSuccess } = useAuthUserQuery()
+    const dispatch            = useDispatch()
+    const { data, isSuccess } = useGetAuthUserQuery()
 
     useEffect( () => {
         isSuccess && dispatch( setAuth( data.user ) )

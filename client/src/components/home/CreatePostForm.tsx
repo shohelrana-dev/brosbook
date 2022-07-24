@@ -4,16 +4,16 @@ import InsertPhotoIcon                                                from "@mui
 import CancelIcon                                                     from '@mui/icons-material/Cancel'
 import { toast }                                                      from "react-toastify"
 import { CircularProgress }                                           from "@mui/material"
+import { useSelector }                                                from "react-redux"
 
 import Avatar                    from "@components/common/Avatar"
-import { useAppSelector }        from "@store/store"
 import { selectAuthState }       from "@features/authSlice"
 import { useCreatePostMutation } from "@services/postsApi"
 
 function CreatePostForm(){
 
     //hooks
-    const { user }                                                     = useAppSelector( selectAuthState )
+    const { user }                                                     = useSelector( selectAuthState )
     const [createPost, { isLoading, isSuccess, isError, data, error }] = useCreatePostMutation()
     const inputImageRef                                                = useRef<HTMLInputElement | null>( null )
     const [selectedImage, setSelectedImage]                            = useState<any>( null )

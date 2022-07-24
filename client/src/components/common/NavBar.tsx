@@ -17,12 +17,12 @@ import PermIdentityIcon    from '@mui/icons-material/PermIdentity'
 import LogoutIcon          from '@mui/icons-material/Logout'
 import SettingsIcon        from '@mui/icons-material/Settings'
 import { selectAuthState } from "@features/authSlice"
-import { useAppSelector }  from "@store/store"
+import { useSelector }     from "react-redux"
 
 function NavBar(){
     const [anchorEl, setAnchorEl]                     = React.useState<null | HTMLElement>( null )
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState<null | HTMLElement>( null )
-    const { user, isAuthenticated }                   = useAppSelector( selectAuthState )
+    const { user, isAuthenticated }                   = useSelector( selectAuthState )
 
     if( ! isAuthenticated ) return null
 

@@ -33,7 +33,7 @@ export const authApi = appApi.injectEndpoints( {
                 credentials: 'include'
             } )
         } ),
-        authUser: build.query<FetchData, void>( {
+        getAuthUser: build.query<FetchData, void>( {
             query: () => ( {
                 url: `auth/me`,
                 credentials: 'include'
@@ -70,7 +70,7 @@ export const {
                  useSignupMutation,
                  useLoginMutation,
                  useLoginWithGoogleMutation,
-                 useAuthUserQuery,
+                 useGetAuthUserQuery,
                  useLogoutQuery,
                  useForgotPasswordMutation,
                  useResetPasswordMutation,

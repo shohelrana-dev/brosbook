@@ -1,5 +1,5 @@
-import { Post }                      from "@interfaces/posts.interfaces"
-import { authApi }                   from "@services/authApi"
+import { Post }    from "@interfaces/posts.interfaces"
+import { authApi } from "@services/authApi"
 
 type FetchData = {
     message: string
@@ -17,7 +17,7 @@ type FetchData = {
 
 export const postsApi = authApi.injectEndpoints( {
     endpoints: ( build ) => ( {
-        getPosts: build.query<FetchData, { page: number }>( {
+        getPosts: build.query<FetchData, { page?: number, limit?: number }>( {
             query: () => ( {
                 url: 'posts',
                 credentials: 'include'

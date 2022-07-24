@@ -2,20 +2,21 @@ import useInfiniteScroll      from 'react-infinite-scroll-hook'
 import { CircularProgress }   from "@mui/material"
 import { GetServerSideProps } from "next"
 import { useState }           from "react"
+import { useSelector }        from "react-redux"
 
 import MainLayout             from "@components/layouts/MainLayout"
 import CreatePostForm         from "@components/home/CreatePostForm"
 import PostCard               from "@components/home/PostCard"
 import { withAuthServerSide } from "@utils/withAuth"
 import { useGetPostsQuery }   from "@services/postsApi"
-import { useAppSelector }     from "@store/store"
 import { selectAuthState }    from "@features/authSlice"
 
 function Home(){
     //hooks
     const [page, setPage]     = useState( 1 )
     const { isLoading, data } = useGetPostsQuery( { page } )
-    const { user }            = useAppSelector( selectAuthState )
+    const { user }            = useSelector( selectAuthState )
+    console.log( user )
 
     const [scrollBottomRef] = useInfiniteScroll( {
         loading: isLoading,
@@ -49,11 +50,7 @@ function Home(){
 
 // @ts-ignore
 export const getServerSideProps: GetServerSideProps = withAuthServerSide( async() => {
-    return {
-        props: {
-            posts: []
-        }
-    }
+    return { props: {} }
 } )
 
 export default Home
