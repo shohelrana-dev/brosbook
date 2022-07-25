@@ -24,7 +24,7 @@ export interface Message {
     createdAt: string
 }
 
-export interface MessageFormData {
+export interface MessagePayload {
     body?: string
     file?: string
     sender: string
@@ -33,7 +33,7 @@ export interface MessageFormData {
     currentUsername: string
 }
 
-export interface ReactionFormData {
+export interface ReactionPayload {
     messageId: number
     reaction: string
     sender: string

@@ -17,8 +17,8 @@ import notFound    from "@middleware/not-found"
 import error       from '@middleware/error'
 import currentUser from '@middleware/current-user'
 import socketInit  from "@api/socket"
-import fileUpload from "express-fileupload"
-import routes     from '@routes/index.route'
+import fileUpload  from "express-fileupload"
+import routes      from '@startup/routes'
 
 //Application
 const app: Application = express()

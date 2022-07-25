@@ -18,34 +18,28 @@ type FetchData = {
 export const postsApi = authApi.injectEndpoints( {
     endpoints: ( build ) => ( {
         getPosts: build.query<FetchData, { page?: number, limit?: number }>( {
-            query: () => ( {
-                url: 'posts',
-                credentials: 'include'
-            } ),
+            query: () => 'posts'
         } ),
 
         createPost: build.mutation<FetchData, { content: string, image: Blob }>( {
             query: ( formData ) => ( {
                 url: 'posts',
                 method: 'POST',
-                body: formData,
-                credentials: 'include'
+                body: formData
             } ),
         } ),
 
         like: build.mutation<FetchData, number>( {
             query: ( postId ) => ( {
                 url: `posts/${ postId }/like`,
-                method: 'POST',
-                credentials: 'include'
+                method: 'POST'
             } ),
         } ),
 
         unlike: build.mutation<FetchData, number>( {
             query: ( postId ) => ( {
                 url: `posts/${ postId }/unlike`,
-                method: 'POST',
-                credentials: 'include'
+                method: 'POST'
             } ),
         } ),
     } ),

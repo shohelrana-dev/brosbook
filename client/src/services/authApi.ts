@@ -1,4 +1,4 @@
-import { Credentials, ResetPassFormData, SignupFormData } from "@interfaces/auth.interfaces"
+import { CredentialPayload, ResetPassPayload, SignupPayload } from "@interfaces/auth.interfaces"
 import { User }                                           from "@interfaces/user.interfaces"
 import { appApi }                                         from "@services/appApi"
 
@@ -10,42 +10,43 @@ type FetchData = {
 
 export const authApi = appApi.injectEndpoints( {
     endpoints: ( build ) => ( {
-        signup: build.mutation<FetchData, SignupFormData>( {
+        signup: build.mutation<FetchData, SignupPayload>( {
             query: ( formData ) => ( {
                 url: `auth/signup`,
                 method: 'POST',
                 body: formData
             } )
         } ),
-        login: build.mutation<FetchData, Credentials>( {
-            query: ( credentials ) => ( {
+
+        login: build.mutation<FetchData, CredentialPayload>( {
+            query: ( CredentialPayload ) => ( {
                 url: `auth/login`,
                 method: 'POST',
-                body: credentials,
-                credentials: 'include'
+                body: CredentialPayload
             } )
         } ),
+
         loginWithGoogle: build.mutation<FetchData, string>( {
             query: ( token ) => ( {
                 url: `auth/google`,
                 method: 'POST',
                 body: { token },
-                credentials: 'include'
             } )
         } ),
-        getAuthUser: build.query<FetchData, void>( {
-            query: () => ( {
+
+        getAuthUser: build.query<FetchData, string | void>( {
+            query: ( access_token?: string ) => ( {
                 url: `auth/me`,
-                credentials: 'include'
-            } )
+                headers: {
+                    Authorization: access_token ? `Bearer ${ access_token }` : ''
+                }
+            } ),
         } ),
+
         logout: build.query<FetchData, void>( {
-            query: () => ( {
-                url: `auth/logout`,
-                method: 'GET',
-                credentials: 'include'
-            } )
+            query: () => `auth/logout`,
         } ),
+
         forgotPassword: build.mutation<FetchData, string>( {
             query: ( email ) => ( {
                 url: `auth/forgot_password`,
@@ -53,13 +54,15 @@ export const authApi = appApi.injectEndpoints( {
                 body: { email }
             } )
         } ),
-        resetPassword: build.mutation<FetchData, ResetPassFormData>( {
+
+        resetPassword: build.mutation<FetchData, ResetPassPayload>( {
             query: ( formData ) => ( {
                 url: `auth/reset_password/${ formData.token }`,
                 method: 'POST',
                 body: formData
             } )
         } ),
+
         verifyAccount: build.mutation<FetchData, string>( {
             query: ( token ) => `auth/reset_password/${ token }`
         } ),

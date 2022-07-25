@@ -43,7 +43,7 @@ export default function Followers() {
     } )
 
     return (
-        <ProfileLayout>
+        <ProfileLayout user={}>
             <>
                 { followers && followers.map( user => (
                     <FollowUser user={ user } key={ user.id }/>

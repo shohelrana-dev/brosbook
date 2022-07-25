@@ -6,7 +6,7 @@ import MainLayout                       from "@components/layouts/MainLayout"
 import Conversations                    from "@components/messages/Conversations"
 import MessageBox                       from "@components/messages/MessageBox"
 import Information                      from "@components/messages/Information"
-import { withAuth }                     from "@utils/withAuth"
+import { withAuth }                     from "@hoc/withAuth"
 import { setCurrentConversationAction } from "@actions/chatActions"
 import api                              from "../../api/index"
 import NavBar                           from "@components/common/NavBar";

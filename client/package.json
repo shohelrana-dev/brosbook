@@ -39,6 +39,7 @@
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
+    "@types/js-cookie": "^3.0.2",
     "@types/next-redux-wrapper": "^3.0.0",
     "@types/node": "18.0.1",
     "@types/react": "^18.0.14",

@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from "express"
 import { validationResult }                from "express-validator"
 import cookie                              from "cookie"
+import bcrypt                              from "bcrypt"
 
 import User              from "@entities/User"
 import AuthService       from "@services/auth.service"
 import HttpException     from "@exceptions/http.exception"
-import bcrypt            from "bcrypt";
-import { HTTP_CONFLICT } from "@utils/httpStatusCodes";
+import { HTTP_CONFLICT } from "@utils/httpStatusCodes"
 
 class AuthController {
 
@@ -55,7 +55,7 @@ class AuthController {
             const tokenData = await this.authService.login( req )
 
             //set cookie
-            res.set( 'Set-Cookie', this.getTokenCookie( tokenData.access_token ) )
+            res.set( 'Set-Cookie', this.getSerializeTokenCookie( tokenData.access_token ) )
 
             //return success response
             return res.json( {
@@ -73,7 +73,7 @@ class AuthController {
             const tokenData = await this.authService.google( req )
 
             //set cookie
-            res.set( 'Set-Cookie', this.getTokenCookie( tokenData.access_token ) )
+            res.set( 'Set-Cookie', this.getSerializeTokenCookie( tokenData.access_token ) )
 
             //return success response
             return res.json( {
@@ -211,7 +211,7 @@ class AuthController {
         }
     }
 
-    private getTokenCookie = ( token: string ) => {
+    private getSerializeTokenCookie = ( token: string ) => {
         return cookie.serialize( 'access_token', token, {
             httpOnly: true,
             secure: true,

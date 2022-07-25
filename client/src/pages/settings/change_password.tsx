@@ -2,9 +2,9 @@ import React, { FormEvent }         from 'react'
 import { useDispatch, useSelector } from "react-redux"
 
 import { RootState } from "@store/store"
-import Avatar        from "@components/common/Avatar"
-import { withAuth }    from "@utils/withAuth"
-import MainLayout      from "@components/layouts/MainLayout"
+import Avatar       from "@components/common/Avatar"
+import { withAuth } from "@hoc/withAuth"
+import MainLayout   from "@components/layouts/MainLayout"
 import BasicInputGroup from "@components/common/BasicInputGroup"
 import LeftSidebar        from "@components/settings/LeftSidebar"
 import { changePassword } from "@actions/settingsActions";

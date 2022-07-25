@@ -1,9 +1,9 @@
-export interface Credentials {
+export interface CredentialPayload {
     username: string
     password: string
 }
 
-export interface SignupFormData {
+export interface SignupPayload {
     firstName: string
     lastName: string
     email: string
@@ -11,7 +11,7 @@ export interface SignupFormData {
     password: string
 }
 
-export interface ResetPassFormData {
+export interface ResetPassPayload {
     password: string
     confirmPassword: string
     token: string

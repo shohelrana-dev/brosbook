@@ -7,7 +7,7 @@ import { useSelector }        from "react-redux"
 import MainLayout             from "@components/layouts/MainLayout"
 import CreatePostForm         from "@components/home/CreatePostForm"
 import PostCard               from "@components/home/PostCard"
-import { withAuthServerSide } from "@utils/withAuth"
+import { withAuthServerSide } from "@hoc/withAuth"
 import { useGetPostsQuery }   from "@services/postsApi"
 import { selectAuthState }    from "@features/authSlice"
 

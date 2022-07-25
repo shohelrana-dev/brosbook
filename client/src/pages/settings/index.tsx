@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { withAuth }         from "@utils/withAuth"
+import { withAuth }         from "@hoc/withAuth"
 import { LinearProgress }   from "@mui/material"
 import { useRouter }        from "next/router"
 

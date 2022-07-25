@@ -9,7 +9,7 @@ import HttpException        from "@exceptions/http.exception"
 import { TokenData }        from "@interfaces/index.interfaces"
 import { decrypt, encrypt } from "@utils/encryptDecrypt"
 import sendEmail            from "@utils/sendEmail"
-import Verification         from "@entities/Verification";
+import Verification         from "@entities/Verification"
 
 class AuthService {
 
@@ -70,7 +70,7 @@ class AuthService {
             throw new HttpException( 'The account is not activate yet, please check your email.', 401 )
         }
 
-        const tokenData = this.generateJwtToken( user )
+        const tokenData = AuthService.generateJwtToken( user )
         return { ...tokenData, user }
 
     }
@@ -110,7 +110,7 @@ class AuthService {
                 }
             }
 
-            const tokenData = this.generateJwtToken( user )
+            const tokenData = AuthService.generateJwtToken( user )
             return { ...tokenData, user }
         }
 
@@ -178,7 +178,7 @@ class AuthService {
         throw new HttpException( 'The token is not valid!', 422 )
     }
 
-    private generateJwtToken( user: User ): TokenData {
+    private static generateJwtToken( user: User ): TokenData {
         const dataStoredInToken = {
             id: user.id,
             firstName: user.firstName,

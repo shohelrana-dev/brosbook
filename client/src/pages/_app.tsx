@@ -32,7 +32,9 @@ function MyApp( { Component, pageProps }: AppProps ){
 }
 
 MyApp.getInitialProps = wrapper.getInitialAppProps( ( store ) => async( { Component, ctx } ) => {
-    await store.dispatch<any>( authApi.endpoints.getAuthUser.initiate() )
+    // @ts-ignore
+    const access_token = ctx.req?.cookies?.access_token as string
+    await store.dispatch<any>( authApi.endpoints.getAuthUser.initiate( access_token ) )
 
     const pageProps = Component.getInitialProps ? await Component.getInitialProps( ctx ) : {}
     return { pageProps }

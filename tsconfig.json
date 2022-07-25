@@ -37,6 +37,7 @@
       "paths": {
          "@api/*": ["server/api/*"],
          "@config/*": ["server/config/*"],
+         "@startup/*": ["server/startup/*"],
          "@controllers/*": ["server/api/http/controllers/*"],
          "@database/*": ["server/api/database"],
          "@exceptions/*": ["server/api/exceptions/*"],

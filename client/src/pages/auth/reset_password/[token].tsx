@@ -11,8 +11,8 @@ import InputGroup                   from "@components/common/InputGroup"
 import PrimaryButton                from "@components/common/PrimaryButton"
 import { useAppDispatch }           from "@store/store"
 import { useResetPasswordMutation } from "@services/authApi";
-import { InputErrors }              from "@interfaces/index.interfaces"
-import API                          from "@utils/API"
+import { InputErrors } from "@interfaces/index.interfaces"
+import Http            from "@utils/http"
 
 function Token(){
     //hooks
@@ -42,7 +42,7 @@ function Token(){
         if( ! token || token === 'undefined' ) return
 
         try {
-            await API.get( `${ process.env.NEXT_PUBLIC_SERVER_API_URL }/auth/reset_password/${ token }` )
+            await Http.get( `${ process.env.NEXT_PUBLIC_SERVER_API_URL }/auth/reset_password/${ token }` )
             setIsTokenVerifying( false )
         } catch ( e ) {
             toast.error( 'Invalid token!' )

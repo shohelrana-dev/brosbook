@@ -46,7 +46,7 @@ export interface SettingsState {
     user: User
 }
 
-export interface UpdateProfileFormData {
+export interface UpdateProfilePayload {
     firstName: string
     lastName: string
     bio: string
@@ -58,7 +58,7 @@ export interface UpdateProfileFormData {
     coverPhoto: Blob | null
 }
 
-export interface ChangePasswordFormData {
+export interface ChangePasswordPayload {
     oldPassword: string
     newPassword: string
     confirmNewPassword: string

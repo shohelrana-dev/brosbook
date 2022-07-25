@@ -8,7 +8,7 @@ import GoogleLoginButton       from '@components/common/GoogleLoginButton'
 import PrimaryButton           from "@components/common/PrimaryButton"
 import { useRouter }           from "next/router"
 import { GetServerSideProps }  from "next"
-import { withGuestServerSide } from "@utils/withAuth"
+import { withGuestServerSide } from "@hoc/withAuth"
 import { useLoginMutation }    from "@services/authApi"
 import { InputErrors }         from "@interfaces/index.interfaces"
 import { toast }               from "react-toastify"

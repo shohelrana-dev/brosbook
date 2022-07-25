@@ -6,19 +6,12 @@ import { GetServerSideProps } from "next"
 
 import ProfileLayout                                       from "@components/layouts/ProfileLayout"
 import PostCard                                            from "@components/home/PostCard"
-import { Post }                                            from "@interfaces/posts.interfaces"
 import { User }                                            from "@interfaces/user.interfaces"
 import { PaginateMeta }                                    from "@interfaces/index.interfaces"
 import { wrapper }                                         from "@store/store"
 import { useGetUserPostsQuery, useGetUserQuery, usersApi } from "@services/usersApi"
 
-interface ProfileProps {
-    posts: Post[],
-    user: User,
-    postsMeta: PaginateMeta
-}
-
-function Index( props: ProfileProps ){
+function Index(  ){
     //hooks
     const router                     = useRouter()
     const { isLoading, data, error } = useGetUserPostsQuery( { username: router.query.username as string } )
