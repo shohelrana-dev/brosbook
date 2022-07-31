@@ -1,21 +1,20 @@
-import React                  from "react"
-import useInfiniteScroll      from "react-infinite-scroll-hook"
-import { CircularProgress }   from "@mui/material"
-import { useRouter }          from "next/router"
-import { GetServerSideProps } from "next"
+import React                from "react"
+import useInfiniteScroll    from "react-infinite-scroll-hook"
+import { CircularProgress } from "@mui/material"
+import { useRouter }        from "next/router"
 
 import ProfileLayout                                       from "@components/layouts/ProfileLayout"
 import PostCard                                            from "@components/home/PostCard"
 import { User }                                            from "@interfaces/user.interfaces"
 import { PaginateMeta }                                    from "@interfaces/index.interfaces"
-import { wrapper }                                         from "@store/store"
 import { useGetUserPostsQuery, useGetUserQuery, usersApi } from "@services/usersApi"
+import { wrapper }                                         from "@store/store"
 
-function Index(  ){
+export default function UserProfilePage(){
     //hooks
-    const router                     = useRouter()
-    const { isLoading, data, error } = useGetUserPostsQuery( { username: router.query.username as string } )
-    const { data: userData }         = useGetUserQuery( router.query.username as string )
+    const router              = useRouter()
+    const { isLoading, data } = useGetUserPostsQuery( { username: router.query.username as string } )
+    const { data: userData }  = useGetUserQuery( router.query.username as string )
 
     const posts     = data?.posts || []
     const postsMeta = data?.meta || {} as PaginateMeta
@@ -46,11 +45,10 @@ function Index(  ){
     )
 }
 
-export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps( store => async( context ) => {
-    await store.dispatch<any>( usersApi.endpoints.getUser.initiate( context.params?.username as string ) )
-    await store.dispatch<any>( usersApi.endpoints.getUserPosts.initiate( { username: context.params?.username as string } ) )
+export const getServerSideProps = wrapper.getServerSideProps( ( store ) => async( ctx ) => {
+    store.dispatch( usersApi.endpoints.getUserPosts.initiate( { username: ctx.params?.username as string } ) )
+    store.dispatch( usersApi.endpoints.getUser.initiate( ctx.params?.username as string ) )
+    await Promise.all( usersApi.util.getRunningOperationPromises() )
 
     return { props: {} }
 } )
-
-export default Index

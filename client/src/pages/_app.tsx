@@ -3,13 +3,18 @@ import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { ToastContainer }             from 'react-toastify'
 import SimpleReactLightbox            from 'simple-react-lightbox'
 import { GoogleOAuthProvider }        from '@react-oauth/google'
+import { useSelector }                from "react-redux"
+import { NextApiRequest }             from "next"
 import 'react-toastify/dist/ReactToastify.css'
 
-import '@styles/app.css'
 import { wrapper }                    from '@store/store'
 import { authApi }                    from "@services/authApi"
+import { selectAuthState }            from "@features/authSlice"
+import '@styles/app.css'
 
 function MyApp( { Component, pageProps }: AppProps ){
+    const { isAuthenticated } = useSelector( selectAuthState )
+    console.log( 'isAuthenticated', isAuthenticated )
 
     const theme = createTheme( {
         palette: {
@@ -31,12 +36,12 @@ function MyApp( { Component, pageProps }: AppProps ){
     )
 }
 
-MyApp.getInitialProps = wrapper.getInitialAppProps( ( store ) => async( { Component, ctx } ) => {
-    // @ts-ignore
-    const access_token = ctx.req?.cookies?.access_token as string
-    await store.dispatch<any>( authApi.endpoints.getAuthUser.initiate( access_token ) )
+MyApp.getInitialProps = wrapper.getInitialAppProps( ( store ) => async( appContext ) => {
+    const req          = appContext.ctx.req as NextApiRequest
+    const access_token = req?.cookies?.access_token
+    await store.dispatch( authApi.endpoints.getAuthUser.initiate( access_token ) )
 
-    const pageProps = Component.getInitialProps ? await Component.getInitialProps( ctx ) : {}
+    const pageProps = appContext.Component.getInitialProps ? await appContext.Component.getInitialProps( appContext.ctx ) : {}
     return { pageProps }
 } )
 

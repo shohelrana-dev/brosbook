@@ -7,7 +7,7 @@ interface LayoutProps {
 }
 
 
-function MainLayout( { children }: LayoutProps ) {
+function MainLayout( { children }: LayoutProps ){
     return (
         <>
             <NavBar/>

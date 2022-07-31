@@ -4,8 +4,8 @@ import { HYDRATE }        from "next-redux-wrapper"
 
 const BASE_URL = process.env.NEXT_PUBLIC_SERVER_API_URL
 
-export const appApi = createApi( {
-    reducerPath: 'appApi',
+export const baseApi = createApi( {
+    reducerPath: 'baseApi',
     baseQuery: fetchBaseQuery( {
         baseUrl: BASE_URL,
         credentials: 'include'

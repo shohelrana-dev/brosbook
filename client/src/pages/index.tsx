@@ -1,27 +1,22 @@
-import useInfiniteScroll      from 'react-infinite-scroll-hook'
-import { CircularProgress }   from "@mui/material"
-import { GetServerSideProps } from "next"
-import { useState }           from "react"
-import { useSelector }        from "react-redux"
+import useInfiniteScroll    from 'react-infinite-scroll-hook'
+import { CircularProgress } from "@mui/material"
+import { useState }         from "react"
 
-import MainLayout             from "@components/layouts/MainLayout"
-import CreatePostForm         from "@components/home/CreatePostForm"
-import PostCard               from "@components/home/PostCard"
-import { withAuthServerSide } from "@hoc/withAuth"
-import { useGetPostsQuery }   from "@services/postsApi"
-import { selectAuthState }    from "@features/authSlice"
+import MainLayout           from "@components/layouts/MainLayout"
+import CreatePostForm       from "@components/home/CreatePostForm"
+import PostCard             from "@components/home/PostCard"
+import { useGetPostsQuery } from "@services/postsApi"
+import { wrapper }          from "@store/store"
 
-function Home(){
+export default function Home(){
     //hooks
     const [page, setPage]     = useState( 1 )
     const { isLoading, data } = useGetPostsQuery( { page } )
-    const { user }            = useSelector( selectAuthState )
-    console.log( user )
 
     const [scrollBottomRef] = useInfiniteScroll( {
         loading: isLoading,
         hasNextPage: !! data?.meta?.nextPage,
-        onLoadMore: () => setPage( data?.meta?.nextPage! ),
+        onLoadMore: () => setPage( data?.meta?.nextPage! )
     } )
 
     return (
@@ -48,9 +43,6 @@ function Home(){
     )
 }
 
-// @ts-ignore
-export const getServerSideProps: GetServerSideProps = withAuthServerSide( async() => {
+export const getServerSideProps = wrapper.getServerSideProps( ( store ) => async( ctx ) => {
     return { props: {} }
 } )
-
-export default Home

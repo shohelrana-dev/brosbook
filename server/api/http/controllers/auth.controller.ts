@@ -91,7 +91,7 @@ class AuthController {
         res.set(
             'Set-Cookie',
             cookie.serialize( 'access_token', '', {
-                httpOnly: true,
+                httpOnly: false,
                 secure: true,
                 sameSite: 'strict',
                 expires: new Date( 0 ),
@@ -213,7 +213,7 @@ class AuthController {
 
     private getSerializeTokenCookie = ( token: string ) => {
         return cookie.serialize( 'access_token', token, {
-            httpOnly: true,
+            httpOnly: false,
             secure: true,
             sameSite: 'strict',
             maxAge: Number( process.env.JWT_EXPIRY ) || 3600,

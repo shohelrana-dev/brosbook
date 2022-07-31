@@ -1,6 +1,6 @@
-import { User }         from "@interfaces/user.interfaces"
-import { appApi }       from "./appApi"
-import { Post }         from "@interfaces/posts.interfaces";
+import { User }    from "@interfaces/user.interfaces"
+import { baseApi } from "./baseApi"
+import { Post }    from "@interfaces/posts.interfaces";
 import { PaginateMeta } from "@interfaces/index.interfaces";
 
 type FetchData = {
@@ -12,16 +12,16 @@ type FetchData = {
     meta?: PaginateMeta
 }
 
-export const usersApi = appApi.injectEndpoints( {
+export const usersApi = baseApi.injectEndpoints( {
     endpoints: ( build ) => ( {
         getUser: build.query<FetchData, string>( {
             query: ( username ) => `users/${ username }`
         } ),
 
         getUserPosts: build.query<FetchData, { username: string, page?: number, limit?: number }>( {
-            query: ( args ) => ( {
-                url: `users/${ args.username }/posts`,
-                params: args
+            query: ( params ) => ( {
+                url: `users/${ params.username }/posts`,
+                params: params
             } )
         } ),
 

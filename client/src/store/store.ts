@@ -1,29 +1,27 @@
-import { AnyAction, configureStore }       from '@reduxjs/toolkit'
-import rootReducer                         from "@store/rootReducer"
-import thunk                               from "redux-thunk"
-import { appApi }                          from "@services/appApi"
-import { Context, createWrapper, HYDRATE } from "next-redux-wrapper"
+import { AnyAction, configureStore }         from '@reduxjs/toolkit'
+import combinedReducers                      from "@store/combinedReducers"
+import { createWrapper, HYDRATE, MakeStore } from "next-redux-wrapper"
+import { baseApi }                           from "@services/baseApi"
 
-const reducer = ( state: any, action: AnyAction ) => {
-    if( action.type === HYDRATE ){
-        return { ...state, ...action.payload }
+const reducer = ( state: any, action: AnyAction ): ReturnType<typeof combinedReducers> => {
+    if( action.type === HYDRATE && ! state.isHydrate ){
+        return { ...state, ...action.payload, isHydrate: true }
     } else{
-        return rootReducer( state, action )
+        return combinedReducers( state, action )
     }
 }
 
 
 // creating the store
-const makeStore = ( context: Context ) => {
+const makeStore = () => {
     return configureStore( {
         reducer: reducer,
-        middleware: [thunk, appApi.middleware],
+        middleware: ( getDefaultMiddleware ) => getDefaultMiddleware().concat( baseApi.middleware ),
         devTools: process.env.NODE_ENV !== "production"
     } )
 }
 
 export type AppStore = ReturnType<typeof makeStore>
-
 export type RootState = ReturnType<AppStore['getState']>
 
-export const wrapper = createWrapper<AppStore>( makeStore, { debug: false } )
+export const wrapper = createWrapper<AppStore>( makeStore )
