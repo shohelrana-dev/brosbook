@@ -1,6 +1,6 @@
 import { CredentialPayload, ResetPassPayload, SignupPayload } from "@interfaces/auth.interfaces"
-import { User }    from "@interfaces/user.interfaces"
-import { baseApi } from "@services/baseApi"
+import { User }                                               from "@interfaces/user.interfaces"
+import { baseApi }                                            from "@services/baseApi"
 
 type FetchData = {
     message: string
@@ -41,8 +41,8 @@ export const authApi = baseApi.injectEndpoints( {
                     Authorization: access_token ? `Bearer ${ access_token }` : ''
                 },
             } ),
-            onQueryStarted: (arg, api) => {
-                console.log('onQueryStarted')
+            onQueryStarted: ( arg, api ) => {
+                console.log( 'onQueryStarted' )
             }
         } ),
 

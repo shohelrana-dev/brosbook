@@ -19,7 +19,6 @@
          "@components/*": ["components/*"],
          "@images/*": ["images/*"],
          "@pages/*": ["pages/*"],
-         "@hoc/*": ["hoc/*"],
          "@store/*": ["store/*"],
          "@features/*": ["features/*"],
          "@services/*": ["services/*"],

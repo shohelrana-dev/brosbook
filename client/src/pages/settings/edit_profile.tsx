@@ -3,7 +3,7 @@ import { useDispatch, useSelector }                               from "react-re
 import { FormControl, FormControlLabel, Radio, RadioGroup, Zoom } from "@mui/material"
 
 import { RootState } from "@store/store"
-import { withAuth }  from "@hoc/withAuth"
+import { withAuth }  from "@hoc/withEnsureAuth"
 import Avatar        from "@components/common/Avatar"
 import MainLayout            from "@components/layouts/MainLayout"
 import BasicInputGroup       from "@components/common/BasicInputGroup"

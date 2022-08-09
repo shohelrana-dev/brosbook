@@ -1,7 +1,7 @@
-import { AnyAction, configureStore }         from '@reduxjs/toolkit'
-import combinedReducers                      from "@store/combinedReducers"
-import { createWrapper, HYDRATE, MakeStore } from "next-redux-wrapper"
-import { baseApi }                           from "@services/baseApi"
+import { AnyAction, configureStore } from '@reduxjs/toolkit'
+import combinedReducers              from "@store/combinedReducers"
+import { createWrapper, HYDRATE }    from "next-redux-wrapper"
+import { baseApi }                   from "@services/baseApi"
 
 const reducer = ( state: any, action: AnyAction ): ReturnType<typeof combinedReducers> => {
     if( action.type === HYDRATE && ! state.isHydrate ){

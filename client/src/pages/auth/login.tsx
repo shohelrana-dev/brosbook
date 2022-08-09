@@ -3,15 +3,14 @@ import Head                                                from 'next/head'
 import Link                                                from 'next/link'
 import { Divider, LinearProgress }                         from '@mui/material'
 
-import InputGroup              from '@components/common/InputGroup'
-import GoogleLoginButton       from '@components/common/GoogleLoginButton'
-import PrimaryButton           from "@components/common/PrimaryButton"
-import { useRouter }           from "next/router"
-import { GetServerSideProps }  from "next"
-import { withGuestServerSide } from "@hoc/withAuth"
-import { useLoginMutation }    from "@services/authApi"
-import { InputErrors }         from "@interfaces/index.interfaces"
-import { toast }               from "react-toastify"
+import InputGroup            from '@components/common/InputGroup'
+import GoogleLoginButton     from '@components/common/GoogleLoginButton'
+import PrimaryButton         from "@components/common/PrimaryButton"
+import { useRouter }         from "next/router"
+import { useLoginMutation }  from "@services/authApi"
+import { InputErrors }       from "@interfaces/index.interfaces"
+import { toast }             from "react-toastify"
+import ensureServerSideGuest from "@utils/ensureServerSideGuest";
 
 function Login(){
     //hooks
@@ -105,11 +104,6 @@ function Login(){
     )
 }
 
-// @ts-ignore
-export const getServerSideProps: GetServerSideProps = withGuestServerSide( async() => {
-    return {
-        props: {}
-    }
-} )
-
 export default Login
+
+export const getServerSideProps = ensureServerSideGuest

@@ -2,7 +2,7 @@ import React from 'react'
 
 import MainLayout    from "@components/layouts/MainLayout"
 import Conversations from "@components/messages/Conversations"
-import { withAuth }  from "@hoc/withAuth"
+import { withAuth }  from "@hoc/withEnsureAuth"
 
 function Index() {
     return (

@@ -6,9 +6,9 @@ import MainLayout           from "@components/layouts/MainLayout"
 import CreatePostForm       from "@components/home/CreatePostForm"
 import PostCard             from "@components/home/PostCard"
 import { useGetPostsQuery } from "@services/postsApi"
-import { wrapper }          from "@store/store"
+import ensureServerSideAuth from "@utils/ensureServerSideAuth"
 
-export default function Home(){
+function Home(){
     //hooks
     const [page, setPage]     = useState( 1 )
     const { isLoading, data } = useGetPostsQuery( { page } )
@@ -43,6 +43,6 @@ export default function Home(){
     )
 }
 
-export const getServerSideProps = wrapper.getServerSideProps( ( store ) => async( ctx ) => {
-    return { props: {} }
-} )
+export default Home
+
+export const getServerSideProps = ensureServerSideAuth

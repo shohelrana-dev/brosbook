@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux"
 
 import { RootState } from "@store/store"
 import Avatar       from "@components/common/Avatar"
-import { withAuth } from "@hoc/withAuth"
+import { withAuth } from "@hoc/withEnsureAuth"
 import MainLayout   from "@components/layouts/MainLayout"
 import BasicInputGroup from "@components/common/BasicInputGroup"
 import LeftSidebar        from "@components/settings/LeftSidebar"
