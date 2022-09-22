@@ -1,30 +1,24 @@
-import React           from 'react'
-import Link            from "next/link"
-import { SRLWrapper }  from "simple-react-lightbox"
-import Image           from "next/image"
-import { useRouter }   from "next/router"
-import LocationIcon    from "@mui/icons-material/LocationOnOutlined"
-import CakeIcon        from "@mui/icons-material/CakeOutlined"
-import ScheduleIcon    from "@mui/icons-material/Schedule"
-import { Button }      from "@mui/material"
-import moment          from "moment"
-import { useSelector } from "react-redux"
+import React, { useEffect } from 'react'
+import Link                 from "next/link"
+import { SRLWrapper }       from "simple-react-lightbox"
+import Image                from "next/image"
+import { useRouter }        from "next/router"
+import LocationIcon         from "@mui/icons-material/LocationOnOutlined"
+import CakeIcon             from "@mui/icons-material/CakeOutlined"
+import ScheduleIcon         from "@mui/icons-material/Schedule"
+import { Button }           from "@mui/material"
+import moment               from "moment"
+import { useSelector }      from "react-redux"
 
 import MainLayout          from "@components/layouts/MainLayout"
 import { User }            from "@interfaces/user.interfaces"
 import { selectAuthState } from "@features/authSlice"
+import { useGetUserQuery } from "@services/usersApi";
 
-interface ProfileLayoutProps {
-    children: React.ReactElement
-    user: User
-}
-
-export default function ProfileLayout( props: ProfileLayoutProps ){
-    const { children, user } = props
-
+export default function ProfileLayout(){
     //hooks
-    const router                                 = useRouter()
-    const { user: currentUser, isAuthenticated } = useSelector( selectAuthState )
+    const router                    = useRouter()
+    const { isLoading, data: user } = useGetUserQuery( router.query.username as string )
 
     async function handleFollowClick( user: User ){
 

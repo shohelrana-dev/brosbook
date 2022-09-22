@@ -1,9 +1,9 @@
 import { Router } from "express"
 
-import AuthController from "@controllers/auth.controller"
+import AuthController from "@api/modules/auth/auth.controller"
 import AuthService    from "@services/auth.service"
-import AuthValidation from "@validations/auth.validation"
-import { ensureAuth } from "@middleware/auth"
+import AuthValidation from "@api/modules/auth/auth.validation"
+import { ensureAuth } from "@api/middleware/auth"
 
 const router         = Router()
 const authController = new AuthController( new AuthService() )

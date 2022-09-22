@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
-import HttpException                       from '@exceptions/http.exception'
+import HttpException                       from '@modules/http.exception'
 import { HTTP_INTERNAL_SERVER_ERROR }      from "@utils/httpStatusCodes"
 
 const error = ( error: HttpException, _: Request, res: Response, __: NextFunction ) => {

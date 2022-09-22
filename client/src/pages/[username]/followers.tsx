@@ -1,51 +1,31 @@
 import React, { useState }  from 'react'
 import { useRouter }        from "next/router"
 import { CircularProgress } from "@mui/material"
-import useAsyncEffect       from "use-async-effect"
 import useInfiniteScroll    from "react-infinite-scroll-hook"
 
-import ProfileLayout    from "@components/layouts/ProfileLayout"
-import FollowUser       from "@components/common/FollowUser"
-import { User }         from "@interfaces/user.interfaces"
-import api              from "../../api/index"
-import { PaginateMeta } from "@interfaces/index.interfaces"
+import ProfileLayout         from "@components/layouts/ProfileLayout"
+import FollowUser            from "@components/common/FollowUser"
+import { PaginateMeta }      from "@interfaces/index.interfaces"
+import { useFollowersQuery } from "@services/usersApi"
 
-export default function Followers() {
+export default function Followers(){
     //hooks
-    const router                      = useRouter()
-    const [ isLoading, setIsLoading ] = useState<boolean>( false )
-    const [ followers, setFollowers ] = useState<User[]>( [] )
-    const [ meta, setMeta ]           = useState<PaginateMeta>( {} as PaginateMeta )
+    const router        = useRouter()
+    const username      = router.query.username as string
+    const { isLoading, data } = useFollowersQuery( { username } )
 
-    const username = router.query.username as string
+    const [meta, setMeta] = useState<PaginateMeta>( {} as PaginateMeta )
 
-    useAsyncEffect( () => fetchFollowers(), [ username ] )
-
-    async function fetchFollowers( page: number = 1, postsPerPage: number = 10 ) {
-        if ( !username ) return
-        setIsLoading( true )
-
-        try {
-            const { data } = await api.profile.fetchFollowers( username, page, postsPerPage )
-            setFollowers( [ ...followers, ...data.followers ] )
-            setMeta( data.meta )
-        } catch ( err: any ) {
-            console.error( err.response?.data.message )
-        } finally {
-            setIsLoading( false )
-        }
-    }
-
-    const [ scrollBottomRef ] = useInfiniteScroll( {
+    const [scrollBottomRef] = useInfiniteScroll( {
         loading: isLoading,
-        hasNextPage: !!meta?.nextPage,
-        onLoadMore: () => fetchFollowers( meta?.nextPage ),
+        hasNextPage: !! meta?.nextPage,
+        onLoadMore: () => ''
     } )
 
     return (
-        <ProfileLayout user={}>
+        <ProfileLayout>
             <>
-                { followers && followers.map( user => (
+                { data?.followers && data?.followers.map( user => (
                     <FollowUser user={ user } key={ user.id }/>
                 ) ) }
 
@@ -55,11 +35,11 @@ export default function Followers() {
                     </div>
                 ) }
 
-                { !isLoading && followers.length < 1 && (
+                { ! isLoading && data?.followers.length < 1 && (
                     <p className="box text-center py-10">You have no follower</p>
                 ) }
 
-                { !isLoading && followers.length > 1 && !meta.nextPage && (
+                { ! isLoading && data?.followers.length > 1 && ! meta.nextPage && (
                     <p className="box text-center py-10">No more followers</p>
                 ) }
             </>

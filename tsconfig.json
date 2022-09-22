@@ -38,14 +38,11 @@
          "@api/*": ["server/api/*"],
          "@config/*": ["server/config/*"],
          "@startup/*": ["server/startup/*"],
-         "@controllers/*": ["server/api/http/controllers/*"],
-         "@database/*": ["server/api/database"],
+         "@database/*": ["server/api/modules"],
+         "@modules/*": ["server/api/exceptions/*"],
          "@exceptions/*": ["server/api/exceptions/*"],
          "@entities/*": ["server/api/database/entities/*"],
-         "@middleware/*": ["server/api/http/middleware/*"],
-         "@routes/*": ["server/api/http/routes/*"],
-         "@services/*": ["server/api/services/*"],
-         "@validations/*": ["server/api/http/validations/*"],
+         "@middleware/*": ["server/api/middleware/*"],
          "@interfaces/*": ["server/api/interfaces/*"],
          "@utils/*": ["server/api/utils/*"]
       }

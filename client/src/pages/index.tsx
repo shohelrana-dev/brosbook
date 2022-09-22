@@ -1,6 +1,6 @@
 import useInfiniteScroll    from 'react-infinite-scroll-hook'
-import { CircularProgress } from "@mui/material"
 import { useState }         from "react"
+import { Facebook }         from "react-content-loader"
 
 import MainLayout           from "@components/layouts/MainLayout"
 import CreatePostForm       from "@components/home/CreatePostForm"
@@ -25,14 +25,13 @@ function Home(){
                 <div className="box p-6">
                     <CreatePostForm/>
                 </div>
-
                 { data?.posts && data?.posts?.length > 0 && data?.posts?.map( post => (
                     <PostCard post={ post } key={ post.id }/>
                 ) ) }
 
                 { !! data?.meta?.nextPage ? (
-                    <div className="flex justify-center min-h-[300px] items-center" ref={ scrollBottomRef }>
-                        <CircularProgress/>
+                    <div className="box mt-5 p-5" ref={ scrollBottomRef }>
+                        <Facebook/>
                     </div>
                 ) : (
                     <p className="box text-center mt-5 py-10">No more posts</p>

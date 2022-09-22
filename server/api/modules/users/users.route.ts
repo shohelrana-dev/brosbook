@@ -1,7 +1,7 @@
 import { Router } from "express"
 
-import { ensureAuth }  from "@middleware/auth"
-import UsersController from "@controllers/users.controller"
+import { ensureAuth }  from "@api/middleware/auth"
+import UsersController from "@api/modules/users/users.controller"
 import UsersService    from "@services/users.service"
 
 const router          = Router()

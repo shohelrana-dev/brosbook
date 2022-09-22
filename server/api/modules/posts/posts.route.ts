@@ -1,7 +1,7 @@
 import { Router } from "express"
 
-import { ensureAuth } from "@middleware/auth"
-import PostController from "@controllers/post.controller"
+import { ensureAuth } from "@api/middleware/auth"
+import PostController from "@api/modules/posts/post.controller"
 import PostService    from "@services/post.service"
 
 const router          = Router()

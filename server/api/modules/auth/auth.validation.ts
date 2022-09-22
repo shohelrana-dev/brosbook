@@ -1,6 +1,6 @@
 import { check, ValidationChain } from "express-validator"
-import bcrypt                     from "bcrypt"
-import User                       from "@entities/User"
+import bcrypt from "bcrypt"
+import User   from "@entities/User"
 
 class AuthValidation {
 

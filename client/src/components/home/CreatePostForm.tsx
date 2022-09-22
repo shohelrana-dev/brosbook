@@ -22,9 +22,14 @@ function CreatePostForm(){
     const errorData = ( error && 'data' in error && error.data as any ) || {}
 
     useEffect( () => {
-        isSuccess && toast.success( data?.message )
-        isError && toast.error( errorData?.message )
-    }, [isSuccess, isError] )
+        if( isSuccess ){
+            setContent( '' )
+            setSelectedImage( null )
+            toast.success( data?.message )
+        }
+    }, [isSuccess] )
+
+    useEffect( () => {isError && toast.error( errorData?.message ) }, [isError] )
 
     async function submitFormHandle( event: FormEvent ){
         event.preventDefault()
@@ -32,9 +37,6 @@ function CreatePostForm(){
         if( ! content && ! selectedImage ) return
 
         createPost( { content, image: selectedImage } )
-
-        setContent( '' )
-        setSelectedImage( null )
     }
 
     function fileInputChangeHandle( event: ChangeEvent<HTMLInputElement> ){
@@ -67,7 +69,9 @@ function CreatePostForm(){
                     className="input-basic text-gray-600 text-lg font-medium p-4 my-2"
                     placeholder="What's your mind?"
                     onChange={ ( e ) => setContent( e.target.value ) }
-                />
+                >
+                    { content }
+                </textarea>
                 <input
                     ref={ inputImageRef }
                     type="file"

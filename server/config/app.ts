@@ -13,9 +13,9 @@ dotenv.config()
 
 
 //internal import
-import notFound    from "@middleware/not-found"
-import error       from '@middleware/error'
-import currentUser from '@middleware/current-user'
+import notFound    from "@api/middleware/not-found"
+import error       from '@api/middleware/error'
+import currentUser from '@api/middleware/current-user'
 import socketInit  from "@api/socket"
 import fileUpload  from "express-fileupload"
 import routes      from '@startup/routes'

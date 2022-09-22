@@ -1,6 +1,6 @@
-import { User }    from "@interfaces/user.interfaces"
-import { baseApi } from "./baseApi"
-import { Post }    from "@interfaces/posts.interfaces";
+import { User }         from "@interfaces/user.interfaces"
+import { baseApi }      from "./baseApi"
+import { Post }         from "@interfaces/posts.interfaces";
 import { PaginateMeta } from "@interfaces/index.interfaces";
 
 type FetchData = {
@@ -14,7 +14,7 @@ type FetchData = {
 
 export const usersApi = baseApi.injectEndpoints( {
     endpoints: ( build ) => ( {
-        getUser: build.query<FetchData, string>( {
+        getUser: build.query<User, string>( {
             query: ( username ) => `users/${ username }`
         } ),
 
@@ -38,7 +38,22 @@ export const usersApi = baseApi.injectEndpoints( {
                 method: 'POST',
             } )
         } ),
+
+        followers: build.query<FetchData, {username: string}>( {
+            query: ( { username } ) => ( `users/${ username }/followers` )
+        } ),
+
+        following: build.query<FetchData, {username: string}>( {
+            query: ( { username } ) => ( `users/${ username }/following` )
+        } ),
     } ),
 } )
 
-export const { useGetUserQuery, useGetUserPostsQuery, useFollowMutation, useUnfollowMutation } = usersApi
+export const {
+                 useGetUserQuery,
+                 useGetUserPostsQuery,
+                 useFollowMutation,
+                 useUnfollowMutation,
+                 useFollowersQuery,
+                 useFollowingQuery
+             } = usersApi

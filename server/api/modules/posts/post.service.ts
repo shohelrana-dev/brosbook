@@ -6,7 +6,7 @@ import { getRepository } from "typeorm"
 
 import Post                                         from "@entities/Post"
 import Like                                         from "@entities/Like"
-import HttpException                                from "@exceptions/http.exception"
+import HttpException                                from "@modules/http.exception"
 import { HTTP_CONFLICT, HTTP_UNPROCESSABLE_ENTITY } from "@utils/httpStatusCodes"
 import { paginateMeta }                             from "@api/utils"
 import { PaginateMeta }                             from "@interfaces/index.interfaces";
