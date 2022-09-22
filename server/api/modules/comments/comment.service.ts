@@ -1,11 +1,11 @@
-import { Request }                                  from "express"
-import Comment                                      from "@entities/Comment"
-import Like                                         from "@entities/Like"
-import HttpException                                from "@exceptions/http.exception"
-import { HTTP_CONFLICT, HTTP_UNPROCESSABLE_ENTITY } from "@utils/httpStatusCodes"
-import { getRepository }                            from "typeorm"
-import { paginateMeta }                             from "@api/utils";
-import { PaginateMeta }                             from "@interfaces/index.interfaces"
+import { Request }       from "express"
+import Comment           from "@entities/Comment"
+import Like              from "@entities/Like"
+import HttpException     from "@exceptions/http.exception"
+import httpStatus        from "http-status"
+import { getRepository } from "typeorm"
+import { paginateMeta }  from "@api/utils"
+import { PaginateMeta }  from "@interfaces/index.interfaces"
 
 export default class CommentService {
 
@@ -15,7 +15,7 @@ export default class CommentService {
         const limit  = Number( req.query.limit ) || 5
         const skip   = limit * ( page - 1 )
 
-        if( ! postId ) throw new HttpException( 'Post id missing', HTTP_CONFLICT )
+        if( ! postId ) throw new HttpException( 'Post id missing', httpStatus.CONFLICT )
 
         const [comments, count] = await getRepository( Comment )
             .createQueryBuilder( 'comment' )
@@ -27,7 +27,7 @@ export default class CommentService {
             .take( limit )
             .getManyAndCount()
 
-        if( ! Array.isArray( comments ) ) throw new HttpException( "comments couldn't be fetched", HTTP_CONFLICT )
+        if( ! Array.isArray( comments ) ) throw new HttpException( "comments couldn't be fetched", httpStatus.CONFLICT )
 
         //check and set current user like
         for ( let comment of comments ) {
@@ -42,7 +42,7 @@ export default class CommentService {
         const { content } = req.body
         const postId      = Number( req.query.postId )
 
-        if( ! content && ! postId ) throw new HttpException( 'Input field missing', HTTP_UNPROCESSABLE_ENTITY )
+        if( ! content && ! postId ) throw new HttpException( 'Input field missing', httpStatus.UNPROCESSABLE_ENTITY )
 
         const comment = Comment.create( {
             username: req.user.username,
@@ -57,7 +57,7 @@ export default class CommentService {
 
             return createdComment
         } catch ( e ) {
-            throw new HttpException( "Comment couldn't be created", HTTP_CONFLICT )
+            throw new HttpException( "Comment couldn't be created", httpStatus.CONFLICT )
         }
     }
 
@@ -71,7 +71,7 @@ export default class CommentService {
         try {
             await like.save()
         } catch ( e ) {
-            throw new HttpException( "The comment couldn't be liked", HTTP_CONFLICT )
+            throw new HttpException( "The comment couldn't be liked", httpStatus.CONFLICT )
         }
 
     }
@@ -84,7 +84,7 @@ export default class CommentService {
         try {
             await Like.delete( { commentId, username: req.user.username } )
         } catch ( e ) {
-            throw new HttpException( "The comment couldn't be unliked", HTTP_CONFLICT )
+            throw new HttpException( "The comment couldn't be unliked", httpStatus.CONFLICT )
         }
     }
 }

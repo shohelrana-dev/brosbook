@@ -1,17 +1,17 @@
 import { Request } from "express"
 import bcrypt      from "bcrypt"
 
-import HttpException                                from "@exceptions/http.exception"
-import Profile                                      from "@entities/Profile"
-import User                                         from "@entities/User"
-import { HTTP_CONFLICT, HTTP_UNPROCESSABLE_ENTITY } from "@utils/httpStatusCodes"
-import savePhoto                                    from "@utils/savePhoto"
-import { PhotoType }                                from "@api/enums"
-import { UploadedFile }                             from "express-fileupload"
+import HttpException    from "@exceptions/http.exception"
+import Profile          from "@entities/Profile"
+import User             from "@entities/User"
+import httpStatus       from "http-status"
+import savePhoto        from "@utils/savePhoto"
+import { PhotoType }    from "@api/enums"
+import { UploadedFile } from "express-fileupload"
 
 export default class SettingService {
 
-    public async updateProfile( req: Request ) {
+    public async updateProfile( req: Request ){
         const { firstName, lastName, bio, phone, location, birthdate, gender } = req.body
         const { profilePhoto, coverPhoto }                                     = req.files || {}
 
@@ -30,8 +30,8 @@ export default class SettingService {
         } ) : null
 
         let profile = await Profile.findOne( { username: req.user.username } )
-        if ( !profile ) {
-            if ( coverPhotoUrl ) {
+        if( ! profile ){
+            if( coverPhotoUrl ){
                 Profile.create( {
                     username: req.user.username,
                     bio,
@@ -40,23 +40,23 @@ export default class SettingService {
                     gender,
                     coverPhoto: coverPhotoUrl
                 } )
-            } else {
+            } else{
                 profile = Profile.create( { username: req.user.username, bio, phone, location, gender } )
             }
-        } else {
+        } else{
             profile.bio       = bio
             profile.phone     = phone
             profile.location  = location
             profile.birthdate = birthdate
             profile.gender    = gender
-            if ( coverPhotoUrl ) {
+            if( coverPhotoUrl ){
                 profile.coverPhoto = coverPhotoUrl
             }
         }
 
         try {
             await profile.save()
-            if ( profilePhotoUrl ) {
+            if( profilePhotoUrl ){
                 return await User.update( { username: req.user.username }, {
                     firstName, lastName, photo: profilePhotoUrl
                 } )
@@ -66,27 +66,27 @@ export default class SettingService {
             } )
         } catch ( e ) {
             console.log( e )
-            throw new HttpException( "Profile couldn't be updated", HTTP_CONFLICT )
+            throw new HttpException( "Profile couldn't be updated", httpStatus.CONFLICT )
         }
     }
 
-    public async changePassword( req: Request ) {
+    public async changePassword( req: Request ){
         const { oldPassword, newPassword } = req.body
 
         const user = await User.findOne( { username: req.user.username } )
 
-        if ( !user ) throw new HttpException( "Password couldn't be change", HTTP_CONFLICT )
+        if( ! user ) throw new HttpException( "Password couldn't be change", httpStatus.CONFLICT )
 
         const isMatched = await bcrypt.compare( oldPassword, user.password )
 
-        if ( !isMatched ) throw new HttpException( "Old password didn't match", HTTP_UNPROCESSABLE_ENTITY )
+        if( ! isMatched ) throw new HttpException( "Old password didn't match", httpStatus.UNPROCESSABLE_ENTITY )
 
         user.password = await bcrypt.hash( newPassword, 6 )
 
         try {
             await user.save()
         } catch ( err ) {
-            throw new HttpException( "Password couldn't be change", HTTP_CONFLICT )
+            throw new HttpException( "Password couldn't be change", httpStatus.CONFLICT )
         }
     }
 }

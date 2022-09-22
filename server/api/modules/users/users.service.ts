@@ -1,12 +1,12 @@
 import HttpException     from "@exceptions/http.exception"
-import { HTTP_CONFLICT } from "@utils/httpStatusCodes"
+import httpStatus from "http-status"
 import { Request }       from "express"
 import Follow            from "@entities/Follow"
-import { getRepository } from "typeorm";
-import User              from "@entities/User";
-import { paginateMeta }  from "@api/utils";
-import Post              from "@entities/Post";
-import LikeEntity        from "@entities/Like";
+import { getRepository } from "typeorm"
+import User              from "@entities/User"
+import { paginateMeta }  from "@api/utils"
+import Post              from "@entities/Post"
+import LikeEntity        from "@entities/Like"
 
 
 export default class UsersService {
@@ -27,14 +27,14 @@ export default class UsersService {
 
             return { users, meta: paginateMeta( count, page, limit ) }
         } catch ( e ) {
-            throw new HttpException( "posts couldn't be fetched", HTTP_CONFLICT )
+            throw new HttpException( "posts couldn't be fetched", httpStatus.CONFLICT )
         }
     }
 
     public async getUser( req: Request ) {
         const { username } = req.params
 
-        if ( !username ) throw new HttpException( "Username is missing", HTTP_CONFLICT )
+        if ( !username ) throw new HttpException( "Username is missing", httpStatus.CONFLICT )
 
         try {
             return await getRepository( User )
@@ -46,7 +46,7 @@ export default class UsersService {
                 .getOne()
         } catch ( e ) {
             console.log( e )
-            throw new HttpException( "User couldn't be fetched", HTTP_CONFLICT )
+            throw new HttpException( "User couldn't be fetched", httpStatus.CONFLICT )
         }
     }
 
@@ -56,7 +56,7 @@ export default class UsersService {
         const limit    = Number( req.query.limit ) || 6
         const skip     = limit * ( page - 1 )
 
-        if ( !username ) throw new HttpException( "Username is missing", HTTP_CONFLICT )
+        if ( !username ) throw new HttpException( "Username is missing", httpStatus.CONFLICT )
 
         try {
             const [ posts, count ] = await getRepository( Post )
@@ -79,7 +79,7 @@ export default class UsersService {
 
             return { posts, meta: paginateMeta( count, page, limit ) }
         } catch ( e ) {
-            throw new HttpException( "posts could not be fetched", HTTP_CONFLICT )
+            throw new HttpException( "posts could not be fetched", httpStatus.CONFLICT )
         }
     }
 
@@ -110,7 +110,7 @@ export default class UsersService {
             return { following, meta: paginateMeta( count, page, limit ) }
         } catch ( e ) {
             console.log( e )
-            throw new HttpException( 'Following could not be fetched', HTTP_CONFLICT )
+            throw new HttpException( 'Following could not be fetched', httpStatus.CONFLICT )
         }
     }
 
@@ -139,33 +139,33 @@ export default class UsersService {
             return { followers, meta: paginateMeta( count, page, limit ) }
         } catch ( e ) {
             console.log( e )
-            throw new HttpException( 'Following could not be fetched', HTTP_CONFLICT )
+            throw new HttpException( 'Following could not be fetched', httpStatus.CONFLICT )
         }
     }
 
     public async follow( req: Request ) {
         const username = req.params.username
 
-        if ( !username ) throw new HttpException( 'username is missing', HTTP_CONFLICT )
+        if ( !username ) throw new HttpException( 'username is missing', httpStatus.CONFLICT )
 
         const following = Follow.create( { username, followingUsername: req.user.username } )
 
         try {
             return await following.save()
         } catch ( e ) {
-            throw new HttpException( 'Could not be following', HTTP_CONFLICT )
+            throw new HttpException( 'Could not be following', httpStatus.CONFLICT )
         }
     }
 
     public async unfollow( req: Request ) {
         const username = req.params.username
 
-        if ( !username ) throw new HttpException( 'username is missing', HTTP_CONFLICT )
+        if ( !username ) throw new HttpException( 'username is missing', httpStatus.CONFLICT )
 
         try {
             return await Follow.delete( { username, followingUsername: req.user.username } )
         } catch ( e ) {
-            throw new HttpException( 'Could not be unfollowing', HTTP_CONFLICT )
+            throw new HttpException( 'Could not be unfollowing', httpStatus.CONFLICT )
         }
     }
 

@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from 'express'
 import HttpException                       from '@exceptions/http.exception'
-import { HTTP_INTERNAL_SERVER_ERROR }      from "@utils/httpStatusCodes"
+import httpStatus      from "http-status"
 
 const error = ( error: HttpException, _: Request, res: Response, __: NextFunction ) => {
-    const status: number  = error.status || HTTP_INTERNAL_SERVER_ERROR
+    const status: number  = error.status || httpStatus.INTERNAL_SERVER_ERROR
     const message: string = error.message || 'Something went wrong'
 
     console.log( '==================Error==================' )

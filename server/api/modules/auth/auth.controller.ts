@@ -2,10 +2,10 @@ import { NextFunction, Request, Response } from "express"
 import { validationResult }                from "express-validator"
 import cookie                              from "cookie"
 import bcrypt                              from "bcrypt"
+import httpStatus                              from "http-status"
 
 import User              from "@entities/User"
 import HttpException     from "@exceptions/http.exception"
-import { HTTP_CONFLICT } from "@utils/httpStatusCodes"
 import AuthService       from "./auth.service"
 
 class AuthController {
@@ -18,7 +18,7 @@ class AuthController {
             //check errors
             const errors = validationResult( req )
             if( ! errors.isEmpty() ){
-                return res.status( 422 ).json( {
+                return res.status( httpStatus.UNPROCESSABLE_ENTITY ).json( {
                     success: false,
                     message: 'Please fix the errors below.',
                     errors: errors.mapped()
@@ -44,7 +44,7 @@ class AuthController {
             //check errors
             const errors = validationResult( req )
             if( ! errors.isEmpty() ){
-                return res.status( 422 ).json( {
+                return res.status( httpStatus.UNPROCESSABLE_ENTITY ).json( {
                     success: false,
                     message: 'Please fix the errors below.',
                     errors: errors.mapped()
@@ -117,7 +117,7 @@ class AuthController {
                 user
             } )
         } catch ( err ) {
-            next( new HttpException( 'User could not be found', HTTP_CONFLICT ) )
+            next( new HttpException( 'User could not be found', httpStatus.CONFLICT ) )
         }
     }
 
@@ -126,7 +126,7 @@ class AuthController {
             //check errors
             const errors = validationResult( req )
             if( ! errors.isEmpty() ){
-                return res.status( 422 ).json( {
+                return res.status( httpStatus.UNPROCESSABLE_ENTITY ).json( {
                     success: false,
                     message: 'Please fix the input errors below.',
                     errors: errors.mapped()
@@ -165,7 +165,7 @@ class AuthController {
             //check errors
             const errors = validationResult( req )
             if( ! errors.isEmpty() ){
-                return res.status( 422 ).json( {
+                return res.status( httpStatus.UNPROCESSABLE_ENTITY ).json( {
                     success: false,
                     message: 'Input validation error',
                     errors: errors.mapped()

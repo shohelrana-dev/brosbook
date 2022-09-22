@@ -4,12 +4,12 @@ import { v4 as uuidv4 }  from "uuid"
 import { UploadedFile }  from "express-fileupload"
 import { getRepository } from "typeorm"
 
-import Post                                         from "@entities/Post"
-import Like                                         from "@entities/Like"
-import HttpException                                from "@exceptions/http.exception"
-import { HTTP_CONFLICT, HTTP_UNPROCESSABLE_ENTITY } from "@utils/httpStatusCodes"
-import { paginateMeta }                             from "@api/utils"
-import { PaginateMeta }                             from "@interfaces/index.interfaces";
+import Post             from "@entities/Post"
+import Like             from "@entities/Like"
+import HttpException    from "@exceptions/http.exception"
+import httpStatus       from "http-status"
+import { paginateMeta } from "@api/utils"
+import { PaginateMeta } from "@interfaces/index.interfaces"
 
 export default class PostService {
 
@@ -39,7 +39,7 @@ export default class PostService {
 
             return { posts, meta: paginateMeta( count, page, limit ) }
         } catch ( e ) {
-            throw new HttpException( "posts couldn't be fetched", HTTP_CONFLICT )
+            throw new HttpException( "posts couldn't be fetched", httpStatus.CONFLICT )
         }
     }
 
@@ -49,7 +49,7 @@ export default class PostService {
         const image = req.files?.image as UploadedFile
 
         if( ! content && ! image ){
-            throw new HttpException( 'Input field missing', HTTP_UNPROCESSABLE_ENTITY )
+            throw new HttpException( 'Input field missing', httpStatus.UNPROCESSABLE_ENTITY )
         }
 
         let imageUrl
@@ -71,7 +71,7 @@ export default class PostService {
             await post.save()
         } catch ( err ) {
             err.message = "Post couldn't be saved"
-            err.status  = HTTP_CONFLICT
+            err.status  = httpStatus.CONFLICT
             throw err
         }
 
@@ -80,7 +80,7 @@ export default class PostService {
     public async like( req: Request ){
         const postId = Number( req.params.postId )
 
-        if( ! postId ) throw new HttpException( 'Post id missing', HTTP_CONFLICT )
+        if( ! postId ) throw new HttpException( 'Post id missing', httpStatus.CONFLICT )
 
         const like = Like.create( { postId, username: req.user.username } )
 
@@ -94,7 +94,7 @@ export default class PostService {
     public async unlike( req: Request ){
         const postId = Number( req.params.postId )
 
-        if( ! postId ) throw new HttpException( 'Post id missing', HTTP_CONFLICT )
+        if( ! postId ) throw new HttpException( 'Post id missing', httpStatus.CONFLICT )
 
         try {
             await Like.delete( { postId, username: req.user.username } )
