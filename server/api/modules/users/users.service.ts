@@ -1,4 +1,4 @@
-import HttpException     from "@modules/http.exception"
+import HttpException     from "@exceptions/http.exception"
 import { HTTP_CONFLICT } from "@utils/httpStatusCodes"
 import { Request }       from "express"
 import Follow            from "@entities/Follow"

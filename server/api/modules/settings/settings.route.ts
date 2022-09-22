@@ -2,7 +2,7 @@ import { Router }         from "express"
 import { ensureAuth }     from "@api/middleware/auth"
 import SettingsValidation from "@api/modules/settings/settings.validation"
 import SettingController  from "@api/modules/settings/setting.controller"
-import SettingService     from "@services/setting.service"
+import SettingService     from "./setting.service"
 
 const validation         = new SettingsValidation()
 const settingController = new SettingController( new SettingService() )

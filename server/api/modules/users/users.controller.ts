@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express"
-import UsersService                        from "@services/users.service"
+import UsersService                        from "./users.service"
 
 export default class UsersController {
     constructor( private readonly usersService: UsersService ){

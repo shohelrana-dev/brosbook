@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express"
-import PostService                         from "@services/post.service"
+import PostService                         from "./post.service"
 
 export default class PostController {
     constructor( private readonly postService: PostService ){

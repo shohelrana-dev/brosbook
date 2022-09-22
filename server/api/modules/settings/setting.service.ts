@@ -1,7 +1,7 @@
 import { Request } from "express"
 import bcrypt      from "bcrypt"
 
-import HttpException                                from "@modules/http.exception"
+import HttpException                                from "@exceptions/http.exception"
 import Profile                                      from "@entities/Profile"
 import User                                         from "@entities/User"
 import { HTTP_CONFLICT, HTTP_UNPROCESSABLE_ENTITY } from "@utils/httpStatusCodes"

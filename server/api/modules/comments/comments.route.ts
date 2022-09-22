@@ -2,7 +2,7 @@ import { Router } from "express"
 
 import { ensureAuth }    from "@api/middleware/auth"
 import CommentController from "@api/modules/comments/comment.controller"
-import CommentService    from "@services/comment.service"
+import CommentService    from "./comment.service"
 
 const router            = Router()
 const commentController = new CommentController( new CommentService() )

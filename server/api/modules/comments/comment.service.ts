@@ -1,7 +1,7 @@
 import { Request }                                  from "express"
 import Comment                                      from "@entities/Comment"
 import Like                                         from "@entities/Like"
-import HttpException                                from "@modules/http.exception"
+import HttpException                                from "@exceptions/http.exception"
 import { HTTP_CONFLICT, HTTP_UNPROCESSABLE_ENTITY } from "@utils/httpStatusCodes"
 import { getRepository }                            from "typeorm"
 import { paginateMeta }                             from "@api/utils";

@@ -4,9 +4,9 @@ import cookie                              from "cookie"
 import bcrypt                              from "bcrypt"
 
 import User              from "@entities/User"
-import AuthService       from "@services/auth.service"
 import HttpException     from "@exceptions/http.exception"
 import { HTTP_CONFLICT } from "@utils/httpStatusCodes"
+import AuthService       from "./auth.service"
 
 class AuthController {
 

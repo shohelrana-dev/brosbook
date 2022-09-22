@@ -1,4 +1,4 @@
-import ChatService                         from "@services/chat.service"
+import ChatService                         from "./chat.service"
 import { NextFunction, Request, Response } from "express"
 
 export default class ChatController {

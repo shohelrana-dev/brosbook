@@ -3,6 +3,7 @@
 /client/.swc
 **/node_modules
 .idea
+server_dist
 
 *.env.local
 *.env

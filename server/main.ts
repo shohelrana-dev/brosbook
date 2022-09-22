@@ -18,4 +18,3 @@ app.listen( PORT, async () => {
         console.log( err.message )
     }
 } )
-export const connection = ''

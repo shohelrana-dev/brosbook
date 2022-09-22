@@ -3,15 +3,15 @@ import path              from "path"
 import { writeFileSync } from "fs"
 import { v4 as uuidv4 }  from "uuid"
 import Hashids           from "hashids"
+import { getRepository, Like }                      from "typeorm"
 
-import HttpException                                from "@modules/http.exception"
+import HttpException                                from "@exceptions/http.exception"
 import Conversation                                 from "@entities/Conversation"
 import Message                                      from "@entities/Message"
 import Reaction                                     from "@entities/Reaction"
 import { MessageDataDto, ReactionDataDto }          from "@interfaces/index.interfaces"
 import { HTTP_CONFLICT, HTTP_UNPROCESSABLE_ENTITY } from "@utils/httpStatusCodes"
-import { getRepository, Like }                      from "typeorm";
-import User                                         from "@entities/User";
+import User                                         from "@entities/User"
 
 const hashids = new Hashids()
 

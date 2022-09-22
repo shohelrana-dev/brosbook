@@ -1,14 +1,14 @@
 {
   "name": "brosbook",
   "version": "1.0.0",
-  "main": "server.js",
+  "main": "main.js",
   "author": "Shohel Rana",
   "license": "MIT",
   "private": true,
   "scripts": {
     "start": "concurrently \"npm run server:start\" \"npm run client:start\" --names server,client",
     "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\" --names server,client",
-    "server:start": "npm run build && cross-env NODE_ENV=production node dist/server.js",
+    "server:start": "npm run build && cross-env NODE_ENV=production node server_dist/main.js",
     "server:dev": "nodemon",
     "client:start": "cd client && npm run start",
     "client:dev": "cd client && npm run dev",

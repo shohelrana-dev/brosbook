@@ -2,7 +2,7 @@ import { Router } from "express"
 
 import { ensureAuth }  from "@api/middleware/auth"
 import UsersController from "@api/modules/users/users.controller"
-import UsersService    from "@services/users.service"
+import UsersService    from "./users.service"
 
 const router          = Router()
 const usersController = new UsersController( new UsersService() )

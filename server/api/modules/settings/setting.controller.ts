@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express"
 import { validationResult } from "express-validator"
-import SettingService       from "@services/setting.service"
+import SettingService       from "./setting.service"
 
 export default class SettingController {
     constructor( private readonly settingsService: SettingService ) {

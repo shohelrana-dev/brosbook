@@ -5,7 +5,7 @@ import jwt                                         from "jsonwebtoken"
 import crypto                                      from "crypto"
 
 import User                 from "@entities/User"
-import HttpException        from "@modules/http.exception"
+import HttpException        from "@exceptions/http.exception"
 import { TokenData }        from "@interfaces/index.interfaces"
 import { decrypt, encrypt } from "@utils/encryptDecrypt"
 import sendEmail            from "@utils/sendEmail"

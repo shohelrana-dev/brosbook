@@ -1,7 +1,7 @@
 import { Router } from "express"
 
 import AuthController from "@api/modules/auth/auth.controller"
-import AuthService    from "@services/auth.service"
+import AuthService    from "./auth.service"
 import AuthValidation from "@api/modules/auth/auth.validation"
 import { ensureAuth } from "@api/middleware/auth"
 

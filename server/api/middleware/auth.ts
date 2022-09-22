@@ -1,6 +1,6 @@
 //dependencies
 import { NextFunction, Request, Response } from 'express'
-import HttpException                       from '@modules/http.exception'
+import HttpException                       from '@exceptions/http.exception'
 
 export const ensureAuth = (req: Request, _: Response, next: NextFunction) => {
     if (req.isAuthenticated) {
