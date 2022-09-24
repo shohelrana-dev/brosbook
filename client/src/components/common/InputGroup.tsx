@@ -1,74 +1,26 @@
-import React, { Fragment, InputHTMLAttributes, useState } from 'react'
+import React, { InputHTMLAttributes, ReactNode } from 'react'
 import {
-    IconButton,
-    InputAdornment,
     OutlinedInput,
     InputLabel,
     FormControl,
     Zoom
-}                                                         from '@mui/material'
-import Visibility                                         from '@mui/icons-material/Visibility'
-import VisibilityOff                                      from '@mui/icons-material/VisibilityOff'
-import ErrorOutlineIcon                                   from '@mui/icons-material/ErrorOutline'
+}                                                from '@mui/material'
+import ErrorOutlineIcon                          from '@mui/icons-material/ErrorOutline'
 
-interface InputGroupProps extends InputHTMLAttributes<HTMLInputElement> {
+export interface InputGroupProps extends InputHTMLAttributes<HTMLInputElement> {
     label: string,
     error?: { msg?: string }
+    endAdornment?: ReactNode
 }
 
-function InputGroup( props: InputGroupProps ) {
+function InputGroup( props: InputGroupProps ){
 
-    let { label, className, type, name, error, onChange } = props
-
-    const [ showPassword, setShowPassword ] = useState( false )
-
-    const handleClickShowPassword = () => {
-        if ( showPassword ) {
-            setShowPassword( false )
-        } else {
-            setShowPassword( true )
-        }
-    }
-
-    const passwordEyeIcon = () => {
-        let isPasswordField = false
-        switch ( name ) {
-            case 'password':
-                isPasswordField = true
-                break
-
-            case 'confirmPassword':
-                isPasswordField = true
-        }
-
-        if ( !isPasswordField ) {
-            if ( error ) {
-                return <ErrorOutlineIcon className="text-red-600"/>
-            }
-            return null
-        }
-
-        return (
-            <InputAdornment position="end">
-                <IconButton
-                    aria-label="toggle password visibility"
-                    edge="end"
-                    onClick={ handleClickShowPassword }
-                >
-                    { showPassword ? <VisibilityOff/> : <Visibility/> }
-                </IconButton>
-            </InputAdornment>
-        )
-    }
-
-    if ( name === 'password' || name === 'confirmPassword' ) {
-        type = showPassword ? 'text' : 'password'
-    }
+    let { label, type, name, error, onChange, endAdornment } = props
 
     return (
-        <div className={ className }>
+        <div className="mb-3">
             <FormControl variant="outlined" fullWidth size="small">
-                <InputLabel htmlFor={ name } className="!text-sm !text-gray-500" error={ !!error }>
+                <InputLabel htmlFor={ name } className="!text-sm !text-gray-500" error={ !! error }>
                     { label }
                 </InputLabel>
                 <OutlinedInput
@@ -79,8 +31,8 @@ function InputGroup( props: InputGroupProps ) {
                     classes={ {
                         input: 'text-sm text-gray-700'
                     } }
-                    endAdornment={ passwordEyeIcon() }
-                    error={ !!error }
+                    endAdornment={ endAdornment }
+                    error={ !! error }
                     onChange={ onChange }
                     size="small"
                 />

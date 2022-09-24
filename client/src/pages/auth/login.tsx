@@ -10,7 +10,8 @@ import { useRouter }         from "next/router"
 import { useLoginMutation }  from "@services/authApi"
 import { InputErrors }       from "@interfaces/index.interfaces"
 import { toast }             from "react-toastify"
-import ensureServerSideGuest from "@utils/ensureServerSideGuest";
+import ensureServerSideGuest from "@utils/ensureServerSideGuest"
+import InputPassword         from "@components/common/InputPassword";
 
 function Login(){
     //hooks
@@ -57,29 +58,27 @@ function Login(){
                         <form method="post" onSubmit={ onLoginFormSubmit }>
                             <InputGroup
                                 label="Username"
-                                name="username" className="mb-3"
+                                name="username"
                                 error={ inputErrors.username }
                                 onChange={ ( e ) => setUsername( e.target.value ) }
                             />
-                            <InputGroup
+                            <InputPassword
                                 label="Password"
                                 name="password"
-                                type="password"
-                                className="mb-3"
                                 error={ inputErrors.password }
                                 onChange={ ( e ) => setPassword( e.target.value ) }
                             />
                             <PrimaryButton type="submit" buttonTitle="Log In" isLoading={ isLoading }/>
                         </form>
 
-                        <Divider className="text-gray-700 mb-6 mt-5">
+                        <Divider className="text-gray-700 !my-4">
                             OR
                         </Divider>
 
                         <GoogleLoginButton/>
 
                         <small className="block text-center">
-                            <Link href="/auth/forgot_password">
+                            <Link href="/auth/forgot-password">
                                 <a className="text-blue-500">
                                     Forgotten your password?
                                 </a>

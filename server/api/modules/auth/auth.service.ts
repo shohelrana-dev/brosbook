@@ -20,7 +20,7 @@ class AuthService {
 
         let verifyToken  = crypto.randomBytes( 16 ).toString( 'hex' )
         verifyToken      = `${ verifyToken }.${ encrypt( email ) }`
-        const verifyLink = `${ process.env.CLIENT_URL }/auth/verify_account/${ verifyToken }`
+        const verifyLink = `${ process.env.CLIENT_URL }/auth/verify-account/${ verifyToken }`
 
         await Verification
             .create( {
@@ -122,7 +122,7 @@ class AuthService {
 
         let resetToken  = crypto.randomBytes( 16 ).toString( 'hex' )
         resetToken      = `${ resetToken }.${ encrypt( email ) }`
-        const resetLink = `${ process.env.CLIENT_URL }/auth/reset_password/${ resetToken }`
+        const resetLink = `${ process.env.CLIENT_URL }/auth/reset-password/${ resetToken }`
 
         const user = await User.findOne( { email } )
         if ( !user ) {

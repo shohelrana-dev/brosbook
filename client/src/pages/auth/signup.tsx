@@ -10,7 +10,8 @@ import InputGroup            from '@components/common/InputGroup'
 import GoogleLoginButton     from "@components/common/GoogleLoginButton"
 import PrimaryButton         from "@components/common/PrimaryButton"
 import { useSignupMutation } from "@services/authApi"
-import { InputErrors }       from "@interfaces/index.interfaces";
+import { InputErrors }       from "@interfaces/index.interfaces"
+import InputPassword         from "@components/common/InputPassword";
 
 function Signup(){
     //hooks
@@ -64,7 +65,7 @@ function Signup(){
 
                         <GoogleLoginButton/>
 
-                        <Divider className="text-gray-700 mb-6 mt-5">
+                        <Divider className="text-gray-700 !my-4">
                             OR
                         </Divider>
 
@@ -72,36 +73,30 @@ function Signup(){
                             <InputGroup
                                 label="First Name"
                                 name="firstName"
-                                className="mb-2"
                                 error={ inputErrors.firstName }
                                 onChange={ ( e => setFirstName( e.target.value ) ) }
                             />
                             <InputGroup
                                 label="Last Name"
                                 name="lastName"
-                                className="mb-2"
                                 error={ inputErrors.lastName }
                                 onChange={ ( e => setLastName( e.target.value ) ) }
                             />
                             <InputGroup
                                 label="Email"
                                 name="email"
-                                className="mb-2"
                                 error={ inputErrors.email }
                                 onChange={ ( e => setEmail( e.target.value ) ) }
                             />
                             <InputGroup
                                 label="Username"
                                 name="username"
-                                className="mb-2"
                                 error={ inputErrors.username }
                                 onChange={ ( e => setUsername( e.target.value ) ) }
                             />
-                            <InputGroup
+                            <InputPassword
                                 label="Password"
                                 name="password"
-                                type="password"
-                                className="mb-2"
                                 error={ inputErrors.password }
                                 onChange={ ( e ) => {
                                     setPassword( e.target.value )

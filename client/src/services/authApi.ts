@@ -52,7 +52,7 @@ export const authApi = baseApi.injectEndpoints( {
 
         forgotPassword: build.mutation<FetchData, string>( {
             query: ( email ) => ( {
-                url: `/auth/forgot_password`,
+                url: `/auth/forgot-password`,
                 method: 'POST',
                 body: { email }
             } )
@@ -60,14 +60,14 @@ export const authApi = baseApi.injectEndpoints( {
 
         resetPassword: build.mutation<FetchData, ResetPassPayload>( {
             query: ( formData ) => ( {
-                url: `/auth/reset_password/${ formData.token }`,
+                url: `/auth/reset-password/${ formData.token }`,
                 method: 'POST',
                 body: formData
             } )
         } ),
 
         verifyAccount: build.mutation<FetchData, string>( {
-            query: ( token ) => `/auth/reset_password/${ token }`
+            query: ( token ) => `/auth/reset-password/${ token }`
         } ),
     } ),
 } )

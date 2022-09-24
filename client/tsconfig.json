@@ -24,7 +24,6 @@
          "@services/*": ["services/*"],
          "@styles/*": ["styles/*"],
          "@interfaces/*": ["interfaces/*"],
-         "@hooks/*": ["hooks/*"],
          "@utils/*": ["utils/*"]
       }
    },

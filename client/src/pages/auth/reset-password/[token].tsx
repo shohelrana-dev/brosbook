@@ -42,7 +42,7 @@ function Token(){
         if( ! token || token === 'undefined' ) return
 
         try {
-            await Http.get( `${ process.env.NEXT_PUBLIC_SERVER_API_URL }/auth/reset_password/${ token }` )
+            await Http.get( `${ process.env.NEXT_PUBLIC_SERVER_API_URL }/auth/reset-password/${ token }` )
             setIsTokenVerifying( false )
         } catch ( e ) {
             toast.error( 'Invalid token!' )

@@ -45,30 +45,30 @@ router.get( '/me', ensureAuth, authController.me )
 
 /**
  * @desc forgot password
- * @route GET /auth/forgot_password
+ * @route GET /auth/forgot-password
  * @access Public
  */
-router.post( '/forgot_password', validation.forgotPassword(), authController.forgotPassword )
+router.post( '/forgot-password', validation.forgotPassword(), authController.forgotPassword )
 
 /**
  * @desc reset password token verify
- * @route GET /auth/reset_password/:token
+ * @route GET /auth/reset-password/:token
  * @access Public
  */
-router.get( '/reset_password/:token', authController.resetPassTokenVerify )
+router.get( '/reset-password/:token', authController.resetPassTokenVerify )
 
 /**
  * @desc reset password
- * @route POST /auth/forgot_password/:token
+ * @route POST /auth/forgot-password/:token
  * @access Public
  */
-router.post( '/reset_password/:token', validation.resetPassword(), authController.resetPassword )
+router.post( '/reset-password/:token', validation.resetPassword(), authController.resetPassword )
 
 /**
  * @desc verify account
- * @route POST /auth/verify_account/:token
+ * @route POST /auth/verify-account/:token
  * @access Public
  */
-router.get( '/verify_account/:token', authController.verifyAccount )
+router.get( '/verify-account/:token', authController.verifyAccount )
 
 export default router
