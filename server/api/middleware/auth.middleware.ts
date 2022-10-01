@@ -7,12 +7,12 @@ export const ensureAuth = ( req: Request, _: Response, next: NextFunction ) => {
     if( req.isAuthenticated ){
         return next()
     }
-    next( new HttpException( 'Unauthenticated user not allowed!', httpStatus.FORBIDDEN ) )
+    next( new HttpException( httpStatus.UNAUTHORIZED, 'Sorry, you are not allowed.' ) )
 }
 
 export const ensureGuest = ( req: Request, _: Response, next: NextFunction ) => {
     if( ! req.isAuthenticated ){
         return next()
     }
-    next( new HttpException( 'Authenticated user not allowed!', httpStatus.FORBIDDEN ) )
+    next( new HttpException( httpStatus.BAD_REQUEST, 'Sorry, you are not allowed.' ) )
 }

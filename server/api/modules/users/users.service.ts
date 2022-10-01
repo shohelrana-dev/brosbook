@@ -1,22 +1,22 @@
 import HttpException     from "@exceptions/http.exception"
-import httpStatus from "http-status"
+import httpStatus        from "http-status"
 import { Request }       from "express"
 import Follow            from "@entities/Follow"
 import { getRepository } from "typeorm"
-import User              from "@entities/User"
-import { paginateMeta }  from "@api/utils"
-import Post              from "@entities/Post"
+import User             from "@entities/User"
+import { paginateMeta } from "@utils/paginateMeta"
+import Post             from "@entities/Post"
 import LikeEntity        from "@entities/Like"
 
 
 export default class UsersService {
 
-    public async getSuggestedUsers( req: Request ) {
+    public async getSuggestedUsers( req: Request ){
         const page  = Number( req.query.page ) || 1
         const limit = Number( req.query.posts_per_page ) || 6
 
         try {
-            const [ users, count ] = await getRepository( User )
+            const [users, count] = await getRepository( User )
                 .createQueryBuilder( 'user' )
                 .where( 'user.id != :id', { id: req.user.id } )
                 .leftJoinAndSelect( 'user.profile', 'profile' )
@@ -31,10 +31,10 @@ export default class UsersService {
         }
     }
 
-    public async getUser( req: Request ) {
+    public async getUser( req: Request ){
         const { username } = req.params
 
-        if ( !username ) throw new HttpException( "Username is missing", httpStatus.CONFLICT )
+        if( ! username ) throw new HttpException( "Username is missing", httpStatus.CONFLICT )
 
         try {
             return await getRepository( User )
@@ -50,16 +50,16 @@ export default class UsersService {
         }
     }
 
-    public async getPosts( req: Request ) {
+    public async getPosts( req: Request ){
         const username = req.params.username
         const page     = Number( req.query.page ) || 1
         const limit    = Number( req.query.limit ) || 6
         const skip     = limit * ( page - 1 )
 
-        if ( !username ) throw new HttpException( "Username is missing", httpStatus.CONFLICT )
+        if( ! username ) throw new HttpException( "Username is missing", httpStatus.CONFLICT )
 
         try {
-            const [ posts, count ] = await getRepository( Post )
+            const [posts, count] = await getRepository( Post )
                 .createQueryBuilder( 'post' )
                 .where( 'post.username = :username', { username } )
                 .leftJoinAndSelect( 'post.user', 'user' )
@@ -84,14 +84,14 @@ export default class UsersService {
     }
 
 
-    public async getFollowing( req: Request ) {
+    public async getFollowing( req: Request ){
         const username = req.params.username
         const page     = Number( req.query.page ) || 1
         const limit    = Number( req.query.limit ) || 10
         const skip     = limit * ( page - 1 )
 
         try {
-            const [ follows, count ] = await getRepository( Follow )
+            const [follows, count] = await getRepository( Follow )
                 .createQueryBuilder( 'follow' )
                 .leftJoinAndSelect( 'follow.following', 'following' )
                 .leftJoinAndSelect( 'following.profile', 'profile' )
@@ -114,14 +114,14 @@ export default class UsersService {
         }
     }
 
-    public async getFollowers( req: Request ) {
+    public async getFollowers( req: Request ){
         const username = req.params.username
         const page     = Number( req.query.page ) || 1
         const limit    = Number( req.query.limit ) || 10
         const skip     = limit * ( page - 1 )
 
         try {
-            const [ follows, count ] = await getRepository( Follow )
+            const [follows, count] = await getRepository( Follow )
                 .createQueryBuilder( 'follow' )
                 .leftJoinAndSelect( 'follow.follower', 'follower' )
                 .leftJoinAndSelect( 'follower.profile', 'profile' )
@@ -143,12 +143,12 @@ export default class UsersService {
         }
     }
 
-    public async follow( req: Request ) {
-        const username = req.params.username
+    public async follow( req: Request ){
+        const targetUserId = Number(req.params.targetUserId)
 
-        if ( !username ) throw new HttpException( 'username is missing', httpStatus.CONFLICT )
+        if( ! targetUserId ) throw new HttpException( 'Target user id is missing', httpStatus.BAD_REQUEST )
 
-        const following = Follow.create( { username, followingUsername: req.user.username } )
+        const following = Follow.create( { sourceUserId: req.user.id, targetUserId } )
 
         try {
             return await following.save()
@@ -157,13 +157,13 @@ export default class UsersService {
         }
     }
 
-    public async unfollow( req: Request ) {
-        const username = req.params.username
+    public async unfollow( req: Request ){
+        const targetUserId = Number(req.params.targetUserId)
 
-        if ( !username ) throw new HttpException( 'username is missing', httpStatus.CONFLICT )
+        if( ! targetUserId ) throw new HttpException( 'Target user id is missing', httpStatus.BAD_REQUEST )
 
         try {
-            return await Follow.delete( { username, followingUsername: req.user.username } )
+            return await Follow.delete( { sourceUserId: req.user.id, targetUserId} )
         } catch ( e ) {
             throw new HttpException( 'Could not be unfollowing', httpStatus.CONFLICT )
         }

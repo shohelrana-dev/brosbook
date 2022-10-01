@@ -9,7 +9,6 @@ import {
 import Post from "./Post"
 import User from "./User"
 import Like from "./Like"
-import post from "./Post";
 
 @Entity( 'comments' )
 class Comment extends BaseEntity {
@@ -21,14 +20,14 @@ class Comment extends BaseEntity {
     @Column( { type: 'int', nullable: false } )
     postId: number
 
-    @Column( { length: 25, nullable: false } )
-    username: string
+    @Column( { type: "int", nullable: false } )
+    userId: number
 
     @Column( { type: 'text', nullable: true } )
     content: string
 
     @ManyToOne( () => User )
-    @JoinColumn( { name: 'username', referencedColumnName: 'username' } )
+    @JoinColumn( { name: 'userId', referencedColumnName: 'id' } )
     user: User
 
     @ManyToOne( () => Post )

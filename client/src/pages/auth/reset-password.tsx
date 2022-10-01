@@ -5,62 +5,45 @@ import Head                                                from "next/head"
 import { LinearProgress }                                  from "@mui/material"
 import { Lock }                                            from "@mui/icons-material"
 import { toast }                                           from "react-toastify"
-import useAsyncEffect                                      from "use-async-effect"
 
-import InputGroup                   from "@components/common/InputGroup"
 import PrimaryButton                from "@components/common/PrimaryButton"
-import { useAppDispatch }           from "@store/store"
 import { useResetPasswordMutation } from "@services/authApi";
-import { InputErrors } from "@interfaces/index.interfaces"
-import Http            from "@utils/http"
+import { InputErrors }              from "@interfaces/index.interfaces"
+import InputPassword                from "@components/common/InputPassword";
 
-function Token(){
+function ResetPassword(){
     //hooks
-    const router                                                          = useRouter()
-    const [resetPassword, { isLoading, isSuccess, isError, data, error }] = useResetPasswordMutation()
+    const router                         = useRouter()
+    const [resetPassword, { isLoading }] = useResetPasswordMutation()
 
-    const [isTokenVerifying, setIsTokenVerifying] = useState<boolean>( true )
-    const [password, setPassword]                 = useState<string>( '' )
-    const [confirmPassword, setConfirmPassword]   = useState<string>( '' )
-
-    const errorData   = ( error && 'data' in error && error.data as any ) || {}
-    const inputErrors = errorData.errors || {} as InputErrors
+    const [inputErrors, setInputErrors]         = useState<InputErrors>( {} )
+    const [password, setPassword]               = useState<string>( '' )
+    const [confirmPassword, setConfirmPassword] = useState<string>( '' )
 
     useEffect( () => {
-        isSuccess && toast.success( data?.message )
-        isError && toast.error( errorData?.message )
-
-        if( isSuccess ){
+        const { email, key } = router.query
+        if( ! email || ! key ){
             router.push( '/auth/login' )
+            toast.error( 'Email or verification key missing.' )
         }
-    }, [isSuccess, isError] )
-
-    useAsyncEffect( tokenVerify, [router] )
-
-    async function tokenVerify(){
-        const token = router.query.token as string
-        if( ! token || token === 'undefined' ) return
-
-        try {
-            await Http.get( `${ process.env.NEXT_PUBLIC_SERVER_API_URL }/auth/reset-password/${ token }` )
-            setIsTokenVerifying( false )
-        } catch ( e ) {
-            toast.error( 'Invalid token!' )
-            await router.push( '/auth/login' )
-        }
-    }
+    }, [router] )
 
     //handle form submit
-    const submitForm = async( event: FormEvent<HTMLFormElement> ) => {
+    async function submitForm( event: FormEvent<HTMLFormElement> ){
         event.preventDefault()
 
-        const token = router.query.token as string
+        const email = router.query.email as string
+        const key   = router.query.key as string
 
-        resetPassword( { password, confirmPassword, token } )
-    }
-
-    if( isTokenVerifying ){
-        return <LinearProgress/>
+        try {
+            await resetPassword( { password, confirmPassword, email, key } ).unwrap()
+            toast.success( 'Your login password has been changed.' )
+            router.push( '/auth/login' )
+        } catch ( err: any ) {
+            console.error( err )
+            if( err?.data?.errors ) setInputErrors( err.data.errors )
+            toast.error( err?.data?.message )
+        }
     }
 
     return (
@@ -84,17 +67,15 @@ function Token(){
                         </small>
 
                         <form method="post" onSubmit={ submitForm }>
-                            <InputGroup
+                            <InputPassword
                                 label="Password"
                                 name="password"
-                                className="mb-3"
                                 error={ inputErrors.password }
                                 onChange={ ( e ) => setPassword( e.target.value ) }
                             />
-                            <InputGroup
+                            <InputPassword
                                 label="Confirm Password"
                                 name="confirmPassword"
-                                className="mb-3"
                                 error={ inputErrors.confirmPassword }
                                 onChange={ ( e ) => setConfirmPassword( e.target.value ) }
                             />
@@ -119,4 +100,4 @@ function Token(){
     )
 }
 
-export default Token
+export default ResetPassword

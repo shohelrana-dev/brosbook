@@ -1,7 +1,7 @@
 import { Router } from "express"
 
-import { ensureAuth }    from "@api/middleware/auth"
-import CommentController from "@api/modules/comments/comment.controller"
+import { ensureAuth }    from "@middleware/auth.middleware"
+import CommentController from "@modules/comments/comment.controller"
 import CommentService    from "./comment.service"
 
 const router            = Router()
@@ -9,29 +9,29 @@ const commentController = new CommentController( new CommentService() )
 
 /**
  * @desc get comments
- * @route GET comments
+ * @route GET /posts/:postId/comments
  * @access Private
  */
-router.get( '/', ensureAuth, commentController.getComments )
+router.get( '/:postId/comments/', ensureAuth, commentController.getComments )
 
 /**
  * @desc create comment
- * @route POST /comments
+ * @route POST /posts/:postId/comments
  * @access Private
  */
-router.post( '/', ensureAuth, commentController.create )
+router.post( '/:postId/comments/', ensureAuth, commentController.create )
 
 
 /**
  * @desc save comment like
- * @route POST comments/:commentId/like
+ * @route POST /posts/:postId/comments/:commentId/like
  * @access Private
  */
-router.post( '/:commentId/like', ensureAuth, commentController.like )
+router.post( '/:postId/comments/:commentId/like', ensureAuth, commentController.like )
 
 /**
  * @desc comment unlike
- * @route POST comments/:commentId/unlike
+ * @route POST /posts/:postId/comments/:commentId/unlike
  * @access Private
  */
 router.post( '/:postId/comments/:commentId/unlike', ensureAuth, commentController.unlike )

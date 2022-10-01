@@ -8,22 +8,19 @@ import { useLoginWithGoogleMutation } from "@services/authApi"
 
 function GoogleLoginButton(){
     //hooks
-    const router                                                  = useRouter()
-    const [login, { isLoading, isSuccess, isError, data, error }] = useLoginWithGoogleMutation()
+    const router                            = useRouter()
+    const [login, { isLoading, isSuccess }] = useLoginWithGoogleMutation()
 
-    const errorData = ( error && 'data' in error && error.data as any ) || {}
 
-    useEffect( () => {
-        if( isSuccess ){
+    async function responseGoogle( response: CredentialResponse ){
+        try {
+            login( response.credential! ).unwrap()
             router.push( '/' )
-            toast.success( data?.message )
+            toast.success( 'You have been logged in successfully.' )
+        } catch ( err ) {
+            console.error( err )
+            toast.error( "Login was failed." )
         }
-    }, [isSuccess] )
-
-    useEffect( () => { isError && toast.error( errorData.message )}, [isError] )
-
-    const responseGoogle = async( response: CredentialResponse ) => {
-        login( response.credential! )
     }
 
     if( isSuccess || isLoading ) return (

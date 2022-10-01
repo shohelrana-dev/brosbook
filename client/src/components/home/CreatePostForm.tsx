@@ -69,9 +69,8 @@ function CreatePostForm(){
                     className="input-basic text-gray-600 text-lg font-medium p-4 my-2"
                     placeholder="What's your mind?"
                     onChange={ ( e ) => setContent( e.target.value ) }
-                >
-                    { content }
-                </textarea>
+                    defaultValue={content}
+                ></textarea>
                 <input
                     ref={ inputImageRef }
                     type="file"

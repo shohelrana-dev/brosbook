@@ -9,7 +9,7 @@ import HttpException                       from "@exceptions/http.exception"
 import Conversation                        from "@entities/Conversation"
 import Message                             from "@entities/Message"
 import Reaction                            from "@entities/Reaction"
-import { MessageDataDto, ReactionDataDto } from "@interfaces/index.interfaces"
+import { MessageDataDto, ReactionDataDto } from "@api/types/index.types"
 import httpStatus                          from "http-status"
 import User                                from "@entities/User"
 

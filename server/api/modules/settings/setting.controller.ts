@@ -12,7 +12,7 @@ export default class SettingController {
         if ( !errors.isEmpty() ) {
             return res.status( 422 ).json( {
                 success: false,
-                message: 'Please fix the errors below.',
+                message: 'Request input validation error.',
                 errors: errors.mapped()
             } )
         }
@@ -36,7 +36,7 @@ export default class SettingController {
         if ( !errors.isEmpty() ) {
             return res.status( 422 ).json( {
                 success: false,
-                message: 'Please fix the errors below.',
+                message: 'Request input validation error.',
                 errors: errors.mapped()
             } )
         }

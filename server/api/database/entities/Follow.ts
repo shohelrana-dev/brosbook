@@ -12,18 +12,18 @@ export default class Follow extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column( { length: 25, nullable: false } )
-    username: string
+    @Column( { nullable: false, type: 'int' } )
+    sourceUserId: number
 
-    @Column( { length: 25, nullable: false } )
-    followingUsername: string
+    @Column( { nullable: false, type: 'int' } )
+    targetUserId: number
 
     @OneToOne( () => User )
-    @JoinColumn( { name: 'followingUsername', referencedColumnName: 'username' } )
+    @JoinColumn( { name: 'sourceUserId', referencedColumnName: 'id' } )
     follower: User
 
     @OneToOne( () => User )
-    @JoinColumn( { name: 'username', referencedColumnName: 'username' } )
+    @JoinColumn( { name: 'targetUserId', referencedColumnName: 'id' } )
     following: User
 
     @CreateDateColumn()

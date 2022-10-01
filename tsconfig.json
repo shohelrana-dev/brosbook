@@ -43,7 +43,6 @@
          "@exceptions/*": ["server/api/exceptions/*"],
          "@entities/*": ["server/api/database/entities/*"],
          "@middleware/*": ["server/api/middleware/*"],
-         "@interfaces/*": ["server/api/interfaces/*"],
          "@utils/*": ["server/api/utils/*"]
       }
    },

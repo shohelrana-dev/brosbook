@@ -1,7 +1,7 @@
 import { Router } from "express"
 
-import { ensureAuth } from "@api/middleware/auth"
-import ChatController from "@api/modules/chat/chat.controller"
+import { ensureAuth } from "@middleware/auth.middleware"
+import ChatController from "@modules/chat/chat.controller"
 import ChatService    from "./chat.service"
 
 const router         = Router()

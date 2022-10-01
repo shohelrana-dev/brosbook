@@ -14,5 +14,6 @@ export interface SignupPayload {
 export interface ResetPassPayload {
     password: string
     confirmPassword: string
-    token: string
+    email: string
+    key: string
 }

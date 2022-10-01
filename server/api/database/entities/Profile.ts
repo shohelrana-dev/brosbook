@@ -9,8 +9,8 @@ class Profile extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column( { length: 20, nullable: false } )
-    username: string
+    @Column( { type: "int", nullable: false } )
+    userId: number
 
     @Column( { length: 16, nullable: true } )
     phone: string

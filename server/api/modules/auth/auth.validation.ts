@@ -1,6 +1,6 @@
 import { check, ValidationChain } from "express-validator"
-import bcrypt from "bcrypt"
-import User   from "@entities/User"
+import bcrypt                     from "bcrypt"
+import User                       from "@entities/User"
 
 class AuthValidation {
 
@@ -81,7 +81,7 @@ class AuthValidation {
                 .isLength( { min: 1 } )
                 .withMessage( 'Confirm Password is required!' )
                 .custom( ( value, { req } ) => {
-                    if ( value !== req.body.password ) {
+                    if( value !== req.body.password ){
                         throw new Error( 'Passwords must be same' )
                     }
                     return true
@@ -89,32 +89,29 @@ class AuthValidation {
         ]
     }
 
-    private checkUsernameNotExists = async ( username: string ): Promise<boolean> => {
+    private checkUsernameNotExists = async( username: string ): Promise<void> => {
         const user = await User.findOne( { username } )
-        if ( user ) {
+        if( user ){
             throw new Error( 'The username already exists!' )
         }
-        return true
     }
 
-    private checkEmailNotExists = async ( email: string ): Promise<boolean> => {
-        let user = await User.findOne( { email } )
-        if ( user ) {
+    private checkEmailNotExists = async( email: string ): Promise<void> => {
+        const user = await User.findOne( { email } )
+        if( user ){
             throw new Error( 'The email address already exists!' )
         }
-        return true
     }
 
-    private checkEmailExists = async ( email: string ): Promise<boolean> => {
+    private checkEmailExists = async( email: string ): Promise<void> => {
         try {
             await User.findOneOrFail( { email } )
-            return true
         } catch ( err ) {
             throw new Error( 'The email address not exists!' )
         }
     }
 
-    private checkUsernameExists = async ( username: string ): Promise<boolean> => {
+    private checkUsernameExists = async( username: string ): Promise<void> => {
         try {
             await User.findOneOrFail( {
                 where: [
@@ -122,13 +119,12 @@ class AuthValidation {
                     { username }
                 ]
             } )
-            return true
         } catch ( err ) {
             throw new Error( 'User not found with the email address or username' )
         }
     }
 
-    private checkValidPassword = async ( _: any, { req }: any ): Promise<any> => {
+    private checkValidPassword = async( _: any, { req }: any ): Promise<void> => {
         const { username, password } = req.body
         const user                   = await User.findOne( {
             where: [
@@ -137,12 +133,11 @@ class AuthValidation {
             ]
         } )
 
-        if ( user ) {
+        if( user ){
             let isValidPassword = await bcrypt.compare( password, user.password )
-            if ( !isValidPassword ) {
+            if( ! isValidPassword ){
                 throw new Error( 'Password is incorrect!' )
             }
-            return true
         }
     }
 }

@@ -17,8 +17,8 @@ export default class Like extends BaseEntity{
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column( { length: 25, nullable: false } )
-    username: string
+    @Column( { type: 'int', nullable: false } )
+    userId: number
 
     @Column( { type: 'int', nullable: true } )
     postId: number
@@ -27,7 +27,7 @@ export default class Like extends BaseEntity{
     commentId: number
 
     @ManyToOne( () => User )
-    @JoinColumn( { name: 'username', referencedColumnName: 'username' } )
+    @JoinColumn( { name: 'userId', referencedColumnName: 'id' } )
     user: User
 
     @ManyToOne( () => Post )

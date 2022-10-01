@@ -1,22 +1,22 @@
-import React, { FormEvent, Fragment, useEffect, useState } from 'react'
-import Head                                                from 'next/head'
-import Link                                                from 'next/link'
-import { Alert, Divider, LinearProgress }                  from '@mui/material'
-import zxcvbn                                              from 'zxcvbn-typescript'
-import { toast }                                           from "react-toastify"
-import { useRouter }                                       from "next/router"
+import React, { FormEvent, Fragment, useState } from 'react'
+import Head                                     from 'next/head'
+import Link                                     from 'next/link'
+import { Alert, Divider, LinearProgress }       from '@mui/material'
+import zxcvbn                                   from 'zxcvbn-typescript'
+import { toast }                                from "react-toastify"
+import { useRouter }                            from "next/router"
 
 import InputGroup            from '@components/common/InputGroup'
 import GoogleLoginButton     from "@components/common/GoogleLoginButton"
 import PrimaryButton         from "@components/common/PrimaryButton"
 import { useSignupMutation } from "@services/authApi"
 import { InputErrors }       from "@interfaces/index.interfaces"
-import InputPassword         from "@components/common/InputPassword";
+import InputPassword         from "@components/common/InputPassword"
 
 function Signup(){
     //hooks
-    const router                                                   = useRouter()
-    const [signup, { isLoading, data, error, isSuccess, isError }] = useSignupMutation()
+    const router                  = useRouter()
+    const [signup, { isLoading }] = useSignupMutation()
 
     const [firstName, setFirstName] = useState<string>( '' )
     const [lastName, setLastName]   = useState<string>( '' )
@@ -24,26 +24,23 @@ function Signup(){
     const [username, setUsername]   = useState<string>( '' )
     const [password, setPassword]   = useState<string>( '' )
 
+    const [inputErrors, setInputErrors]         = useState<InputErrors>( {} )
     const [passwordWarning, setPasswordWarning] = useState( '' )
-
-    const errorData = ( error && 'data' in error && error.data as any ) || {}
-    const inputErrors = errorData.errors || {} as InputErrors
-
-    useEffect( () => {
-        isSuccess && toast.success( data?.message )
-        isError && toast.error( errorData?.message )
-
-        if( isSuccess ){
-            router.push( '/auth/login' )
-        }
-
-    }, [isSuccess, isError] )
 
     //handle form submit
     async function onSignupFormSubmit( event: FormEvent ){
         event.preventDefault()
+        setInputErrors( {} )
 
-        signup( { firstName, lastName, email, username, password } )
+        try {
+            await signup( { firstName, lastName, email, username, password } ).unwrap()
+            router.push( '/auth/login' )
+            toast.success( 'Signup success. You have received a mail to verify the account.' )
+        } catch ( err: any ) {
+            console.error( err )
+            toast.error( 'Please fix errors below.' )
+            if( err?.data?.errors ) setInputErrors( err.data.errors )
+        }
     }
 
     function checkPasswordWarning(){

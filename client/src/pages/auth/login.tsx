@@ -1,7 +1,7 @@
-import React, { FormEvent, Fragment, useEffect, useState } from 'react'
-import Head                                                from 'next/head'
-import Link                                                from 'next/link'
-import { Divider, LinearProgress }                         from '@mui/material'
+import React, { FormEvent, Fragment, useState } from 'react'
+import Head                                     from 'next/head'
+import Link                                     from 'next/link'
+import { Divider, LinearProgress }              from '@mui/material'
 
 import InputGroup            from '@components/common/InputGroup'
 import GoogleLoginButton     from '@components/common/GoogleLoginButton'
@@ -11,32 +11,31 @@ import { useLoginMutation }  from "@services/authApi"
 import { InputErrors }       from "@interfaces/index.interfaces"
 import { toast }             from "react-toastify"
 import ensureServerSideGuest from "@utils/ensureServerSideGuest"
-import InputPassword         from "@components/common/InputPassword";
+import InputPassword         from "@components/common/InputPassword"
+import { Lock }              from "@mui/icons-material";
 
 function Login(){
     //hooks
-    const router                                                  = useRouter()
-    const [login, { isLoading, data, error, isSuccess, isError }] = useLoginMutation()
-    const [username, setUsername]                                 = useState<string>( '' )
-    const [password, setPassword]                                 = useState<string>( '' )
+    const router                            = useRouter()
+    const [login, { isLoading, isSuccess }] = useLoginMutation()
+    const [inputErrors, setInputErrors]     = useState<InputErrors>( {} )
+    const [username, setUsername]           = useState<string>( '' )
+    const [password, setPassword]           = useState<string>( '' )
 
-    const errorData   = ( error && 'data' in error && error.data as any ) || {}
-    const inputErrors = errorData.errors || {} as InputErrors
-
-    useEffect( () => {
-        if( isSuccess ){
-            router.push( '/' )
-            toast.success( data?.message )
-        }
-    }, [isSuccess] )
-
-    useEffect( () => { isError && toast.error( errorData.message )}, [isError] )
 
     //handle form submit
-    function onLoginFormSubmit( event: FormEvent ){
+    async function onLoginFormSubmit( event: FormEvent ){
         event.preventDefault()
 
-        login( { username, password } )
+        try {
+            await login( { username, password } ).unwrap()
+            router.push( '/' )
+            toast.success( 'You have been logged in successfully.' )
+        } catch ( err: any ) {
+            console.error( err )
+            if( err?.data?.errors ) setInputErrors( err.data.errors )
+            toast.error( err?.data?.message || 'Invalid credentials.' )
+        }
     }
 
     if( isSuccess ){
@@ -53,11 +52,14 @@ function Login(){
                     { isLoading && <LinearProgress/> }
 
                     <div className="bg-white p-8 border border-gray-300">
+                        <div className="text-center mb-2">
+                            <Lock fontSize="large"/>
+                        </div>
                         <h1 className="text-xl text-center mb-4 font-medium">Log In</h1>
 
                         <form method="post" onSubmit={ onLoginFormSubmit }>
                             <InputGroup
-                                label="Username"
+                                label="Username or email"
                                 name="username"
                                 error={ inputErrors.username }
                                 onChange={ ( e ) => setUsername( e.target.value ) }

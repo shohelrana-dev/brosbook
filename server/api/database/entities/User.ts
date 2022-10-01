@@ -3,7 +3,7 @@ import {
     BaseEntity, BeforeInsert,
     Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany,
     OneToOne, PrimaryGeneratedColumn, UpdateDateColumn
-} from "typeorm"
+}              from "typeorm"
 import bcrypt  from 'bcrypt'
 import Profile from "./Profile"
 import Follow  from "./Follow"
@@ -41,7 +41,7 @@ class User extends BaseEntity {
     verified: number
 
     @OneToOne( () => Profile )
-    @JoinColumn( { name: 'username', referencedColumnName: 'username' } )
+    @JoinColumn()
     profile: Profile
 
     @OneToMany( type => Follow, follow => follow.follower )
@@ -57,26 +57,26 @@ class User extends BaseEntity {
     updatedAt: Date
 
     @BeforeInsert()
-    async makePasswordHash() {
+    async makePasswordHash(){
         this.password = await bcrypt.hash( this.password, 6 )
     }
 
     @BeforeInsert()
-    async generateUsernameFromEmail() {
-        if ( !this.username ) {
+    async generateUsernameFromEmail(){
+        if( ! this.username ){
             const nameParts = this.email.split( "@" )
             this.username   = nameParts[0].toLocaleLowerCase()
         }
     }
 
     @AfterLoad()
-    setFullName() {
+    setFullName(){
         this.fullName = `${ this.firstName } ${ this.lastName }`
     }
 
     @BeforeInsert()
-    async setDefaultProfilePhotoIfNotGiven() {
-        if ( !this.photo ) {
+    async setDefaultProfilePhotoIfNotGiven(){
+        if( ! this.photo ){
             this.photo = process.env.SERVER_URL! + '/images/avatar.png'
         }
     }

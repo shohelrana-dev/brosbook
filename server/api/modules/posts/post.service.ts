@@ -8,8 +8,8 @@ import Post             from "@entities/Post"
 import Like             from "@entities/Like"
 import HttpException    from "@exceptions/http.exception"
 import httpStatus       from "http-status"
-import { paginateMeta } from "@api/utils"
-import { PaginateMeta } from "@interfaces/index.interfaces"
+import { paginateMeta } from "@utils/paginateMeta"
+import { PaginateMeta } from "@api/types/index.types"
 
 export default class PostService {
 

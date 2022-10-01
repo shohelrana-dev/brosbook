@@ -13,10 +13,10 @@ dotenv.config()
 
 
 //internal import
-import notFound    from "@api/middleware/not-found"
-import error       from '@api/middleware/error'
-import currentUser from '@api/middleware/current-user'
-import socketInit  from "@api/socket"
+import notFoundMiddleware        from "@middleware/not-found.middleware"
+import errorMiddleware           from '@middleware/error.middleware'
+import deserializeUserMiddleware from '@middleware/deserialize-user.middleware'
+import socketInit                from "@api/socket"
 import fileUpload  from "express-fileupload"
 import routes      from '@startup/routes'
 
@@ -45,13 +45,13 @@ app.use( fileUpload() )
 app.use( express.static( path.resolve( __dirname, '../../public' ) ) )
 
 //set current user
-app.use( currentUser )
+app.use( deserializeUserMiddleware )
 
 //app routes
 app.use( routes )
 
 // handle error
-app.use( notFound )
-app.use( error )
+app.use( notFoundMiddleware )
+app.use( errorMiddleware )
 
 export default server

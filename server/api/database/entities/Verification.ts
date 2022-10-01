@@ -9,11 +9,11 @@ class Verification extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column( { unique: true, length: 25, nullable: false } )
-    username: string
+    @Column( { type: "int", nullable: false } )
+    userId: number
 
     @Column( { nullable: true } )
-    token: string
+    key: string
 
     @CreateDateColumn()
     createdAt: Date

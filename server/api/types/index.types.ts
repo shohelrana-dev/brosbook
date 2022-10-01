@@ -1,10 +1,10 @@
 import User from "@entities/User"
 
-export interface TokenData {
+export interface LoginTokenData {
     access_token: string
     token_type: string
-    expiresIn: number
-    user?: User
+    expiresIn: number | string
+    user: User
 }
 
 export interface MessageDataDto {

@@ -1,8 +1,8 @@
 //dependencies
 import { createConnection } from 'typeorm'
 
-import app            from '@config/app'
-import databaseConfig from '@config/database'
+import app            from '@config/express.config'
+import databaseConfig from '@config/database.config'
 
 //server run
 const PORT = process.env.SERVER_PORT || 4000;

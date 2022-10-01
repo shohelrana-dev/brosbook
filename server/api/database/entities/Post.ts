@@ -15,8 +15,8 @@ class Post extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column( { length: 25, nullable: false } )
-    username: string
+    @Column( { type: "int", nullable: false } )
+    userId: number
 
     @Column( { type: 'text', nullable: true } )
     content: string
@@ -25,7 +25,7 @@ class Post extends BaseEntity {
     photo: string
 
     @ManyToOne( () => User )
-    @JoinColumn( { name: 'username', referencedColumnName: 'username' } )
+    @JoinColumn( { name: 'userId', referencedColumnName: 'id' } )
     user: User
 
     @OneToMany( () => Comment, comment => comment.post )

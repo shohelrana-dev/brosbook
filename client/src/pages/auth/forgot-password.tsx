@@ -1,10 +1,10 @@
-import React, { FormEvent, Fragment, useEffect, useState } from 'react'
-import Head                                                from "next/head"
-import { LinearProgress }                                  from "@mui/material"
-import Link                                                from "next/link"
-import { Lock }                                            from '@mui/icons-material'
-import { toast }                                           from "react-toastify"
-import { useRouter }                                       from "next/router"
+import React, { FormEvent, Fragment, useState } from 'react'
+import Head                                     from "next/head"
+import { LinearProgress }                       from "@mui/material"
+import Link                                     from "next/link"
+import { Lock }                                 from '@mui/icons-material'
+import { toast }                                from "react-toastify"
+import { useRouter }                            from "next/router"
 
 import InputGroup                    from "@components/common/InputGroup"
 import PrimaryButton                 from "@components/common/PrimaryButton"
@@ -13,28 +13,24 @@ import { InputErrors }               from "@interfaces/index.interfaces"
 
 function ForgotPassword(){
     //hooks
-    const router                                                           = useRouter()
-    const [forgotPassword, { isLoading, isSuccess, isError, data, error }] = useForgotPasswordMutation()
-    const [email, setEmail]                                                = useState<string>( '' )
-
-    const errorData   = ( error && 'data' in error && error.data as any ) || {}
-    const inputErrors = errorData.errors || {} as InputErrors
-
-    useEffect( () => {
-        isSuccess && toast.success( data?.message )
-        isError && toast.error( errorData?.message )
-
-        if( isSuccess ){
-            router.push( '/auth/login' )
-        }
-
-    }, [isSuccess, isError] )
+    const router                          = useRouter()
+    const [forgotPassword, { isLoading }] = useForgotPasswordMutation()
+    const [inputErrors, setInputErrors]   = useState<InputErrors>( {} )
+    const [email, setEmail]               = useState<string>( '' )
 
     //handle form submit
-    function submitForm( event: FormEvent ){
+    async function submitForm( event: FormEvent ){
         event.preventDefault()
 
-        forgotPassword( email )
+        try {
+            await forgotPassword( email ).unwrap()
+            router.push( '/auth/login' )
+            toast.success( 'A reset password link has been sent to your email.' )
+        } catch ( err: any ) {
+            console.error(err)
+            toast.error( err?.data?.message )
+            if( err?.data?.errors ) setInputErrors( err.data.errors )
+        }
     }
 
     return (
@@ -64,7 +60,7 @@ function ForgotPassword(){
                                 error={ inputErrors.email }
                                 onChange={ ( e ) => setEmail( e.target.value ) }
                             />
-                            <PrimaryButton type="submit" buttonTitle="Send Login Link" isLoading={ isLoading }/>
+                            <PrimaryButton type="submit" buttonTitle="Send Reset Link" isLoading={ isLoading }/>
                         </form>
                     </div>
 
