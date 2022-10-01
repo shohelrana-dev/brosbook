@@ -68,7 +68,7 @@ class ChatService {
         if( ! participantId ) throw new HttpException( "Participant id missing", httpStatus.UNPROCESSABLE_ENTITY )
 
         //check conversation exists
-        const conversation = await Conversation.findOne( { ownerId: req.user.id } )
+        const conversation = await Conversation.findOneBy( { ownerId: req.user.id } )
         if( conversation ) return conversation
 
         try {
@@ -106,7 +106,7 @@ class ChatService {
 
         const url = `${ process.env.SERVER_URL! }/reactions/${ name }.png`
 
-        const reaction = await Reaction.findOne( { senderId, messageId } )
+        const reaction = await Reaction.findOneBy( { senderId, messageId } )
         try {
             if( reaction ){
                 reaction.name = name

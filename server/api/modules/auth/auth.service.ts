@@ -4,17 +4,19 @@ import { LoginTicket, OAuth2Client, TokenPayload } from "google-auth-library"
 import jwt                                         from "jsonwebtoken"
 import { v4 as uuid }                              from "uuid"
 
-import User               from "@entities/User"
-import { LoginTokenData } from "@api/types/index.types"
-import sendEmail          from "@utils/sendEmail"
-import Verification       from "@entities/Verification"
+import User                  from "@entities/User"
+import { LoginTokenPayload } from "@api/types/index.types"
+import sendEmail             from "@utils/sendEmail"
+import Verification          from "@entities/Verification"
+import { AppDataSource }     from "@config/data-source.config";
 
 class AuthService {
+    private userRepository = AppDataSource.getRepository( User )
 
     public async signup( req: Request ): Promise<User>{
         const { firstName, lastName, email, username, password } = req.body
 
-        const user = await User.create( { firstName, lastName, email, username, password } ).save()
+        const user = await this.userRepository.create( { firstName, lastName, email, username, password } ).save()
 
         const verificationKey = uuid()
 
@@ -42,10 +44,10 @@ class AuthService {
         return user
     }
 
-    public async login( req: Request ): Promise<LoginTokenData>{
+    public async login( req: Request ): Promise<LoginTokenPayload>{
         const { username, password } = req.body
 
-        const user = await User.findOne( {
+        const user = await this.userRepository.findOne( {
             where: [
                 { email: username },
                 { username }
@@ -72,7 +74,7 @@ class AuthService {
 
     public async me( req: Request ): Promise<User>{
         try {
-            return await User.findOneOrFail( {
+            return await this.userRepository.findOneOrFail( {
                 where: { id: req.user.id },
                 relations: ['profile']
             } )
@@ -81,7 +83,7 @@ class AuthService {
         }
     }
 
-    public async google( req: Request ): Promise<LoginTokenData>{
+    public async google( req: Request ): Promise<LoginTokenPayload>{
         const { token } = req.body
 
         const authClient          = new OAuth2Client( process.env.GOOGLE_CLIENT_ID )
@@ -92,11 +94,11 @@ class AuthService {
 
         const { email_verified, given_name, family_name, email, picture }: TokenPayload = ticket.getPayload()!
 
-        if( email_verified ) throw new Error( 'Email address was not verified' )
+        if( ! email_verified ) throw new Error( 'Email address was not verified' )
 
-        let user = await User.findOne( { email } )
+        let user = await this.userRepository.findOneBy( { email } )
 
-        //make verified user
+        //make user verified
         if( user && ! user.verified ){
             user.verified = 1
             await user.save()
@@ -104,7 +106,7 @@ class AuthService {
 
         //created user
         if( ! user ){
-            user = User.create( {
+            user = this.userRepository.create( {
                 firstName: given_name,
                 lastName: family_name,
                 email: email,
@@ -125,12 +127,12 @@ class AuthService {
     public async forgotPassword( req: Request ): Promise<void>{
         const { email } = req.body
 
-        const user = await User.findOne( { email } )
+        const user = await User.findOneBy( { email } )
         if( ! user ){
             throw new Error( 'User not found with the email' )
         }
 
-        const verification     = await Verification.findOne( { userId: user.id } )
+        const verification     = await Verification.findOneBy( { userId: user.id } )
         const resetPasswordKey = uuid()
         const resetLink        = `${ process.env.CLIENT_URL }/auth/reset-password?email=${ email }&key=${ resetPasswordKey }`
 
@@ -173,7 +175,7 @@ class AuthService {
         if( ! password ) throw new Error( 'Password required.' )
 
         try {
-            const user    = await AuthService.isVerificationKeyValid( { email, key } )
+            const user    = await this.isVerificationKeyValid( { email, key } )
             user.password = await bcrypt.hash( password, 6 )
             user.verified = 1
             await user.save()
@@ -186,7 +188,7 @@ class AuthService {
         const email = req.query.email as string
         const key   = req.query.key as string
 
-        const user = await AuthService.isVerificationKeyValid( { email, key } )
+        const user = await this.isVerificationKeyValid( { email, key } )
 
         if( user.verified ) throw new Error( 'The user account already verified' )
 
@@ -195,15 +197,15 @@ class AuthService {
         return user
     }
 
-    private static async isVerificationKeyValid( { email, key }: { email: string, key: string } ): Promise<User>{
+    private async isVerificationKeyValid( { email, key }: { email: string, key: string } ): Promise<User>{
 
         if( ! email || ! key ) throw new Error( 'Email or verification key is missing.' )
 
-        const user = await User.findOne( { email } )
+        const user = await this.userRepository.findOneBy( { email } )
 
         if( ! user ) throw new Error( 'User not found with the email address.' )
 
-        const verification = await Verification.findOne( { userId: user?.id } )
+        const verification = await Verification.findOneBy( { userId: user?.id } )
         if( verification?.key === key ){
             return user
         }
@@ -211,7 +213,7 @@ class AuthService {
         throw new Error( 'Verification key is invalid.' )
     }
 
-    private static generateJwtToken( user: User ): LoginTokenData{
+    private static generateJwtToken( user: User ): LoginTokenPayload{
         const dataStoredInToken = {
             id: user.id,
             username: user.username,

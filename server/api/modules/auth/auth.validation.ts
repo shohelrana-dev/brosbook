@@ -90,14 +90,14 @@ class AuthValidation {
     }
 
     private checkUsernameNotExists = async( username: string ): Promise<void> => {
-        const user = await User.findOne( { username } )
+        const user = await User.findOneBy( { username } )
         if( user ){
             throw new Error( 'The username already exists!' )
         }
     }
 
     private checkEmailNotExists = async( email: string ): Promise<void> => {
-        const user = await User.findOne( { email } )
+        const user = await User.findOneBy( { email } )
         if( user ){
             throw new Error( 'The email address already exists!' )
         }
@@ -105,7 +105,7 @@ class AuthValidation {
 
     private checkEmailExists = async( email: string ): Promise<void> => {
         try {
-            await User.findOneOrFail( { email } )
+            await User.findOneByOrFail( { email } )
         } catch ( err ) {
             throw new Error( 'The email address not exists!' )
         }

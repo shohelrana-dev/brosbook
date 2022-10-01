@@ -29,7 +29,7 @@ export default class SettingService {
             userId: req.user.id
         } ) : null
 
-        let profile = await Profile.findOne( { username: req.user.username } )
+        let profile = await Profile.findOneBy( { username: req.user.username } )
         if( ! profile ){
             if( coverPhotoUrl ){
                 Profile.create( {
@@ -73,7 +73,7 @@ export default class SettingService {
     public async changePassword( req: Request ){
         const { oldPassword, newPassword } = req.body
 
-        const user = await User.findOne( { username: req.user.username } )
+        const user = await User.findOneBy( { username: req.user.username } )
 
         if( ! user ) throw new HttpException( "Password couldn't be change", httpStatus.CONFLICT )
 

@@ -33,7 +33,7 @@ export default class PostService {
 
             //check and set current user like
             for ( let post of posts ) {
-                const like              = await Like.findOne( { username: req.user.username, postId: post.id } )
+                const like              = await Like.findOneBy( { username: req.user.username, postId: post.id } )
                 post.hasCurrentUserLike = like ? true : false
             }
 

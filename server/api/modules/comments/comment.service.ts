@@ -31,7 +31,7 @@ export default class CommentService {
 
         //check and set current user like
         for ( let comment of comments ) {
-            const like                 = await Like.findOne( { username: req.user.username, commentId: comment.id } )
+            const like                 = await Like.findOneBy( { username: req.user.username, commentId: comment.id } )
             comment.hasCurrentUserLike = like ? true : false
         }
 

@@ -17,8 +17,8 @@ import notFoundMiddleware        from "@middleware/not-found.middleware"
 import errorMiddleware           from '@middleware/error.middleware'
 import deserializeUserMiddleware from '@middleware/deserialize-user.middleware'
 import socketInit                from "@api/socket"
-import fileUpload  from "express-fileupload"
-import routes      from '@startup/routes'
+import fileUpload                from "express-fileupload"
+import routes                    from '@startup/routes'
 
 //Application
 const app: Application = express()
@@ -38,7 +38,7 @@ app.use( cors( {
     origin: process.env.CLIENT_URL,
     optionsSuccessStatus: 200
 } ) )
-app.use( cookieParser( process.env.COOKIE_SECRET ) )
+app.use( cookieParser() )
 app.use( fileUpload() )
 
 //static path

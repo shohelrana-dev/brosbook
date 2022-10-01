@@ -1,14 +1,14 @@
-import path                  from 'path'
-import { ConnectionOptions } from 'typeorm'
+import path           from 'path'
+import { DataSource } from 'typeorm'
 
 const dbConnection: any = process.env.DB_CONNECTION || 'mysql'
 const host: string      = process.env.DB_HOST || 'localhost'
 const port: number      = Number( process.env.DB_PORT ) || 3306
 const username: string  = process.env.DB_USERNAME!
-const password: string = process.env.DB_PASSWORD!
-const database: string = process.env.DB_DATABASE!
+const password: string  = process.env.DB_PASSWORD!
+const database: string  = process.env.DB_DATABASE!
 
-const databaseConfig: ConnectionOptions = {
+export const AppDataSource = new DataSource( {
     type: dbConnection,
     host: host,
     port: port,
@@ -26,12 +26,5 @@ const databaseConfig: ConnectionOptions = {
     ],
     subscribers: [
         path.join( __dirname, '/../api/database/subscribers/**/*.{ts,js}' )
-    ],
-    cli: {
-        entitiesDir: 'server/api/database/entities',
-        migrationsDir: 'server/api/database/migrations',
-        subscribersDir: 'server/api/database/subscribers'
-    }
-}
-
-export default databaseConfig
+    ]
+} )

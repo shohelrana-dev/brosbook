@@ -73,7 +73,7 @@ export default class UsersService {
 
             //check and set current user like
             for ( let post of posts ) {
-                const like              = await LikeEntity.findOne( { username, postId: post.id } )
+                const like              = await LikeEntity.findOneBy( { username, postId: post.id } )
                 post.hasCurrentUserLike = like ? true : false
             }
 

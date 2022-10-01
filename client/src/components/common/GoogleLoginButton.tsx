@@ -1,4 +1,4 @@
-import React, { useEffect }                from 'react'
+import React                               from 'react'
 import { useRouter }                       from "next/router"
 import { toast }                           from "react-toastify"
 import { GoogleLogin, CredentialResponse } from '@react-oauth/google'
@@ -14,12 +14,12 @@ function GoogleLoginButton(){
 
     async function responseGoogle( response: CredentialResponse ){
         try {
-            login( response.credential! ).unwrap()
+            await login( response.credential! ).unwrap()
             router.push( '/' )
             toast.success( 'You have been logged in successfully.' )
         } catch ( err ) {
             console.error( err )
-            toast.error( "Login was failed." )
+            toast.error( "Login has been failed." )
         }
     }
 

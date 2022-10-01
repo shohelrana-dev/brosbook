@@ -72,7 +72,7 @@ export default function socketHandler( server: http.Server ) {
         socket.on( 'user_connected', async ( userId ) => {
             console.log( 'User', userId, 'connected' )
             addUser( socket.id, userId )
-            const user = await User.findOne( userId )
+            const user = await User.findOneBy( { id: userId } )
             if ( !user || user.active === 1 ) return
 
             //update user
@@ -92,7 +92,7 @@ export default function socketHandler( server: http.Server ) {
             console.log( 'User', userId, 'disconnected' )
 
             //set user inactive
-            const user = await User.findOne( userId )
+            const user = await User.findOneBy( { id: userId } )
             if ( !user || user.active === 0 ) return
 
             //update user
