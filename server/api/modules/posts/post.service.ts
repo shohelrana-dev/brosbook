@@ -1,17 +1,17 @@
-import { Request }       from "express"
-import path              from "path"
-import { v4 as uuidv4 }  from "uuid"
-import { UploadedFile }  from "express-fileupload"
-import { getRepository } from "typeorm"
+import { Request }      from "express"
+import path             from "path"
+import { v4 as uuid }   from "uuid"
+import { UploadedFile } from "express-fileupload"
 
-import Post             from "@entities/Post"
-import Like             from "@entities/Like"
-import HttpException    from "@exceptions/http.exception"
-import httpStatus       from "http-status"
-import { paginateMeta } from "@utils/paginateMeta"
-import { PaginateMeta } from "@api/types/index.types"
+import Post              from "@entities/Post"
+import Like              from "@entities/Like"
+import httpStatus        from "http-status"
+import { paginateMeta }  from "@utils/paginateMeta"
+import { PaginateMeta }  from "@api/types/index.types"
+import { AppDataSource } from "@config/data-source.config";
 
 export default class PostService {
+    private postRepository = AppDataSource.getRepository( Post )
 
     public async getPosts( req: Request ): Promise<{ posts: Post[], meta: PaginateMeta }>{
         const page  = Number( req.query.page ) || 1
@@ -19,7 +19,7 @@ export default class PostService {
         const skip  = limit * ( page - 1 )
 
         try {
-            const [posts, count] = await getRepository( Post )
+            const [posts, count] = await this.postRepository
                 .createQueryBuilder( 'post' )
                 .where( 'post.username != :username', { username: req.user.username } )
                 .leftJoinAndSelect( 'post.user', 'user' )
@@ -33,28 +33,28 @@ export default class PostService {
 
             //check and set current user like
             for ( let post of posts ) {
-                const like              = await Like.findOneBy( { username: req.user.username, postId: post.id } )
+                const like              = await Like.findOneBy( { userId: req.user.id, postId: post.id } )
                 post.hasCurrentUserLike = like ? true : false
             }
 
             return { posts, meta: paginateMeta( count, page, limit ) }
         } catch ( e ) {
-            throw new HttpException( "posts couldn't be fetched", httpStatus.CONFLICT )
+            throw new Error( "posts couldn't be fetched" )
         }
     }
 
-    public async createPost( req: Request ){
+    public async createPost( req: Request ): Promise<Post>{
         const { content } = req.body
 
         const image = req.files?.image as UploadedFile
 
         if( ! content && ! image ){
-            throw new HttpException( 'Input field missing', httpStatus.UNPROCESSABLE_ENTITY )
+            throw new Error( 'Input field missing' )
         }
 
         let imageUrl
         if( image ){
-            const imageName = process.env.APP_NAME + '_image_' + uuidv4() + path.extname( image.name )
+            const imageName = process.env.APP_NAME + '_image_' + uuid() + path.extname( image.name )
             imageUrl        = `${ process.env.SERVER_URL }/images/${ imageName }`
             const imagePath = path.resolve( process.cwd(), 'public/images', imageName )
             await image.mv( imagePath )
@@ -62,13 +62,13 @@ export default class PostService {
 
 
         const post = Post.create( {
-            username: req.user.username,
+            userId: req.user.id,
             content: content,
             photo: imageUrl
         } )
 
         try {
-            await post.save()
+            return await post.save()
         } catch ( err ) {
             err.message = "Post couldn't be saved"
             err.status  = httpStatus.CONFLICT
@@ -77,29 +77,29 @@ export default class PostService {
 
     }
 
-    public async like( req: Request ){
+    public async like( req: Request ): Promise<Like>{
         const postId = Number( req.params.postId )
 
-        if( ! postId ) throw new HttpException( 'Post id missing', httpStatus.CONFLICT )
+        if( ! postId ) throw new Error( 'Post id missing' )
 
-        const like = Like.create( { postId, username: req.user.username } )
+        const like = Like.create( { postId, userId: req.user.id } )
 
         try {
-            await like.save()
+            return await like.save()
         } catch ( err ) {
-            throw new HttpException( "The post couldn't be like" )
+            throw new Error( "The post couldn't be like" )
         }
     }
 
-    public async unlike( req: Request ){
+    public async unlike( req: Request ): Promise<void>{
         const postId = Number( req.params.postId )
 
-        if( ! postId ) throw new HttpException( 'Post id missing', httpStatus.CONFLICT )
+        if( ! postId ) throw new Error( 'Post id missing' )
 
         try {
-            await Like.delete( { postId, username: req.user.username } )
+            await Like.delete( { postId, userId: req.user.id } )
         } catch ( err ) {
-            throw new HttpException( "The post couldn't be unlike" )
+            throw new Error( "The post couldn't be unlike" )
         }
     }
 }

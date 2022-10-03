@@ -1,59 +1,64 @@
 import { User }         from "@interfaces/user.interfaces"
 import { baseApi }      from "./baseApi"
-import { Post }         from "@interfaces/posts.interfaces";
-import { PaginateMeta } from "@interfaces/index.interfaces";
-
-type FetchData = {
-    message: string
-    success: boolean
-    users?: User[]
-    user?: User
-    posts?: Post[]
-    meta?: PaginateMeta
-}
+import { ListResponse } from "@interfaces/index.interfaces"
+import { Post }         from "@interfaces/posts.interfaces"
 
 export const usersApi = baseApi.injectEndpoints( {
     endpoints: ( build ) => ( {
-        getUser: build.query<User, string>( {
+        getOneUser: build.query<User, string>( {
             query: ( username ) => `users/${ username }`
         } ),
 
-        getUserPosts: build.query<FetchData, { username: string, page?: number, limit?: number }>( {
+        getManyUser: build.query<ListResponse<User>, { page: number, limit?: number }>( {
             query: ( params ) => ( {
-                url: `users/${ params.username }/posts`,
+                url: `users`,
+                params
+            } )
+        } ),
+
+        getUserManyPost: build.query<ListResponse<Post>, { userId: number, page: number, limit?: number }>( {
+            query: ( { userId, ...params } ) => ( {
+                url: `users/${ userId }/posts`,
                 params: params
             } )
         } ),
 
-        follow: build.mutation<FetchData, string>( {
+        follow: build.mutation<User, string>( {
             query: ( target ) => ( {
                 url: `users/follow?target=${ target }`,
                 method: 'POST',
             } )
         } ),
 
-        unfollow: build.mutation<FetchData, string>( {
+        unfollow: build.mutation<User, string>( {
             query: ( target ) => ( {
                 url: `users/unfollow?target=${ target }`,
                 method: 'POST',
             } )
         } ),
 
-        followers: build.query<FetchData, {username: string}>( {
-            query: ( { username } ) => ( `users/${ username }/followers` )
+        getFollowers: build.query<ListResponse<User>, { userId: number, page: number, limit?: number }>( {
+            query: ( { userId, ...params } ) => ( {
+                url: `users/${ userId }/followers`,
+                params
+            } )
         } ),
 
-        following: build.query<FetchData, {username: string}>( {
-            query: ( { username } ) => ( `users/${ username }/following` )
+        getFollowing: build.query<ListResponse<User>, { userId: number, page: number, limit?: number }>( {
+            query: ( { userId, ...params } ) => ( {
+                url: `users/${ userId }/following`,
+                params
+            } )
         } ),
     } ),
 } )
 
 export const {
-                 useGetUserQuery,
-                 useGetUserPostsQuery,
+                 useGetOneUserQuery,
+                 useGetManyUserQuery,
+                 useGetUserManyPostQuery,
                  useFollowMutation,
                  useUnfollowMutation,
-                 useFollowersQuery,
-                 useFollowingQuery
+                 useGetFollowersQuery,
+                 useGetFollowingQuery
              } = usersApi

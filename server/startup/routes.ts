@@ -1,10 +1,10 @@
 import { Router }    from "express"
 import authRoute     from "@modules/auth/auth.route"
 import chatRoute     from "@modules/chat/chat.route"
-import settingsRoute from "@modules/settings/settings.route"
-import postsRoute    from "@modules/posts/posts.route"
+import settingsRoute from "@modules/settings/setting.routes"
+import postsRoute    from "@modules/posts/post.routes"
 import commentsRoute from "@modules/comments/comments.route"
-import usersRoute    from "@modules/users/users.route"
+import usersRoute    from "@modules/users/user.routes"
 
 const router = Router()
 

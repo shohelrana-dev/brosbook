@@ -1,10 +1,10 @@
 import { Router }         from "express"
-import { ensureAuth }     from "@middleware/auth.middleware"
-import SettingsValidation from "@modules/settings/settings.validation"
-import SettingController  from "@modules/settings/setting.controller"
+import { ensureAuth }    from "@middleware/auth.middleware"
+import SettingValidation from "@modules/settings/setting.validation"
+import SettingController from "@modules/settings/setting.controller"
 import SettingService     from "./setting.service"
 
-const validation         = new SettingsValidation()
+const validation         = new SettingValidation()
 const settingController = new SettingController( new SettingService() )
 
 const router = Router()

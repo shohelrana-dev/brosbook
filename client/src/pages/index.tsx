@@ -1,6 +1,6 @@
-import useInfiniteScroll    from 'react-infinite-scroll-hook'
-import { useState }         from "react"
-import { Facebook }         from "react-content-loader"
+import useInfiniteScroll from 'react-infinite-scroll-hook'
+import { useState }      from "react"
+import { Facebook }      from "react-content-loader"
 
 import MainLayout           from "@components/layouts/MainLayout"
 import CreatePostForm       from "@components/home/CreatePostForm"
@@ -10,13 +10,13 @@ import ensureServerSideAuth from "@utils/ensureServerSideAuth"
 
 function Home(){
     //hooks
-    const [page, setPage]     = useState( 1 )
-    const { isLoading, data } = useGetPostsQuery( { page } )
+    const [page, setPage]            = useState( 1 )
+    const { isLoading, data: posts } = useGetPostsQuery( { page } )
 
     const [scrollBottomRef] = useInfiniteScroll( {
         loading: isLoading,
-        hasNextPage: !! data?.meta?.nextPage,
-        onLoadMore: () => setPage( data?.meta?.nextPage! )
+        hasNextPage: !! posts?.nextPage,
+        onLoadMore: () => setPage( posts?.nextPage! )
     } )
 
     return (
@@ -25,11 +25,11 @@ function Home(){
                 <div className="box p-6">
                     <CreatePostForm/>
                 </div>
-                { data?.posts && data?.posts?.length > 0 && data?.posts?.map( post => (
+                { posts?.items && posts?.items.length > 0 && posts?.items?.map( post => (
                     <PostCard post={ post } key={ post.id }/>
                 ) ) }
 
-                { !! data?.meta?.nextPage ? (
+                { !! posts?.nextPage ? (
                     <div className="box mt-5 p-5" ref={ scrollBottomRef }>
                         <Facebook/>
                     </div>

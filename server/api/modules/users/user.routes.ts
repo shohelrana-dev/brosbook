@@ -1,32 +1,46 @@
 import { Router } from "express"
 
-import { ensureAuth }  from "@middleware/auth.middleware"
-import UsersController from "@modules/users/users.controller"
-import UsersService    from "./users.service"
+import { ensureAuth } from "@middleware/auth.middleware"
+import UserController from "@modules/users/user.controller"
+import UserService    from "./user.service"
 
 const router          = Router()
-const usersController = new UsersController( new UsersService() )
+const usersController = new UserController( new UserService() )
 
 /**
  * @desc get users
  * @route GET /users/search
  * @access Private
  */
-router.get( '/search', usersController.getSuggestedUsers )
+router.get( '/search', usersController.getSearchUsers )
 
 /**
  * @desc get user
  * @route GET /users/:username
  * @access Public
  */
-router.get( '/:username', usersController.getUser )
+router.get( '/:username', usersController.getOneUser )
+
+/**
+ * @desc get users
+ * @route GET /users
+ * @access Public
+ */
+router.get( '/', usersController.getManyUser )
 
 /**
  * @desc get user
  * @route GET /users/:userId/posts
  * @access Public
  */
-router.get( '/:userId/posts', usersController.getPosts )
+router.get( '/:userId/posts', usersController.getManyPosts )
+
+/**
+ * @desc get followers
+ * @route GET users/:userId/followers
+ * @access Public
+ */
+router.get( '/:userId/followers', usersController.getFollowers )
 
 
 /**
@@ -35,13 +49,6 @@ router.get( '/:userId/posts', usersController.getPosts )
  * @access Public
  */
 router.get( '/:userId/following', usersController.getFollowing )
-
-/**
- * @desc get followers
- * @route GET users/:userId/followers
- * @access Public
- */
-router.get( '/:userId/followers', usersController.getFollowers )
 
 /**
  * @desc follow

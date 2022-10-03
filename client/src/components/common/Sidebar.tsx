@@ -1,23 +1,36 @@
-import React, { useState } from 'react'
-import Link                from "next/link"
+import React, { useEffect, useState } from 'react'
+import Link                           from "next/link"
 
-import Avatar   from "@components/common/Avatar"
-import { User } from '@interfaces/user.interfaces'
+import Avatar                  from "@components/common/Avatar"
+import { User }                from '@interfaces/user.interfaces'
+import { useGetManyUserQuery } from "@services/usersApi"
+import useInfiniteScroll       from "react-infinite-scroll-hook"
+import { CircularProgress }    from "@mui/material"
 
 
 export default function Sidebar(){
 
-    const [users, setUsers] = useState<User[]>( [] )
+    const [page, setPage]            = useState<number>( 1 )
+    const { isLoading, data: users } = useGetManyUserQuery( { page } )
+    const [userItems, setUserItems]  = useState<User[]>( users?.items || [] )
 
     async function handleFollowClick( user: User ){
 
     }
 
+    const [scrollBottomRef] = useInfiniteScroll( {
+        loading: isLoading,
+        hasNextPage: !! users?.nextPage,
+        onLoadMore: async() => setPage( users?.nextPage! ),
+    } )
+
+    useEffect( () => setUserItems( [...userItems, ...users?.items || []] ), [users] )
+
     return (
         <div className="box p-5">
             <h2 className="text-xl font-medium mb-3">Suggested People</h2>
 
-            { users && users.map( user => (
+            { userItems.length > 0 && userItems.map( user => (
                 <div className="flex" key={ user.id }>
                     <Link href={ `/${ user.username }` }>
                         <a className="block min-w-[40px] mr-2">
@@ -47,6 +60,13 @@ export default function Sidebar(){
                     </div>
                 </div>
             ) ) }
+            { users?.nextPage ? (
+                <div className="flex justify-center min-h-[300px] items-center" ref={ scrollBottomRef }>
+                    <CircularProgress/>
+                </div>
+            ) : (
+                <p className="box text-center mt-5 py-10">No more users</p>
+            ) }
         </div>
     )
 }

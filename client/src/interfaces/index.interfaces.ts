@@ -1,7 +1,8 @@
 import { Post } from "@interfaces/posts.interfaces"
 import { User } from "@interfaces/user.interfaces"
 
-export interface PaginateMeta {
+export interface ListResponse<T> {
+    items: T[]
     count: number
     currentPage: number
     lastPage: number
@@ -18,9 +19,6 @@ export interface ProfileState {
     posts: Post[]
     followers: User[]
     following: User[]
-    postsMeta: PaginateMeta
-    followersMeta: PaginateMeta
-    followingMeta: PaginateMeta
 }
 
 export interface InputErrors {

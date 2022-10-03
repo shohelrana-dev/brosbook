@@ -1,6 +1,6 @@
 import { body, ValidationChain } from "express-validator"
 
-class SettingsValidation {
+class SettingValidation {
 
     public updateProfile = (): ValidationChain[] => {
         return [
@@ -72,4 +72,4 @@ class SettingsValidation {
     }
 }
 
-export default SettingsValidation
+export default SettingValidation

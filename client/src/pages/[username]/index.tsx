@@ -1,39 +1,38 @@
-import React                from "react"
-import useInfiniteScroll    from "react-infinite-scroll-hook"
-import { CircularProgress } from "@mui/material"
-import { useRouter }        from "next/router"
+import React, { useEffect, useState } from "react"
+import useInfiniteScroll              from "react-infinite-scroll-hook"
+import { CircularProgress }           from "@mui/material"
+import { useRouter }                  from "next/router"
 
-import ProfileLayout                                       from "@components/layouts/ProfileLayout"
-import PostCard                                            from "@components/home/PostCard"
-import { User }                                            from "@interfaces/user.interfaces"
-import { PaginateMeta }                                    from "@interfaces/index.interfaces"
-import { useGetUserPostsQuery, useGetUserQuery, usersApi } from "@services/usersApi"
-import { wrapper }                                         from "@store/store"
+import ProfileLayout                                             from "@components/layouts/ProfileLayout"
+import PostCard                                                  from "@components/home/PostCard"
+import { useGetUserManyPostQuery, useGetOneUserQuery, usersApi } from "@services/usersApi"
+import { wrapper }                                               from "@store/store"
+import { Post }                                                  from "@interfaces/posts.interfaces"
 
 export default function UserProfilePage(){
     //hooks
-    const router              = useRouter()
-    const { isLoading, data } = useGetUserPostsQuery( { username: router.query.username as string } )
-    const { data: userData }  = useGetUserQuery( router.query.username as string )
-
-    const posts     = data?.posts || []
-    const postsMeta = data?.meta || {} as PaginateMeta
-    const user      = userData?.user || {} as User
+    const router                     = useRouter()
+    const [page, setPage]            = useState<number>( 1 )
+    const { data: user }             = useGetOneUserQuery( router.query.username as string )
+    const { isLoading, data: posts } = useGetUserManyPostQuery( { userId: user?.id!, page } )
+    const [postItems, setPostItems]  = useState<Post[]>( posts?.items! || [] )
 
     const [scrollBottomRef] = useInfiniteScroll( {
         loading: isLoading,
-        hasNextPage: !! postsMeta?.nextPage,
-        onLoadMore: async() => {},
+        hasNextPage: !! posts?.nextPage,
+        onLoadMore: async() => setPage( posts?.nextPage! ),
     } )
 
+    useEffect( () => setPostItems( [...postItems, ...posts?.items! || []] ), [posts] )
+
     return (
-        <ProfileLayout user={ user }>
+        <ProfileLayout>
             <>
-                { posts.length > 0 && posts.map( post => (
+                { postItems && postItems.length > 0 && postItems.map( post => (
                     <PostCard post={ post } key={ post.id }/>
                 ) ) }
 
-                { !! postsMeta?.nextPage ? (
+                { posts?.nextPage ? (
                     <div className="flex justify-center min-h-[300px] items-center" ref={ scrollBottomRef }>
                         <CircularProgress/>
                     </div>
@@ -46,9 +45,8 @@ export default function UserProfilePage(){
 }
 
 export const getServerSideProps = wrapper.getServerSideProps( ( store ) => async( ctx ) => {
-    store.dispatch( usersApi.endpoints.getUserPosts.initiate( { username: ctx.params?.username as string } ) )
-    store.dispatch( usersApi.endpoints.getUser.initiate( ctx.params?.username as string ) )
-    await Promise.all( usersApi.util.getRunningOperationPromises() )
+    const { data: user } = await store.dispatch( usersApi.endpoints.getOneUser.initiate( ctx.params?.username as string ) )
+    await store.dispatch( usersApi.endpoints.getUserManyPost.initiate( { userId: user?.id!, page: 1 } ) )
 
     return { props: {} }
 } )

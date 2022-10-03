@@ -1,61 +1,52 @@
 import { NextFunction, Request, Response } from "express"
 import PostService                         from "./post.service"
+import HttpException                       from "@exceptions/http.exception"
+import httpStatus                          from "http-status"
 
 export default class PostController {
     constructor( private readonly postService: PostService ){
     }
 
-    public getPosts = async( req: Request, res: Response, next: NextFunction ) => {
+    public getPosts = async( req: Request, res: Response, next: NextFunction ): Promise<void> => {
         try {
             const { posts, meta } = await this.postService.getPosts( req )
 
-            return res.json( {
-                success: true,
-                posts,
-                meta
+            res.json( {
+                items: posts,
+                ...meta
             } )
         } catch ( err ) {
-            return next( err )
+            next( new HttpException( httpStatus.BAD_REQUEST, err.message ) )
         }
     }
 
-    public createPost = async( req: Request, res: Response, next: NextFunction ) => {
+    public createPost = async( req: Request, res: Response, next: NextFunction ): Promise<void> => {
         try {
             const post = await this.postService.createPost( req )
 
-            return res.status( 201 ).json( {
-                success: true,
-                message: 'Post has been published',
-                post
-            } )
+            res.status( httpStatus.CREATED ).json( post )
         } catch ( err ) {
-            return next( err )
+            next( new HttpException( httpStatus.BAD_REQUEST, err.message ) )
         }
     }
 
-    public like = async( req: Request, res: Response, next: NextFunction ) => {
+    public like = async( req: Request, res: Response, next: NextFunction ): Promise<void> => {
         try {
-            await this.postService.like( req )
+            const like = await this.postService.like( req )
 
-            return res.status( 201 ).json( {
-                success: true,
-                message: 'The post has been liked'
-            } )
+            res.status( httpStatus.CREATED ).json( like )
         } catch ( err ) {
-            return next( err )
+            next( new HttpException( httpStatus.BAD_REQUEST, err.message ) )
         }
     }
 
-    public unlike = async( req: Request, res: Response, next: NextFunction ) => {
+    public unlike = async( req: Request, res: Response, next: NextFunction ): Promise<void> => {
         try {
-            await this.postService.unlike( req )
+            const unlike = await this.postService.unlike( req )
 
-            return res.status( 202 ).json( {
-                success: true,
-                message: 'The post has been unliked'
-            } )
+            res.json( unlike )
         } catch ( err ) {
-            return next( err )
+            next( new HttpException( httpStatus.BAD_REQUEST, err.message ) )
         }
     }
 

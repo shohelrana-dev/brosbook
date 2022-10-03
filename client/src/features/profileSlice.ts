@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { Post }                       from "@interfaces/posts.interfaces"
-import { PaginateMeta, ProfileState } from "@interfaces/index.interfaces"
+import { ListResponse, ProfileState } from "@interfaces/index.interfaces"
 import { User }      from "@interfaces/user.interfaces"
 import { RootState } from "@store/store";
 
@@ -13,9 +13,9 @@ const initialState: ProfileState = {
     posts: [],
     followers: [],
     following: [],
-    postsMeta: {} as PaginateMeta,
-    followersMeta: {} as PaginateMeta,
-    followingMeta: {} as PaginateMeta
+    postsMeta: {} as ListResponse,
+    followersMeta: {} as ListResponse,
+    followingMeta: {} as ListResponse
 }
 
 export const profileSlice = createSlice( {
@@ -38,24 +38,24 @@ export const profileSlice = createSlice( {
             state.user          = payload
             state.isLoadingUser = false
         },
-        setPostsData: ( state, { payload }: PayloadAction<{ posts: Post[], meta: PaginateMeta }> ) => {
+        setPostsData: ( state, { payload }: PayloadAction<{ posts: Post[], meta: ListResponse }> ) => {
             state.posts          = [ ...state.posts, ...payload.posts ]
             state.postsMeta      = payload.meta
             state.isLoadingPosts = false
         },
-        setFollowersData: ( state, { payload }: PayloadAction<{ followers: User[], meta: PaginateMeta }> ) => {
+        setFollowersData: ( state, { payload }: PayloadAction<{ followers: User[], meta: ListResponse }> ) => {
             state.followers          = [ ...state.followers, ...payload.followers ]
             state.followersMeta      = payload.meta
             state.isLoadingFollowers = false
         },
-        setFollowingData: ( state, { payload }: PayloadAction<{ following: User[], meta: PaginateMeta }> ) => {
+        setFollowingData: ( state, { payload }: PayloadAction<{ following: User[], meta: ListResponse }> ) => {
             state.following          = [ ...state.following, ...payload.following ]
             state.followingMeta      = payload.meta
             state.isLoadingFollowing = false
         },
         clearData: ( state, { payload }: PayloadAction<void> ) => {
             state.posts     = []
-            state.postsMeta = {} as PaginateMeta
+            state.postsMeta = {} as ListResponse
         }
     }
 } )

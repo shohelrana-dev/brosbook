@@ -13,30 +13,26 @@ import { useCreatePostMutation } from "@services/postsApi"
 function CreatePostForm(){
 
     //hooks
-    const { user }                                                     = useSelector( selectAuthState )
-    const [createPost, { isLoading, isSuccess, isError, data, error }] = useCreatePostMutation()
-    const inputImageRef                                                = useRef<HTMLInputElement | null>( null )
-    const [selectedImage, setSelectedImage]                            = useState<any>( null )
-    const [content, setContent]                                        = useState<string>( '' )
+    const { user }                          = useSelector( selectAuthState )
+    const [createPost, { isLoading }]       = useCreatePostMutation()
+    const inputImageRef                     = useRef<HTMLInputElement | null>( null )
+    const [selectedImage, setSelectedImage] = useState<any>( null )
+    const [content, setContent]             = useState<string>( '' )
 
-    const errorData = ( error && 'data' in error && error.data as any ) || {}
-
-    useEffect( () => {
-        if( isSuccess ){
-            setContent( '' )
-            setSelectedImage( null )
-            toast.success( data?.message )
-        }
-    }, [isSuccess] )
-
-    useEffect( () => {isError && toast.error( errorData?.message ) }, [isError] )
-
-    async function submitFormHandle( event: FormEvent ){
+    async function submitForm( event: FormEvent ){
         event.preventDefault()
 
         if( ! content && ! selectedImage ) return
 
-        createPost( { content, image: selectedImage } )
+        try {
+            await createPost( { content, image: selectedImage } ).unwrap()
+            toast.error( 'Post has been published.' )
+            setContent( '' )
+            setSelectedImage( null )
+        } catch ( err: any ) {
+            console.error( err )
+            toast.error( 'Post couldn\'t be saved.' )
+        }
     }
 
     function fileInputChangeHandle( event: ChangeEvent<HTMLInputElement> ){
@@ -63,14 +59,14 @@ function CreatePostForm(){
                     </p>
                 </div>
             </div>
-            <form onSubmit={ submitFormHandle }>
+            <form onSubmit={ submitForm }>
                 <textarea
                     name="content"
                     className="input-basic text-gray-600 text-lg font-medium p-4 my-2"
                     placeholder="What's your mind?"
                     onChange={ ( e ) => setContent( e.target.value ) }
-                    defaultValue={content}
-                ></textarea>
+                    value={ content }
+                />
                 <input
                     ref={ inputImageRef }
                     type="file"

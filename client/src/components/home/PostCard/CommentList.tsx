@@ -8,7 +8,7 @@ import CommentsSkeleton from "@components/home/Skeletons/CommentsSkeleton"
 import CommentItem      from "@components/home/PostCard/CommentItem"
 import { Comment }      from "@interfaces/posts.interfaces"
 import { RootState }    from "@store/store"
-import { PaginateMeta } from "@interfaces/index.interfaces"
+import { ListResponse } from "@interfaces/index.interfaces"
 
 interface CommentListPost {
     postId: number
@@ -19,7 +19,7 @@ function CommentList( { postId, clickComment }: CommentListPost ){
     //hooks
     const currentUser                             = useSelector( ( state: RootState ) => state.auth.user )
     const [comments, setComments]                 = useState<Comment[]>( [] )
-    const [commentsMeta, setCommentsMeta]         = useState<PaginateMeta>( {} as PaginateMeta )
+    const [commentsMeta, setCommentsMeta]         = useState<ListResponse>( {} as ListResponse )
     const [isLoadingComments, setLoadingComments] = useState<boolean>( false )
     const [isShowComment, setShowComment]         = useState<boolean>( false )
 

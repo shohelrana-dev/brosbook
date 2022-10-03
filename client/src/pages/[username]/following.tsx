@@ -1,68 +1,59 @@
-import React, { useState }  from 'react'
-import { useRouter }        from "next/router"
-import { CircularProgress } from "@mui/material"
-import useAsyncEffect       from "use-async-effect"
-import useInfiniteScroll    from "react-infinite-scroll-hook"
+import React, { useEffect, useState } from 'react'
+import { useRouter }                  from "next/router"
+import { CircularProgress }           from "@mui/material"
+import useInfiniteScroll              from "react-infinite-scroll-hook"
 
-import ProfileLayout    from "@components/layouts/ProfileLayout"
-import FollowUser       from "@components/common/FollowUser"
-import { User }         from "@interfaces/user.interfaces"
-import api              from "../../api/index"
-import { PaginateMeta } from "@interfaces/index.interfaces"
+import ProfileLayout                                          from "@components/layouts/ProfileLayout"
+import FollowUser                                             from "@components/common/FollowUser"
+import { useGetFollowingQuery, useGetOneUserQuery, usersApi } from "@services/usersApi"
+import { User }                                               from "@interfaces/user.interfaces"
+import { wrapper }                                            from "@store/store"
 
-export default function Following() {
+export default function Following(){
     //hooks
-    const router                      = useRouter()
-    const [ isLoading, setIsLoading ] = useState<boolean>( false )
-    const [ following, setFollowers ] = useState<User[]>( [] )
-    const [ meta, setMeta ]           = useState<PaginateMeta>( {} as PaginateMeta )
+    const router                              = useRouter()
+    const [page, setPage]                     = useState<number>( 1 )
+    const { data: user }                      = useGetOneUserQuery( router.query.username as string )
+    const { isLoading, data: following }      = useGetFollowingQuery( { userId: user?.id!, page } )
+    const [followingItems, setFollowingItems] = useState<User[]>( following?.items! )
 
-    const username = router.query.username as string
 
-    useAsyncEffect( () => fetchFollowing(), [ username ] )
-
-    async function fetchFollowing( page: number = 1, postsPerPage: number = 10 ) {
-        if ( !username ) return
-        setIsLoading( true )
-
-        try {
-            const { data } = await api.profile.fetchFollowing( username, page, postsPerPage )
-            setFollowers( [ ...following, ...data.following ] )
-            setMeta( data.meta )
-        } catch ( err: any ) {
-            console.error( err.response?.data.message )
-        } finally {
-            setIsLoading( false )
-        }
-    }
-
-    const [ scrollBottomRef ] = useInfiniteScroll( {
+    const [scrollBottomRef] = useInfiniteScroll( {
         loading: isLoading,
-        hasNextPage: !!meta?.nextPage,
-        onLoadMore: () => fetchFollowing( meta?.nextPage ),
+        hasNextPage: !! following?.nextPage,
+        onLoadMore: () => setPage( following?.nextPage! ),
     } )
+
+    useEffect( () => setFollowingItems( [...followingItems, ...following?.items || []] ), [following] )
 
     return (
         <ProfileLayout>
             <>
-                { following && following.map( user => (
-                    <FollowUser user={ user } key={ user.id }/>
+                { followingItems.length > 0 && followingItems.map( user => (
+                    <FollowUser user={ user } key={ user.id } isFollowing={ false }/>
                 ) ) }
 
-                { meta?.nextPage && (
+                { following?.nextPage && (
                     <div className="flex justify-center min-h-[300px] items-center" ref={ scrollBottomRef }>
                         <CircularProgress/>
                     </div>
                 ) }
 
-                { !isLoading && following.length < 1 && (
-                    <p className="box text-center py-10">You are no following yet</p>
+                { ! isLoading && followingItems.length < 1 && (
+                    <p className="box text-center py-10">You have no following yet</p>
                 ) }
 
-                { !isLoading && following.length > 0 && !meta.nextPage && (
+                { ! isLoading && followingItems.length > 0 && ! following?.nextPage && (
                     <p className="box text-center py-10">No more following</p>
                 ) }
             </>
         </ProfileLayout>
     )
 }
+
+export const getServerSideProps = wrapper.getServerSideProps( ( store ) => async( ctx ) => {
+    const { data: user } = await store.dispatch( usersApi.endpoints.getOneUser.initiate( ctx.params?.username as string ) )
+    await store.dispatch( usersApi.endpoints.getFollowing.initiate( { userId: user?.id!, page: 1 } ) )
+
+    return { props: {} }
+} )

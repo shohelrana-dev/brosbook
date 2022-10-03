@@ -1,40 +1,26 @@
 import React, { useState } from 'react'
-import Link                from "next/link";
-import Avatar              from "@components/common/Avatar";
-import { User }  from "@interfaces/user.interfaces"
-import api       from "../../api/index";
-import { toast } from "react-toastify";
-import { useSelector } from "react-redux";
-import { RootState }   from "@store/store";
+import Link                from "next/link"
+import Avatar              from "@components/common/Avatar"
+import { User }            from "@interfaces/user.interfaces"
+import { useSelector }     from "react-redux"
+import { RootState }       from "@store/store"
 
 interface FollowUserProps {
     user: User
     isFollowing: boolean
 }
 
-function FollowUser( { user, isFollowing: defaultIsFollowing }: FollowUserProps ) {
+function FollowUser( { user, isFollowing: defaultIsFollowing }: FollowUserProps ){
 
-    const { isAuthenticated }             = useSelector( ( state: RootState ) => state.auth )
-    const [ isFollowing, setIsFollowing ] = useState<boolean>( defaultIsFollowing )
+    const { isAuthenticated }           = useSelector( ( state: RootState ) => state.auth )
+    const [isFollowing, setIsFollowing] = useState<boolean>( defaultIsFollowing )
 
-    async function handleMakeFollowing() {
-        try {
-            const { data } = await api.follows.addFollowing( user.username )
-            toast.success( data.message )
-            setIsFollowing( true )
-        } catch ( err: any ) {
-            toast.error( err.response?.data.message )
-        }
+    async function handleMakeFollowing(){
+
     }
 
-    async function handleMakeUnfollowing() {
-        try {
-            const { data } = await api.follows.removeFollowing( user.username )
-            toast.success( data.message )
-            setIsFollowing( false )
-        } catch ( err: any ) {
-            toast.error( err.response?.data.message )
-        }
+    async function handleMakeUnfollowing(){
+
     }
 
     return (
