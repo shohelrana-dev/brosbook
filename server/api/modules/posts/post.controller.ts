@@ -7,16 +7,23 @@ export default class PostController {
     constructor( private readonly postService: PostService ){
     }
 
-    public getPosts = async( req: Request, res: Response, next: NextFunction ): Promise<void> => {
+    public getManyPost = async( req: Request, res: Response, next: NextFunction ): Promise<void> => {
         try {
-            const { posts, meta } = await this.postService.getPosts( req )
+            const { posts, meta } = await this.postService.getManyPost( req )
 
-            res.json( {
-                items: posts,
-                ...meta
-            } )
+            res.json( { items: posts, ...meta } )
         } catch ( err ) {
-            next( new HttpException( httpStatus.BAD_REQUEST, err.message ) )
+            next( new HttpException( httpStatus.CONFLICT, err.message ) )
+        }
+    }
+
+    public getFeedPosts = async( req: Request, res: Response, next: NextFunction ): Promise<void> => {
+        try {
+            const { posts, meta } = await this.postService.getFeedPosts( req )
+
+            res.json( { items: posts, ...meta } )
+        } catch ( err ) {
+            next( new HttpException( httpStatus.CONFLICT, err.message ) )
         }
     }
 
@@ -26,7 +33,7 @@ export default class PostController {
 
             res.status( httpStatus.CREATED ).json( post )
         } catch ( err ) {
-            next( new HttpException( httpStatus.BAD_REQUEST, err.message ) )
+            next( new HttpException( httpStatus.CONFLICT, err.message ) )
         }
     }
 
@@ -34,9 +41,9 @@ export default class PostController {
         try {
             const like = await this.postService.like( req )
 
-            res.status( httpStatus.CREATED ).json( like )
+            res.json( like )
         } catch ( err ) {
-            next( new HttpException( httpStatus.BAD_REQUEST, err.message ) )
+            next( new HttpException( httpStatus.CONFLICT, err.message ) )
         }
     }
 
@@ -44,9 +51,9 @@ export default class PostController {
         try {
             const unlike = await this.postService.unlike( req )
 
-            res.json( unlike )
+            res.json( { message: 'Unlike success' } )
         } catch ( err ) {
-            next( new HttpException( httpStatus.BAD_REQUEST, err.message ) )
+            next( new HttpException( httpStatus.CONFLICT, err.message ) )
         }
     }
 

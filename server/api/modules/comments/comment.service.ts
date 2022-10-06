@@ -1,23 +1,21 @@
 import { Request }       from "express"
 import Comment           from "@entities/Comment"
 import Like              from "@entities/Like"
-import HttpException     from "@exceptions/http.exception"
-import httpStatus        from "http-status"
-import { getRepository } from "typeorm"
 import { paginateMeta }  from "@utils/paginateMeta"
 import { PaginateMeta }  from "@api/types/index.types"
+import { AppDataSource } from "@config/data-source.config"
+import User              from "@entities/User"
 
 export default class CommentService {
+    private commentRepository = AppDataSource.getRepository( Comment )
 
-    public async getComments( req: Request ): Promise<{ comments: Comment[], meta: PaginateMeta }>{
+    public async getMany( req: Request ): Promise<{ comments: Comment[], meta: PaginateMeta }>{
         const postId = req.params.postId
         const page   = Number( req.query.page ) || 1
         const limit  = Number( req.query.limit ) || 5
         const skip   = limit * ( page - 1 )
 
-        if( ! postId ) throw new HttpException( 'Post id missing', httpStatus.CONFLICT )
-
-        const [comments, count] = await getRepository( Comment )
+        const [comments, count] = await this.commentRepository
             .createQueryBuilder( 'comment' )
             .leftJoinAndSelect( 'comment.user', 'user' )
             .loadRelationCountAndMap( 'comment.likeCount', 'comment.likes' )
@@ -27,64 +25,47 @@ export default class CommentService {
             .take( limit )
             .getManyAndCount()
 
-        if( ! Array.isArray( comments ) ) throw new HttpException( "comments couldn't be fetched", httpStatus.CONFLICT )
-
         //check and set current user like
-        for ( let comment of comments ) {
-            const like                 = await Like.findOneBy( { username: req.user.username, commentId: comment.id } )
-            comment.hasCurrentUserLike = like ? true : false
+        if( req.isAuthenticated ){
+            for ( let comment of comments ) {
+                const like                 = await Like.findOneBy( { userId: req.user?.id, commentId: comment.id } )
+                comment.hasCurrentUserLike = like ? true : false
+            }
         }
 
         return { comments, meta: paginateMeta( count, page, limit ) }
     }
 
-    public async createComment( req: Request ){
+    public async create( req: Request ){
         const { content } = req.body
-        const postId      = Number( req.query.postId )
+        const postId      = Number( req.params.postId )
 
-        if( ! content && ! postId ) throw new HttpException( 'Input field missing', httpStatus.UNPROCESSABLE_ENTITY )
+        if( ! content ) throw new Error( 'Comment content required.' )
 
         const comment = Comment.create( {
-            username: req.user.username,
+            userId: req.user.id,
             content,
             postId
         } )
 
-        try {
-            const createdComment = await comment.save()
-            //@ts-ignore
-            createdComment.user  = req.user
+        const createdComment = await comment.save()
+        createdComment.user  = await User.findOneBy( { id: req.user.id } )
 
-            return createdComment
-        } catch ( e ) {
-            throw new HttpException( "Comment couldn't be created", httpStatus.CONFLICT )
-        }
+        return createdComment
     }
 
     public async like( req: Request ){
         const commentId = Number( req.params.commentId )
 
-        if( ! commentId ) throw new HttpException( 'Comment id missing' )
+        const like = Like.create( { commentId, userId: req.user.id } )
 
-        const like = Like.create( { commentId, username: req.user.username } )
-
-        try {
-            await like.save()
-        } catch ( e ) {
-            throw new HttpException( "The comment couldn't be liked", httpStatus.CONFLICT )
-        }
+        return await like.save()
 
     }
 
     public async unlike( req: Request ){
         const commentId = Number( req.params.commentId )
 
-        if( ! commentId ) throw new HttpException( 'Comment id missing' )
-
-        try {
-            await Like.delete( { commentId, username: req.user.username } )
-        } catch ( e ) {
-            throw new HttpException( "The comment couldn't be unliked", httpStatus.CONFLICT )
-        }
+        await Like.delete( { commentId, userId: req.user.id } )
     }
 }

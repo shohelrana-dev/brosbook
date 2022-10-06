@@ -1,9 +1,9 @@
-import React, { ReactElement } from 'react'
-import NavBar                  from "@components/common/NavBar"
-import Sidebar                 from "@components/common/Sidebar"
+import React, { ReactNode } from 'react'
+import NavBar               from "@components/common/NavBar"
+import Sidebar              from "@components/common/Sidebar"
 
 interface LayoutProps {
-    children: ReactElement | ReactElement[]
+    children: ReactNode
 }
 
 

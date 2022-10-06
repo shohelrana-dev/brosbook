@@ -13,34 +13,56 @@ import { AppDataSource } from "@config/data-source.config";
 export default class PostService {
     private postRepository = AppDataSource.getRepository( Post )
 
-    public async getPosts( req: Request ): Promise<{ posts: Post[], meta: PaginateMeta }>{
+    public async getManyPost( req: Request ): Promise<{ posts: Post[], meta: PaginateMeta }>{
         const page  = Number( req.query.page ) || 1
         const limit = Number( req.query.limit ) || 6
         const skip  = limit * ( page - 1 )
 
-        try {
-            const [posts, count] = await this.postRepository
-                .createQueryBuilder( 'post' )
-                .where( 'post.username != :username', { username: req.user.username } )
-                .leftJoinAndSelect( 'post.user', 'user' )
-                .loadRelationCountAndMap( 'post.commentCount', 'post.comments' )
-                .leftJoinAndSelect( 'post.likes', 'like' )
-                .loadRelationCountAndMap( 'post.likeCount', 'post.likes' )
-                .orderBy( 'post.createdAt', 'DESC' )
-                .skip( skip )
-                .take( limit )
-                .getManyAndCount()
+        const [posts, count] = await this.postRepository
+            .createQueryBuilder( 'post' )
+            .leftJoinAndSelect( 'post.user', 'user' )
+            .loadRelationCountAndMap( 'post.commentCount', 'post.comments' )
+            .leftJoinAndSelect( 'post.likes', 'like' )
+            .loadRelationCountAndMap( 'post.likeCount', 'post.likes' )
+            .orderBy( 'post.createdAt', 'DESC' )
+            .skip( skip )
+            .take( limit )
+            .getManyAndCount()
 
-            //check and set current user like
-            for ( let post of posts ) {
-                const like              = await Like.findOneBy( { userId: req.user.id, postId: post.id } )
-                post.hasCurrentUserLike = like ? true : false
-            }
-
-            return { posts, meta: paginateMeta( count, page, limit ) }
-        } catch ( e ) {
-            throw new Error( "posts couldn't be fetched" )
+        //check and set current user like
+        for ( let post of posts ) {
+            const like              = await Like.findOneBy( { userId: req.user.id, postId: post.id } )
+            post.hasCurrentUserLike = like ? true : false
         }
+
+        return { posts, meta: paginateMeta( count, page, limit ) }
+    }
+
+
+    public async getFeedPosts( req: Request ): Promise<{ posts: Post[], meta: PaginateMeta }>{
+        const page  = Number( req.query.page ) || 1
+        const limit = Number( req.query.limit ) || 6
+        const skip  = limit * ( page - 1 )
+
+        const [posts, count] = await this.postRepository
+            .createQueryBuilder( 'post' )
+            .where( 'post.userId != :userId', { userId: req.user.id } )
+            .leftJoinAndSelect( 'post.user', 'user' )
+            .loadRelationCountAndMap( 'post.commentCount', 'post.comments' )
+            .leftJoinAndSelect( 'post.likes', 'like' )
+            .loadRelationCountAndMap( 'post.likeCount', 'post.likes' )
+            .orderBy( 'post.createdAt', 'DESC' )
+            .skip( skip )
+            .take( limit )
+            .getManyAndCount()
+
+        //check and set current user like
+        for ( let post of posts ) {
+            const like              = await Like.findOneBy( { userId: req.user.id, postId: post.id } )
+            post.hasCurrentUserLike = like ? true : false
+        }
+
+        return { posts, meta: paginateMeta( count, page, limit ) }
     }
 
     public async createPost( req: Request ): Promise<Post>{

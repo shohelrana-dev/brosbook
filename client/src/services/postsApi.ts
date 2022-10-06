@@ -1,20 +1,12 @@
-import { Post }    from "@interfaces/posts.interfaces"
-import { authApi } from "@services/authApi"
+import { Post }         from "@interfaces/posts.interfaces"
+import { baseApi }      from "@services/baseApi";
+import { ListResponse } from "@interfaces/index.interfaces"
 
-type PostsResponse = {
-    items: Post[]
-    count: number
-    currentPage: number
-    lastPage: number
-    nextPage: number | null
-    prevPage: number | null
-}
-
-export const postsApi = authApi.injectEndpoints( {
+export const postsApi = baseApi.injectEndpoints( {
     endpoints: ( build ) => ( {
-        getPosts: build.query<PostsResponse, { page?: number, limit?: number }>( {
+        getFeedPosts: build.query<ListResponse<Post>, { page: number, limit?: number }>( {
             query: ( params ) => ( {
-                url: 'posts',
+                url: 'posts/feed',
                 params
             } )
         } ),
@@ -27,14 +19,14 @@ export const postsApi = authApi.injectEndpoints( {
             } ),
         } ),
 
-        like: build.mutation<Post, number>( {
+        postLike: build.mutation<Post, number>( {
             query: ( postId ) => ( {
                 url: `posts/${ postId }/like`,
                 method: 'POST'
             } ),
         } ),
 
-        unlike: build.mutation<Post, number>( {
+        postUnlike: build.mutation<Post, number>( {
             query: ( postId ) => ( {
                 url: `posts/${ postId }/unlike`,
                 method: 'POST'
@@ -43,4 +35,4 @@ export const postsApi = authApi.injectEndpoints( {
     } ),
 } )
 
-export const { useGetPostsQuery, useCreatePostMutation, useLikeMutation, useUnlikeMutation } = postsApi
+export const { useGetFeedPostsQuery, useCreatePostMutation, usePostLikeMutation, usePostUnlikeMutation } = postsApi

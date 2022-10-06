@@ -36,8 +36,10 @@ class Post extends BaseEntity {
     @JoinColumn( { name: 'id', referencedColumnName: 'postId' } )
     likes: Like[]
 
-    //virtual columns
+    @Column( { nullable: true, select: false, insert: false, update: false } )
     commentCount: number
+
+    @Column( { nullable: true, select: false, insert: false, update: false } )
     hasCurrentUserLike: boolean
 
     @CreateDateColumn()

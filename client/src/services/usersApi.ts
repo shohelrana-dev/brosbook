@@ -5,34 +5,34 @@ import { Post }         from "@interfaces/posts.interfaces"
 
 export const usersApi = baseApi.injectEndpoints( {
     endpoints: ( build ) => ( {
-        getOneUser: build.query<User, string>( {
+        getUser: build.query<User, string>( {
             query: ( username ) => `users/${ username }`
         } ),
 
-        getManyUser: build.query<ListResponse<User>, { page: number, limit?: number }>( {
+        getSuggestedUsers: build.query<ListResponse<User>, { page: number, limit?: number }>( {
             query: ( params ) => ( {
-                url: `users`,
+                url: `users/suggest`,
                 params
             } )
         } ),
 
-        getUserManyPost: build.query<ListResponse<Post>, { userId: number, page: number, limit?: number }>( {
+        getUserPosts: build.query<ListResponse<Post>, { userId: number, page: number, limit?: number }>( {
             query: ( { userId, ...params } ) => ( {
                 url: `users/${ userId }/posts`,
                 params: params
             } )
         } ),
 
-        follow: build.mutation<User, string>( {
-            query: ( target ) => ( {
-                url: `users/follow?target=${ target }`,
+        follow: build.mutation<User, number>( {
+            query: ( targetUserId ) => ( {
+                url: `users/follow/${ targetUserId }`,
                 method: 'POST',
             } )
         } ),
 
-        unfollow: build.mutation<User, string>( {
-            query: ( target ) => ( {
-                url: `users/unfollow?target=${ target }`,
+        unfollow: build.mutation<User, number>( {
+            query: ( targetUserId ) => ( {
+                url: `users/unfollow/${ targetUserId }`,
                 method: 'POST',
             } )
         } ),
@@ -54,9 +54,9 @@ export const usersApi = baseApi.injectEndpoints( {
 } )
 
 export const {
-                 useGetOneUserQuery,
-                 useGetManyUserQuery,
-                 useGetUserManyPostQuery,
+                 useGetUserQuery,
+                 useGetSuggestedUsersQuery,
+                 useGetUserPostsQuery,
                  useFollowMutation,
                  useUnfollowMutation,
                  useGetFollowersQuery,

@@ -1,23 +1,27 @@
-import useInfiniteScroll from 'react-infinite-scroll-hook'
-import { useState }      from "react"
-import { Facebook }      from "react-content-loader"
+import useInfiniteScroll       from 'react-infinite-scroll-hook'
+import { useEffect, useState } from "react"
+import { Facebook }            from "react-content-loader"
 
-import MainLayout           from "@components/layouts/MainLayout"
-import CreatePostForm       from "@components/home/CreatePostForm"
-import PostCard             from "@components/home/PostCard"
-import { useGetPostsQuery } from "@services/postsApi"
-import ensureServerSideAuth from "@utils/ensureServerSideAuth"
+import MainLayout               from "@components/layouts/MainLayout"
+import CreatePostForm           from "@components/home/CreatePostForm"
+import PostCard                 from "@components/home/PostCard"
+import { useGetFeedPostsQuery } from "@services/postsApi"
+import ensureServerSideAuth     from "@utils/ensureServerSideAuth"
+import { Post }                 from "@interfaces/posts.interfaces"
 
 function Home(){
     //hooks
-    const [page, setPage]            = useState( 1 )
-    const { isLoading, data: posts } = useGetPostsQuery( { page } )
+    const [page, setPage]            = useState<number>( 1 )
+    const { isLoading, data: posts } = useGetFeedPostsQuery( { page } )
+    const [postItems, setPostItems]  = useState<Post[]>( posts?.items! || [] )
 
     const [scrollBottomRef] = useInfiniteScroll( {
         loading: isLoading,
         hasNextPage: !! posts?.nextPage,
-        onLoadMore: () => setPage( posts?.nextPage! )
+        onLoadMore: async() => setPage( posts?.nextPage! ),
     } )
+
+    useEffect( () => setPostItems( [...postItems, ...posts?.items! || []] ), [posts] )
 
     return (
         <MainLayout>
@@ -25,17 +29,22 @@ function Home(){
                 <div className="box p-6">
                     <CreatePostForm/>
                 </div>
-                { posts?.items && posts?.items.length > 0 && posts?.items?.map( post => (
+                { ! isLoading && ( postItems.length > 0 ? postItems.map( post => (
                     <PostCard post={ post } key={ post.id }/>
+                ) ) : (
+                    <p className="box text-center mt-5 py-10">Your feed is empty.</p>
                 ) ) }
 
-                { !! posts?.nextPage ? (
+                { posts?.nextPage && (
                     <div className="box mt-5 p-5" ref={ scrollBottomRef }>
                         <Facebook/>
                     </div>
-                ) : (
-                    <p className="box text-center mt-5 py-10">No more posts</p>
                 ) }
+                {
+                    postItems.length > 0 && ! posts?.nextPage && ! isLoading && (
+                        <p className="box text-center mt-5 py-10">No more posts</p>
+                    )
+                }
 
             </div>
         </MainLayout>

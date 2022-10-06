@@ -31,25 +31,21 @@ export default class UserService {
         }
     }
 
-    public async getOneUser( req: Request ){
+    public async getUser( req: Request ){
         const { username } = req.params
 
         if( ! username ) throw new Error( "Username is missing" )
 
-        try {
-            return await this.userRepository
-                .createQueryBuilder( 'user' )
-                .leftJoinAndSelect( 'user.profile', 'profile' )
-                .loadRelationCountAndMap( 'user.followingCount', 'user.following' )
-                .loadRelationCountAndMap( 'user.followerCount', 'user.followers' )
-                .where( 'user.username = :username', { username } )
-                .getOne()
-        } catch ( err ) {
-            throw new Error( "User couldn't be fetched" )
-        }
+        return await this.userRepository
+            .createQueryBuilder( 'user' )
+            .leftJoinAndSelect( 'user.profile', 'profile' )
+            .loadRelationCountAndMap( 'user.followingCount', 'user.following' )
+            .loadRelationCountAndMap( 'user.followerCount', 'user.followers' )
+            .where( 'user.username = :username', { username } )
+            .getOne()
     }
 
-    public async getUserMany( req: Request ): Promise<{ users: User[], meta: PaginateMeta }>{
+    public async getSuggestedUsers( req: Request ): Promise<{ users: User[], meta: PaginateMeta }>{
         const page  = Number( req.query.page ) || 1
         const limit = Number( req.query.limit ) || 6
         const skip  = limit * ( page - 1 )
@@ -63,10 +59,21 @@ export default class UserService {
             .take( limit )
             .getManyAndCount()
 
+        if( req.isAuthenticated ){
+            for ( let user of users ) {
+                const follow             = await Follow.findOneBy( {
+                    sourceUserId: req.user.id,
+                    targetUserId: user.id
+                } )
+
+                user.isCurrentUserFollow = follow ? true : false
+            }
+        }
+
         return { users, meta: paginateMeta( count, page, limit ) }
     }
 
-    public async getManyPosts( req: Request ){
+    public async getUserPosts( req: Request ){
         const userId = req.params.userId
         const page   = Number( req.query.page ) || 1
         const limit  = Number( req.query.limit ) || 6
@@ -74,32 +81,27 @@ export default class UserService {
 
         if( ! userId ) throw new Error( "User id is missing" )
 
-        try {
-            const [posts, count] = await AppDataSource.getRepository( Post )
-                .createQueryBuilder( 'post' )
-                .where( 'post.userId = :userId', { userId } )
-                .leftJoinAndSelect( 'post.user', 'user' )
-                .loadRelationCountAndMap( 'post.commentCount', 'post.comments' )
-                .leftJoinAndSelect( 'post.likes', 'like' )
-                .loadRelationCountAndMap( 'post.likeCount', 'post.likes' )
-                .orderBy( 'post.createdAt', 'DESC' )
-                .skip( skip )
-                .take( limit )
-                .getManyAndCount()
+        const [posts, count] = await AppDataSource.getRepository( Post )
+            .createQueryBuilder( 'post' )
+            .where( 'post.userId = :userId', { userId } )
+            .leftJoinAndSelect( 'post.user', 'user' )
+            .loadRelationCountAndMap( 'post.commentCount', 'post.comments' )
+            .leftJoinAndSelect( 'post.likes', 'like' )
+            .loadRelationCountAndMap( 'post.likeCount', 'post.likes' )
+            .orderBy( 'post.createdAt', 'DESC' )
+            .skip( skip )
+            .take( limit )
+            .getManyAndCount()
 
-            //check and set current user like
-            if( req.isAuthenticated ){
-                for ( let post of posts ) {
-                    const like              = await LikeEntity.findOneBy( { userId: req.user.id, postId: post.id } )
-                    post.hasCurrentUserLike = like ? true : false
-                }
+        //check and set current user like
+        if( req.isAuthenticated ){
+            for ( let post of posts ) {
+                const like              = await LikeEntity.findOneBy( { userId: req.user.id, postId: post.id } )
+                post.hasCurrentUserLike = like ? true : false
             }
-
-            return { posts, meta: paginateMeta( count, page, limit ) }
-        } catch ( err ) {
-            console.log( err )
-            throw new Error( "posts could not be fetched" )
         }
+
+        return { posts, meta: paginateMeta( count, page, limit ) }
     }
 
     public async getFollowers( req: Request ){
@@ -156,11 +158,7 @@ export default class UserService {
 
         const following = Follow.create( { sourceUserId: req.user.id, targetUserId } )
 
-        try {
-            return await following.save()
-        } catch ( e ) {
-            throw new Error( 'Could not be following' )
-        }
+        return await following.save()
     }
 
     public async unfollow( req: Request ){
@@ -168,11 +166,7 @@ export default class UserService {
 
         if( ! targetUserId ) throw new Error( 'Target user id is missing' )
 
-        try {
-            return await Follow.delete( { sourceUserId: req.user.id, targetUserId } )
-        } catch ( e ) {
-            throw new Error( 'Could not be unfollowing' )
-        }
+        return await Follow.delete( { sourceUserId: req.user.id, targetUserId } )
     }
 
 }

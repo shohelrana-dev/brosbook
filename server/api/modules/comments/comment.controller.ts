@@ -1,61 +1,49 @@
 import { NextFunction, Request, Response } from "express"
 import CommentService                      from "./comment.service"
+import httpStatus                          from "http-status";
+import HttpException                       from "@exceptions/http.exception";
 
 export default class CommentController {
     constructor( private readonly commentService: CommentService ){
     }
 
-    public getComments = async( req: Request, res: Response, next: NextFunction ) => {
+    public getMany = async( req: Request, res: Response, next: NextFunction ): Promise<void> => {
         try {
-            const { comments, meta } = await this.commentService.getComments( req )
+            const { comments, meta } = await this.commentService.getMany( req )
 
-            return res.json( {
-                success: true,
-                comments,
-                meta
-            } )
+            res.json( { items: comments, ...meta } )
         } catch ( err ) {
-            return next( err )
+            next( new HttpException( httpStatus.CONFLICT, err.message ) )
         }
     }
 
-    public create = async( req: Request, res: Response, next: NextFunction ) => {
+    public create = async( req: Request, res: Response, next: NextFunction ): Promise<void> => {
         try {
-            const comment = await this.commentService.createComment( req )
+            const comment = await this.commentService.create( req )
 
-            return res.status( 201 ).json( {
-                success: true,
-                message: 'Comment has been created',
-                comment
-            } )
+            res.status( 201 ).json( comment )
         } catch ( err ) {
-            return next( err )
+            next( new HttpException( httpStatus.CONFLICT, err.message ) )
         }
     }
 
-    public like = async( req: Request, res: Response, next: NextFunction ) => {
+    public like = async( req: Request, res: Response, next: NextFunction ): Promise<void> => {
         try {
-            await this.commentService.like( req )
+            const like = await this.commentService.like( req )
 
-            return res.status( 200 ).json( {
-                success: true,
-                message: 'The comment has been liked'
-            } )
+            res.json( like )
         } catch ( err ) {
-            return next( err )
+            next( new HttpException( httpStatus.CONFLICT, err.message ) )
         }
     }
 
-    public unlike = async( req: Request, res: Response, next: NextFunction ) => {
+    public unlike = async( req: Request, res: Response, next: NextFunction ): Promise<void> => {
         try {
             await this.commentService.unlike( req )
 
-            return res.status( 200 ).json( {
-                success: true,
-                message: 'The comment has been unliked'
-            } )
+            res.json( { message: 'Unlike success' } )
         } catch ( err ) {
-            return next( err )
+            next( new HttpException( httpStatus.CONFLICT, err.message ) )
         }
     }
 

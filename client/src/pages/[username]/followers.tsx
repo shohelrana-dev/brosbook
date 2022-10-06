@@ -5,7 +5,7 @@ import useInfiniteScroll              from "react-infinite-scroll-hook"
 
 import ProfileLayout                                          from "@components/layouts/ProfileLayout"
 import FollowUser                                             from "@components/common/FollowUser"
-import { useGetFollowersQuery, useGetOneUserQuery, usersApi } from "@services/usersApi"
+import { useGetFollowersQuery, useGetUserQuery, usersApi } from "@services/usersApi"
 import { wrapper }                                            from "@store/store"
 import { User }                                               from "@interfaces/user.interfaces"
 
@@ -13,7 +13,7 @@ export default function Followers(){
     //hooks
     const router                            = useRouter()
     const [page, setPage]                   = useState<number>( 1 )
-    const { data: user }                    = useGetOneUserQuery( router.query.username as string )
+    const { data: user }                    = useGetUserQuery( router.query.username as string )
     const { isLoading, data: followers }    = useGetFollowersQuery( { userId: user?.id!, page } )
     const [followerItems, setFollowerItems] = useState<User[]>( followers?.items! )
 
@@ -51,7 +51,7 @@ export default function Followers(){
 }
 
 export const getServerSideProps = wrapper.getServerSideProps( ( store ) => async( ctx ) => {
-    const { data: user } = await store.dispatch( usersApi.endpoints.getOneUser.initiate( ctx.params?.username as string ) )
+    const { data: user } = await store.dispatch( usersApi.endpoints.getUser.initiate( ctx.params?.username as string ) )
     await store.dispatch( usersApi.endpoints.getFollowers.initiate( { userId: user?.id!, page: 1 } ) )
 
     return { props: {} }

@@ -13,37 +13,37 @@ export default class UserController {
 
             res.json( { items: users, ...meta } )
         } catch ( err ) {
-            next( new HttpException( httpStatus.BAD_REQUEST, err.message ) )
+            next( new HttpException( httpStatus.CONFLICT, err.message ) )
         }
     }
 
-    public getOneUser = async( req: Request, res: Response, next: NextFunction ) => {
+    public getUser = async( req: Request, res: Response, next: NextFunction ) => {
         try {
-            const user = await this.usersService.getOneUser( req )
+            const user = await this.usersService.getUser( req )
 
             res.json( user )
         } catch ( err ) {
-            next( new HttpException( httpStatus.BAD_REQUEST, err.message ) )
+            next( new HttpException( httpStatus.CONFLICT, err.message ) )
         }
     }
 
-    public getManyUser = async( req: Request, res: Response, next: NextFunction ) => {
+    public getSuggestedUsers = async( req: Request, res: Response, next: NextFunction ) => {
         try {
-            const { users, meta } = await this.usersService.getUserMany( req )
+            const { users, meta } = await this.usersService.getSuggestedUsers( req )
 
             res.json( { items: users, ...meta } )
         } catch ( err ) {
-            next( new HttpException( httpStatus.BAD_REQUEST, err.message ) )
+            next( new HttpException( httpStatus.CONFLICT, err.message ) )
         }
     }
 
-    public getManyPosts = async( req: Request, res: Response, next: NextFunction ) => {
+    public getUserPosts = async( req: Request, res: Response, next: NextFunction ) => {
         try {
-            const { posts, meta } = await this.usersService.getManyPosts( req )
+            const { posts, meta } = await this.usersService.getUserPosts( req )
 
             res.json( { items: posts, ...meta } )
         } catch ( err ) {
-            next( new HttpException( httpStatus.BAD_REQUEST, err.message ) )
+            next( new HttpException( httpStatus.CONFLICT, err.message ) )
         }
     }
 
@@ -54,7 +54,7 @@ export default class UserController {
 
             res.json( { items: following, ...meta } )
         } catch ( err ) {
-            next( new HttpException( httpStatus.BAD_REQUEST, err.message ) )
+            next( new HttpException( httpStatus.CONFLICT, err.message ) )
         }
     }
 
@@ -64,7 +64,7 @@ export default class UserController {
 
             res.json( { items: followers, ...meta } )
         } catch ( err ) {
-            next( new HttpException( httpStatus.BAD_REQUEST, err.message ) )
+            next( new HttpException( httpStatus.CONFLICT, err.message ) )
         }
     }
 
@@ -74,17 +74,17 @@ export default class UserController {
 
             res.json( following )
         } catch ( err ) {
-            next( new HttpException( httpStatus.BAD_REQUEST, err.message ) )
+            next( new HttpException( httpStatus.CONFLICT, err.message ) )
         }
     }
 
     public unfollow = async( req: Request, res: Response, next: NextFunction ) => {
         try {
-            const following = await this.usersService.unfollow( req )
+            await this.usersService.unfollow( req )
 
-            res.json( following )
+            res.json( { message: 'Unfollow success.' } )
         } catch ( err ) {
-            next( new HttpException( httpStatus.BAD_REQUEST, err.message ) )
+            next( new HttpException( httpStatus.CONFLICT, err.message ) )
         }
     }
 

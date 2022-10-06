@@ -12,6 +12,7 @@ export interface User {
     active: number
     followerCount?: number
     followingCount?: number
+    isCurrentUserFollow: boolean
     createdAt?: string
     updatedAt?: string
 }

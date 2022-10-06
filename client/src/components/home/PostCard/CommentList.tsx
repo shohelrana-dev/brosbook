@@ -1,88 +1,69 @@
-import React, { FormEvent, useState } from 'react'
-import { useSelector }                from "react-redux"
-import { toast }                      from "react-toastify"
-import { CircularProgress }           from "@mui/material"
+import React, { FormEvent, useEffect, useState } from 'react'
+import { CircularProgress }                      from "@mui/material"
 
-import Avatar           from "@components/common/Avatar"
-import CommentsSkeleton from "@components/home/Skeletons/CommentsSkeleton"
-import CommentItem      from "@components/home/PostCard/CommentItem"
-import { Comment }      from "@interfaces/posts.interfaces"
-import { RootState }    from "@store/store"
-import { ListResponse } from "@interfaces/index.interfaces"
+import Avatar                                            from "@components/common/Avatar"
+import CommentsSkeleton                                  from "@components/home/Skeletons/CommentsSkeleton"
+import CommentItem                                       from "@components/home/PostCard/CommentItem"
+import { useCreateCommentMutation, useGetCommentsQuery } from "@services/commentsApi"
+import { Comment }                                       from "@interfaces/posts.interfaces"
+import { useSelector }                                   from "react-redux"
+import { selectAuthState }                               from "@features/authSlice"
 
 interface CommentListPost {
     postId: number
-    clickComment: boolean
+    isShowComment: boolean
 }
 
-function CommentList( { postId, clickComment }: CommentListPost ){
-    //hooks
-    const currentUser                             = useSelector( ( state: RootState ) => state.auth.user )
-    const [comments, setComments]                 = useState<Comment[]>( [] )
-    const [commentsMeta, setCommentsMeta]         = useState<ListResponse>( {} as ListResponse )
-    const [isLoadingComments, setLoadingComments] = useState<boolean>( false )
-    const [isShowComment, setShowComment]         = useState<boolean>( false )
+function CommentList( { postId, isShowComment }: CommentListPost ){
+    const [page, setPage]                     = useState<number>( 1 )
+    const { isLoading, data: comments }       = useGetCommentsQuery( { page, postId } )
+    const [createComment]                     = useCreateCommentMutation()
+    const [commentItems, setCommentItems]     = useState<Comment[]>( [] )
+    const { user: currentUser }               = useSelector( selectAuthState )
+    const [commentContent, setCommentContent] = useState( '' )
 
-    async function fetchComments( page: number, postsParPage?: number ){
-        setLoadingComments( true )
-
-        try {
-            setComments( [...comments, ...data?.comments] )
-            setCommentsMeta( data?.meta || {} )
-        } catch ( err: any ) {
-            console.error( err?.response?.data?.message )
-        } finally {
-            setShowComment( true )
-            setLoadingComments( false )
-        }
-    }
-
-    async function handleSaveComment( event: FormEvent<HTMLFormElement> ){
+    async function handleSaveComment( event: FormEvent ){
         event.preventDefault()
-
-        const form    = event.target as HTMLFormElement
-        const comment = form.comment.value?.trim()
-        if( ! comment ) return
+        if( ! commentContent ) return
 
         try {
-            //set comment and show success message
-            setComments( [...comments, data.comment] )
-            toast.success( data.message )
-            form.reset()
-        } catch ( err: any ) {
-            const message = err.response?.data?.message || ''
-            toast.error( message )
+            const comment = await createComment( { postId, content: commentContent } ).unwrap()
+            setCommentItems( [...commentItems, comment] )
+            setCommentContent( '' )
+        } catch ( err ) {
+            console.error( err )
         }
     }
+
+    useEffect( () => setCommentItems( [...commentItems, ...comments?.items! || []] ), [comments] )
 
     return (
         <div className="mt-2">
             <form onSubmit={ handleSaveComment } className="mb-2 flex items-center">
                 <Avatar src={ currentUser.photo } online size="small"/>
-                <input type="text" name="comment" className="input-basic rounded-full bg-theme-gray ml-2"
+                <input onChange={ ( e ) => setCommentContent( e.target.value.trim() ) } type="text" name="comment"
+                       value={ commentContent }
+                       className="input-basic rounded-full bg-theme-gray ml-2"
                        placeholder="Write a comment..."/>
             </form>
 
-            { comments.length > 0 && comments.map( comment => (
+            { isShowComment && ( commentItems.length > 0 ? commentItems.map( comment => (
                 <CommentItem comment={ comment } key={ comment.id }/>
+            ) ) : (
+                <p className="mt-3">No comments</p>
             ) ) }
 
-            { isShowComment && !! commentsMeta.nextPage && (
+            { isShowComment && !! comments?.nextPage && (
                 <button
                     className="button mt-2 py-2 disabled:cursor-default min-w-[150px]"
-                    disabled={ isLoadingComments }
-                    onClick={ () => fetchComments( commentsMeta.nextPage ) }
+                    disabled={ isLoading }
+                    onClick={ () => setPage( comments?.nextPage! ) }
                 >
-                    { isLoadingComments ? <CircularProgress size={ 16 }/> : 'See mor comments' }
+                    { isLoading ? <CircularProgress size={ 16 }/> : 'See more comments' }
                 </button>
             ) }
 
-            { isLoadingComments && <CommentsSkeleton/> }
-
-
-            { isShowComment && comments.length < 1 && (
-                <p className="mt-3">No comments</p>
-            ) }
+            { isLoading && <CommentsSkeleton/> }
 
         </div>
     )

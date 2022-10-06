@@ -13,8 +13,8 @@ function Logout(){
 
     useEffect( () => {
         dispatch( logout() )
-        router.push( '/auth/login' )
         toast.success( 'You have been logged out.' )
+        window.location.href = '/auth/login'
     }, [dispatch, router] )
 
     return <LinearProgress/>

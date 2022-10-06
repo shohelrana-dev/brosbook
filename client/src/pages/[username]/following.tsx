@@ -5,7 +5,7 @@ import useInfiniteScroll              from "react-infinite-scroll-hook"
 
 import ProfileLayout                                          from "@components/layouts/ProfileLayout"
 import FollowUser                                             from "@components/common/FollowUser"
-import { useGetFollowingQuery, useGetOneUserQuery, usersApi } from "@services/usersApi"
+import { useGetFollowingQuery, useGetUserQuery, usersApi } from "@services/usersApi"
 import { User }                                               from "@interfaces/user.interfaces"
 import { wrapper }                                            from "@store/store"
 
@@ -13,7 +13,7 @@ export default function Following(){
     //hooks
     const router                              = useRouter()
     const [page, setPage]                     = useState<number>( 1 )
-    const { data: user }                      = useGetOneUserQuery( router.query.username as string )
+    const { data: user }                      = useGetUserQuery( router.query.username as string )
     const { isLoading, data: following }      = useGetFollowingQuery( { userId: user?.id!, page } )
     const [followingItems, setFollowingItems] = useState<User[]>( following?.items! )
 
@@ -40,7 +40,7 @@ export default function Following(){
                 ) }
 
                 { ! isLoading && followingItems.length < 1 && (
-                    <p className="box text-center py-10">You have no following yet</p>
+                    <p className="box text-center py-10">You haven't followed anyone yet</p>
                 ) }
 
                 { ! isLoading && followingItems.length > 0 && ! following?.nextPage && (
@@ -52,7 +52,7 @@ export default function Following(){
 }
 
 export const getServerSideProps = wrapper.getServerSideProps( ( store ) => async( ctx ) => {
-    const { data: user } = await store.dispatch( usersApi.endpoints.getOneUser.initiate( ctx.params?.username as string ) )
+    const { data: user } = await store.dispatch( usersApi.endpoints.getUser.initiate( ctx.params?.username as string ) )
     await store.dispatch( usersApi.endpoints.getFollowing.initiate( { userId: user?.id!, page: 1 } ) )
 
     return { props: {} }

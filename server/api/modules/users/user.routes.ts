@@ -15,25 +15,25 @@ const usersController = new UserController( new UserService() )
 router.get( '/search', usersController.getSearchUsers )
 
 /**
+ * @desc get suggested users
+ * @route GET /users/suggest
+ * @access Private
+ */
+router.get( '/suggest', ensureAuth, usersController.getSuggestedUsers )
+
+/**
  * @desc get user
  * @route GET /users/:username
  * @access Public
  */
-router.get( '/:username', usersController.getOneUser )
-
-/**
- * @desc get users
- * @route GET /users
- * @access Public
- */
-router.get( '/', usersController.getManyUser )
+router.get( '/:username', usersController.getUser )
 
 /**
  * @desc get user
  * @route GET /users/:userId/posts
  * @access Public
  */
-router.get( '/:userId/posts', usersController.getManyPosts )
+router.get( '/:userId/posts', usersController.getUserPosts )
 
 /**
  * @desc get followers
@@ -59,7 +59,7 @@ router.post( '/follow/:targetUserId', ensureAuth, usersController.follow )
 
 /**
  * @desc Add following
- * @route POST /users//unfollow/:targetUserId
+ * @route POST /users/unfollow/:targetUserId
  * @access Private
  */
 router.post( '/unfollow/:targetUserId', ensureAuth, usersController.unfollow )

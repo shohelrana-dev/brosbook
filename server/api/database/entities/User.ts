@@ -56,6 +56,9 @@ class User extends BaseEntity {
     @UpdateDateColumn()
     updatedAt: Date
 
+    @Column( { nullable: true, select: false, insert: false, update: false } )
+    isCurrentUserFollow: boolean
+
     @BeforeInsert()
     async makePasswordHash(){
         this.password = await bcrypt.hash( this.password, 6 )
@@ -65,7 +68,7 @@ class User extends BaseEntity {
     async generateUsernameFromEmail(){
         if( ! this.username ){
             const nameParts = this.email.split( "@" )
-            this.username   = nameParts[0].toLocaleLowerCase()
+            this.username   = nameParts[0].toLowerCase()
         }
     }
 

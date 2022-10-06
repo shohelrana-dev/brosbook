@@ -11,7 +11,7 @@
 
 @layer components {
     .button {
-        @apply bg-theme-gray text-theme-blue transition duration-300 py-3 text-xs font-bold uppercase px-4 block text-center rounded
+        @apply bg-theme-gray text-theme-blue transition duration-300 py-3 text-xs font-bold px-4 block text-center rounded
     }
 
     .button-blue {

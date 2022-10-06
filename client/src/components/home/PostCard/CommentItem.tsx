@@ -5,8 +5,9 @@ import { Zoom }             from "@mui/material"
 import FavoriteIcon         from "@mui/icons-material/Favorite"
 import OutlinedFavoriteIcon from "@mui/icons-material/FavoriteBorderOutlined"
 
-import Avatar      from "@components/common/Avatar"
-import { Comment } from "@interfaces/posts.interfaces"
+import Avatar                                               from "@components/common/Avatar"
+import { Comment }                                          from "@interfaces/posts.interfaces"
+import { useLikeCommentMutation, useUnlikeCommentMutation } from "@services/commentsApi";
 
 interface CommentItemState {
     comment: Comment
@@ -14,50 +15,50 @@ interface CommentItemState {
 
 function CommentItem( { comment }: CommentItemState ){
     //hooks
+    const [likeComment]                               = useLikeCommentMutation()
+    const [unlikeComment]                             = useUnlikeCommentMutation()
     const [hasCurrentUserLike, setHasCurrentUserLike] = useState<boolean>( comment.hasCurrentUserLike )
     const [likeCount, setLikeCount]                   = useState<number>( comment.likeCount || 0 )
 
     async function saveCommentLike(){
         try {
+            await likeComment( { postId: comment.postId, commentId: comment.id } ).unwrap()
             setHasCurrentUserLike( true )
             setLikeCount( likeCount + 1 )
-        } catch ( err: any ) {
-            //console error message
-            const message = err?.response?.data.message || ''
-            console.error( message )
+        } catch ( err ) {
+            console.error( err )
         }
     }
 
     async function removeCommentLike(){
         try {
+            await unlikeComment( { postId: comment.postId, commentId: comment.id } ).unwrap()
             setHasCurrentUserLike( false )
             setLikeCount( likeCount - 1 )
-        } catch ( err: any ) {
-            //console error message
-            const message = err?.response?.data.message || ''
-            console.error( message )
+        } catch ( err ) {
+            console.error( err )
         }
     }
 
     return (
         <div className="flex">
-            <Link href={ `/${ comment.username }` }>
+            <Link href={ `/${ comment.user.username }` }>
                 <a className="mt-3">
                     <Avatar src={ comment.user.photo } size="small"/>
                 </a>
             </Link>
             <div>
                 <div className="ml-2 mt-1 py-2 px-4 rounded-xl bg-theme-gray relative">
-                    <Link href={ `/${ comment.username }` }>
+                    <Link href={ `/${ comment.user.username }` }>
                         <a>
-                            <h3 className="text-md font-medium">
+                            <h3 className="text-xs font-medium">
                                 { comment.user.fullName }
                             </h3>
                         </a>
                     </Link>
 
                     <div>
-                        <div className="text-gray-700">
+                        <div className="text-sm text-gray-700">
                             { comment.content }
                         </div>
                     </div>

@@ -11,9 +11,10 @@ import moment                     from "moment"
 
 import MainLayout          from "@components/layouts/MainLayout"
 import { User }            from "@interfaces/user.interfaces"
-import { useGetOneUserQuery } from "@services/usersApi"
+import { useGetUserQuery } from "@services/usersApi"
 import { useSelector }     from "react-redux"
 import { selectAuthState } from "@features/authSlice"
+import FollowButton        from "@components/common/FollowButton";
 
 interface ProfileLayoutProps {
     children: ReactNode
@@ -22,14 +23,8 @@ interface ProfileLayoutProps {
 export default function ProfileLayout( { children }: ProfileLayoutProps ){
     //hooks
     const router                                 = useRouter()
-    const { isLoading, data: user }              = useGetOneUserQuery( router.query.username as string )
+    const { data: user }                         = useGetUserQuery( router.query.username as string )
     const { isAuthenticated, user: currentUser } = useSelector( selectAuthState )
-
-    async function handleFollowClick( user: User ){
-
-    }
-
-    if( isLoading ) return <LinearProgress/>
 
     return (
         <MainLayout>
@@ -66,15 +61,12 @@ export default function ProfileLayout( { children }: ProfileLayoutProps ){
                                     /> }
                                 </a>
                             </SRLWrapper>
-                            { isAuthenticated && currentUser.username !== user?.username && (
-                                < div>
-                                    <button onClick={ () => handleFollowClick( user! ) }
-                                            className="button-blue rounded-full py-2 px-5 mt-3 mr-4">
-                                        Follow
-                                    </button>
+                            { isAuthenticated && currentUser?.username !== user?.username && (
+                                <div>
+                                    <FollowButton user={ user! }/>
                                 </div>
                             ) }
-                            { isAuthenticated && currentUser.username === user?.username && (
+                            { isAuthenticated && currentUser?.username === user?.username && (
                                 < div>
                                     <Link href="/settings/edit_profile">
                                         <a className="button-blue rounded-full py-2 px-5 mt-3 mr-4">
@@ -123,28 +115,28 @@ export default function ProfileLayout( { children }: ProfileLayoutProps ){
 
 
                     <div className="px-6 mt-5">
-                        <Link href={ `/${ router.query.username }` }>
+                        <Link href={ `/${ user?.username }` }>
                             <a className="inline-block mr-3">
                                 <Button variant="outlined" size="small">
                                     Posts
                                 </Button>
                             </a>
                         </Link>
-                        <Link href={ `/${ router.query.username }/followers` }>
+                        <Link href={ `/${ user?.username }/followers` }>
                             <a className="inline-block mr-3">
                                 <Button variant="outlined" size="small">
                                     Followers
                                 </Button>
                             </a>
                         </Link>
-                        <Link href={ `/${ router.query.username }/following` }>
+                        <Link href={ `/${ user?.username }/following` }>
                             <a className="inline-block mr-3">
                                 <Button variant="outlined" size="small">
                                     Following
                                 </Button>
                             </a>
                         </Link>
-                        <Link href={ `/${ router.query.username }/photos` }>
+                        <Link href={ `/${ user?.username }/photos` }>
                             <a className="inline-block mr-3">
                                 <Button variant="outlined" size="small">
                                     Photos

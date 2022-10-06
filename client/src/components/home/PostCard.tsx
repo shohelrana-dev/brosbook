@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react'
-import { SRLWrapper }                 from "simple-react-lightbox"
-import OutlinedFavoriteIcon           from "@mui/icons-material/FavoriteBorderOutlined"
-import FavoriteIcon                   from '@mui/icons-material/Favorite'
-import CommentIcon                    from "@mui/icons-material/ModeCommentOutlined"
-import IosShareIcon                   from "@mui/icons-material/IosShare"
-import moment                         from "moment"
-import Link                           from "next/link"
-import { Zoom }                       from "@mui/material"
+import React, { useState }  from 'react'
+import { SRLWrapper }       from "simple-react-lightbox"
+import OutlinedFavoriteIcon from "@mui/icons-material/FavoriteBorderOutlined"
+import FavoriteIcon         from '@mui/icons-material/Favorite'
+import CommentIcon          from "@mui/icons-material/ModeCommentOutlined"
+import IosShareIcon         from "@mui/icons-material/IosShare"
+import moment               from "moment"
+import Link                 from "next/link"
+import { Zoom }             from "@mui/material"
 
-import Avatar                                 from "@components/common/Avatar"
-import { Post }                               from "@interfaces/posts.interfaces"
-import CommentList                            from "@components/home/PostCard/CommentList"
-import { useLikeMutation, useUnlikeMutation } from "@services/postsApi"
+import Avatar                                         from "@components/common/Avatar"
+import { Post }                                       from "@interfaces/posts.interfaces"
+import CommentList                                    from "@components/home/PostCard/CommentList"
+import { usePostLikeMutation, usePostUnlikeMutation } from "@services/postsApi"
 
 interface PostCardProps {
     post: Post
@@ -19,45 +19,43 @@ interface PostCardProps {
 
 const PostCard = ( { post }: PostCardProps ) => {
     //hooks
-    const [like, { isSuccess: isLikeSuccess }]     = useLikeMutation()
-    const [unlike, { isSuccess: isUnlikeSuccess }] = useUnlikeMutation()
+    const [postLike]   = usePostLikeMutation()
+    const [postUnlike] = usePostUnlikeMutation()
 
     const [hasCurrentUserLike, setHasCurrentUserLike] = useState<boolean>( post.hasCurrentUserLike )
     const [likeCount, setLikeCount]                   = useState<number>( post.likeCount )
-    const [clickComment, setClickComment]             = useState<boolean>( false )
-
-    useEffect( () => {
-        if( isLikeSuccess ){
-            setHasCurrentUserLike( true )
-            setLikeCount( likeCount + 1 )
-        }
-    }, [isLikeSuccess] )
-
-    useEffect( () => {
-        if( isUnlikeSuccess ){
-            setHasCurrentUserLike( false )
-            setLikeCount( likeCount - 1 )
-        }
-    }, [isUnlikeSuccess] )
+    const [isShowComment, setIsShowComment]           = useState<boolean>( false )
 
     async function handlePostLike(){
-        like( post.id )
+        try {
+            await postLike( post.id ).unwrap()
+            setHasCurrentUserLike( true )
+            setLikeCount( likeCount + 1 )
+        } catch ( err ) {
+            console.error( err )
+        }
     }
 
     async function handlePostUnlike(){
-        unlike( post.id )
+        try {
+            await postUnlike( post.id ).unwrap()
+            setHasCurrentUserLike( false )
+            setLikeCount( likeCount - 1 )
+        } catch ( err ) {
+            console.error( err )
+        }
     }
 
     return (
         <div className="box p-6 mt-6" id={ `post-${ post.id }` }>
             <div className="flex">
-                <Link href={ `/${ post.username }` }>
+                <Link href={ `/${ post.user.username }` }>
                     <a>
                         <Avatar src={ post.user.photo }/>
                     </a>
                 </Link>
                 <div className="ml-4">
-                    <Link href={ `/${ post.username }` }>
+                    <Link href={ `/${ post.user.username }` }>
                         <a>
                             <h3 className="text-md font-medium">
                                 { post.user.fullName }
@@ -106,7 +104,7 @@ const PostCard = ( { post }: PostCardProps ) => {
                         <p>{ likeCount }</p>
                     </div>
                     <div className="flex items-center text-gray-600">
-                        <button className="mr-2" onClick={ () => setClickComment( true ) }>
+                        <button className="mr-2" onClick={ () => setIsShowComment( ! isShowComment ) }>
                             <CommentIcon/>
                         </button>
                         <p>{ post.commentCount }</p>
@@ -118,7 +116,7 @@ const PostCard = ( { post }: PostCardProps ) => {
                     </div>
                 </div>
 
-                <CommentList postId={ post.id } clickComment={ clickComment }/>
+                <CommentList postId={ post.id } isShowComment={ isShowComment }/>
 
             </div>
         </div>
