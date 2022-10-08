@@ -11,7 +11,7 @@ export const postsApi = baseApi.injectEndpoints( {
             } )
         } ),
 
-        createPost: build.mutation<Post, { content: string, image: Blob }>( {
+        createPost: build.mutation<Post, FormData>( {
             query: ( formData ) => ( {
                 url: 'posts',
                 method: 'POST',

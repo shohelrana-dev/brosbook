@@ -37,14 +37,14 @@ export default class CommentService {
     }
 
     public async create( req: Request ){
-        const { content } = req.body
+        const { body } = req.body
         const postId      = Number( req.params.postId )
 
-        if( ! content ) throw new Error( 'Comment content required.' )
+        if( ! body ) throw new Error( 'Comment body not be empty.' )
 
         const comment = Comment.create( {
             userId: req.user.id,
-            content,
+            body,
             postId
         } )
 

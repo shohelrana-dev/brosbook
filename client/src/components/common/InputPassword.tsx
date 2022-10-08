@@ -1,8 +1,8 @@
 import React, { useState }             from 'react'
 import { IconButton, InputAdornment }  from "@mui/material"
 import VisibilityOff                   from "@mui/icons-material/VisibilityOff"
-import Visibility                      from "@mui/icons-material/Visibility"
-import InputGroup, { InputGroupProps } from "@components/common/InputGroup"
+import Visibility                         from "@mui/icons-material/Visibility"
+import AnimatedInput, { InputGroupProps } from "@components/common/AnimatedInput"
 
 function InputPassword( props: InputGroupProps ){
     const [showPassword, setShowPassword] = useState( false )
@@ -28,7 +28,7 @@ function InputPassword( props: InputGroupProps ){
     )
 
     return (
-        <InputGroup type={ showPassword ? 'text' : 'password' } endAdornment={ passwordEyeIcon } { ...props }/>
+        <AnimatedInput type={ showPassword ? 'text' : 'password' } endAdornment={ passwordEyeIcon } { ...props }/>
     )
 }
 

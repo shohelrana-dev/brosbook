@@ -4,7 +4,7 @@ import { baseApi }                                            from "@services/ba
 
 type LoginResponse = {
     access_token: string
-    expiresIn: string | number
+    expires_in: string | number
     token_type: string
     user: User
 }

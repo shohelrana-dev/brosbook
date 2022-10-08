@@ -1,20 +1,18 @@
-import React, { ReactNode }       from 'react'
-import Link                       from "next/link"
-import { SRLWrapper }             from "simple-react-lightbox"
-import Image                      from "next/image"
-import { useRouter }              from "next/router"
-import LocationIcon               from "@mui/icons-material/LocationOnOutlined"
-import CakeIcon                   from "@mui/icons-material/CakeOutlined"
-import ScheduleIcon               from "@mui/icons-material/Schedule"
-import { Button, LinearProgress } from "@mui/material"
-import moment                     from "moment"
+import React, { ReactNode } from 'react'
+import Link                 from "next/link"
+import { SRLWrapper }       from "simple-react-lightbox"
+import Image                from "next/image"
+import { useRouter }        from "next/router"
+import LocationIcon         from "@mui/icons-material/LocationOnOutlined"
+import CakeIcon             from "@mui/icons-material/CakeOutlined"
+import ScheduleIcon         from "@mui/icons-material/Schedule"
+import { Button }           from "@mui/material"
 
 import MainLayout          from "@components/layouts/MainLayout"
-import { User }            from "@interfaces/user.interfaces"
 import { useGetUserQuery } from "@services/usersApi"
 import { useSelector }     from "react-redux"
 import { selectAuthState } from "@features/authSlice"
-import FollowButton        from "@components/common/FollowButton";
+import FollowButton        from "@components/common/FollowButton"
 
 interface ProfileLayoutProps {
     children: ReactNode
@@ -28,7 +26,7 @@ export default function ProfileLayout( { children }: ProfileLayoutProps ){
 
     return (
         <MainLayout>
-            <div className="container">
+            <div className="">
                 <div className="bg-white pb-5">
                     {/*Profile photos*/ }
                     <div>
@@ -68,7 +66,7 @@ export default function ProfileLayout( { children }: ProfileLayoutProps ){
                             ) }
                             { isAuthenticated && currentUser?.username === user?.username && (
                                 < div>
-                                    <Link href="/settings/edit_profile">
+                                    <Link href="/account/profile">
                                         <a className="button-blue rounded-full py-2 px-5 mt-3 mr-4">
                                             Edit Profile
                                         </a>
@@ -95,12 +93,12 @@ export default function ProfileLayout( { children }: ProfileLayoutProps ){
                             { user?.profile?.birthdate && (
                                 <li className="text-gray-600 inline-block mr-3">
                                     <CakeIcon/>&nbsp;
-                                    Born { moment( user?.profile?.birthdate ).format( 'MMMM DD, YYYY' ) }
+                                    Born { new Date( user?.profile?.birthdate ).toLocaleDateString('en-us', {day: "numeric", year:"numeric", month:"short"}) }
                                 </li>
                             ) }
                             <li className="text-gray-600 inline-block mr-3">
                                 <ScheduleIcon/>&nbsp;
-                                Joined { moment( user?.createdAt ).format( 'MMMM YYYY' ) }
+                                Joined { new Date( user?.createdAt! ).toLocaleDateString('en-us', {day: "numeric", year:"numeric", month:"short"}) }
                             </li>
                         </ul>
                         <ul className="mt-4">

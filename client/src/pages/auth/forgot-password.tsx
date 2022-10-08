@@ -6,8 +6,8 @@ import { Lock }                                 from '@mui/icons-material'
 import { toast }                                from "react-toastify"
 import { useRouter }                            from "next/router"
 
-import InputGroup                    from "@components/common/InputGroup"
-import PrimaryButton                 from "@components/common/PrimaryButton"
+import AnimatedInput from "@components/common/AnimatedInput"
+import PrimaryButton from "@components/common/PrimaryButton"
 import { useForgotPasswordMutation } from "@services/authApi"
 import { InputErrors }               from "@interfaces/index.interfaces"
 
@@ -53,7 +53,7 @@ function ForgotPassword(){
                         </small>
 
                         <form onSubmit={ submitForm }>
-                            <InputGroup
+                            <AnimatedInput
                                 label="Email"
                                 name="email"
                                 className="mb-3"

@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express'
-import HttpException                       from '@exceptions/http.exception'
+import HttpError                           from '@utils/http.error'
 import httpStatus                          from "http-status"
 
-export default function errorMiddleware( error: HttpException, req: Request, res: Response, next: NextFunction ){
+export default function errorMiddleware( error: HttpError, req: Request, res: Response, next: NextFunction ){
     const status: number  = error.status || httpStatus.INTERNAL_SERVER_ERROR
     const message: string = error.message || 'Ops! Something went wrong'
 

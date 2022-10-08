@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express"
-import UserService                         from "./user.service"
-import HttpException                       from "@exceptions/http.exception"
-import httpStatus                          from "http-status"
+import UserService from "./user.service"
+import HttpError   from "@utils/http.error"
+import httpStatus  from "http-status"
 
 export default class UserController {
     constructor( private readonly usersService: UserService ){
@@ -13,7 +13,7 @@ export default class UserController {
 
             res.json( { items: users, ...meta } )
         } catch ( err ) {
-            next( new HttpException( httpStatus.CONFLICT, err.message ) )
+            next( new HttpError( httpStatus.CONFLICT, err.message ) )
         }
     }
 
@@ -23,7 +23,7 @@ export default class UserController {
 
             res.json( user )
         } catch ( err ) {
-            next( new HttpException( httpStatus.CONFLICT, err.message ) )
+            next( new HttpError( httpStatus.CONFLICT, err.message ) )
         }
     }
 
@@ -33,7 +33,7 @@ export default class UserController {
 
             res.json( { items: users, ...meta } )
         } catch ( err ) {
-            next( new HttpException( httpStatus.CONFLICT, err.message ) )
+            next( new HttpError( httpStatus.CONFLICT, err.message ) )
         }
     }
 
@@ -43,7 +43,7 @@ export default class UserController {
 
             res.json( { items: posts, ...meta } )
         } catch ( err ) {
-            next( new HttpException( httpStatus.CONFLICT, err.message ) )
+            next( new HttpError( httpStatus.CONFLICT, err.message ) )
         }
     }
 
@@ -54,7 +54,7 @@ export default class UserController {
 
             res.json( { items: following, ...meta } )
         } catch ( err ) {
-            next( new HttpException( httpStatus.CONFLICT, err.message ) )
+            next( new HttpError( httpStatus.CONFLICT, err.message ) )
         }
     }
 
@@ -64,7 +64,7 @@ export default class UserController {
 
             res.json( { items: followers, ...meta } )
         } catch ( err ) {
-            next( new HttpException( httpStatus.CONFLICT, err.message ) )
+            next( new HttpError( httpStatus.CONFLICT, err.message ) )
         }
     }
 
@@ -74,7 +74,7 @@ export default class UserController {
 
             res.json( following )
         } catch ( err ) {
-            next( new HttpException( httpStatus.CONFLICT, err.message ) )
+            next( new HttpError( httpStatus.CONFLICT, err.message ) )
         }
     }
 
@@ -84,7 +84,7 @@ export default class UserController {
 
             res.json( { message: 'Unfollow success.' } )
         } catch ( err ) {
-            next( new HttpException( httpStatus.CONFLICT, err.message ) )
+            next( new HttpError( httpStatus.CONFLICT, err.message ) )
         }
     }
 

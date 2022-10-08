@@ -19,7 +19,7 @@ class Post extends BaseEntity {
     userId: number
 
     @Column( { type: 'text', nullable: true } )
-    content: string
+    body: string
 
     @Column( { nullable: true } )
     photo: string
@@ -36,10 +36,8 @@ class Post extends BaseEntity {
     @JoinColumn( { name: 'id', referencedColumnName: 'postId' } )
     likes: Like[]
 
-    @Column( { nullable: true, select: false, insert: false, update: false } )
+    //virtual columns
     commentCount: number
-
-    @Column( { nullable: true, select: false, insert: false, update: false } )
     hasCurrentUserLike: boolean
 
     @CreateDateColumn()

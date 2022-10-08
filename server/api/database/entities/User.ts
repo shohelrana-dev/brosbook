@@ -1,12 +1,12 @@
 import {
     AfterLoad,
     BaseEntity, BeforeInsert,
-    Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany,
+    Column, CreateDateColumn, Entity, JoinColumn, OneToMany,
     OneToOne, PrimaryGeneratedColumn, UpdateDateColumn
-}              from "typeorm"
-import bcrypt  from 'bcrypt'
-import Profile from "./Profile"
-import Follow  from "./Follow"
+}                            from "typeorm"
+import bcrypt                from 'bcrypt'
+import Profile               from "./Profile"
+import FollowingRelationship from "./FollowingRelationship"
 
 @Entity( 'users' )
 class User extends BaseEntity {
@@ -19,20 +19,17 @@ class User extends BaseEntity {
     @Column( { length: 20, nullable: false } )
     lastName: string
 
-    @Column( { nullable: true, select: false, insert: false, update: false } )
-    fullName: string
-
     @Column( { unique: true, length: 25, nullable: false } )
     username: string
 
     @Column( { unique: true, length: 50, nullable: false } )
     email: string
 
-    @Column( { length: 255, nullable: true } )
-    photo: string
-
     @Column( { length: 100, nullable: false } )
     password: string
+
+    @Column( { nullable: true } )
+    photo: string
 
     @Column( { type: 'tinyint', default: 0 } )
     active: number
@@ -44,11 +41,11 @@ class User extends BaseEntity {
     @JoinColumn()
     profile: Profile
 
-    @OneToMany( type => Follow, follow => follow.follower )
-    followers: Follow[]
+    @OneToMany( type => FollowingRelationship, follow => follow.follower )
+    followers: FollowingRelationship[]
 
-    @OneToMany( type => Follow, follow => follow.following )
-    following: Follow[]
+    @OneToMany( type => FollowingRelationship, follow => follow.following )
+    following: FollowingRelationship[]
 
     @CreateDateColumn()
     createdAt: Date
@@ -56,7 +53,8 @@ class User extends BaseEntity {
     @UpdateDateColumn()
     updatedAt: Date
 
-    @Column( { nullable: true, select: false, insert: false, update: false } )
+    //virtual columns
+    fullName: string
     isCurrentUserFollow: boolean
 
     @BeforeInsert()
@@ -65,23 +63,23 @@ class User extends BaseEntity {
     }
 
     @BeforeInsert()
-    async generateUsernameFromEmail(){
+    generateUsernameFromEmail(){
         if( ! this.username ){
             const nameParts = this.email.split( "@" )
             this.username   = nameParts[0].toLowerCase()
         }
     }
 
-    @AfterLoad()
-    setFullName(){
-        this.fullName = `${ this.firstName } ${ this.lastName }`
-    }
-
     @BeforeInsert()
-    async setDefaultProfilePhotoIfNotGiven(){
+    setDefaultProfilePhotoIfNotGiven(){
         if( ! this.photo ){
             this.photo = process.env.SERVER_URL! + '/images/avatar.png'
         }
+    }
+
+    @AfterLoad()
+    setFullName(){
+        this.fullName = `${ this.firstName } ${ this.lastName }`
     }
 }
 

@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express"
 import httpStatus                          from "http-status"
 
-import HttpException from "@exceptions/http.exception"
-import AuthService   from "./auth.service"
+import HttpError   from "@utils/http.error"
+import AuthService from "./auth.service"
 
 class AuthController {
 
@@ -17,7 +17,7 @@ class AuthController {
             //send success response
             res.status( httpStatus.CREATED ).json( user )
         } catch ( err ) {
-            next( new HttpException( httpStatus.BAD_REQUEST, err.message ) )
+            next( new HttpError( httpStatus.BAD_REQUEST, err.message ) )
         }
     }
 
@@ -29,7 +29,7 @@ class AuthController {
             //send success response
             res.json( loginData )
         } catch ( err ) {
-            next( new HttpException( httpStatus.UNAUTHORIZED, err.message ) )
+            next( new HttpError( httpStatus.UNAUTHORIZED, err.message ) )
         }
     }
 
@@ -41,7 +41,7 @@ class AuthController {
             res.json( loginData )
 
         } catch ( err ) {
-            next( new HttpException( httpStatus.UNAUTHORIZED, err.message ) )
+            next( new HttpError( httpStatus.UNAUTHORIZED, err.message ) )
         }
     }
 
@@ -52,7 +52,7 @@ class AuthController {
             //send success response
             res.json( user )
         } catch ( err ) {
-            next( new HttpException( httpStatus.UNAUTHORIZED, err.message ) )
+            next( new HttpError( httpStatus.UNAUTHORIZED, err.message ) )
         }
     }
 
@@ -63,7 +63,7 @@ class AuthController {
 
             res.json( { message: `We've sent an email to ${ email } with a link to get back into your account.` } )
         } catch ( err ) {
-            next( new HttpException( httpStatus.BAD_REQUEST, err.message ) )
+            next( new HttpError( httpStatus.BAD_REQUEST, err.message ) )
         }
     }
 
@@ -73,7 +73,7 @@ class AuthController {
 
             res.json( { message: 'Password has been changed successfully' } )
         } catch ( err ) {
-            next( new HttpException( httpStatus.BAD_REQUEST, err.message ) )
+            next( new HttpError( httpStatus.BAD_REQUEST, err.message ) )
         }
     }
 
@@ -83,7 +83,7 @@ class AuthController {
 
             res.json( user )
         } catch ( err ) {
-            next( new HttpException( httpStatus.BAD_REQUEST, err.message ) )
+            next( new HttpError( httpStatus.BAD_REQUEST, err.message ) )
         }
     }
 }

@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express"
-import PostService                         from "./post.service"
-import HttpException                       from "@exceptions/http.exception"
-import httpStatus                          from "http-status"
+import PostService from "./post.service"
+import HttpError   from "@utils/http.error"
+import httpStatus  from "http-status"
 
 export default class PostController {
     constructor( private readonly postService: PostService ){
@@ -13,7 +13,7 @@ export default class PostController {
 
             res.json( { items: posts, ...meta } )
         } catch ( err ) {
-            next( new HttpException( httpStatus.CONFLICT, err.message ) )
+            next( new HttpError( httpStatus.CONFLICT, err.message ) )
         }
     }
 
@@ -23,7 +23,7 @@ export default class PostController {
 
             res.json( { items: posts, ...meta } )
         } catch ( err ) {
-            next( new HttpException( httpStatus.CONFLICT, err.message ) )
+            next( new HttpError( httpStatus.CONFLICT, err.message ) )
         }
     }
 
@@ -33,7 +33,7 @@ export default class PostController {
 
             res.status( httpStatus.CREATED ).json( post )
         } catch ( err ) {
-            next( new HttpException( httpStatus.CONFLICT, err.message ) )
+            next( new HttpError( httpStatus.CONFLICT, err.message ) )
         }
     }
 
@@ -43,7 +43,7 @@ export default class PostController {
 
             res.json( like )
         } catch ( err ) {
-            next( new HttpException( httpStatus.CONFLICT, err.message ) )
+            next( new HttpError( httpStatus.CONFLICT, err.message ) )
         }
     }
 
@@ -53,7 +53,7 @@ export default class PostController {
 
             res.json( { message: 'Unlike success' } )
         } catch ( err ) {
-            next( new HttpException( httpStatus.CONFLICT, err.message ) )
+            next( new HttpError( httpStatus.CONFLICT, err.message ) )
         }
     }
 

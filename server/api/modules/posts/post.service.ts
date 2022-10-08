@@ -5,10 +5,11 @@ import { UploadedFile } from "express-fileupload"
 
 import Post              from "@entities/Post"
 import Like              from "@entities/Like"
-import httpStatus        from "http-status"
 import { paginateMeta }  from "@utils/paginateMeta"
 import { PaginateMeta }  from "@api/types/index.types"
-import { AppDataSource } from "@config/data-source.config";
+import { AppDataSource } from "@config/data-source.config"
+import Photo             from "@entities/Photo"
+import { PhotoSource }   from "@api/enums";
 
 export default class PostService {
     private postRepository = AppDataSource.getRepository( Post )
@@ -66,37 +67,43 @@ export default class PostService {
     }
 
     public async createPost( req: Request ): Promise<Post>{
-        const { content } = req.body
+        const { body } = req.body
 
         const image = req.files?.image as UploadedFile
 
-        if( ! content && ! image ){
+        if( ! body && ! image ){
             throw new Error( 'Input field missing' )
         }
 
-        let imageUrl
         if( image ){
             const imageName = process.env.APP_NAME + '_image_' + uuid() + path.extname( image.name )
-            imageUrl        = `${ process.env.SERVER_URL }/images/${ imageName }`
-            const imagePath = path.resolve( process.cwd(), 'public/images', imageName )
+            const imageUrl  = `${ process.env.SERVER_URL }/images/${ imageName }`
+            const imagePath = path.resolve( process.cwd(), 'server/public/images', imageName )
             await image.mv( imagePath )
+
+            const post = await Post.create( {
+                userId: req.user.id,
+                body: body,
+                photo: imageUrl
+            } ).save()
+
+            await Photo.create( {
+                userId: req.user.id,
+                sourceId: post.id,
+                source: PhotoSource.POST,
+                name: image.name,
+                type: image.mimetype,
+                url: imageUrl
+            } ).save()
+
+            return post
         }
 
 
-        const post = Post.create( {
+        return await Post.create( {
             userId: req.user.id,
-            content: content,
-            photo: imageUrl
-        } )
-
-        try {
-            return await post.save()
-        } catch ( err ) {
-            err.message = "Post couldn't be saved"
-            err.status  = httpStatus.CONFLICT
-            throw err
-        }
-
+            body: body
+        } ).save()
     }
 
     public async like( req: Request ): Promise<Like>{

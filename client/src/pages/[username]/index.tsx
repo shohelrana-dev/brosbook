@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react"
 import useInfiniteScroll              from "react-infinite-scroll-hook"
-import { CircularProgress }           from "@mui/material"
 import { useRouter }                  from "next/router"
 
 import ProfileLayout                                       from "@components/layouts/ProfileLayout"
@@ -8,7 +7,7 @@ import PostCard                                            from "@components/hom
 import { useGetUserPostsQuery, useGetUserQuery, usersApi } from "@services/usersApi"
 import { wrapper }                                         from "@store/store"
 import { Post }                                            from "@interfaces/posts.interfaces"
-import { Facebook }                                        from "react-content-loader";
+import { Facebook }                                        from "react-content-loader"
 
 export default function UserProfilePage(){
     //hooks

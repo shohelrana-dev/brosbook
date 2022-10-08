@@ -5,8 +5,8 @@ import { v4 as uuidv4 }        from "uuid"
 import Hashids                 from "hashids"
 import { getRepository, Like } from "typeorm"
 
-import HttpException                       from "@exceptions/http.exception"
-import Conversation                        from "@entities/Conversation"
+import HttpError    from "@utils/http.error"
+import Conversation from "@entities/Conversation"
 import Message                             from "@entities/Message"
 import Reaction                            from "@entities/Reaction"
 import { MessageDataDto, ReactionDataDto } from "@api/types/index.types"
@@ -20,11 +20,11 @@ class ChatService {
         let { senderId, conversationIdentifier, body, type, base64Image, imageName } = messageData
 
         if( ! body && ! imageName ){
-            throw new HttpException( "Message body is empty.", httpStatus.UNPROCESSABLE_ENTITY )
+            throw new HttpError( "Message body is empty.", httpStatus.UNPROCESSABLE_ENTITY )
         }
 
         if( ! ["text", "image", "emoji"].includes( type ) ){
-            throw new HttpException( "Message type is not valid.", httpStatus.UNPROCESSABLE_ENTITY )
+            throw new HttpError( "Message type is not valid.", httpStatus.UNPROCESSABLE_ENTITY )
         }
 
         //save image
@@ -57,7 +57,7 @@ class ChatService {
 
             return createdMessage
         } catch ( e ) {
-            throw new HttpException( "Message couldn't be saved", httpStatus.CONFLICT )
+            throw new HttpError( "Message couldn't be saved", httpStatus.CONFLICT )
         }
     }
 
@@ -65,7 +65,7 @@ class ChatService {
         const { participantId } = req.body
         const identifier        = hashids.encode( req.user.id + participantId + Date.now() )
 
-        if( ! participantId ) throw new HttpException( "Participant id missing", httpStatus.UNPROCESSABLE_ENTITY )
+        if( ! participantId ) throw new HttpError( "Participant id missing", httpStatus.UNPROCESSABLE_ENTITY )
 
         //check conversation exists
         const conversation = await Conversation.findOneBy( { ownerId: req.user.id } )
@@ -88,7 +88,7 @@ class ChatService {
             await conversationTwo.save()
             return await conversation.save()
         } catch ( err ) {
-            throw new HttpException( "Conversation couldn't be created" )
+            throw new HttpError( "Conversation couldn't be created" )
         }
     }
 
@@ -97,11 +97,11 @@ class ChatService {
         const defaultReactions              = ["love", "smile", "wow", "sad", "angry", "like"]
 
         if( ! senderId || ! name || ! messageId ){
-            throw new HttpException( "Some field is empty.", httpStatus.UNPROCESSABLE_ENTITY )
+            throw new HttpError( "Some field is empty.", httpStatus.UNPROCESSABLE_ENTITY )
         }
 
         if( ! defaultReactions.includes( name ) ){
-            throw new HttpException( "Invalid reaction", httpStatus.UNPROCESSABLE_ENTITY )
+            throw new HttpError( "Invalid reaction", httpStatus.UNPROCESSABLE_ENTITY )
         }
 
         const url = `${ process.env.SERVER_URL! }/reactions/${ name }.png`
@@ -115,7 +115,7 @@ class ChatService {
             }
             return await Reaction.create( { senderId, messageId, url, name } ).save()
         } catch ( e ) {
-            throw new HttpException( "Reaction couldn't be saved", httpStatus.CONFLICT )
+            throw new HttpError( "Reaction couldn't be saved", httpStatus.CONFLICT )
         }
     }
 
@@ -128,7 +128,7 @@ class ChatService {
             },
         } )
 
-        if( ! Array.isArray( conversations ) ) throw new HttpException( "Conversations couldn't be fetched", httpStatus.CONFLICT )
+        if( ! Array.isArray( conversations ) ) throw new HttpError( "Conversations couldn't be fetched", httpStatus.CONFLICT )
 
         return conversations
     }
@@ -136,7 +136,7 @@ class ChatService {
     public async getOneConversation( req: Request ){
         const { identifier } = req.params
 
-        if( ! identifier ) throw new HttpException( "Identifier missing", httpStatus.CONFLICT )
+        if( ! identifier ) throw new HttpError( "Identifier missing", httpStatus.CONFLICT )
 
         try {
             return await Conversation.findOneOrFail( {
@@ -144,14 +144,14 @@ class ChatService {
                 where: { identifier, ownerId: req.user.id },
             } )
         } catch ( e ) {
-            throw new HttpException( "Conversation couldn't found", httpStatus.CONFLICT )
+            throw new HttpError( "Conversation couldn't found", httpStatus.CONFLICT )
         }
     }
 
     public async getMessages( req: Request ){
         const { identifier } = req.params
 
-        if( ! identifier ) throw new HttpException( "Identifier missing", httpStatus.CONFLICT )
+        if( ! identifier ) throw new HttpError( "Identifier missing", httpStatus.CONFLICT )
 
         try {
             return await Message.find( {
@@ -162,7 +162,7 @@ class ChatService {
                 },
             } )
         } catch ( err ) {
-            throw new HttpException( "Messages couldn't be fetched", httpStatus.CONFLICT )
+            throw new HttpError( "Messages couldn't be fetched", httpStatus.CONFLICT )
         }
     }
 
@@ -177,7 +177,7 @@ class ChatService {
                 }
             } )
         } catch ( err ) {
-            throw new HttpException( "Users couldn't be fetched", httpStatus.CONFLICT )
+            throw new HttpError( "Users couldn't be fetched", httpStatus.CONFLICT )
         }
     }
 }

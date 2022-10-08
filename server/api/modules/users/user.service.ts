@@ -1,11 +1,11 @@
-import { Request }       from "express"
-import Follow            from "@entities/Follow"
-import User              from "@entities/User"
-import { paginateMeta }  from "@utils/paginateMeta"
-import Post              from "@entities/Post"
-import LikeEntity        from "@entities/Like"
-import { AppDataSource } from "@config/data-source.config"
-import { PaginateMeta }  from "@api/types/index.types"
+import { Request }           from "express"
+import FollowingRelationship from "@entities/FollowingRelationship"
+import User                  from "@entities/User"
+import { paginateMeta }      from "@utils/paginateMeta"
+import Post                  from "@entities/Post"
+import LikeEntity            from "@entities/Like"
+import { AppDataSource }     from "@config/data-source.config"
+import { PaginateMeta }      from "@api/types/index.types"
 
 
 export default class UserService {
@@ -61,9 +61,9 @@ export default class UserService {
 
         if( req.isAuthenticated ){
             for ( let user of users ) {
-                const follow             = await Follow.findOneBy( {
-                    sourceUserId: req.user.id,
-                    targetUserId: user.id
+                const follow = await FollowingRelationship.findOneBy( {
+                    followerUserId: req.user.id,
+                    followingUserId: user.id
                 } )
 
                 user.isCurrentUserFollow = follow ? true : false
@@ -110,11 +110,11 @@ export default class UserService {
         const limit  = Number( req.query.limit ) || 10
         const skip   = limit * ( page - 1 )
 
-        const [follows, count] = await AppDataSource.getRepository( Follow )
+        const [follows, count] = await AppDataSource.getRepository( FollowingRelationship )
             .createQueryBuilder( 'follow' )
             .leftJoinAndSelect( 'follow.follower', 'follower' )
             .leftJoinAndSelect( 'follower.profile', 'profile' )
-            .where( 'follow.sourceUserId = :sourceUserId', { sourceUserId: userId } )
+            .where( 'follow.followingUserId = :followingUserId', { followingUserId: userId } )
             .take( limit )
             .skip( skip )
             .getManyAndCount()
@@ -134,11 +134,11 @@ export default class UserService {
         const limit  = Number( req.query.limit ) || 10
         const skip   = limit * ( page - 1 )
 
-        const [follows, count] = await AppDataSource.getRepository( Follow )
+        const [follows, count] = await AppDataSource.getRepository( FollowingRelationship )
             .createQueryBuilder( 'follow' )
             .leftJoinAndSelect( 'follow.following', 'following' )
             .leftJoinAndSelect( 'following.profile', 'profile' )
-            .where( 'follow.targetUserId = :targetUserId', { targetUserId: userId } )
+            .where( 'follow.followerUserId = :followerUserId', { followerUserId: userId } )
             .take( limit )
             .skip( skip )
             .getManyAndCount()
@@ -156,7 +156,7 @@ export default class UserService {
 
         if( ! targetUserId ) throw new Error( 'Target user id is missing' )
 
-        const following = Follow.create( { sourceUserId: req.user.id, targetUserId } )
+        const following = FollowingRelationship.create( { followerUserId: req.user.id, followingUserId: targetUserId } )
 
         return await following.save()
     }
@@ -166,7 +166,7 @@ export default class UserService {
 
         if( ! targetUserId ) throw new Error( 'Target user id is missing' )
 
-        return await Follow.delete( { sourceUserId: req.user.id, targetUserId } )
+        return await FollowingRelationship.delete( { followerUserId: req.user.id, followingUserId: targetUserId } )
     }
 
 }

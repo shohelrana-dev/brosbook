@@ -1,13 +1,13 @@
 import React, { useState }  from 'react'
 import Link                 from "next/link"
-import moment               from "moment"
 import { Zoom }             from "@mui/material"
 import FavoriteIcon         from "@mui/icons-material/Favorite"
 import OutlinedFavoriteIcon from "@mui/icons-material/FavoriteBorderOutlined"
 
 import Avatar                                               from "@components/common/Avatar"
 import { Comment }                                          from "@interfaces/posts.interfaces"
-import { useLikeCommentMutation, useUnlikeCommentMutation } from "@services/commentsApi";
+import { useLikeCommentMutation, useUnlikeCommentMutation } from "@services/commentsApi"
+import timeAgo                                              from "@utils/timeAgo"
 
 interface CommentItemState {
     comment: Comment
@@ -59,7 +59,7 @@ function CommentItem( { comment }: CommentItemState ){
 
                     <div>
                         <div className="text-sm text-gray-700">
-                            { comment.content }
+                            { comment.body }
                         </div>
                     </div>
                 </div>
@@ -79,7 +79,7 @@ function CommentItem( { comment }: CommentItemState ){
                     </Zoom>
                     <p>{ likeCount }</p>
                     <p className="text-xs ml-5">
-                        { moment( comment.createdAt ).fromNow( true ) }
+                        { timeAgo( comment.createdAt ) }
                     </p>
                 </div>
             </div>

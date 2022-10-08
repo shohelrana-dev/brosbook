@@ -72,10 +72,10 @@ function NavBar(){
                 </Link>
             </MenuItem>
             <MenuItem onClick={ handleMenuClose }>
-                <Link href="/settings">
+                <Link href="/account">
                     <a>
                         <SettingsIcon fontSize="small"/>
-                        &nbsp;&nbsp;Settings
+                        &nbsp;&nbsp;Account
                     </a>
                 </Link>
             </MenuItem>

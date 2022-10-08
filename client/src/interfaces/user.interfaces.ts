@@ -13,8 +13,8 @@ export interface User {
     followerCount?: number
     followingCount?: number
     isCurrentUserFollow: boolean
-    createdAt?: string
-    updatedAt?: string
+    createdAt: string
+    updatedAt: string
 }
 
 export interface Profile {

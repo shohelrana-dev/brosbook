@@ -3,7 +3,7 @@ import User from "@entities/User"
 export interface LoginTokenPayload {
     access_token: string
     token_type: string
-    expiresIn: number | string
+    expires_in: number | string
     user: User
 }
 

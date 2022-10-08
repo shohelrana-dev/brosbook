@@ -25,7 +25,7 @@ function Home(){
 
     return (
         <MainLayout>
-            <div className="container pt-6 mb-6">
+            <div className=" pt-6 mb-6">
                 <div className="box p-6">
                     <CreatePostForm/>
                 </div>

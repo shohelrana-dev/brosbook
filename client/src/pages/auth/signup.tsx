@@ -6,8 +6,8 @@ import zxcvbn                                   from 'zxcvbn-typescript'
 import { toast }                                from "react-toastify"
 import { useRouter }                            from "next/router"
 
-import InputGroup            from '@components/common/InputGroup'
-import GoogleLoginButton     from "@components/common/GoogleLoginButton"
+import AnimatedInput     from '@components/common/AnimatedInput'
+import GoogleLoginButton from "@components/common/GoogleLoginButton"
 import PrimaryButton         from "@components/common/PrimaryButton"
 import { useSignupMutation } from "@services/authApi"
 import { InputErrors }       from "@interfaces/index.interfaces"
@@ -67,25 +67,25 @@ function Signup(){
                         </Divider>
 
                         <form method="post" onSubmit={ onSignupFormSubmit }>
-                            <InputGroup
+                            <AnimatedInput
                                 label="First Name"
                                 name="firstName"
                                 error={ inputErrors.firstName }
                                 onChange={ ( e => setFirstName( e.target.value ) ) }
                             />
-                            <InputGroup
+                            <AnimatedInput
                                 label="Last Name"
                                 name="lastName"
                                 error={ inputErrors.lastName }
                                 onChange={ ( e => setLastName( e.target.value ) ) }
                             />
-                            <InputGroup
+                            <AnimatedInput
                                 label="Email"
                                 name="email"
                                 error={ inputErrors.email }
                                 onChange={ ( e => setEmail( e.target.value ) ) }
                             />
-                            <InputGroup
+                            <AnimatedInput
                                 label="Username"
                                 name="username"
                                 error={ inputErrors.username }

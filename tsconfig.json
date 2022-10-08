@@ -40,7 +40,7 @@
          "@startup/*": ["server/startup/*"],
          "@database/*": ["server/api/modules"],
          "@modules/*": ["server/api/modules/*"],
-         "@exceptions/*": ["server/api/exceptions/*"],
+         "@enums/*": ["server/api/enums/*"],
          "@entities/*": ["server/api/database/entities/*"],
          "@middleware/*": ["server/api/middleware/*"],
          "@utils/*": ["server/api/utils/*"]

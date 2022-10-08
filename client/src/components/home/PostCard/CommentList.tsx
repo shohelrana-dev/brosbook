@@ -20,14 +20,14 @@ function CommentList( { postId, isShowComment }: CommentListPost ){
     const [createComment]                     = useCreateCommentMutation()
     const [commentItems, setCommentItems]     = useState<Comment[]>( [] )
     const { user: currentUser }               = useSelector( selectAuthState )
-    const [commentContent, setCommentContent] = useState( '' )
+    const [commentBody, setCommentContent] = useState( '' )
 
     async function handleSaveComment( event: FormEvent ){
         event.preventDefault()
-        if( ! commentContent ) return
+        if( ! commentBody ) return
 
         try {
-            const comment = await createComment( { postId, content: commentContent } ).unwrap()
+            const comment = await createComment( { postId, body: commentBody } ).unwrap()
             setCommentItems( [...commentItems, comment] )
             setCommentContent( '' )
         } catch ( err ) {
@@ -42,7 +42,7 @@ function CommentList( { postId, isShowComment }: CommentListPost ){
             <form onSubmit={ handleSaveComment } className="mb-2 flex items-center">
                 <Avatar src={ currentUser.photo } online size="small"/>
                 <input onChange={ ( e ) => setCommentContent( e.target.value.trim() ) } type="text" name="comment"
-                       value={ commentContent }
+                       value={ commentBody }
                        className="input-basic rounded-full bg-theme-gray ml-2"
                        placeholder="Write a comment..."/>
             </form>

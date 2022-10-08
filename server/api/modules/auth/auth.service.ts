@@ -8,7 +8,9 @@ import User                  from "@entities/User"
 import { LoginTokenPayload } from "@api/types/index.types"
 import sendEmail             from "@utils/sendEmail"
 import Verification          from "@entities/Verification"
-import { AppDataSource }     from "@config/data-source.config";
+import { AppDataSource }     from "@config/data-source.config"
+import Photo                 from "@entities/Photo"
+import { PhotoSource }       from "@api/enums"
 
 class AuthService {
     private userRepository = AppDataSource.getRepository( User )
@@ -73,14 +75,10 @@ class AuthService {
     }
 
     public async me( req: Request ): Promise<User>{
-        try {
-            return await this.userRepository.findOneOrFail( {
-                where: { id: req.user.id },
-                relations: ['profile']
-            } )
-        } catch ( e ) {
-            throw new Error( 'User could not be found.' )
-        }
+        return await this.userRepository.findOneOrFail( {
+            where: { id: req.user.id },
+            relations: ['profile']
+        } )
     }
 
     public async google( req: Request ): Promise<LoginTokenPayload>{
@@ -104,21 +102,25 @@ class AuthService {
             await user.save()
         }
 
-        //created user
+        //created user and profile
         if( ! user ){
-            user = this.userRepository.create( {
+            user = await this.userRepository.create( {
                 firstName: given_name,
                 lastName: family_name,
                 email: email,
                 photo: picture,
                 password: email + process.env.JWT_SECRET!,
                 verified: 1
-            } )
-            try {
-                await user.save()
-            } catch ( err ) {
-                throw new Error( "User account couldn't be created" )
-            }
+            } ).save()
+
+            await Photo.create( {
+                name: 'Google profile photo',
+                userId: user.id,
+                sourceId: user.id,
+                source: PhotoSource.PROFILE,
+                type: 'image/jpg',
+                url: picture
+            } ).save()
         }
 
         return AuthService.generateJwtToken( user )
@@ -220,10 +222,10 @@ class AuthService {
             email: user.email
         }
         const secretKey         = process.env.JWT_SECRET!
-        const expiresIn         = process.env.JWT_EXPIRY! || '1h'
+        const expires_in        = process.env.JWT_EXPIRY! || '1h'
 
-        let access_token = jwt.sign( dataStoredInToken, secretKey, { expiresIn: expiresIn } )
-        return { access_token, expiresIn, token_type: 'Bearer', user }
+        let access_token = jwt.sign( dataStoredInToken, secretKey, { expiresIn: expires_in } )
+        return { access_token, expires_in, token_type: 'Bearer', user }
     }
 }
 

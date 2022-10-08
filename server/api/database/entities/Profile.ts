@@ -2,7 +2,7 @@ import {
     BaseEntity, Column, CreateDateColumn,
     Entity, PrimaryGeneratedColumn,
     UpdateDateColumn
-} from "typeorm"
+}            from "typeorm"
 
 @Entity( 'profile' )
 class Profile extends BaseEntity {
@@ -15,12 +15,12 @@ class Profile extends BaseEntity {
     @Column( { length: 16, nullable: true } )
     phone: string
 
-    @Column( { length: 255, nullable: true } )
+    @Column( { nullable: true } )
     coverPhoto: string
 
     @Column( {
         type: 'enum',
-        enum: [ 'male', 'female' ],
+        enum: ['male', 'female'],
         default: 'male'
     } )
     gender: string

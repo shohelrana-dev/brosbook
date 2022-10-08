@@ -5,7 +5,7 @@ import {
     CreateDateColumn,
     UpdateDateColumn, BaseEntity
 }                    from 'typeorm'
-import { PhotoType } from "../../enums"
+import { PhotoSource } from "@api/enums"
 
 @Entity( 'photos' )
 export default class Photo extends BaseEntity {
@@ -18,17 +18,17 @@ export default class Photo extends BaseEntity {
     @Column( { type: 'int', nullable: true } )
     sourceId: number
 
-    @Column( { nullable: true } )
-    caption: string
+    @Column( { nullable: false, type: 'enum', enum: PhotoSource } )
+    source: PhotoSource
 
     @Column( { nullable: false } )
     name: string
 
     @Column( { nullable: false } )
-    url: string
+    type: string
 
-    @Column( { nullable: false, type: 'enum', enum: PhotoType } )
-    type: PhotoType
+    @Column( { nullable: false } )
+    url: string
 
     @CreateDateColumn()
     createdAt: Date

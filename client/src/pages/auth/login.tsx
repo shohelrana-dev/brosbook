@@ -3,8 +3,8 @@ import Head                                     from 'next/head'
 import Link                                     from 'next/link'
 import { Divider, LinearProgress }              from '@mui/material'
 
-import InputGroup            from '@components/common/InputGroup'
-import GoogleLoginButton     from '@components/common/GoogleLoginButton'
+import AnimatedInput     from '@components/common/AnimatedInput'
+import GoogleLoginButton from '@components/common/GoogleLoginButton'
 import PrimaryButton         from "@components/common/PrimaryButton"
 import { useRouter }         from "next/router"
 import { useLoginMutation }  from "@services/authApi"
@@ -58,7 +58,7 @@ function Login(){
                         <h1 className="text-xl text-center mb-4 font-medium">Log In</h1>
 
                         <form method="post" onSubmit={ onLoginFormSubmit }>
-                            <InputGroup
+                            <AnimatedInput
                                 label="Username or email"
                                 name="username"
                                 error={ inputErrors.username }

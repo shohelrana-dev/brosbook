@@ -24,7 +24,7 @@ class Comment extends BaseEntity {
     userId: number
 
     @Column( { type: 'text', nullable: true } )
-    content: string
+    body: string
 
     @ManyToOne( () => User )
     @JoinColumn( { name: 'userId', referencedColumnName: 'id' } )
@@ -38,17 +38,15 @@ class Comment extends BaseEntity {
     @JoinColumn( { name: 'id', referencedColumnName: 'commentId' } )
     likes: Like[]
 
-    @Column( { nullable: true, select: false, insert: false, update: false } )
-    likeCount: number
-
-    @Column( { nullable: true, select: false, insert: false, update: false } )
-    hasCurrentUserLike: boolean
-
     @CreateDateColumn()
     createdAt: Date
 
     @UpdateDateColumn()
     updatedAt: Date
+
+    //virtual columns
+    likeCount: number
+    hasCurrentUserLike: boolean
 }
 
 export default Comment

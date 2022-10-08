@@ -1,10 +1,10 @@
-import React, { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react'
-import PublicIcon                                                     from "@mui/icons-material/Public"
-import InsertPhotoIcon                                                from "@mui/icons-material/InsertPhotoOutlined"
-import CancelIcon                                                     from '@mui/icons-material/Cancel'
-import { toast }                                                      from "react-toastify"
-import { CircularProgress }                                           from "@mui/material"
-import { useSelector }                                                from "react-redux"
+import React, { ChangeEvent, FormEvent, useRef, useState } from 'react'
+import PublicIcon                                          from "@mui/icons-material/Public"
+import InsertPhotoIcon                                     from "@mui/icons-material/InsertPhotoOutlined"
+import CancelIcon                                          from '@mui/icons-material/Cancel'
+import { toast }                                           from "react-toastify"
+import { CircularProgress }                                from "@mui/material"
+import { useSelector }                                     from "react-redux"
 
 import Avatar                    from "@components/common/Avatar"
 import { selectAuthState }       from "@features/authSlice"
@@ -17,18 +17,22 @@ function CreatePostForm(){
     const [createPost, { isLoading }]       = useCreatePostMutation()
     const inputImageRef                     = useRef<HTMLInputElement | null>( null )
     const [selectedImage, setSelectedImage] = useState<any>( null )
-    const [content, setContent]             = useState<string>( '' )
+    const [postBody, setPostBody]           = useState<string>( '' )
 
     async function submitForm( event: FormEvent ){
         event.preventDefault()
 
-        if( ! content && ! selectedImage ) return
+        if( ! postBody && ! selectedImage ) return
+
+        const formData = new FormData()
+        formData.append( 'body', postBody )
+        formData.append( 'image', selectedImage )
 
         try {
-            await createPost( { content, image: selectedImage } ).unwrap()
+            await createPost( formData ).unwrap()
             toast.error( 'Post has been published.' )
-            setContent( '' )
-            setSelectedImage( null )
+            if( postBody ) setPostBody( '' )
+            if( selectedImage ) setSelectedImage( null )
         } catch ( err: any ) {
             console.error( err )
             toast.error( 'Post couldn\'t be saved.' )
@@ -61,11 +65,11 @@ function CreatePostForm(){
             </div>
             <form onSubmit={ submitForm }>
                 <textarea
-                    name="content"
+                    name="postBody"
                     className="input-basic text-gray-600 text-lg font-medium p-4 my-2"
                     placeholder="What's your mind?"
-                    onChange={ ( e ) => setContent( e.target.value ) }
-                    value={ content }
+                    onChange={ ( e ) => setPostBody( e.target.value ) }
+                    value={ postBody }
                 />
                 <input
                     ref={ inputImageRef }

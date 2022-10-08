@@ -1,4 +1,4 @@
-export enum PhotoType {
+export enum PhotoSource {
     CONVERSATION = 'conversation',
     POST         = 'post',
     PROFILE      = 'profile',

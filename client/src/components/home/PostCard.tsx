@@ -4,7 +4,6 @@ import OutlinedFavoriteIcon from "@mui/icons-material/FavoriteBorderOutlined"
 import FavoriteIcon         from '@mui/icons-material/Favorite'
 import CommentIcon          from "@mui/icons-material/ModeCommentOutlined"
 import IosShareIcon         from "@mui/icons-material/IosShare"
-import moment               from "moment"
 import Link                 from "next/link"
 import { Zoom }             from "@mui/material"
 
@@ -12,6 +11,7 @@ import Avatar                                         from "@components/common/A
 import { Post }                                       from "@interfaces/posts.interfaces"
 import CommentList                                    from "@components/home/PostCard/CommentList"
 import { usePostLikeMutation, usePostUnlikeMutation } from "@services/postsApi"
+import timeAgo                                        from "@utils/timeAgo"
 
 interface PostCardProps {
     post: Post
@@ -63,14 +63,14 @@ const PostCard = ( { post }: PostCardProps ) => {
                         </a>
                     </Link>
                     <p className="text-gray-500 font-medium text-xs">
-                        { moment( post.createdAt ).fromNow( true ) }
+                        { timeAgo( post.createdAt ) }
                     </p>
                 </div>
             </div>
             <div>
-                { post.content && (
+                { post.body && (
                     <div className="my-1">
-                        { post.content }
+                        { post.body }
                     </div>
                 ) }
                 { post.photo && (

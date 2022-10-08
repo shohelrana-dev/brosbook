@@ -11,7 +11,7 @@ export const commentsApi = baseApi.injectEndpoints( {
             } )
         } ),
 
-        createComment: build.mutation<Comment, { postId: number, content: string }>( {
+        createComment: build.mutation<Comment, { postId: number, body: string }>( {
             query: ( { postId, ...formData } ) => ( {
                 url: `posts/${ postId }/comments`,
                 method: 'POST',

@@ -4,15 +4,26 @@ import Sidebar              from "@components/common/Sidebar"
 
 interface LayoutProps {
     children: ReactNode
+    showSidebar?: boolean
 }
 
 
-function MainLayout( { children }: LayoutProps ){
-    return (
+function MainLayout( { children, showSidebar = true }: LayoutProps ){
+    if( ! showSidebar ) return (
         <>
             <NavBar/>
             <div className="bg-theme-gray">
-                <main className="container min-h-[93vh] flex">
+                <main className="max-w-2xl mx-auto min-h-[93vh] flex">
+                    { children }
+                </main>
+            </div>
+        </>
+    )
+    else return (
+        <>
+            <NavBar/>
+            <div className="bg-theme-gray">
+                <main className="max-w-4xl mx-auto min-h-[93vh] flex">
                     <div className="w-8/12 mx-5">
                         { children }
                     </div>
