@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express"
 import PostService from "./post.service"
-import HttpError   from "@utils/http.error"
+import HttpError   from "@utils/httpError"
 import httpStatus  from "http-status"
 
 export default class PostController {

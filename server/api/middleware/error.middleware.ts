@@ -1,24 +1,21 @@
 import { NextFunction, Request, Response } from 'express'
-import HttpError                           from '@utils/http.error'
+import HttpError                           from '@utils/httpError'
 import httpStatus                          from "http-status"
 
 export default function errorMiddleware( error: HttpError, req: Request, res: Response, next: NextFunction ){
-    const status: number  = error.status || httpStatus.INTERNAL_SERVER_ERROR
-    const message: string = error.message || 'Ops! Something went wrong'
+    const status  = error.code || httpStatus.INTERNAL_SERVER_ERROR
+    const code    = error.code || httpStatus.INTERNAL_SERVER_ERROR
+    const meta    = error.meta || error.meta || {}
+    const message = error.message || 'Ops! An unexpected error occurred during the request.'
 
     console.log( '=======================Error message from server====================' )
     console.log( error.message )
     console.log( '=======================Error message from server====================' )
 
-    if( error.errors ){
-        return res.status( status ).json( {
-            status,
-            message,
-            errors: error.errors
-        } )
-    }
-    return res.status( status ).json( {
+    res.status( status ).json( {
         status,
-        message
+        code,
+        message,
+        ...meta
     } )
 }

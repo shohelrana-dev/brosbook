@@ -1,6 +1,6 @@
 //dependencies
 import { NextFunction, Request, Response } from 'express'
-import HttpError                           from '@utils/http.error'
+import HttpError                           from '@utils/httpError'
 import httpStatus                          from "http-status"
 
 export const ensureAuth = ( req: Request, _: Response, next: NextFunction ) => {

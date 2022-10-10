@@ -35,7 +35,7 @@ export default function UserProfilePage(){
                 { postItems && postItems.length > 0 ? postItems.map( post => (
                     <PostCard post={ post } key={ post.id }/>
                 ) ) : (
-                    <p className="box text-center mt-5 py-10">User haven&apos;t any post.</p>
+                    <p className="box text-center mt-5 py-10">{ user?.fullName } has not posted yet.</p>
                 ) }
 
                 { posts?.nextPage && (

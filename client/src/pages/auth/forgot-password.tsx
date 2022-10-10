@@ -6,16 +6,16 @@ import { Lock }                                 from '@mui/icons-material'
 import { toast }                                from "react-toastify"
 import { useRouter }                            from "next/router"
 
-import AnimatedInput from "@components/common/AnimatedInput"
-import PrimaryButton from "@components/common/PrimaryButton"
+import AnimatedInput                 from "@components/common/AnimatedInput"
+import PrimaryButton                 from "@components/common/PrimaryButton"
 import { useForgotPasswordMutation } from "@services/authApi"
-import { InputErrors }               from "@interfaces/index.interfaces"
+import { ForgotPasswordErrors }      from "@interfaces/auth.interfaces"
 
 function ForgotPassword(){
     //hooks
     const router                          = useRouter()
     const [forgotPassword, { isLoading }] = useForgotPasswordMutation()
-    const [inputErrors, setInputErrors]   = useState<InputErrors>( {} )
+    const [inputErrors, setInputErrors]   = useState<ForgotPasswordErrors>( {} )
     const [email, setEmail]               = useState<string>( '' )
 
     //handle form submit
@@ -43,7 +43,7 @@ function ForgotPassword(){
                 <div className="w-90 mx-auto mt-12 lg:mt-28">
                     { isLoading && <LinearProgress/> }
 
-                    <div className="bg-white p-8 border border-gray-300">
+                    <div className="auth-box">
                         <div className="text-center mb-2">
                             <Lock fontSize="large"/>
                         </div>
@@ -64,7 +64,7 @@ function ForgotPassword(){
                         </form>
                     </div>
 
-                    <div className="bg-white p-6 border border-gray-300 text-center mt-2">
+                    <div className="auth-box text-center mt-2">
                         <p className="text-gray-800">
                             Go back?
                             <Link href="/auth/login">

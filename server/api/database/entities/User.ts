@@ -34,8 +34,11 @@ class User extends BaseEntity {
     @Column( { type: 'tinyint', default: 0 } )
     active: number
 
-    @Column( { type: 'tinyint', default: 0 } )
-    verified: number
+    @Column( { type: 'datetime', nullable: true } )
+    emailVerifiedAt: string
+
+    @Column( { nullable: true } )
+    verificationKey: string
 
     @OneToOne( () => Profile )
     @JoinColumn()
@@ -56,6 +59,7 @@ class User extends BaseEntity {
     //virtual columns
     fullName: string
     isCurrentUserFollow: boolean
+    hasEmailVerified: boolean
 
     @BeforeInsert()
     async makePasswordHash(){
@@ -80,6 +84,11 @@ class User extends BaseEntity {
     @AfterLoad()
     setFullName(){
         this.fullName = `${ this.firstName } ${ this.lastName }`
+    }
+
+    @AfterLoad()
+    setHasEmailVerified(){
+        this.hasEmailVerified = this.emailVerifiedAt !== null && !! this.emailVerifiedAt
     }
 }
 

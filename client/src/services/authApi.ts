@@ -60,10 +60,18 @@ export const authApi = baseApi.injectEndpoints( {
             } )
         } ),
 
-        verifyAccount: build.mutation<User, { email: string, key: string }>( {
+        verifyEmail: build.mutation<User, { email: string, key: string }>( {
             query: ( data ) => ( {
-                url: `/auth/verify-account`,
+                url: `/auth/email/verify`,
                 params: data
+            } )
+        } ),
+
+        resendVerificationLink: build.mutation<void, string>( {
+            query: ( email ) => ( {
+                url: `/auth/email/resend-verification-link`,
+                method: 'POST',
+                body: { email }
             } )
         } ),
     } ),
@@ -76,5 +84,6 @@ export const {
                  useGetAuthUserQuery,
                  useForgotPasswordMutation,
                  useResetPasswordMutation,
-                 useVerifyAccountMutation
+                 useVerifyEmailMutation,
+                 useResendVerificationLinkMutation
              } = authApi

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express"
 import { validationResult } from "express-validator"
-import HttpError            from "@utils/http.error"
+import HttpError            from "@utils/httpError"
 import httpStatus           from "http-status"
 
 export function validationMiddleware( req: Request, res: Response, next: NextFunction ){
@@ -8,6 +8,6 @@ export function validationMiddleware( req: Request, res: Response, next: NextFun
     if( errors.isEmpty() ){
         next()
     } else{
-        next( new HttpError( httpStatus.UNPROCESSABLE_ENTITY, 'Validation failed.', errors.mapped() ) )
+        next( new HttpError( httpStatus.UNPROCESSABLE_ENTITY, 'Validation failed.', {errors: errors.mapped()} ) )
     }
 }

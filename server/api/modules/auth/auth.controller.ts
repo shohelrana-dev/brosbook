@@ -1,7 +1,5 @@
 import { NextFunction, Request, Response } from "express"
 import httpStatus                          from "http-status"
-
-import HttpError   from "@utils/http.error"
 import AuthService from "./auth.service"
 
 class AuthController {
@@ -17,7 +15,7 @@ class AuthController {
             //send success response
             res.status( httpStatus.CREATED ).json( user )
         } catch ( err ) {
-            next( new HttpError( httpStatus.BAD_REQUEST, err.message ) )
+            next( err )
         }
     }
 
@@ -26,10 +24,10 @@ class AuthController {
             //attempt login
             const loginData = await this.authService.login( req )
 
-            //send success response
+
             res.json( loginData )
         } catch ( err ) {
-            next( new HttpError( httpStatus.UNAUTHORIZED, err.message ) )
+            next( err )
         }
     }
 
@@ -41,7 +39,7 @@ class AuthController {
             res.json( loginData )
 
         } catch ( err ) {
-            next( new HttpError( httpStatus.UNAUTHORIZED, err.message ) )
+            next( err )
         }
     }
 
@@ -52,7 +50,7 @@ class AuthController {
             //send success response
             res.json( user )
         } catch ( err ) {
-            next( new HttpError( httpStatus.UNAUTHORIZED, err.message ) )
+            next( err )
         }
     }
 
@@ -63,7 +61,7 @@ class AuthController {
 
             res.json( { message: `We've sent an email to ${ email } with a link to get back into your account.` } )
         } catch ( err ) {
-            next( new HttpError( httpStatus.BAD_REQUEST, err.message ) )
+            next( err )
         }
     }
 
@@ -73,17 +71,27 @@ class AuthController {
 
             res.json( { message: 'Password has been changed successfully' } )
         } catch ( err ) {
-            next( new HttpError( httpStatus.BAD_REQUEST, err.message ) )
+            next( err )
         }
     }
 
-    public verifyAccount = async( req: Request, res: Response, next: NextFunction ): Promise<void> => {
+    public verifyEmail = async( req: Request, res: Response, next: NextFunction ): Promise<void> => {
         try {
-            const user = await this.authService.verifyAccount( req )
+            const user = await this.authService.verifyEmail( req )
 
             res.json( user )
         } catch ( err ) {
-            next( new HttpError( httpStatus.BAD_REQUEST, err.message ) )
+            next( err )
+        }
+    }
+
+    public resendVerificationLink = async( req: Request, res: Response, next: NextFunction ): Promise<void> => {
+        try {
+            await this.authService.resendVerificationLink( req )
+
+            res.json( { message: 'Sent email success' } )
+        } catch ( err ) {
+            next( err )
         }
     }
 }

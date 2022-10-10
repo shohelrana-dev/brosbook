@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express"
 import CommentService                      from "./comment.service"
 import httpStatus from "http-status";
-import HttpError  from "@utils/http.error";
+import HttpError  from "@utils/httpError";
 
 export default class CommentController {
     constructor( private readonly commentService: CommentService ){

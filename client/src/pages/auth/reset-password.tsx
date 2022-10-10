@@ -7,16 +7,16 @@ import { Lock }                                            from "@mui/icons-mate
 import { toast }                                           from "react-toastify"
 
 import PrimaryButton                from "@components/common/PrimaryButton"
-import { useResetPasswordMutation } from "@services/authApi";
-import { InputErrors }              from "@interfaces/index.interfaces"
-import InputPassword                from "@components/common/InputPassword";
+import { useResetPasswordMutation } from "@services/authApi"
+import PasswordInput                from "@components/common/PasswordInput"
+import { ResetPasswordErrors }      from "@interfaces/auth.interfaces"
 
 function ResetPassword(){
     //hooks
     const router                         = useRouter()
     const [resetPassword, { isLoading }] = useResetPasswordMutation()
 
-    const [inputErrors, setInputErrors]         = useState<InputErrors>( {} )
+    const [inputErrors, setInputErrors]         = useState<ResetPasswordErrors>( {} )
     const [password, setPassword]               = useState<string>( '' )
     const [confirmPassword, setConfirmPassword] = useState<string>( '' )
 
@@ -56,7 +56,7 @@ function ResetPassword(){
                 <div className="w-90 mx-auto mt-12 lg:mt-28">
                     { isLoading && <LinearProgress/> }
 
-                    <div className="bg-white p-8 border border-gray-300">
+                    <div className="auth-box">
                         <div className="text-center mb-2">
                             <Lock fontSize="large"/>
                         </div>
@@ -67,13 +67,13 @@ function ResetPassword(){
                         </small>
 
                         <form method="post" onSubmit={ submitForm }>
-                            <InputPassword
+                            <PasswordInput
                                 label="Password"
                                 name="password"
                                 error={ inputErrors.password }
                                 onChange={ ( e ) => setPassword( e.target.value ) }
                             />
-                            <InputPassword
+                            <PasswordInput
                                 label="Confirm Password"
                                 name="confirmPassword"
                                 error={ inputErrors.confirmPassword }

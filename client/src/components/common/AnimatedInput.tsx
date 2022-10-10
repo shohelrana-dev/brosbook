@@ -12,7 +12,7 @@ export interface InputGroupProps extends InputHTMLAttributes<HTMLInputElement> {
     label: string,
     error?: { msg?: string }
     endAdornment?: ReactNode
-    size: 'small' | 'medium'
+    size?: 'small' | 'medium'
 }
 
 function AnimatedInput( props: InputGroupProps ){
@@ -23,6 +23,7 @@ function AnimatedInput( props: InputGroupProps ){
         <div className="mb-3">
             <FormControl variant="outlined" fullWidth size="small">
                 <InputLabel htmlFor={ name } className="!text-sm !text-gray-500 !duration-500" error={ !! error }>
+                    { error && <ErrorOutlineIcon fontSize="small" className="!text-red-600 mr-1 !text-[16px]"/> }
                     { label }
                 </InputLabel>
                 <OutlinedInput
@@ -41,7 +42,6 @@ function AnimatedInput( props: InputGroupProps ){
                 { error && (
                     <Zoom in>
                         <span className="flex items-center">
-                            <ErrorOutlineIcon fontSize="small" className="!text-red-600 mr-1 !text-[16px]"/>
                             <p className="font-medium text-red-600 text-[12px]">
                                 { error.msg }
                             </p>

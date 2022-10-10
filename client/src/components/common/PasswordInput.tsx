@@ -4,7 +4,7 @@ import VisibilityOff                   from "@mui/icons-material/VisibilityOff"
 import Visibility                         from "@mui/icons-material/Visibility"
 import AnimatedInput, { InputGroupProps } from "@components/common/AnimatedInput"
 
-function InputPassword( props: InputGroupProps ){
+function PasswordInput( props: InputGroupProps ){
     const [showPassword, setShowPassword] = useState( false )
 
     const handleClickShowPassword = () => {
@@ -32,4 +32,4 @@ function InputPassword( props: InputGroupProps ){
     )
 }
 
-export default InputPassword
+export default PasswordInput

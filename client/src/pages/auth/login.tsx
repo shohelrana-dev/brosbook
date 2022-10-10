@@ -3,22 +3,22 @@ import Head                                     from 'next/head'
 import Link                                     from 'next/link'
 import { Divider, LinearProgress }              from '@mui/material'
 
-import AnimatedInput     from '@components/common/AnimatedInput'
-import GoogleLoginButton from '@components/common/GoogleLoginButton'
+import AnimatedInput         from '@components/common/AnimatedInput'
+import GoogleLoginButton     from '@components/common/GoogleLoginButton'
 import PrimaryButton         from "@components/common/PrimaryButton"
 import { useRouter }         from "next/router"
 import { useLoginMutation }  from "@services/authApi"
-import { InputErrors }       from "@interfaces/index.interfaces"
 import { toast }             from "react-toastify"
 import ensureServerSideGuest from "@utils/ensureServerSideGuest"
-import InputPassword         from "@components/common/InputPassword"
-import { Lock }              from "@mui/icons-material";
+import PasswordInput         from "@components/common/PasswordInput"
+import { Lock }              from "@mui/icons-material"
+import { LoginErrors }       from "@interfaces/auth.interfaces"
 
 function Login(){
     //hooks
     const router                            = useRouter()
     const [login, { isLoading, isSuccess }] = useLoginMutation()
-    const [inputErrors, setInputErrors]     = useState<InputErrors>( {} )
+    const [inputErrors, setInputErrors]     = useState<LoginErrors>( {} )
     const [username, setUsername]           = useState<string>( '' )
     const [password, setPassword]           = useState<string>( '' )
 
@@ -28,13 +28,18 @@ function Login(){
         event.preventDefault()
 
         try {
-            await login( { username, password } ).unwrap()
-            router.push( '/' )
-            toast.success( 'You have been logged in successfully.' )
+            const { user } = await login( { username, password } ).unwrap()
+            if( user.hasEmailVerified ){
+                router.push( '/' )
+                toast.success( 'You have been logged in successfully.' )
+            } else{
+                router.push( '/auth/email/verification-required' )
+                toast.error( 'Your email has not been verified yet.' )
+            }
         } catch ( err: any ) {
             console.error( err )
             if( err?.data?.errors ) setInputErrors( err.data.errors )
-            toast.error( err?.data?.message || 'Invalid credentials.' )
+            toast.error( 'Invalid credentials.' )
         }
     }
 
@@ -42,7 +47,8 @@ function Login(){
         return <LinearProgress/>
     }
 
-    return ( <Fragment>
+    return (
+        <Fragment>
             <Head>
                 <title>Log In | BrosBook</title>
             </Head>
@@ -51,7 +57,7 @@ function Login(){
                 <div className="w-90 mx-auto mt-12 lg:mt-28">
                     { isLoading && <LinearProgress/> }
 
-                    <div className="bg-white p-8 border border-gray-300">
+                    <div className="auth-box">
                         <div className="text-center mb-2">
                             <Lock fontSize="large"/>
                         </div>
@@ -64,7 +70,7 @@ function Login(){
                                 error={ inputErrors.username }
                                 onChange={ ( e ) => setUsername( e.target.value ) }
                             />
-                            <InputPassword
+                            <PasswordInput
                                 label="Password"
                                 name="password"
                                 error={ inputErrors.password }
@@ -88,7 +94,7 @@ function Login(){
                         </small>
                     </div>
 
-                    <div className="bg-white p-6 border border-gray-300 text-center mt-2">
+                    <div className="auth-box text-center mt-2">
                         <p className="text-gray-800">
                             Don&apos;t have an account?
                             <Link href="/auth/signup">

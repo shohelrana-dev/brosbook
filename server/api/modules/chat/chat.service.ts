@@ -5,7 +5,7 @@ import { v4 as uuidv4 }        from "uuid"
 import Hashids                 from "hashids"
 import { getRepository, Like } from "typeorm"
 
-import HttpError    from "@utils/http.error"
+import HttpError    from "@utils/httpError"
 import Conversation from "@entities/Conversation"
 import Message                             from "@entities/Message"
 import Reaction                            from "@entities/Reaction"

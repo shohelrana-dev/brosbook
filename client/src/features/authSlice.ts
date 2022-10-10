@@ -1,8 +1,8 @@
-import { createSlice } from "@reduxjs/toolkit"
-import { RootState }   from "@store/store"
-import { User }        from "@interfaces/user.interfaces"
-import { authApi }     from "@services/authApi"
-import Cookies         from "js-cookie"
+import { Action, createSlice } from "@reduxjs/toolkit"
+import { RootState }           from "@store/store"
+import { User }                from "@interfaces/user.interfaces"
+import { authApi }             from "@services/authApi"
+import Cookies                 from "js-cookie"
 
 interface AuthState {
     isAuthenticated: boolean
@@ -25,10 +25,18 @@ export const authSlice = createSlice( {
         }
     },
     extraReducers: ( builder ) => {
+        builder.addMatcher( authApi.endpoints.signup.matchFulfilled, ( state, { payload } ) => {
+            state.user = payload
+        } )
+
         builder.addMatcher( authApi.endpoints.login.matchFulfilled, ( state, { payload } ) => {
-            state.isAuthenticated = true
-            state.user            = payload.user!
-            Cookies.set( 'access_token', payload.access_token )
+            if( payload.access_token && payload.user && payload.user.hasEmailVerified ){
+                state.isAuthenticated = true
+                state.user            = payload.user!
+                Cookies.set( 'access_token', payload.access_token )
+            } else{
+                state.user = payload.user!
+            }
         } )
 
         builder.addMatcher( authApi.endpoints.loginWithGoogle.matchFulfilled, ( state, { payload } ) => {

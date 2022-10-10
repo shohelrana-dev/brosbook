@@ -1,7 +1,7 @@
 import { Request } from "express"
 import bcrypt      from "bcrypt"
 
-import HttpError from "@utils/http.error"
+import HttpError from "@utils/httpError"
 import Profile   from "@entities/Profile"
 import User             from "@entities/User"
 import httpStatus       from "http-status"

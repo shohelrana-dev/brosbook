@@ -10,9 +10,10 @@ export interface User {
     photo: string
     profile?: Profile
     active: number
+    hasEmailVerified: boolean
     followerCount?: number
     followingCount?: number
-    isCurrentUserFollow: boolean
+    isCurrentUserFollow: boolean,
     createdAt: string
     updatedAt: string
 }

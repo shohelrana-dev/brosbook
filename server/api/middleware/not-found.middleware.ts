@@ -1,6 +1,6 @@
 //dependencies
 import { Request, Response, NextFunction } from 'express'
-import HttpError                           from '@utils/http.error'
+import HttpError                           from '@utils/httpError'
 import httpStatus                          from "http-status"
 
 const notFoundMiddleware = async( _: Request, __: Response, next: NextFunction ) => {

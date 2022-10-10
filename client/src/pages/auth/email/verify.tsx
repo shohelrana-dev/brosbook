@@ -2,19 +2,19 @@ import React                        from 'react'
 import { useRouter }                from "next/router"
 import { LinearProgress }           from "@mui/material"
 import { toast }                    from "react-toastify"
-import useAsyncEffect               from "use-async-effect"
-import { useVerifyAccountMutation } from "@services/authApi"
+import useAsyncEffect             from "use-async-effect"
+import { useVerifyEmailMutation } from "@services/authApi"
 
-function VerifyAccount(){
+function Verify(){
     const router          = useRouter()
-    const [verifyAccount] = useVerifyAccountMutation()
+    const [verifyEmail] = useVerifyEmailMutation()
 
     useAsyncEffect( async() => {
         const email = router.query.email as string
         const key   = router.query.key as string
 
         try {
-            await verifyAccount( { email, key } ).unwrap()
+            await verifyEmail( { email, key } ).unwrap()
             toast.success( 'Your Account has been verified.' )
         } catch ( err: any ) {
             console.error( err )
@@ -27,4 +27,4 @@ function VerifyAccount(){
     return <LinearProgress/>
 }
 
-export default VerifyAccount
+export default Verify

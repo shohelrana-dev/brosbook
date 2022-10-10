@@ -2,9 +2,10 @@ import User from "@entities/User"
 
 export interface LoginTokenPayload {
     access_token: string
-    token_type: string
     expires_in: number | string
-    user: User
+    token_type?: string
+    user: User,
+    message?: string
 }
 
 export interface MessageDataDto {

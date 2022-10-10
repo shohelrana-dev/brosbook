@@ -6,12 +6,12 @@ import zxcvbn                                   from 'zxcvbn-typescript'
 import { toast }                                from "react-toastify"
 import { useRouter }                            from "next/router"
 
-import AnimatedInput     from '@components/common/AnimatedInput'
-import GoogleLoginButton from "@components/common/GoogleLoginButton"
+import AnimatedInput         from '@components/common/AnimatedInput'
+import GoogleLoginButton     from "@components/common/GoogleLoginButton"
 import PrimaryButton         from "@components/common/PrimaryButton"
 import { useSignupMutation } from "@services/authApi"
-import { InputErrors }       from "@interfaces/index.interfaces"
-import InputPassword         from "@components/common/InputPassword"
+import PasswordInput         from "@components/common/PasswordInput"
+import { SignupErrors }      from "@interfaces/auth.interfaces";
 
 function Signup(){
     //hooks
@@ -24,7 +24,7 @@ function Signup(){
     const [username, setUsername]   = useState<string>( '' )
     const [password, setPassword]   = useState<string>( '' )
 
-    const [inputErrors, setInputErrors]         = useState<InputErrors>( {} )
+    const [inputErrors, setInputErrors]         = useState<SignupErrors>( {} )
     const [passwordWarning, setPasswordWarning] = useState( '' )
 
     //handle form submit
@@ -34,7 +34,7 @@ function Signup(){
 
         try {
             await signup( { firstName, lastName, email, username, password } ).unwrap()
-            router.push( '/auth/login' )
+            router.push( '/auth/email/verification-required' )
             toast.success( 'Signup success. You have received a mail to verify the account.' )
         } catch ( err: any ) {
             console.error( err )
@@ -57,7 +57,7 @@ function Signup(){
                 <div className="w-90 mx-auto mt-12 lg:mt-16">
                     { isLoading && <LinearProgress/> }
 
-                    <div className="bg-white p-8 border border-gray-300">
+                    <div className="auth-box">
                         <h1 className="text-xl text-center mb-4 font-medium">Sign Up</h1>
 
                         <GoogleLoginButton/>
@@ -91,7 +91,7 @@ function Signup(){
                                 error={ inputErrors.username }
                                 onChange={ ( e => setUsername( e.target.value ) ) }
                             />
-                            <InputPassword
+                            <PasswordInput
                                 label="Password"
                                 name="password"
                                 error={ inputErrors.password }
@@ -115,7 +115,7 @@ function Signup(){
 
                     </div>
 
-                    <div className="bg-white p-6 border border-gray-300 text-center mt-2">
+                    <div className="auth-box text-center mt-2">
                         <p className="text-gray-800">
                             Have an account?
                             <Link href="/auth/login">

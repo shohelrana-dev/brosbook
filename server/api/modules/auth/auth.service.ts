@@ -7,10 +7,11 @@ import { v4 as uuid }                              from "uuid"
 import User                  from "@entities/User"
 import { LoginTokenPayload } from "@api/types/index.types"
 import sendEmail             from "@utils/sendEmail"
-import Verification          from "@entities/Verification"
 import { AppDataSource }     from "@config/data-source.config"
 import Photo                 from "@entities/Photo"
 import { PhotoSource }       from "@api/enums"
+import HttpError             from "@utils/httpError"
+import httpStatus            from "http-status"
 
 class AuthService {
     private userRepository = AppDataSource.getRepository( User )
@@ -18,36 +19,33 @@ class AuthService {
     public async signup( req: Request ): Promise<User>{
         const { firstName, lastName, email, username, password } = req.body
 
-        const user = await this.userRepository.create( { firstName, lastName, email, username, password } ).save()
+        if( ! firstName || ! lastName || ! email || ! username || ! password ){
+            throw new HttpError( httpStatus.UNPROCESSABLE_ENTITY, 'Required input field missing.' )
+        }
 
-        const verificationKey = uuid()
+        const emailVerificationKey = uuid()
 
-        await Verification.create( {
-            key: verificationKey,
-            userId: user.id
+        const user = await this.userRepository.create( {
+            firstName,
+            lastName,
+            email,
+            username,
+            password,
+            verificationKey: emailVerificationKey
         } ).save()
 
 
-        const verificationLink = `${ process.env.CLIENT_URL }/auth/verify-account?email=${ email }&key=${ verificationKey }`
-        const subject          = `Please activate your account, thank you for signup on ${ process.env.APP_NAME }`
-        const html             = `
-                <div>
-                    <h3>Hi ${ user.username },</h3>
-                    </br>
-                    </br>
-                        <p>Please click the following link to activate your account: </p>
-                    </br>
-                    <p><a href="${ verificationLink }"><strong>Verify account</strong></a></p>
-                </div>
-            `
-
-        sendEmail( email, subject, html )
+        AuthService.sendEmailVerificationLink( { email, username, emailVerificationKey } )
 
         return user
     }
 
     public async login( req: Request ): Promise<LoginTokenPayload>{
         const { username, password } = req.body
+
+        if( ! username || ! password ){
+            throw new HttpError( httpStatus.UNPROCESSABLE_ENTITY, 'Username and password required.' )
+        }
 
         const user = await this.userRepository.findOne( {
             where: [
@@ -57,17 +55,17 @@ class AuthService {
         } )
 
         if( ! user ){
-            throw new Error( 'Account is not found with the username.' )
+            throw new HttpError( httpStatus.BAD_REQUEST, 'Account is not found with the username.' )
         }
 
         let isPasswordMatched = await bcrypt.compare( password, user.password )
 
         if( ! isPasswordMatched ){
-            throw new Error( "Password didn't match" )
+            throw new HttpError( httpStatus.BAD_REQUEST, "Invalid password." )
         }
 
-        if( user.verified !== 1 ){
-            throw new Error( 'The account is not activate yet, please check your email.' )
+        if( ! user.hasEmailVerified ){
+            return { access_token: null, expires_in: null, user, message: 'Email has not been verified. ' }
         }
 
         return AuthService.generateJwtToken( user )
@@ -92,13 +90,13 @@ class AuthService {
 
         const { email_verified, given_name, family_name, email, picture }: TokenPayload = ticket.getPayload()!
 
-        if( ! email_verified ) throw new Error( 'Email address was not verified' )
+        if( ! email_verified ) throw new HttpError( httpStatus.UNAUTHORIZED, 'Email address was not verified' )
 
         let user = await this.userRepository.findOneBy( { email } )
 
         //make user verified
-        if( user && ! user.verified ){
-            user.verified = 1
+        if( user && ! user.emailVerifiedAt ){
+            user.emailVerifiedAt = new Date( Date.now() ).toISOString()
             await user.save()
         }
 
@@ -110,7 +108,7 @@ class AuthService {
                 email: email,
                 photo: picture,
                 password: email + process.env.JWT_SECRET!,
-                verified: 1
+                emailVerifiedAt: new Date( Date.now() ).toISOString()
             } ).save()
 
             await Photo.create( {
@@ -131,24 +129,17 @@ class AuthService {
 
         const user = await User.findOneBy( { email } )
         if( ! user ){
-            throw new Error( 'User not found with the email' )
+            throw new HttpError( httpStatus.BAD_REQUEST, 'User not found with the email.' )
         }
 
-        const verification     = await Verification.findOneBy( { userId: user.id } )
         const resetPasswordKey = uuid()
         const resetLink        = `${ process.env.CLIENT_URL }/auth/reset-password?email=${ email }&key=${ resetPasswordKey }`
 
-        if( ! verification ){
-            const createVerification = await Verification.create( {
-                key: resetPasswordKey,
-                userId: user.id
-            } )
-            await createVerification.save()
-        } else{
-            verification.key = resetPasswordKey
-            await verification.save()
-        }
+        //save verification key
+        user.verificationKey = resetPasswordKey
+        await user.save()
 
+        //send email
         const subject = `${ user.username }, we've made it easy to get back on ${ process.env.APP_NAME }`
         const html    = `
                 <div>
@@ -174,45 +165,85 @@ class AuthService {
     public async resetPassword( req: Request ){
         const { password, email, key } = req.body
 
-        if( ! password ) throw new Error( 'Password required.' )
-
-        try {
-            const user    = await this.isVerificationKeyValid( { email, key } )
-            user.password = await bcrypt.hash( password, 6 )
-            user.verified = 1
-            await user.save()
-        } catch ( err ) {
-            throw err
+        if( ! password || ! email || ! key ){
+            throw new HttpError( httpStatus.UNPROCESSABLE_ENTITY, 'Password, email, Verification key required.' )
         }
+
+        const user = await this.userRepository.findOneBy( { email } )
+        if( ! user ){
+            throw new HttpError( httpStatus.BAD_REQUEST, 'User not found with the email address.' )
+        }
+
+        if( ! user.verificationKey || user.verificationKey !== key ){
+            throw new HttpError( httpStatus.BAD_REQUEST, 'Verification key is invalid.' )
+        }
+
+        user.password        = await bcrypt.hash( password, 6 )
+        user.emailVerifiedAt = new Date( Date.now() ).toISOString()
+        await user.save()
     }
 
-    public async verifyAccount( req: Request ){
+    public async verifyEmail( req: Request ){
         const email = req.query.email as string
         const key   = req.query.key as string
 
-        const user = await this.isVerificationKeyValid( { email, key } )
+        if( ! email || ! key ){
+            throw new HttpError( httpStatus.UNPROCESSABLE_ENTITY, 'Email or verification key is missing.' )
+        }
 
-        if( user.verified ) throw new Error( 'The user account already verified' )
+        const user = await this.userRepository.findOneBy( { email } )
 
-        user.verified = 1
+        if( ! user ){
+            throw new HttpError( httpStatus.BAD_REQUEST, 'User not found with the email address.' )
+        }
+
+        if( user.hasEmailVerified ){
+            throw new HttpError( httpStatus.BAD_REQUEST, 'The user account already verified' )
+        }
+
+        if( ! user.verificationKey || user.verificationKey !== key ){
+            throw new HttpError( httpStatus.BAD_REQUEST, 'Verification key is invalid.' )
+        }
+
+        user.emailVerifiedAt = new Date( Date.now() ).toISOString()
         await user.save()
         return user
     }
 
-    private async isVerificationKeyValid( { email, key }: { email: string, key: string } ): Promise<User>{
-
-        if( ! email || ! key ) throw new Error( 'Email or verification key is missing.' )
+    public async resendVerificationLink( req: Request ){
+        const email                = req.body.email as string
+        const emailVerificationKey = uuid()
 
         const user = await this.userRepository.findOneBy( { email } )
 
-        if( ! user ) throw new Error( 'User not found with the email address.' )
-
-        const verification = await Verification.findOneBy( { userId: user?.id } )
-        if( verification?.key === key ){
-            return user
+        if( ! user ){
+            throw new HttpError( httpStatus.BAD_REQUEST, 'User not found with the email address.' )
         }
 
-        throw new Error( 'Verification key is invalid.' )
+        user.verificationKey = emailVerificationKey
+        await user.save()
+
+        AuthService.sendEmailVerificationLink( { email, username: user.username, emailVerificationKey } )
+
+    }
+
+    private static sendEmailVerificationLink( data: { email: string, username: string, emailVerificationKey: string } ){
+        const { email, username, emailVerificationKey } = data
+
+        const verificationLink = `${ process.env.CLIENT_URL }/auth/email/verify?email=${ email }&key=${ emailVerificationKey }`
+        const subject          = `Please activate your account, thank you for signup on ${ process.env.APP_NAME }`
+        const html             = `
+                <div>
+                    <h3>Hi ${ username },</h3>
+                    </br>
+                    </br>
+                        <p>Please click the following link to activate your account: </p>
+                    </br>
+                    <p><a href="${ verificationLink }"><strong>Verify account</strong></a></p>
+                </div>
+            `
+
+        sendEmail( email, subject, html )
     }
 
     private static generateJwtToken( user: User ): LoginTokenPayload{
