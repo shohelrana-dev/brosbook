@@ -44,7 +44,7 @@ app.use( fileUpload() )
 //static path
 app.use( express.static( path.resolve( __dirname, '../../public' ) ) )
 
-//set current user
+//deserialize current user
 app.use( deserializeUserMiddleware )
 
 //app routes

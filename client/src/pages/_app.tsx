@@ -7,9 +7,9 @@ import { useSelector }                from "react-redux"
 import { NextApiRequest }             from "next"
 import 'react-toastify/dist/ReactToastify.css'
 
-import { wrapper }                    from '@store/store'
-import { authApi }                    from "@services/authApi"
-import { selectAuthState }            from "@features/authSlice"
+import { wrapper }                         from '@store/store'
+import { authApi }                         from "@services/authApi"
+import { selectAuthState, setAccessToken } from "@features/authSlice"
 import '@styles/app.css'
 
 function MyApp( { Component, pageProps }: AppProps ){
@@ -39,7 +39,8 @@ function MyApp( { Component, pageProps }: AppProps ){
 MyApp.getInitialProps = wrapper.getInitialAppProps( ( store ) => async( appContext ) => {
     const req          = appContext.ctx.req as NextApiRequest
     const access_token = req?.cookies?.access_token
-    await store.dispatch( authApi.endpoints.getAuthUser.initiate( access_token ) )
+    await store.dispatch( setAccessToken( access_token! ) )
+    await store.dispatch( authApi.endpoints.getAuthUser.initiate() )
 
     const pageProps = appContext.Component.getInitialProps ? await appContext.Component.getInitialProps( appContext.ctx ) : {}
     return { pageProps }

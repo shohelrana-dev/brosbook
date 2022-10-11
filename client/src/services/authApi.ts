@@ -35,13 +35,8 @@ export const authApi = baseApi.injectEndpoints( {
             } )
         } ),
 
-        getAuthUser: build.query<User, string | void>( {
-            query: ( access_token?: string ) => ( {
-                url: `/auth/me`,
-                headers: {
-                    Authorization: access_token ? `Bearer ${ access_token }` : ''
-                }
-            } )
+        getAuthUser: build.query<User, void>( {
+            query: () => ( `/auth/me` )
         } ),
 
         forgotPassword: build.mutation<{ message: string }, string>( {

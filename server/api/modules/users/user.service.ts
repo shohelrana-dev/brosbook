@@ -100,7 +100,10 @@ export default class UserService {
                 post.hasCurrentUserLike = like ? true : false
             }
         }
-
+        console.log('req.isAuthenticated')
+        console.log(req.user)
+        console.log(req.isAuthenticated)
+        console.log('req.isAuthenticated')
         return { posts, meta: paginateMeta( count, page, limit ) }
     }
 

@@ -1,17 +1,19 @@
-import { Action, createSlice } from "@reduxjs/toolkit"
-import { RootState }           from "@store/store"
-import { User }                from "@interfaces/user.interfaces"
-import { authApi }             from "@services/authApi"
-import Cookies                 from "js-cookie"
+import { Action, createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { RootState }                          from "@store/store"
+import { User }                               from "@interfaces/user.interfaces"
+import { authApi }                            from "@services/authApi"
+import Cookies                                from "js-cookie"
 
 interface AuthState {
     isAuthenticated: boolean
-    user: User
+    user: User,
+    access_token: null | string
 }
 
 const initialState: AuthState = {
     isAuthenticated: false,
-    user: {} as User
+    user: {} as User,
+    access_token: null
 }
 
 export const authSlice = createSlice( {
@@ -21,7 +23,11 @@ export const authSlice = createSlice( {
         logout: ( state ) => {
             state.isAuthenticated = false
             state.user            = {} as User
+            state.access_token    = null
             Cookies.remove( 'access_token' )
+        },
+        setAccessToken: ( state, { payload }: PayloadAction<string> ) => {
+            state.access_token = payload
         }
     },
     extraReducers: ( builder ) => {
@@ -54,4 +60,4 @@ export const authSlice = createSlice( {
 
 export const selectAuthState = ( state: RootState ) => state.auth
 
-export const { logout } = authSlice.actions
+export const { logout, setAccessToken } = authSlice.actions

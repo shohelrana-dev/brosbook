@@ -8,6 +8,9 @@ import { useGetUserPostsQuery, useGetUserQuery, usersApi } from "@services/users
 import { wrapper }                                         from "@store/store"
 import { Post }                                            from "@interfaces/posts.interfaces"
 import { Facebook }                                        from "react-content-loader"
+import NotFound                                            from "@pages/404"
+import { getCookie }                                       from "cookies-next";
+import Cookies                                             from "js-cookie";
 
 export default function UserProfilePage(){
     //hooks
@@ -28,6 +31,8 @@ export default function UserProfilePage(){
             setPostItems( ( prevState ) => [...prevState, ...posts?.items! || []] )
         }
     }, [posts] )
+
+    if( ! user ) return <NotFound/>
 
     return (
         <ProfileLayout>
@@ -56,7 +61,7 @@ export default function UserProfilePage(){
 
 export const getServerSideProps = wrapper.getServerSideProps( ( store ) => async( ctx ) => {
     const { data: user } = await store.dispatch( usersApi.endpoints.getUser.initiate( ctx.params?.username as string ) )
-    await store.dispatch( usersApi.endpoints.getUserPosts.initiate( { userId: user?.id!, page: 1 } ) )
+    if( user ) await store.dispatch( usersApi.endpoints.getUserPosts.initiate( { userId: user?.id!, page: 1 } ) )
 
     return { props: {} }
 } )

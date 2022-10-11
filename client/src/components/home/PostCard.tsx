@@ -1,11 +1,11 @@
-import React, { useState }  from 'react'
-import { SRLWrapper }       from "simple-react-lightbox"
-import OutlinedFavoriteIcon from "@mui/icons-material/FavoriteBorderOutlined"
-import FavoriteIcon         from '@mui/icons-material/Favorite'
-import CommentIcon          from "@mui/icons-material/ModeCommentOutlined"
-import IosShareIcon         from "@mui/icons-material/IosShare"
-import Link                 from "next/link"
-import { Zoom }             from "@mui/material"
+import React, { useState, MouseEvent } from 'react'
+import { SRLWrapper }                  from "simple-react-lightbox"
+import OutlinedFavoriteIcon            from "@mui/icons-material/FavoriteBorderOutlined"
+import FavoriteIcon                    from '@mui/icons-material/Favorite'
+import CommentIcon                     from "@mui/icons-material/ModeCommentOutlined"
+import IosShareIcon                    from "@mui/icons-material/IosShare"
+import Link                            from "next/link"
+import { Zoom }                        from "@mui/material"
 
 import Avatar                                         from "@components/common/Avatar"
 import { Post }                                       from "@interfaces/posts.interfaces"
@@ -26,7 +26,9 @@ const PostCard = ( { post }: PostCardProps ) => {
     const [likeCount, setLikeCount]                   = useState<number>( post.likeCount )
     const [isShowComment, setIsShowComment]           = useState<boolean>( false )
 
-    async function handlePostLike(){
+    async function handlePostLike( event: MouseEvent<HTMLButtonElement> ){
+        event.currentTarget.disabled = true
+
         try {
             await postLike( post.id ).unwrap()
             setHasCurrentUserLike( true )
@@ -36,7 +38,9 @@ const PostCard = ( { post }: PostCardProps ) => {
         }
     }
 
-    async function handlePostUnlike(){
+    async function handlePostUnlike( event: MouseEvent<HTMLButtonElement> ){
+        event.currentTarget.disabled = true
+
         try {
             await postUnlike( post.id ).unwrap()
             setHasCurrentUserLike( false )

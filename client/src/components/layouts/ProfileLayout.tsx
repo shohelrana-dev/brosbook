@@ -8,11 +8,12 @@ import CakeIcon             from "@mui/icons-material/CakeOutlined"
 import ScheduleIcon         from "@mui/icons-material/Schedule"
 import { Button }           from "@mui/material"
 
-import MainLayout          from "@components/layouts/MainLayout"
-import { useGetUserQuery } from "@services/usersApi"
-import { useSelector }     from "react-redux"
-import { selectAuthState } from "@features/authSlice"
-import FollowButton        from "@components/common/FollowButton"
+import MainLayout            from "@components/layouts/MainLayout"
+import { useGetUserQuery }   from "@services/usersApi"
+import { useSelector }       from "react-redux"
+import { selectAuthState }   from "@features/authSlice"
+import FollowButton          from "@components/common/FollowButton"
+import placeholderCoverPhoto from "@images/placeholder-cover-photo.png"
 
 interface ProfileLayoutProps {
     children: ReactNode
@@ -42,7 +43,7 @@ export default function ProfileLayout( { children }: ProfileLayoutProps ){
                                         />
                                     </a>
                                 </SRLWrapper> ) : (
-                                <Image src="/images/placeholder-cover-photo.png" width={ 800 } height={ 400 }
+                                <Image src={ placeholderCoverPhoto } width={ 800 } height={ 400 }
                                        objectFit="cover"/>
                             ) }
                         </div>
@@ -93,12 +94,20 @@ export default function ProfileLayout( { children }: ProfileLayoutProps ){
                             { user?.profile?.birthdate && (
                                 <li className="text-gray-600 inline-block mr-3">
                                     <CakeIcon/>&nbsp;
-                                    Born { new Date( user?.profile?.birthdate ).toLocaleDateString('en-us', {day: "numeric", year:"numeric", month:"short"}) }
+                                    Born { new Date( user?.profile?.birthdate ).toLocaleDateString( 'en-us', {
+                                    day: "numeric",
+                                    year: "numeric",
+                                    month: "short"
+                                } ) }
                                 </li>
                             ) }
                             <li className="text-gray-600 inline-block mr-3">
                                 <ScheduleIcon/>&nbsp;
-                                Joined { new Date( user?.createdAt! ).toLocaleDateString('en-us', {day: "numeric", year:"numeric", month:"short"}) }
+                                Joined { new Date( user?.createdAt! ).toLocaleDateString( 'en-us', {
+                                day: "numeric",
+                                year: "numeric",
+                                month: "short"
+                            } ) }
                             </li>
                         </ul>
                         <ul className="mt-4">
