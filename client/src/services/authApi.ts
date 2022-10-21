@@ -2,7 +2,7 @@ import { CredentialPayload, ResetPassPayload, SignupPayload } from "@interfaces/
 import { User }                                               from "@interfaces/user.interfaces"
 import { baseApi }                                            from "@services/baseApi"
 
-type LoginResponse = {
+export type LoginResponse = {
     access_token: string
     expires_in: string | number
     token_type: string

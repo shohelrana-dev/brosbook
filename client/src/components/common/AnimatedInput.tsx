@@ -1,53 +1,50 @@
-import React, { InputHTMLAttributes, ReactNode } from 'react'
+import React from 'react'
 import {
     OutlinedInput,
     InputLabel,
     FormControl,
-    Zoom
-}                                                from '@mui/material'
-import ErrorOutlineIcon                          from '@mui/icons-material/ErrorOutline'
+    Zoom,
+    OutlinedInputProps
+} from '@mui/material'
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline'
 
-// @ts-ignore
-export interface InputGroupProps extends InputHTMLAttributes<HTMLInputElement> {
-    label: string,
-    error?: { msg?: string }
-    endAdornment?: ReactNode
-    size?: 'small' | 'medium'
+export interface AnimatedInputProps extends Omit<OutlinedInputProps, 'error'> {
+    error?: string
 }
 
-function AnimatedInput( props: InputGroupProps ){
+function AnimatedInput(props: AnimatedInputProps) {
 
-    let { label, type, name, size = 'small', error, onChange, endAdornment } = props
+    let { label, name, size = 'small', error, endAdornment, ...rest } = props
+    
+    name = name ? name : (label as string).toLowerCase().replace(' ', '')
 
     return (
-        <div className="mb-3">
+        <div className="mt-4">
             <FormControl variant="outlined" fullWidth size="small">
-                <InputLabel htmlFor={ name } className="!text-sm !text-gray-500 !duration-500" error={ !! error }>
-                    { error && <ErrorOutlineIcon fontSize="small" className="!text-red-600 mr-1 !text-[16px]"/> }
-                    { label }
+                <InputLabel htmlFor={name} className="!text-sm !text-gray-500 !duration-500" error={!!error}>
+                    {error && <ErrorOutlineIcon fontSize="small" className="!text-red-600 mr-1 !text-[16px]" />}
+                    {label}
                 </InputLabel>
                 <OutlinedInput
-                    id={ name }
-                    label={ label }
-                    type={ type }
-                    name={ name }
-                    classes={ {
+                    id={name}
+                    label={label}
+                    name={name}
+                    classes={{
                         input: 'text-sm text-gray-700'
-                    } }
-                    endAdornment={ endAdornment }
-                    error={ !! error }
-                    onChange={ onChange }
-                    size={ size }
+                    }}
+                    error={!!error}
+                    size={size}
+                    {...rest}
                 />
-                { error && (
+                {error && (
                     <Zoom in>
                         <span className="flex items-center">
                             <p className="font-medium text-red-600 text-[12px]">
-                                { error.msg }
+                                {error}
                             </p>
                         </span>
                     </Zoom>
-                ) }
+                )}
             </FormControl>
         </div>
     )

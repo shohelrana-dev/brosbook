@@ -6,7 +6,7 @@ export default async function ensureServerSideAuth( ctx: GetServerSidePropsConte
     try {
         await isUserAuthenticated( ctx )
     } catch ( e ) {
-        redirect( ctx, 'auth/login' )
+        redirect( ctx, '/auth/login' )
     }
     return { props: {} }
 }

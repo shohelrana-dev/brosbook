@@ -8,7 +8,7 @@ function LeftSidebar() {
     const router = useRouter()
 
     return (
-        <div className="w-4/12 p-4 lg:border-r-2 border-theme-gray">
+        <div className="box w-4/12 p-4 lg:border-r-2 border-theme-gray">
             <Link href="/account/profile">
                 <a className={ classNames( 'button text-left mb-2', {
                     "button-blue cursor-auto": router.pathname.endsWith( 'profile' )

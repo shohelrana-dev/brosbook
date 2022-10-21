@@ -1,48 +1,48 @@
 import React, { FormEvent, Fragment, useEffect, useState } from 'react'
-import { useRouter }                                       from "next/router"
-import Link                                                from "next/link"
-import Head                                                from "next/head"
-import { LinearProgress }                                  from "@mui/material"
-import { Lock }                                            from "@mui/icons-material"
-import { toast }                                           from "react-toastify"
+import { useRouter } from "next/router"
+import Link from "next/link"
+import Head from "next/head"
+import { LinearProgress } from "@mui/material"
+import { Lock } from "@mui/icons-material"
+import { toast } from "react-toastify"
 
-import PrimaryButton                from "@components/common/PrimaryButton"
+import PrimaryButton from "@components/common/PrimaryButton"
 import { useResetPasswordMutation } from "@services/authApi"
-import PasswordInput                from "@components/common/PasswordInput"
-import { ResetPasswordErrors }      from "@interfaces/auth.interfaces"
+import PasswordInput from "@components/common/PasswordInput"
+import { ResetPasswordErrors } from "@interfaces/auth.interfaces"
 
-function ResetPassword(){
+function ResetPassword() {
     //hooks
-    const router                         = useRouter()
-    const [resetPassword, { isLoading }] = useResetPasswordMutation()
+    const router = useRouter()
+    const [resetPassword, { isLoading, isSuccess }] = useResetPasswordMutation()
 
-    const [inputErrors, setInputErrors]         = useState<ResetPasswordErrors>( {} )
-    const [password, setPassword]               = useState<string>( '' )
-    const [confirmPassword, setConfirmPassword] = useState<string>( '' )
+    const [inputErrors, setInputErrors] = useState<ResetPasswordErrors>({})
+    const [password, setPassword] = useState<string>('')
+    const [confirmPassword, setConfirmPassword] = useState<string>('')
 
-    useEffect( () => {
+    useEffect(() => {
         const { email, key } = router.query
-        if( ! email || ! key ){
-            router.push( '/auth/login' )
-            toast.error( 'Email or verification key missing.' )
+        if (!email || !key) {
+            router.push('/auth/login')
+            toast.error('Email or verification key missing.')
         }
-    }, [router] )
+    }, [router])
 
     //handle form submit
-    async function submitForm( event: FormEvent<HTMLFormElement> ){
+    async function submitForm(event: FormEvent) {
         event.preventDefault()
 
         const email = router.query.email as string
-        const key   = router.query.key as string
+        const key = router.query.key as string
 
         try {
-            await resetPassword( { password, confirmPassword, email, key } ).unwrap()
-            toast.success( 'Your login password has been changed.' )
-            router.push( '/auth/login' )
-        } catch ( err: any ) {
-            console.error( err )
-            if( err?.data?.errors ) setInputErrors( err.data.errors )
-            toast.error( err?.data?.message )
+            await resetPassword({ password, confirmPassword, email, key }).unwrap()
+            toast.success('Your login password has been changed.')
+            router.push('/auth/login')
+        } catch (err: any) {
+            console.error(err)
+            if (err?.data?.errors) setInputErrors(err.data.errors)
+            toast.error(err?.data?.message)
         }
     }
 
@@ -54,11 +54,11 @@ function ResetPassword(){
 
             <div className="h-screen flex flex-col bg-theme-gray">
                 <div className="w-90 mx-auto mt-12 lg:mt-28">
-                    { isLoading && <LinearProgress/> }
+                    {isLoading || isSuccess && <LinearProgress />}
 
                     <div className="auth-box">
                         <div className="text-center mb-2">
-                            <Lock fontSize="large"/>
+                            <Lock fontSize="large" />
                         </div>
                         <h1 className="text-lg text-center mb-4 font-medium">Create a strong password</h1>
                         <small className="block text-gray-500 text-center mb-2">
@@ -66,24 +66,24 @@ function ResetPassword(){
                             Your password must be at least six characters.
                         </small>
 
-                        <form method="post" onSubmit={ submitForm }>
+                        <form method="post" onSubmit={submitForm}>
                             <PasswordInput
                                 label="Password"
-                                name="password"
-                                error={ inputErrors.password }
-                                onChange={ ( e ) => setPassword( e.target.value ) }
+                                value={password}
+                                error={inputErrors.password?.msg}
+                                onChange={(e) => setPassword(e.target.value)}
                             />
                             <PasswordInput
                                 label="Confirm Password"
-                                name="confirmPassword"
-                                error={ inputErrors.confirmPassword }
-                                onChange={ ( e ) => setConfirmPassword( e.target.value ) }
+                                value={confirmPassword}
+                                error={inputErrors.confirmPassword?.msg}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
                             />
-                            <PrimaryButton type="submit" buttonTitle="Reset" isLoading={ isLoading }/>
+                            <PrimaryButton fullWidth type="submit" title="Reset" isLoading={isLoading || isSuccess} />
                         </form>
                     </div>
 
-                    <div className="bg-white p-6 border border-gray-300 text-center mt-2">
+                    <div className="auth-box text-center mt-2 py-6">
                         <p className="text-gray-800">
                             Go back?
                             <Link href="/auth/login">

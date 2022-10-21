@@ -30,7 +30,7 @@ function CreatePostForm(){
 
         try {
             await createPost( formData ).unwrap()
-            toast.error( 'Post has been published.' )
+            toast.success( 'Post has been published.' )
             if( postBody ) setPostBody( '' )
             if( selectedImage ) setSelectedImage( null )
         } catch ( err: any ) {

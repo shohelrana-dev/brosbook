@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react'
-import NavBar               from "@components/common/NavBar"
-import Sidebar              from "@components/common/Sidebar"
+import NavBar from "@components/common/NavBar"
+import Sidebar from "@components/common/Sidebar"
 
 interface LayoutProps {
     children: ReactNode
@@ -8,28 +8,32 @@ interface LayoutProps {
 }
 
 
-function MainLayout( { children, showSidebar = true }: LayoutProps ){
-    if( ! showSidebar ) return (
+function MainLayout({ children, showSidebar = true }: LayoutProps) {
+    if (!showSidebar) return (
         <>
-            <NavBar/>
+            <NavBar />
             <div className="bg-theme-gray">
                 <main className="max-w-2xl mx-auto min-h-[93vh] flex">
-                    { children }
+                    <div className="w-full">
+                        {children}
+                    </div>
                 </main>
             </div>
         </>
     )
     else return (
         <>
-            <NavBar/>
+            <NavBar />
             <div className="bg-theme-gray">
-                <main className="max-w-4xl mx-auto min-h-[93vh] flex">
-                    <div className="w-8/12 mx-5">
-                        { children }
+                <main className="max-w-4xl mx-auto min-h-[93vh]">
+                    <div className="w-full flex">
+                        <div className="w-8/12 mx-5">
+                            {children}
+                        </div>
+                        <aside className="w-4/12 mt-6">
+                            <Sidebar />
+                        </aside>
                     </div>
-                    <aside className="w-4/12 mt-6">
-                        <Sidebar/>
-                    </aside>
                 </main>
             </div>
         </>

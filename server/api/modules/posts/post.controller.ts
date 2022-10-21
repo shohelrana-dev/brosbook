@@ -49,7 +49,7 @@ export default class PostController {
 
     public unlike = async( req: Request, res: Response, next: NextFunction ): Promise<void> => {
         try {
-            const unlike = await this.postService.unlike( req )
+            await this.postService.unlike( req )
 
             res.json( { message: 'Unlike success' } )
         } catch ( err ) {

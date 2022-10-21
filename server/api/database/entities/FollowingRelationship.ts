@@ -19,11 +19,11 @@ export default class FollowingRelationship extends BaseEntity {
     followerUserId: number
 
     @OneToOne( () => User )
-    @JoinColumn( { name: 'followingId', referencedColumnName: 'id' } )
+    @JoinColumn( { name: 'followingUserId', referencedColumnName: 'id' } )
     following: User
 
     @OneToOne( () => User )
-    @JoinColumn( { name: 'followerId', referencedColumnName: 'id' } )
+    @JoinColumn( { name: 'followerUserId', referencedColumnName: 'id' } )
     follower: User
 
     @CreateDateColumn()

@@ -4,70 +4,72 @@ class AccountValidation {
 
     public updateProfile = (): ValidationChain[] => {
         return [
-            body( 'firstName' )
+            body('firstName')
                 .trim()
-                .isLength( { min: 1 } )
-                .withMessage( 'First Name is required.' ),
+                .isLength({ min: 1 })
+                .withMessage('First Name required.'),
 
-            body( 'lastName' )
+            body('lastName')
                 .trim()
-                .isLength( { min: 1 } )
-                .withMessage( 'Last Name is required.' ),
+                .isLength({ min: 1 })
+                .withMessage('Last Name required.'),
 
-            body( 'bio' )
+            body('username')
                 .trim()
-                .isLength( { min: 5 } )
-                .withMessage( 'Bio should be at least min 5 characters.' ),
+                .isLength({ min: 1 })
+                .withMessage('Username required.'),
 
-            body( 'phone' )
+            body('bio')
                 .trim()
-                .isMobilePhone( 'bn-BD' )
-                .withMessage( 'Phone number should be bangladeshi mobile number.' ),
+                .isLength({ min: 5 })
+                .withMessage('Bio should be at least min 5 characters.'),
 
-            body( 'location' )
+            body('phone')
                 .trim()
-                .isLength( { min: 1 } )
-                .withMessage( 'Location is required.' ),
+                .isMobilePhone('bn-BD')
+                .withMessage('Phone number should be bangladeshi mobile number.'),
 
-            body( 'birthdate' )
-                .isLength( { min: 1 } )
-                .withMessage( 'Birthdate is required.' )
-                .isDate()
-                .withMessage( 'Birthdate should be valid date' ),
-
-            body( 'gender' )
+            body('location')
                 .trim()
-                .custom( ( value ) => {
-                    if ( value !== 'male' && value !== 'female' ) {
-                        throw new Error( 'Gender is required.' )
-                    }
-                    return true
-                } )
+                .isLength({ min: 1 })
+                .withMessage('Location required.'),
+
+            body('birthdate')
+                .isLength({ min: 1 })
+                .withMessage('Birthdate required.')
+                .isISO8601()
+                .toDate()
+                .withMessage('Birthdate should be valid date'),
+
+            body('gender')
+                .trim()
+                .isLength({ min: 1 })
+                .withMessage('Gender required.')
         ]
     }
 
     public changePassword = (): ValidationChain[] => {
         return [
-            body( 'oldPassword' )
+            body('currentPassword')
                 .trim()
-                .isLength( { min: 1 } )
-                .withMessage( 'Old Password is required.' ),
+                .isLength({ min: 1 })
+                .withMessage('Current Password required.'),
 
-            body( 'newPassword' )
+            body('newPassword')
                 .trim()
-                .isLength( { min: 1 } )
-                .withMessage( 'New Password is required.' ),
+                .isLength({ min: 1 })
+                .withMessage('New Password required.'),
 
-            body( 'confirmNewPassword' )
+            body('confirmNewPassword')
                 .trim()
-                .isLength( { min: 1 } )
-                .withMessage( 'Confirm New Password is required.' )
-                .custom( ( value, { req } ) => {
-                    if ( req.body.newPassword !== value ) {
-                        throw new Error( 'New password and confirm new password should be the same.' )
+                .isLength({ min: 1 })
+                .withMessage('Confirm New Password required.')
+                .custom((value, { req }) => {
+                    if (req.body.newPassword !== value) {
+                        throw new Error('New password and confirm new password should be the same.')
                     }
                     return true
-                } )
+                })
         ]
     }
 }

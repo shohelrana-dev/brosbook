@@ -8,9 +8,9 @@ export default function errorMiddleware( error: HttpError, req: Request, res: Re
     const meta    = error.meta || {}
     const message = error.message || 'Ops! An unexpected error occurred during the request.'
 
-    console.log( '=======================Error message from server====================' )
-    console.log( error.message )
-    console.log( '=======================Error message from server====================' )
+    console.log( '=======================Error log from server====================' )
+    console.log( error )
+    console.log( '=======================Error log from server====================' )
 
     res.status( status ).json( {
         status,

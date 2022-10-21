@@ -1,92 +1,65 @@
 import { Request } from "express"
-import bcrypt      from "bcrypt"
+import bcrypt from "bcrypt"
 
 import HttpError from "@utils/httpError"
-import Profile   from "@entities/Profile"
-import User             from "@entities/User"
-import httpStatus       from "http-status"
-import savePhoto        from "@utils/savePhoto"
-import { PhotoType }    from "@api/enums"
+import Profile from "@entities/Profile"
+import User from "@entities/User"
+import httpStatus from "http-status"
+import savePhoto from "@utils/savePhoto"
 import { UploadedFile } from "express-fileupload"
 
 export default class AccountService {
 
-    public async updateProfile( req: Request ){
-        const { firstName, lastName, bio, phone, location, birthdate, gender } = req.body
-        const { profilePhoto, coverPhoto }                                     = req.files || {}
+    public async updateProfile(req: Request): Promise<User> {
+        const { firstName, lastName, username, bio, phone, location, birthdate, gender } = req.body
 
 
-        //save profile photo
-        const profilePhotoUrl = profilePhoto ? await savePhoto( {
-            file: profilePhoto as UploadedFile,
-            type: PhotoType.PROFILE,
-            userId: req.user.id
-        } ) : null
-        //save cover photo
-        const coverPhotoUrl   = coverPhoto ? await savePhoto( {
-            file: coverPhoto as UploadedFile,
-            type: PhotoType.COVER,
-            userId: req.user.id
-        } ) : null
+        let profile = await Profile.findOneBy({ userId: req.user.id })
 
-        let profile = await Profile.findOneBy( { username: req.user.username } )
-        if( ! profile ){
-            if( coverPhotoUrl ){
-                Profile.create( {
-                    username: req.user.username,
-                    bio,
-                    phone,
-                    location,
-                    gender,
-                    coverPhoto: coverPhotoUrl
-                } )
-            } else{
-                profile = Profile.create( { username: req.user.username, bio, phone, location, gender } )
-            }
-        } else{
-            profile.bio       = bio
-            profile.phone     = phone
-            profile.location  = location
+        if (!profile) {
+            profile = Profile.create({ userId: req.user.id, bio, phone, location, gender })
+        } else {
+            profile.bio = bio
+            profile.phone = phone
+            profile.location = location
             profile.birthdate = birthdate
-            profile.gender    = gender
-            if( coverPhotoUrl ){
-                profile.coverPhoto = coverPhotoUrl
-            }
+            profile.gender = gender
         }
 
         try {
-            await profile.save()
-            if( profilePhotoUrl ){
-                return await User.update( { username: req.user.username }, {
-                    firstName, lastName, photo: profilePhotoUrl
-                } )
-            }
-            return await User.update( { username: req.user.username }, {
-                firstName, lastName
-            } )
-        } catch ( e ) {
-            console.log( e )
-            throw new HttpError( "Profile couldn't be updated", httpStatus.CONFLICT )
+            profile = await profile.save()
+
+            const user = await User.findOneBy({ id: req.user.id })
+            user.firstName = firstName
+            user.lastName = lastName
+            user.username = username
+
+            await user.save()
+            user.profile = profile
+
+            return user
+        } catch (err) {
+            throw new HttpError(httpStatus.BAD_REQUEST, "Account profile couldn't be updated")
         }
     }
 
-    public async changePassword( req: Request ){
-        const { oldPassword, newPassword } = req.body
+    public async changePassword(req: Request) {
+        const { currentPassword, newPassword } = req.body
 
-        const user = await User.findOneBy( { username: req.user.username } )
+        const user = await User.findOneBy({ username: req.user.username })
 
-        if( ! user ) throw new HttpError( "Password couldn't be change", httpStatus.CONFLICT )
+        if (!user) throw new HttpError(httpStatus.CONFLICT, "Password couldn't be change")
 
-        const isMatched = await bcrypt.compare( oldPassword, user.password )
+        const isMatched = await bcrypt.compare(currentPassword, user.password)
 
-        if( ! isMatched ) throw new HttpError( "Old password didn't match", httpStatus.UNPROCESSABLE_ENTITY )
+        if (!isMatched) throw new HttpError(httpStatus.UNPROCESSABLE_ENTITY, "Current password didn't match")
 
-        user.password = await bcrypt.hash( newPassword, 6 )
+        user.password = await bcrypt.hash(newPassword, 6)
 
         try {
             await user.save()
-        } catch ( err ) {
-            throw new HttpError( "Password couldn't be change", httpStatus.CONFLICT )
+        } catch (err) {
+            throw new HttpError(httpStatus.CONFLICT, "Password couldn't be changed")
         }
     }
 }

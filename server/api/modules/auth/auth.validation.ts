@@ -9,23 +9,23 @@ class AuthValidation {
             check( 'firstName' )
                 .trim()
                 .isLength( { min: 1 } )
-                .withMessage( 'First Name is required!' ),
+                .withMessage( 'First Name required!' ),
 
             check( 'lastName' )
                 .trim()
                 .isLength( { min: 1 } )
-                .withMessage( 'Last Name is required!' ),
+                .withMessage( 'Last Name required!' ),
 
             check( 'username' )
                 .trim()
                 .isLength( { min: 1 } )
-                .withMessage( 'Username is required!' )
+                .withMessage( 'Username required!' )
                 .custom( this.checkUsernameNotExists ),
 
             check( 'email' )
                 .trim()
                 .isLength( { min: 1 } )
-                .withMessage( 'Email is required!' )
+                .withMessage( 'Email required!' )
                 .isEmail()
                 .withMessage( 'Email address is not valid!' )
                 .custom( this.checkEmailNotExists ),
@@ -33,7 +33,7 @@ class AuthValidation {
             check( 'password' )
                 .trim()
                 .isLength( { min: 1 } )
-                .withMessage( 'Password is required!' )
+                .withMessage( 'Password required!' )
                 .isLength( { min: 4, max: 16 } )
                 .withMessage( 'Password must be min 4 to 16 characters' )
         ]
@@ -44,13 +44,13 @@ class AuthValidation {
             check( 'username' )
                 .trim()
                 .isLength( { min: 1 } )
-                .withMessage( 'Username is required!' )
+                .withMessage( 'Username required!' )
                 .custom( this.checkUsernameExists ),
 
             check( 'password' )
                 .trim()
                 .isLength( { min: 1 } )
-                .withMessage( 'Password is required!' )
+                .withMessage( 'Password required!' )
                 .custom( this.checkValidPassword ),
         ]
     }
@@ -60,7 +60,7 @@ class AuthValidation {
             check( 'email' )
                 .trim()
                 .isLength( { min: 1 } )
-                .withMessage( 'Email is required!' )
+                .withMessage( 'Email required!' )
                 .isEmail()
                 .withMessage( 'Invalid email address!' )
                 .custom( this.checkEmailExists ),
@@ -72,14 +72,14 @@ class AuthValidation {
             check( 'password' )
                 .trim()
                 .isLength( { min: 1 } )
-                .withMessage( 'Password is required!' )
+                .withMessage( 'Password required!' )
                 .isLength( { min: 4, max: 16 } )
                 .withMessage( 'Password must be min 4 to 16 characters' ),
 
             check( 'confirmPassword' )
                 .trim()
                 .isLength( { min: 1 } )
-                .withMessage( 'Confirm Password is required!' )
+                .withMessage( 'Confirm Password required!' )
                 .custom( ( value, { req } ) => {
                     if( value !== req.body.password ){
                         throw new Error( 'Passwords must be same' )

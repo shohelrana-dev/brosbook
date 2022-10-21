@@ -3,51 +3,51 @@ import {
     BaseEntity, BeforeInsert,
     Column, CreateDateColumn, Entity, JoinColumn, OneToMany,
     OneToOne, PrimaryGeneratedColumn, UpdateDateColumn
-}                            from "typeorm"
-import bcrypt                from 'bcrypt'
-import Profile               from "./Profile"
+} from "typeorm"
+import bcrypt from 'bcrypt'
+import Profile from "./Profile"
 import FollowingRelationship from "./FollowingRelationship"
 
-@Entity( 'users' )
+@Entity('users')
 class User extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column( { length: 20, nullable: false } )
+    @Column({ length: 20, nullable: false })
     firstName: string
 
-    @Column( { length: 20, nullable: false } )
+    @Column({ length: 20, nullable: false })
     lastName: string
 
-    @Column( { unique: true, length: 25, nullable: false } )
+    @Column({ unique: true, length: 25, nullable: false })
     username: string
 
-    @Column( { unique: true, length: 50, nullable: false } )
+    @Column({ unique: true, length: 50, nullable: false })
     email: string
 
-    @Column( { length: 100, nullable: false } )
+    @Column({ length: 100, nullable: false })
     password: string
 
-    @Column( { nullable: true } )
+    @Column({ nullable: true })
     photo: string
 
-    @Column( { type: 'tinyint', default: 0 } )
+    @Column({ type: 'tinyint', default: 0 })
     active: number
 
-    @Column( { type: 'datetime', nullable: true } )
+    @Column({ type: 'datetime', nullable: true })
     emailVerifiedAt: string
 
-    @Column( { nullable: true } )
+    @Column({ nullable: true })
     verificationKey: string
 
-    @OneToOne( () => Profile )
-    @JoinColumn()
+    @OneToOne(() => Profile)
+    @JoinColumn({ name: 'id', foreignKeyConstraintName: 'userId' })
     profile: Profile
 
-    @OneToMany( type => FollowingRelationship, follow => follow.follower )
+    @OneToMany(type => FollowingRelationship, follow => follow.follower)
     followers: FollowingRelationship[]
 
-    @OneToMany( type => FollowingRelationship, follow => follow.following )
+    @OneToMany(type => FollowingRelationship, follow => follow.following)
     following: FollowingRelationship[]
 
     @CreateDateColumn()
@@ -62,33 +62,33 @@ class User extends BaseEntity {
     hasEmailVerified: boolean
 
     @BeforeInsert()
-    async makePasswordHash(){
-        this.password = await bcrypt.hash( this.password, 6 )
+    async makePasswordHash() {
+        this.password = await bcrypt.hash(this.password, 6)
     }
 
     @BeforeInsert()
-    generateUsernameFromEmail(){
-        if( ! this.username ){
-            const nameParts = this.email.split( "@" )
-            this.username   = nameParts[0].toLowerCase()
+    generateUsernameFromEmail() {
+        if (!this.username) {
+            const nameParts = this.email.split("@")
+            this.username = nameParts[0].toLowerCase()
         }
     }
 
     @BeforeInsert()
-    setDefaultProfilePhotoIfNotGiven(){
-        if( ! this.photo ){
+    setDefaultProfilePhotoIfNotGiven() {
+        if (!this.photo) {
             this.photo = process.env.SERVER_URL! + '/images/avatar.png'
         }
     }
 
     @AfterLoad()
-    setFullName(){
-        this.fullName = `${ this.firstName } ${ this.lastName }`
+    setFullName() {
+        this.fullName = `${this.firstName} ${this.lastName}`
     }
 
     @AfterLoad()
-    setHasEmailVerified(){
-        this.hasEmailVerified = this.emailVerifiedAt !== null && !! this.emailVerifiedAt
+    setHasEmailVerified() {
+        this.hasEmailVerified = this.emailVerifiedAt !== null && !!this.emailVerifiedAt
     }
 }
 

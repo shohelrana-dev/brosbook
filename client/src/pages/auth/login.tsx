@@ -43,10 +43,6 @@ function Login(){
         }
     }
 
-    if( isSuccess ){
-        return <LinearProgress/>
-    }
-
     return (
         <Fragment>
             <Head>
@@ -55,7 +51,7 @@ function Login(){
 
             <div className="h-screen flex flex-col bg-theme-gray">
                 <div className="w-90 mx-auto mt-12 lg:mt-28">
-                    { isLoading && <LinearProgress/> }
+                    { isLoading || isSuccess && <LinearProgress/> }
 
                     <div className="auth-box">
                         <div className="text-center mb-2">
@@ -66,17 +62,17 @@ function Login(){
                         <form method="post" onSubmit={ onLoginFormSubmit }>
                             <AnimatedInput
                                 label="Username or email"
-                                name="username"
-                                error={ inputErrors.username }
+                                value={username}
+                                error={ inputErrors?.username?.msg }
                                 onChange={ ( e ) => setUsername( e.target.value ) }
                             />
                             <PasswordInput
                                 label="Password"
-                                name="password"
-                                error={ inputErrors.password }
+                                value={password}
+                                error={ inputErrors?.password?.msg }
                                 onChange={ ( e ) => setPassword( e.target.value ) }
                             />
-                            <PrimaryButton type="submit" buttonTitle="Log In" isLoading={ isLoading }/>
+                            <PrimaryButton fullWidth  type="submit" title="Log In" isLoading={ isLoading || isSuccess }/>
                         </form>
 
                         <Divider className="text-gray-700 !my-4">
