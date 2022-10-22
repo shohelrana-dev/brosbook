@@ -46,7 +46,7 @@ function CreatePostForm(){
     }
 
     return (
-        <div className="relative">
+        <div className="relative box p-6">
             { isLoading && <div
                 className="absolute left-0 top-0 w-full h-full bg-gray-100 opacity-50 flex justify-center items-center">
                 <CircularProgress/>

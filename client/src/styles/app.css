@@ -23,7 +23,7 @@
     }
 
     .button-bordered {
-        @apply button text-blue-500 bg-white border border-theme-blue
+        @apply button text-blue-500 bg-white border border-theme-blue hover:bg-gray-100
     }
 
     .box {

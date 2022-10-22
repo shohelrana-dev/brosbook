@@ -6,12 +6,12 @@ import Hashids                 from "hashids"
 import { getRepository, Like } from "typeorm"
 
 import HttpError    from "@utils/httpError"
-import Conversation from "@entities/Conversation"
-import Message                             from "@entities/Message"
-import Reaction                            from "@entities/Reaction"
+import Conversation from "@api/entities/Conversation"
+import Message                             from "@api/entities/Message"
+import Reaction                            from "@api/entities/Reaction"
 import { MessageDataDto, ReactionDataDto } from "@api/types/index.types"
 import httpStatus                          from "http-status"
-import User                                from "@entities/User"
+import User                                from "@api/entities/User"
 
 const hashids = new Hashids()
 

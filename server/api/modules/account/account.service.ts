@@ -2,45 +2,37 @@ import { Request } from "express"
 import bcrypt from "bcrypt"
 
 import HttpError from "@utils/httpError"
-import Profile from "@entities/Profile"
-import User from "@entities/User"
+import Profile from "@api/entities/Profile"
+import User from "@api/entities/User"
 import httpStatus from "http-status"
-import savePhoto from "@utils/savePhoto"
-import { UploadedFile } from "express-fileupload"
 
 export default class AccountService {
 
     public async updateProfile(req: Request): Promise<User> {
         const { firstName, lastName, username, bio, phone, location, birthdate, gender } = req.body
 
-
         let profile = await Profile.findOneBy({ userId: req.user.id })
-
         if (!profile) {
-            profile = Profile.create({ userId: req.user.id, bio, phone, location, gender })
-        } else {
-            profile.bio = bio
-            profile.phone = phone
-            profile.location = location
-            profile.birthdate = birthdate
-            profile.gender = gender
+            profile = new Profile()
         }
 
-        try {
-            profile = await profile.save()
+        profile.userId = req.user.id
+        profile.bio = bio
+        profile.phone = phone
+        profile.location = location
+        profile.birthdate = birthdate
+        profile.gender = gender
+        await profile.save()
 
-            const user = await User.findOneBy({ id: req.user.id })
-            user.firstName = firstName
-            user.lastName = lastName
-            user.username = username
+        const user = await User.findOneBy({ id: req.user.id })
+        user.firstName = firstName
+        user.lastName = lastName
+        user.username = username
+        await user.save()
 
-            await user.save()
-            user.profile = profile
+        user.profile = profile
 
-            return user
-        } catch (err) {
-            throw new HttpError(httpStatus.BAD_REQUEST, "Account profile couldn't be updated")
-        }
+        return user
     }
 
     public async changePassword(req: Request) {

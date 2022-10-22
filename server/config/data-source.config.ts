@@ -8,7 +8,7 @@ const username: string  = process.env.DB_USERNAME!
 const password: string  = process.env.DB_PASSWORD!
 const database: string  = process.env.DB_DATABASE!
 
-export const AppDataSource = new DataSource( {
+export const appDataSource = new DataSource( {
     type: dbConnection,
     host: host,
     port: port,
@@ -19,12 +19,6 @@ export const AppDataSource = new DataSource( {
     logging: false,
     migrationsRun: false,
     entities: [
-        path.join( __dirname, '/../api/database/entities/**/*.{ts,js}' )
-    ],
-    migrations: [
-        path.join( __dirname, '/../api/database/migrations/**/*.{ts,js}' )
-    ],
-    subscribers: [
-        path.join( __dirname, '/../api/database/subscribers/**/*.{ts,js}' )
+        path.join( __dirname, '/../api/entities/**/*.{ts,js}' )
     ]
 } )

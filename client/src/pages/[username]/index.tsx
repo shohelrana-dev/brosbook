@@ -1,56 +1,54 @@
 import React, { useEffect, useState } from "react"
-import useInfiniteScroll              from "react-infinite-scroll-hook"
-import { useRouter }                  from "next/router"
+import useInfiniteScroll from "react-infinite-scroll-hook"
+import { useRouter } from "next/router"
 
-import ProfileLayout                                       from "@components/layouts/ProfileLayout"
-import PostCard                                            from "@components/home/PostCard"
+import ProfileLayout from "@components/layouts/ProfileLayout"
+import PostCard from "@components/home/PostCard"
 import { useGetUserPostsQuery, useGetUserQuery, usersApi } from "@services/usersApi"
-import { wrapper }                                         from "@store/store"
-import { Post }                                            from "@interfaces/posts.interfaces"
-import { Facebook }                                        from "react-content-loader"
-import NotFound                                            from "@pages/404"
-import { getCookie }                                       from "cookies-next";
-import Cookies                                             from "js-cookie";
+import { wrapper } from "@store/store"
+import { Post } from "@interfaces/posts.interfaces"
+import { Facebook } from "react-content-loader"
+import NotFound from "@pages/404"
 
-export default function UserProfilePage(){
+export default function UserProfilePage() {
     //hooks
-    const router                     = useRouter()
-    const [page, setPage]            = useState<number>( 1 )
-    const { data: user }             = useGetUserQuery( router.query.username as string )
-    const { isLoading, data: posts } = useGetUserPostsQuery( { userId: user?.id!, page } )
-    const [postItems, setPostItems]  = useState<Post[]>( posts?.items! || [] )
+    const router = useRouter()
+    const [page, setPage] = useState<number>(1)
+    const { data: user } = useGetUserQuery(router.query.username as string)
+    const { isLoading, data: posts } = useGetUserPostsQuery({ userId: user?.id!, page })
+    const [postItems, setPostItems] = useState<Post[]>(posts?.items! || [])
 
-    const [scrollBottomRef] = useInfiniteScroll( {
+    const [scrollBottomRef] = useInfiniteScroll({
         loading: isLoading,
-        hasNextPage: !! posts?.nextPage,
-        onLoadMore: async() => setPage( posts?.nextPage! ),
-    } )
+        hasNextPage: !!posts?.nextPage,
+        onLoadMore: async () => setPage(posts?.nextPage!),
+    })
 
-    useEffect( () => {
-        if( posts?.currentPage !== 1 ){
-            setPostItems( ( prevState ) => [...prevState, ...posts?.items! || []] )
+    useEffect(() => {
+        if (posts?.currentPage !== 1) {
+            setPostItems((prevState) => [...prevState, ...posts?.items! || []])
         }
-    }, [posts] )
+    }, [posts])
 
-    if( ! user ) return <NotFound/>
+    if (!user) return <NotFound />
 
     return (
         <ProfileLayout>
             <>
-                { postItems && postItems.length > 0 ? postItems.map( post => (
-                    <PostCard post={ post } key={ post.id }/>
-                ) ) : (
-                    <p className="box text-center mt-5 py-10">{ user?.fullName } has not posted yet.</p>
-                ) }
+                {postItems && postItems.length > 0 ? postItems.map(post => (
+                    <PostCard post={post} key={post.id} />
+                )) : (
+                    <p className="box text-center mt-5 py-10">{user?.fullName} has not posted yet.</p>
+                )}
 
-                { posts?.nextPage && (
-                    <div className="box mt-5 p-5" ref={ scrollBottomRef }>
-                        <Facebook/>
-                        <Facebook/>
+                {posts?.nextPage && (
+                    <div className="box mt-5 p-5" ref={scrollBottomRef}>
+                        <Facebook />
+                        <Facebook />
                     </div>
-                ) }
+                )}
                 {
-                    postItems.length > 0 && ! posts?.nextPage && ! isLoading && (
+                    postItems.length > 0 && !posts?.nextPage && !isLoading && (
                         <p className="box text-center mt-5 py-10">No more posts</p>
                     )
                 }
@@ -59,9 +57,9 @@ export default function UserProfilePage(){
     )
 }
 
-export const getServerSideProps = wrapper.getServerSideProps( ( store ) => async( ctx ) => {
-    const { data: user } = await store.dispatch( usersApi.endpoints.getUser.initiate( ctx.params?.username as string ) )
-    if( user ) await store.dispatch( usersApi.endpoints.getUserPosts.initiate( { userId: user?.id!, page: 1 } ) )
+export const getServerSideProps = wrapper.getServerSideProps((store) => async (ctx) => {
+    const { data: user } = await store.dispatch(usersApi.endpoints.getUser.initiate(ctx.params?.username as string))
+    if (user) await store.dispatch(usersApi.endpoints.getUserPosts.initiate({ userId: user?.id!, page: 1 }))
 
     return { props: {} }
-} )
+})

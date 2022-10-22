@@ -3,16 +3,16 @@ import path             from "path"
 import { v4 as uuid }   from "uuid"
 import { UploadedFile } from "express-fileupload"
 
-import Post              from "@entities/Post"
-import Like              from "@entities/Like"
+import Post              from "@api/entities/Post"
+import Like              from "@api/entities/Like"
 import { paginateMeta }  from "@utils/paginateMeta"
 import { PaginateMeta }  from "@api/types/index.types"
-import { AppDataSource } from "@config/data-source.config"
-import Photo             from "@entities/Photo"
+import { appDataSource } from "@config/data-source.config"
+import Media             from "@api/entities/Media"
 import { PhotoSource }   from "@api/enums";
 
 export default class PostService {
-    private postRepository = AppDataSource.getRepository( Post )
+    private postRepository = appDataSource.getRepository( Post )
 
     public async getManyPost( req: Request ): Promise<{ posts: Post[], meta: PaginateMeta }>{
         const page  = Number( req.query.page ) || 1
@@ -84,10 +84,10 @@ export default class PostService {
             const post = await Post.create( {
                 userId: req.user.id,
                 body: body,
-                photo: imageUrl
+                Media: imageUrl
             } ).save()
 
-            await Photo.create( {
+            await Media.create( {
                 userId: req.user.id,
                 sourceId: post.id,
                 source: PhotoSource.POST,

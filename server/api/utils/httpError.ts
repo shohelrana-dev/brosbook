@@ -1,7 +1,6 @@
-import User from "@entities/User"
+import User from "@api/entities/User"
 
-type ErrorMeta = {
-    errorType?: string,
+type Meta = {
     errors?: {}
     user?: User
 }
@@ -9,11 +8,11 @@ type ErrorMeta = {
 export default class HttpError extends Error {
     public code: number
     public message: string
-    public meta: ErrorMeta
+    public meta: Meta
 
-    constructor( code: number, message: string, meta?: ErrorMeta ){
+    constructor( code: number, message: string, meta?: Meta ){
         super( message )
-        this.code    = code!
+        this.code    = code
         this.message = message
         this.meta    = meta
     }

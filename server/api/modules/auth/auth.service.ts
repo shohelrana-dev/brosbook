@@ -4,17 +4,17 @@ import { LoginTicket, OAuth2Client, TokenPayload } from "google-auth-library"
 import jwt from "jsonwebtoken"
 import { v4 as uuid } from "uuid"
 
-import User from "@entities/User"
+import User from "@api/entities/User"
 import { LoginTokenPayload } from "@api/types/index.types"
 import sendEmail from "@utils/sendEmail"
-import { AppDataSource } from "@config/data-source.config"
-import Photo from "@entities/Photo"
+import { appDataSource } from "@config/data-source.config"
+import Media from "@api/entities/Media"
 import { PhotoSource } from "@api/enums"
 import HttpError from "@utils/httpError"
 import httpStatus from "http-status"
 
 class AuthService {
-    private userRepository = AppDataSource.getRepository(User)
+    private userRepository = appDataSource.getRepository(User)
 
     public async signup(req: Request): Promise<User> {
         const { firstName, lastName, email, username, password } = req.body
@@ -25,15 +25,15 @@ class AuthService {
 
         const emailVerificationKey = uuid()
 
-        const user = await this.userRepository.create({
-            firstName,
-            lastName,
-            email,
-            username,
-            password,
-            verificationKey: emailVerificationKey
-        }).save()
+        const user = new User()
+        user.firstName
+        user.lastName = lastName
+        user.email = email
+        user.username = username
+        user.password = password
+        user.verificationKey = emailVerificationKey
 
+        await this.userRepository.save(user)
 
         AuthService.sendEmailVerificationLink({ email, username, emailVerificationKey })
 
@@ -95,30 +95,30 @@ class AuthService {
         let user = await this.userRepository.findOneBy({ email })
 
         //make user verified
-        if (user && !user.emailVerifiedAt) {
+        if (user && !user.hasEmailVerified) {
             user.emailVerifiedAt = new Date(Date.now()).toISOString()
             await user.save()
         }
 
-        //created user and profile
+        //created user
         if (!user) {
-            user = await this.userRepository.create({
-                firstName: given_name,
-                lastName: family_name,
-                email: email,
-                photo: picture,
-                password: email + process.env.JWT_SECRET!,
-                emailVerifiedAt: new Date(Date.now()).toISOString()
-            }).save()
+            user = new User()
+            user.firstName = given_name
+            user.lastName = family_name
+            user.email = email
+            user.photo = picture
+            user.password = email + process.env.JWT_SECRET!
+            user.emailVerifiedAt = new Date(Date.now()).toISOString()
 
-            await Photo.create({
-                name: 'Google profile photo',
-                userId: user.id,
-                sourceId: user.id,
-                source: PhotoSource.PROFILE,
-                type: 'image/jpg',
-                url: picture
-            }).save()
+            user = await this.userRepository.save(user)
+
+            const media = new Media()
+            media.name = 'Google profile Media'
+            media.userId = user.id
+            media.sourceId = user.id
+            media.source = PhotoSource.PROFILE
+            media.type = 'image/jpg'
+            media.url = picture
         }
 
         return AuthService.generateJwtToken(user)

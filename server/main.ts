@@ -1,6 +1,6 @@
 //dependencies
 import { server }        from '@config/express.config'
-import { AppDataSource } from "@config/data-source.config"
+import { appDataSource } from "@config/data-source.config"
 
 //server run
 const PORT = process.env.SERVER_PORT || 4000;
@@ -10,7 +10,7 @@ server.listen( PORT, async() => {
 
     try {
         //make database connection
-        await AppDataSource.initialize()
+        await appDataSource.initialize()
         console.log( "Data Source has been initialized!" )
     } catch ( err ) {
         console.error( "Error during Data Source initialization", err )

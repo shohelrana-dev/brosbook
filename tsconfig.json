@@ -38,10 +38,9 @@
          "@api/*": ["server/api/*"],
          "@config/*": ["server/config/*"],
          "@startup/*": ["server/startup/*"],
-         "@database/*": ["server/api/modules"],
          "@modules/*": ["server/api/modules/*"],
          "@enums/*": ["server/api/enums/*"],
-         "@entities/*": ["server/api/database/entities/*"],
+         "@entities/*": ["server/api/entities/*"],
          "@middleware/*": ["server/api/middleware/*"],
          "@utils/*": ["server/api/utils/*"]
       }

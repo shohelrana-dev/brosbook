@@ -1,13 +1,13 @@
 import { Request }       from "express"
-import Comment           from "@entities/Comment"
-import Like              from "@entities/Like"
+import Comment           from "@api/entities/Comment"
+import Like              from "@api/entities/Like"
 import { paginateMeta }  from "@utils/paginateMeta"
 import { PaginateMeta }  from "@api/types/index.types"
-import { AppDataSource } from "@config/data-source.config"
-import User              from "@entities/User"
+import { appDataSource } from "@config/data-source.config"
+import User              from "@api/entities/User"
 
 export default class CommentService {
-    private commentRepository = AppDataSource.getRepository( Comment )
+    private commentRepository = appDataSource.getRepository( Comment )
 
     public async getMany( req: Request ): Promise<{ comments: Comment[], meta: PaginateMeta }>{
         const postId = req.params.postId

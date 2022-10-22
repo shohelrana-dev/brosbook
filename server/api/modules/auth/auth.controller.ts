@@ -69,7 +69,7 @@ class AuthController {
         try {
             await this.authService.resetPassword( req )
 
-            res.json( { message: 'Password has been changed successfully' } )
+            res.json( { message: 'Password has been changed' } )
         } catch ( err ) {
             next( err )
         }
