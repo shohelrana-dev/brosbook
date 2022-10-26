@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express"
 import CommentService                      from "./comment.service"
 import httpStatus from "http-status";
-import HttpError  from "@utils/httpError";
+import HttpException  from "@exceptions/HttpException";
 
 export default class CommentController {
     constructor( private readonly commentService: CommentService ){
@@ -13,7 +13,7 @@ export default class CommentController {
 
             res.json( { items: comments, ...meta } )
         } catch ( err ) {
-            next( new HttpError( httpStatus.CONFLICT, err.message ) )
+            next( new HttpException( httpStatus.CONFLICT, err.message ) )
         }
     }
 
@@ -23,7 +23,7 @@ export default class CommentController {
 
             res.status( 201 ).json( comment )
         } catch ( err ) {
-            next( new HttpError( httpStatus.CONFLICT, err.message ) )
+            next( new HttpException( httpStatus.CONFLICT, err.message ) )
         }
     }
 
@@ -33,7 +33,7 @@ export default class CommentController {
 
             res.json( like )
         } catch ( err ) {
-            next( new HttpError( httpStatus.CONFLICT, err.message ) )
+            next( new HttpException( httpStatus.CONFLICT, err.message ) )
         }
     }
 
@@ -43,7 +43,7 @@ export default class CommentController {
 
             res.json( { message: 'Unlike success' } )
         } catch ( err ) {
-            next( new HttpError( httpStatus.CONFLICT, err.message ) )
+            next( new HttpException( httpStatus.CONFLICT, err.message ) )
         }
     }
 

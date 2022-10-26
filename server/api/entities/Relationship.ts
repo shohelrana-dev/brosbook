@@ -1,34 +1,20 @@
-import {
-    Entity,
-    Column,
-    PrimaryGeneratedColumn,
-    CreateDateColumn,
-    UpdateDateColumn, BaseEntity, JoinColumn, OneToOne
-}           from 'typeorm'
+import { AbstractEntity } from '@entities/AbstractEntity'
+import { Entity, Column, JoinColumn, OneToOne } from 'typeorm'
 import User from "./User"
 
-@Entity( 'relationships' )
-export default class FollowingRelationship extends BaseEntity {
-    @PrimaryGeneratedColumn('uuid')
-    id: number
+@Entity('relationships')
+export default class FollowingRelationship extends AbstractEntity {
+    @Column({ nullable: false, length: 48 })
+    followedId: string
 
-    @Column( { nullable: false, type: 'int' } )
-    followedId: number
+    @Column({ nullable: false, length: 48 })
+    followerId: string
 
-    @Column( { nullable: false, type: 'int' } )
-    followerId: number
-
-    @OneToOne( () => User )
-    @JoinColumn( { name: 'followedId', referencedColumnName: 'id' } )
+    @OneToOne(() => User)
+    @JoinColumn({ name: 'followedId', referencedColumnName: 'id' })
     following: User
 
-    @OneToOne( () => User )
-    @JoinColumn( { name: 'followerId', referencedColumnName: 'id' } )
+    @OneToOne(() => User)
+    @JoinColumn({ name: 'followerId', referencedColumnName: 'id' })
     follower: User
-
-    @CreateDateColumn()
-    createdAt: Date
-
-    @UpdateDateColumn()
-    updatedAt: Date
 }

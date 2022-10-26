@@ -1,6 +1,6 @@
 import { Router } from "express"
 
-import { ensureAuth } from "@middleware/auth.middleware"
+import authMiddleware from "@middleware/auth.middleware"
 import ChatController from "@modules/chat/chat.controller"
 import ChatService    from "./chat.service"
 
@@ -12,35 +12,35 @@ const chatController = new ChatController( new ChatService() )
  * @route GET /chat/conversations
  * @access Private
  */
-router.get( '/conversations', ensureAuth, chatController.getConversations )
+router.get( '/conversations', authMiddleware, chatController.getConversations )
 
 /**
  * @desc create conversation
  * @route POST /chat/conversations
  * @access Private
  */
-router.post( '/conversations', ensureAuth, chatController.createConversation )
+router.post( '/conversations', authMiddleware, chatController.createConversation )
 
 /**
  * @desc search conversation
  * @route GET user/search
  * @access Private
  */
-router.get( '/conversations/search', ensureAuth, chatController.searchConversation )
+router.get( '/conversations/search', authMiddleware, chatController.searchConversation )
 
 /**
  * @desc get one conversation
  * @route GET /chat/conversations
  * @access Private
  */
-router.get( '/conversations/:identifier', ensureAuth, chatController.getOneConversation )
+router.get( '/conversations/:identifier', authMiddleware, chatController.getOneConversation )
 
 /**
  * @desc get messages
  * @route GET /chat/messages/:participant
  * @access Private
  */
-router.get( '/messages/:identifier', ensureAuth, chatController.getMessages )
+router.get( '/messages/:identifier', authMiddleware, chatController.getMessages )
 
 
 export default router

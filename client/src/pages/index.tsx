@@ -3,8 +3,8 @@ import { useEffect, useState } from "react"
 import { Facebook } from "react-content-loader"
 
 import MainLayout from "@components/layouts/MainLayout"
-import CreatePostForm from "@components/home/CreatePostForm"
-import PostCard from "@components/home/PostCard"
+import CreatePostForm from "@components/post/CreatePostForm"
+import Index from "@components/post/PostCard"
 import { useGetFeedPostsQuery } from "@services/postsApi"
 import ensureServerSideAuth from "@utils/ensureServerSideAuth"
 import { Post } from "@interfaces/posts.interfaces"
@@ -30,7 +30,7 @@ function Home() {
                 <CreatePostForm />
 
                 {!isLoading && (postItems.length > 0 ? postItems.map(post => (
-                    <PostCard post={post} key={post.id} />
+                    <Index post={post} key={post.id} />
                 )) : (
                     <p className="box text-center mt-5 py-10">Your feed is empty.</p>
                 ))}

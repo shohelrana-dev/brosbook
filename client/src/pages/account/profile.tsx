@@ -6,9 +6,9 @@ import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Zoom } fro
 import { toast } from 'react-toastify'
 
 import MainLayout from "@components/layouts/MainLayout"
-import LeftSidebar from "@components/settings/LeftSidebar"
+import LeftSidebar from "@components/account/LeftSidebar"
 import ensureServerSideAuth from "@utils/ensureServerSideAuth"
-import { selectAuthState } from "@features/authSlice"
+import { selectAuthState } from "@slices/authSlice"
 import Avatar from "@components/common/Avatar"
 import { ProfileErrors } from "@interfaces/account.interfaces"
 import AnimatedInput from '@components/common/AnimatedInput'
@@ -69,14 +69,14 @@ function Profile() {
                                 size="medium"
                                 label="First Name"
                                 value={firstName}
-                                error={inputErrors?.firstName?.msg}
+                                error={inputErrors?.firstName}
                                 onChange={(e) => setFirstName(e.target.value)}
                             />
                             <AnimatedInput
                                 size="medium"
                                 label="Last Name"
                                 value={lastName}
-                                error={inputErrors?.lastName?.msg}
+                                error={inputErrors?.lastName}
                                 onChange={(e) => setLastName(e.target.value)}
                             />
                             <AnimatedInput
@@ -84,14 +84,14 @@ function Profile() {
                                 size="medium"
                                 label="Bio"
                                 value={bio}
-                                error={inputErrors?.bio?.msg}
+                                error={inputErrors?.bio}
                                 onChange={(e) => setBio(e.target.value)}
                             />
                             <AnimatedInput
                                 size="medium"
                                 label="Username"
                                 value={username}
-                                error={inputErrors?.username?.msg}
+                                error={inputErrors?.username}
                                 onChange={(e) => setUsername(e.target.value)}
                             />
                             <AnimatedInput
@@ -106,14 +106,14 @@ function Profile() {
                                 label="Phone Number"
                                 type="number"
                                 value={phone}
-                                error={inputErrors?.phone?.msg}
+                                error={inputErrors?.phone}
                                 onChange={(e) => setPhone(e.target.value)}
                             />
                             <AnimatedInput
                                 size="medium"
                                 label="Location"
                                 value={location}
-                                error={inputErrors?.location?.msg}
+                                error={inputErrors?.location}
                                 onChange={(e) => setLocation(e.target.value)}
                             />
 
@@ -125,7 +125,7 @@ function Profile() {
                                     value={birthdate}
                                     onChange={(value) => setBirthdate(value)}
                                     renderInput={({ error, size, ...params }) => (
-                                        <AnimatedInput size="medium" error={inputErrors?.birthdate?.msg} {...params} />
+                                        <AnimatedInput size="medium" error={inputErrors?.birthdate} {...params} />
                                     )}
                                 />
                             </LocalizationProvider>
@@ -146,7 +146,7 @@ function Profile() {
                                 {inputErrors?.gender && (
                                     <Zoom in>
                                         <p className="font-medium text-red-600 text-[12px]">
-                                            {inputErrors?.gender.msg}
+                                            {inputErrors?.gender}
                                         </p>
                                     </Zoom>
                                 )}

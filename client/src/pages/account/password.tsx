@@ -4,9 +4,9 @@ import Link from 'next/link'
 
 import Avatar from "@components/common/Avatar"
 import MainLayout from "@components/layouts/MainLayout"
-import LeftSidebar from "@components/settings/LeftSidebar"
+import LeftSidebar from "@components/account/LeftSidebar"
 import ensureServerSideAuth from "@utils/ensureServerSideAuth"
-import { selectAuthState } from "@features/authSlice"
+import { selectAuthState } from "@slices/authSlice"
 import AnimatedInput from '@components/common/AnimatedInput'
 import PrimaryButton from '@components/common/PrimaryButton'
 import { ChangePasswordErrors } from '@interfaces/account.interfaces'
@@ -62,10 +62,10 @@ function Password() {
                             label="Current Password"
                             size="medium"
                             value={currentPassword}
-                            error={inputErrors.currentPassword?.msg}
+                            error={inputErrors.currentPassword}
                             onChange={(e) => setCurrentPassword(e.target.value)}
                         />
-                        <Link href="/auth/forgot-password">
+                        <Link href="/auth/forgot_password">
                             <a className="text-blue-600 text-sm">
                                 Forgot password?
                             </a>
@@ -74,14 +74,14 @@ function Password() {
                             label="New Password"
                             size="medium"
                             value={newPassword}
-                            error={inputErrors.newPassword?.msg}
+                            error={inputErrors.newPassword}
                             onChange={(e) => setNewPassword(e.target.value)}
                         />
                         <PasswordInput
                             label="Confirm New Password"
                             size="medium"
                             value={confirmNewPassword}
-                            error={inputErrors.confirmNewPassword?.msg}
+                            error={inputErrors.confirmNewPassword}
                             onChange={(e) => setConfirmNewPassword(e.target.value)}
                         />
 

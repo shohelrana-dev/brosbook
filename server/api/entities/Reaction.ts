@@ -1,41 +1,24 @@
-import {
-    BaseEntity,
-    Entity,
-    PrimaryGeneratedColumn,
-    Column,
-    CreateDateColumn,
-    UpdateDateColumn,
-    ManyToOne, JoinColumn
-} from "typeorm"
-import Message
-  from "./Message"
+import { AbstractEntity } from "@entities/AbstractEntity"
+import { Entity, Column, ManyToOne, JoinColumn } from "typeorm"
+import Message from "./Message"
 
-@Entity( 'reactions' )
-class Reaction extends BaseEntity {
-    @PrimaryGeneratedColumn('uuid')
-    id: number
+@Entity('reactions')
+class Reaction extends AbstractEntity {
+  @Column({ nullable: false, length: 48 })
+  messageId: string
 
-    @Column( { nullable: false } )
-    messageId: number
+  @Column({ nullable: false, length: 48 })
+  senderId: string
 
-    @Column( { nullable: false } )
-    senderId: number
+  @Column({ length: 10, nullable: false })
+  name: string
 
-    @Column( { length: 10, nullable: false } )
-    name: string
+  @Column({ nullable: false })
+  url: string
 
-    @Column( { nullable: false } )
-    url: string
-
-    @ManyToOne( () => Message, message => message.reactions )
-    @JoinColumn( { name: 'messageId', referencedColumnName: 'id' } )
-    message: Message
-
-    @CreateDateColumn()
-    createdAt: Date
-
-    @UpdateDateColumn()
-    updatedAt: Date
+  @ManyToOne(() => Message, message => message.reactions)
+  @JoinColumn({ name: 'messageId', referencedColumnName: 'id' })
+  message: Message
 }
 
 export default Reaction

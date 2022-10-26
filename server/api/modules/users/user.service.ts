@@ -1,15 +1,37 @@
 import { Request } from "express"
-import Relationship from "@api/entities/Relationship"
-import User from "@api/entities/User"
+import Relationship from "@entities/Relationship"
+import User from "@entities/User"
 import { paginateMeta } from "@utils/paginateMeta"
-import Post from "@api/entities/Post"
-import LikeEntity from "@api/entities/Like"
+import Post from "@entities/Post"
+import LikeEntity from "@entities/Like"
 import { appDataSource } from "@config/data-source.config"
 import { PaginateMeta } from "@api/types/index.types"
+import { SignupUserDTO } from "@api/modules/users/user.dto"
+import { v4 as uuid } from "uuid"
+import { PhotoSource } from "@api/enums"
+import Media from "@api/entities/Media"
+import { LoginTicket, OAuth2Client, TokenPayload } from "google-auth-library"
+import HttpException from "@api/utils/HttpException"
+import httpStatus from "http-status"
+import InternalServerException from "@exceptions/InternalServerException";
+import BadRequestException from "@exceptions/BadRequestException";
 
 
 export default class UserService {
     private userRepository = appDataSource.getRepository(User)
+
+    public async getUserByUsername(username: string) {
+        if (!username) throw new BadRequestException("Username is missing")
+
+        try {
+            return await this.userRepository.findOneOrFail({
+                where: {username},
+                relations: {profile: true}
+            })
+        }catch (err) {
+            throw new InternalServerException('User couldn\'t be found.')
+        }
+    }
 
     public async getSearchUsers(req: Request) {
         const page = Number(req.query.page) || 1
@@ -29,20 +51,6 @@ export default class UserService {
         } catch (err) {
             throw new Error("posts couldn't be fetched")
         }
-    }
-
-    public async getUser(req: Request) {
-        const { username } = req.params
-
-        if (!username) throw new Error("Username is missing")
-
-        return await this.userRepository
-            .createQueryBuilder('user')
-            .leftJoinAndSelect('user.profile', 'profile')
-            .loadRelationCountAndMap('user.followingCount', 'user.following')
-            .loadRelationCountAndMap('user.followerCount', 'user.followers')
-            .where('user.username = :username', { username })
-            .getOne()
     }
 
     public async getSuggestedUsers(req: Request): Promise<{ users: User[], meta: PaginateMeta }> {

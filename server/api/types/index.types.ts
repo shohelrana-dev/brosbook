@@ -1,4 +1,4 @@
-import User from "@api/entities/User"
+import User from "@entities/User"
 
 export interface LoginTokenPayload {
     access_token: string

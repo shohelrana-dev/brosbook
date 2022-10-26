@@ -1,9 +1,9 @@
 import { Request } from "express"
-import bcrypt from "bcrypt"
+import argon2 from "argon2"
 
-import HttpError from "@utils/httpError"
-import Profile from "@api/entities/Profile"
-import User from "@api/entities/User"
+import HttpException from "@exceptions/HttpException"
+import Profile from "@entities/Profile"
+import User from "@entities/User"
 import httpStatus from "http-status"
 
 export default class AccountService {
@@ -40,18 +40,18 @@ export default class AccountService {
 
         const user = await User.findOneBy({ username: req.user.username })
 
-        if (!user) throw new HttpError(httpStatus.CONFLICT, "Password couldn't be change")
+        if (!user) throw new HttpException(httpStatus.CONFLICT, "Password couldn't be change")
 
-        const isMatched = await bcrypt.compare(currentPassword, user.password)
+        const isMatched = await argon2.verify(currentPassword, user.password)
 
-        if (!isMatched) throw new HttpError(httpStatus.UNPROCESSABLE_ENTITY, "Current password didn't match")
+        if (!isMatched) throw new HttpException(httpStatus.UNPROCESSABLE_ENTITY, "Current password didn't match")
 
-        user.password = await bcrypt.hash(newPassword, 6)
+        user.password = await argon2.hash(newPassword)
 
         try {
             await user.save()
         } catch (err) {
-            throw new HttpError(httpStatus.CONFLICT, "Password couldn't be changed")
+            throw new HttpException(httpStatus.CONFLICT, "Password couldn't be changed")
         }
     }
 }

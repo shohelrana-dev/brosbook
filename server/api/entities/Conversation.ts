@@ -1,41 +1,30 @@
-import {
-    BaseEntity, Entity, PrimaryGeneratedColumn,
-    Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn
-}           from "typeorm"
+import { AbstractEntity } from "@entities/AbstractEntity"
+import { Entity, Column, ManyToOne, JoinColumn } from "typeorm"
 import User from "./User"
 
-@Entity( 'conversations' )
-class Conversation extends BaseEntity {
-    @PrimaryGeneratedColumn('uuid')
-    id: number
-
-    @Column( { length: 55, nullable: false } )
+@Entity('conversations')
+class Conversation extends AbstractEntity {
+    @Column({ length: 55, nullable: false })
     identifier: string
 
-    @Column( { type: 'int', nullable: false } )
-    ownerId: number
+    @Column({ nullable: false, length: 48 })
+    ownerId: string
 
-    @Column( { type: 'int', nullable: false } )
-    participantId: number
+    @Column({ nullable: false, length: 48 })
+    participantId: string
 
-    @ManyToOne( () => User )
-    @JoinColumn( { name: 'participantId', referencedColumnName: 'id' } )
+    @ManyToOne(() => User)
+    @JoinColumn({ name: 'participantId', referencedColumnName: 'id' })
     participant: User
 
-    @Column( { type: 'text', nullable: true } )
+    @Column({ type: 'text', nullable: true })
     lastMessage: string
 
-    @Column( { type: 'tinyint', default: 0 } )
+    @Column({ type: 'tinyint', default: 0 })
     seen: number
 
-    @Column( { type: 'int', nullable: true } )
+    @Column({ type: 'int', nullable: true })
     unseenCount: number
-
-    @CreateDateColumn()
-    createdAt: Date
-
-    @UpdateDateColumn()
-    updatedAt: Date
 }
 
 export default Conversation

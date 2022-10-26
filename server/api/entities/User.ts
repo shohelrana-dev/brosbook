@@ -1,18 +1,11 @@
-import {
-    AfterLoad,
-    BaseEntity, BeforeInsert,
-    Column, CreateDateColumn, Entity, JoinColumn, OneToMany,
-    OneToOne, PrimaryGeneratedColumn, UpdateDateColumn
-} from "typeorm"
-import bcrypt from 'bcrypt'
+import { AfterLoad, BeforeInsert, Column, Entity, OneToMany, OneToOne } from "typeorm"
+import argon2 from 'argon2'
 import Profile from "./Profile"
 import FollowingRelationship from "./Relationship"
+import { AbstractEntity } from "@entities/AbstractEntity"
 
 @Entity('users')
-class User extends BaseEntity {
-    @PrimaryGeneratedColumn('uuid')
-    id: number
-
+class User extends AbstractEntity {
     @Column({ length: 20, nullable: false })
     firstName: string
 
@@ -37,9 +30,6 @@ class User extends BaseEntity {
     @Column({ type: 'datetime', nullable: true })
     emailVerifiedAt: string
 
-    @Column({ nullable: true })
-    verificationKey: string
-
     @OneToOne(() => Profile, (profile) => profile.user)
     profile: Profile
 
@@ -49,12 +39,6 @@ class User extends BaseEntity {
     @OneToMany(() => FollowingRelationship, follow => follow.following)
     following: FollowingRelationship[]
 
-    @CreateDateColumn()
-    createdAt: Date
-
-    @UpdateDateColumn()
-    updatedAt: Date
-
     //virtual columns
     fullName: string
     isCurrentUserFollow: boolean
@@ -62,7 +46,7 @@ class User extends BaseEntity {
 
     @BeforeInsert()
     async makePasswordHash() {
-        this.password = await bcrypt.hash(this.password, 6)
+        this.password = await argon2.hash(this.password)
     }
 
     @BeforeInsert()
@@ -75,8 +59,8 @@ class User extends BaseEntity {
 
     @BeforeInsert()
     setDefaultProfilePhotoIfNotGiven() {
-        if (!this.Media) {
-            this.Media = process.env.SERVER_URL! + '/images/avatar.png'
+        if (!this.photo) {
+            this.photo = process.env.SERVER_URL! + '/images/avatar.png'
         }
     }
 
@@ -86,7 +70,7 @@ class User extends BaseEntity {
     }
 
     @AfterLoad()
-    setHasEmailVerified() {
+    setEmailVerified() {
         this.hasEmailVerified = this.emailVerifiedAt !== null && !!this.emailVerifiedAt
     }
 }

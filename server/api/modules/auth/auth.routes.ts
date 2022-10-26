@@ -2,26 +2,27 @@ import { Router } from "express"
 
 import AuthController           from "@modules/auth/auth.controller"
 import AuthService              from "./auth.service"
-import AuthValidation           from "@modules/auth/auth.validation"
-import { ensureAuth }           from "@middleware/auth.middleware"
-import { validationMiddleware } from "@middleware/validation.middleware"
+import validationMiddleware from "@middleware/validation.middleware"
+import {ForgotPasswordDTO, LoginUserDTO, ResetPasswordDTO} from "@modules/auth/auth.dto"
+import {SignupUserDTO} from "@modules/auth/auth.dto"
+import {EmailService} from "@services/email.service"
 
 const router         = Router()
-const authController = new AuthController( new AuthService() )
-const validation     = new AuthValidation()
+const authController = new AuthController( new AuthService(new EmailService()) )
+
 /**
  * @desc signup user
  * @route POST /api/v1/auth/signup
  * @access Public
  */
-router.post( '/signup', [...validation.signup(), validationMiddleware], authController.signup )
+router.post( '/signup', validationMiddleware(SignupUserDTO), authController.signup )
 
 /**
  * @desc local login
  * @route POST /api/v1/auth/login
  * @access Public
  */
-router.post( '/login', [...validation.login(), validationMiddleware], authController.login )
+router.post( '/login',validationMiddleware(LoginUserDTO), authController.login )
 
 /**
  * @desc google login
@@ -31,38 +32,31 @@ router.post( '/login', [...validation.login(), validationMiddleware], authContro
 router.post( '/google', authController.google )
 
 /**
- * @desc make log in user
- * @route GET /api/v1/auth/me
- * @access Protected
- */
-router.get( '/me', ensureAuth, authController.me )
-
-/**
  * @desc forgot password
- * @route GET /api/v1/auth/forgot-password
+ * @route GET /api/v1/auth/forgot_password
  * @access Public
  */
-router.post( '/forgot-password', [...validation.forgotPassword(), validationMiddleware], authController.forgotPassword )
+router.post( '/forgot_password',validationMiddleware(ForgotPasswordDTO), authController.forgotPassword )
 
 /**
  * @desc reset password
- * @route POST /api/v1/auth/forgot-password
+ * @route POST /api/v1/auth/forgot_password
  * @access Public
  */
-router.post( '/reset-password', [...validation.resetPassword(), validationMiddleware], authController.resetPassword )
+router.post( '/reset_password/:token',validationMiddleware(ResetPasswordDTO), authController.resetPassword )
+
+/**
+ * @desc resend email verification link
+ * @route POST /api/v1/auth/email_verification/resend
+ * @access Public
+ */
+router.post( '/email_verification/resend', authController.resendEmailVerificationLink )
 
 /**
  * @desc verify email
- * @route GET /api/v1/auth/email/verify
+ * @route GET /api/v1/auth/email_verification/:token
  * @access Public
  */
-router.get( '/email/verify', authController.verifyEmail )
-
-/**
- * @desc resend verification link
- * @route POST /api/v1/auth/email/resend-verification-link
- * @access Public
- */
-router.post( '/email/resend-verification-link', authController.resendVerificationLink )
+router.get( '/email_verification/:token', authController.verifyEmail )
 
 export default router

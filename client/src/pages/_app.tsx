@@ -8,9 +8,9 @@ import { NextApiRequest }             from "next"
 import 'react-toastify/dist/ReactToastify.css'
 
 import { wrapper }                         from '@store/store'
-import { authApi }                         from "@services/authApi"
-import { selectAuthState, setAccessToken } from "@features/authSlice"
+import { selectAuthState, setAccessToken } from "@slices/authSlice"
 import '@styles/app.css'
+import {usersApi} from "@services/usersApi";
 
 function MyApp( { Component, pageProps }: AppProps ){
     const { isAuthenticated } = useSelector( selectAuthState )
@@ -40,7 +40,7 @@ MyApp.getInitialProps = wrapper.getInitialAppProps( ( store ) => async( appConte
     const req          = appContext.ctx.req as NextApiRequest
     const access_token = req?.cookies?.access_token
     await store.dispatch( setAccessToken( access_token! ) )
-    await store.dispatch( authApi.endpoints.getAuthUser.initiate() )
+    await store.dispatch( usersApi.endpoints.getCurrentUser.initiate() )
 
     const pageProps = appContext.Component.getInitialProps ? await appContext.Component.getInitialProps( appContext.ctx ) : {}
     return { pageProps }

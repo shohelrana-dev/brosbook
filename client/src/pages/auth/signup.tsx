@@ -34,12 +34,12 @@ function Signup() {
 
         try {
             await signup({ firstName, lastName, email, username, password }).unwrap()
-            router.push('/auth/email/verification-required')
+            router.push('/auth/email_verification/verification-required')
             toast.success('Signup success. You have received a mail to verify the account.')
         } catch (err: any) {
             console.error(err)
-            toast.error('Please fix errors below.')
-            if (err?.data?.errors) setInputErrors(err.data.errors)
+            setInputErrors(err?.data?.errors || {})
+            toast.error(err?.data?.message || 'Please fix errors below.')
         }
     }
 
@@ -70,31 +70,31 @@ function Signup() {
                             <AnimatedInput
                                 label="First Name"
                                 value={firstName}
-                                error={inputErrors.firstName?.msg}
+                                error={inputErrors.firstName}
                                 onChange={(e => setFirstName(e.target.value))}
                             />
                             <AnimatedInput
                                 label="Last Name"
                                 value={lastName}
-                                error={inputErrors.lastName?.msg}
+                                error={inputErrors.lastName}
                                 onChange={(e => setLastName(e.target.value))}
                             />
                             <AnimatedInput
                                 label="Email"
                                 value={email}
-                                error={inputErrors.email?.msg}
+                                error={inputErrors.email}
                                 onChange={(e => setEmail(e.target.value))}
                             />
                             <AnimatedInput
                                 label="Username"
                                 value={username}
-                                error={inputErrors.username?.msg}
+                                error={inputErrors.username}
                                 onChange={(e => setUsername(e.target.value))}
                             />
                             <PasswordInput
                                 label="Password"
                                 value={password}
-                                error={inputErrors.password?.msg}
+                                error={inputErrors.password}
                                 onChange={(e) => {
                                     setPassword(e.target.value)
                                     checkPasswordWarning()

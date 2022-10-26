@@ -5,6 +5,10 @@ import { Post }         from "@interfaces/posts.interfaces"
 
 export const usersApi = baseApi.injectEndpoints( {
     endpoints: ( build ) => ( {
+        getCurrentUser: build.query<User, void>( {
+            query: (  ) => `users/me`
+        } ),
+
         getUser: build.query<User, string>( {
             query: ( username ) => `users/${ username }`
         } ),

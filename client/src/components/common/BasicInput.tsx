@@ -4,7 +4,7 @@ import { Zoom }                       from "@mui/material"
 interface LabeledInputProps extends InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement> {
     label: string,
     textarea?: boolean
-    error?: { msg: string }
+    error?: string
 }
 
 export default function BasicInput( props: LabeledInputProps ) {
@@ -30,7 +30,7 @@ export default function BasicInput( props: LabeledInputProps ) {
                 { error && (
                     <Zoom in>
                         <p className="font-medium text-red-600 text-[12px]">
-                            { error.msg }
+                            { error }
                         </p>
                     </Zoom>
                 ) }

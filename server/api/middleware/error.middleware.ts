@@ -1,21 +1,12 @@
 import { NextFunction, Request, Response } from 'express'
-import HttpError from '@utils/httpError'
-import httpStatus from "http-status"
+import HttpException from '@exceptions/HttpException'
 
-export default function errorMiddleware(error: HttpError, req: Request, res: Response, _: NextFunction) {
-    const status = error.code || httpStatus.INTERNAL_SERVER_ERROR
-    const code = error.code || httpStatus.INTERNAL_SERVER_ERROR
-    const meta = error.meta || {}
-    const message = error.message || 'Ops! An unexpected error occurred during the request.'
-
-    console.log('=======================Error log from server====================')
+export default function errorMiddleware(error: HttpException, req: Request, res: Response, next: NextFunction) {
     console.log(error)
-    console.log('=======================Error log from server====================')
 
-    res.status(code).json({
-        status,
-        code,
-        message,
-        ...meta
-    })
+    if (error instanceof HttpException) {
+        return  error.send(res)
+    }
+
+    res.status(500).json({message: 'Server error'})
 }

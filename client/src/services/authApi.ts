@@ -12,10 +12,10 @@ export type LoginResponse = {
 export const authApi = baseApi.injectEndpoints( {
     endpoints: ( build ) => ( {
         signup: build.mutation<User, SignupPayload>( {
-            query: ( formData ) => ( {
+            query: ( payload ) => ( {
                 url: `/auth/signup`,
                 method: 'POST',
-                body: formData
+                body: payload
             } )
         } ),
 
@@ -35,36 +35,29 @@ export const authApi = baseApi.injectEndpoints( {
             } )
         } ),
 
-        getAuthUser: build.query<User, void>( {
-            query: () => ( `/auth/me` )
-        } ),
-
         forgotPassword: build.mutation<{ message: string }, string>( {
             query: ( email ) => ( {
-                url: `/auth/forgot-password`,
+                url: `/auth/forgot_password`,
                 method: 'POST',
                 body: { email }
             } )
         } ),
 
         resetPassword: build.mutation<{ message: string }, ResetPassPayload>( {
-            query: ( formData ) => ( {
-                url: `/auth/reset-password`,
+            query: ({token, ...payload} ) => ( {
+                url: `/auth/reset_password/${token}`,
                 method: 'POST',
-                body: formData
+                body: payload
             } )
         } ),
 
-        verifyEmail: build.mutation<User, { email: string, key: string }>( {
-            query: ( data ) => ( {
-                url: `/auth/email/verify`,
-                params: data
-            } )
+        verifyEmail: build.mutation<User, string>( {
+            query: ( token ) => (  `/auth/email_verification/${token}`  )
         } ),
 
         resendVerificationLink: build.mutation<void, string>( {
             query: ( email ) => ( {
-                url: `/auth/email/resend-verification-link`,
+                url: `/auth/email_verification/resend`,
                 method: 'POST',
                 body: { email }
             } )
@@ -76,7 +69,6 @@ export const {
                  useSignupMutation,
                  useLoginMutation,
                  useLoginWithGoogleMutation,
-                 useGetAuthUserQuery,
                  useForgotPasswordMutation,
                  useResetPasswordMutation,
                  useVerifyEmailMutation,

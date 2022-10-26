@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express"
-import httpStatus                          from "http-status"
 import AuthService from "./auth.service"
 
 class AuthController {
@@ -10,10 +9,10 @@ class AuthController {
     public signup = async( req: Request, res: Response, next: NextFunction ): Promise<void> => {
         try {
             //create the user
-            const user = await this.authService.signup( req )
+            const user = await this.authService.signup( req.body )
 
             //send success response
-            res.status( httpStatus.CREATED ).json( user )
+            res.status( 201).json( user )
         } catch ( err ) {
             next( err )
         }
@@ -22,7 +21,7 @@ class AuthController {
     public login = async( req: Request, res: Response, next: NextFunction ): Promise<void> => {
         try {
             //attempt login
-            const loginData = await this.authService.login( req )
+            const loginData = await this.authService.login( req.body )
 
 
             res.json( loginData )
@@ -33,22 +32,9 @@ class AuthController {
 
     public google = async( req: Request, res: Response, next: NextFunction ): Promise<void> => {
         try {
-            const loginData = await this.authService.google( req )
+            const loginData = await this.authService.google( req.body.token )
 
-            //send success response
             res.json( loginData )
-
-        } catch ( err ) {
-            next( err )
-        }
-    }
-
-    public me = async( req: Request, res: Response, next: NextFunction ): Promise<void> => {
-        try {
-            const user = await this.authService.me( req )
-
-            //send success response
-            res.json( user )
         } catch ( err ) {
             next( err )
         }
@@ -56,10 +42,9 @@ class AuthController {
 
     public forgotPassword = async( req: Request, res: Response, next: NextFunction ): Promise<void> => {
         try {
-            const { email } = req.body
-            await this.authService.forgotPassword( req )
+            await this.authService.forgotPassword( req.body.email )
 
-            res.json( { message: `We've sent an email to ${ email } with a link to get back into your account.` } )
+            res.json( { message: `We've sent an email to ${ req.body.email } with a link to get back into your account.` } )
         } catch ( err ) {
             next( err )
         }
@@ -67,7 +52,7 @@ class AuthController {
 
     public resetPassword = async( req: Request, res: Response, next: NextFunction ): Promise<void> => {
         try {
-            await this.authService.resetPassword( req )
+            await this.authService.resetPassword({...req.body, token: req.params.token} )
 
             res.json( { message: 'Password has been changed' } )
         } catch ( err ) {
@@ -77,7 +62,7 @@ class AuthController {
 
     public verifyEmail = async( req: Request, res: Response, next: NextFunction ): Promise<void> => {
         try {
-            const user = await this.authService.verifyEmail( req )
+            const user = await this.authService.verifyEmail( req.params.token )
 
             res.json( user )
         } catch ( err ) {
@@ -85,11 +70,11 @@ class AuthController {
         }
     }
 
-    public resendVerificationLink = async( req: Request, res: Response, next: NextFunction ): Promise<void> => {
+    public resendEmailVerificationLink = async( req: Request, res: Response, next: NextFunction ): Promise<void> => {
         try {
-            await this.authService.resendVerificationLink( req )
+            await this.authService.resendEmailVerificationLink( req.body.email )
 
-            res.json( { message: 'Sent email success' } )
+            res.json( { message: 'Success resending email' } )
         } catch ( err ) {
             next( err )
         }

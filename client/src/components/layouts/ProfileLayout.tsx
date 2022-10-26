@@ -11,7 +11,7 @@ import { Button } from "@mui/material"
 import MainLayout from "@components/layouts/MainLayout"
 import { useGetUserQuery } from "@services/usersApi"
 import { useSelector } from "react-redux"
-import { selectAuthState } from "@features/authSlice"
+import { selectAuthState } from "@slices/authSlice"
 import FollowButton from "@components/common/FollowButton"
 import placeholderCoverPhoto from "@images/placeholder-cover-photo.png"
 

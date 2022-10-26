@@ -1,38 +1,24 @@
-import {
-    Entity,
-    Column,
-    PrimaryGeneratedColumn,
-    CreateDateColumn,
-    UpdateDateColumn, BaseEntity
-}                    from 'typeorm'
+import { Entity, Column, } from 'typeorm'
 import { PhotoSource } from "@api/enums"
+import { AbstractEntity } from '@entities/AbstractEntity'
 
-@Entity( 'media' )
-export default class Media extends BaseEntity {
-    @PrimaryGeneratedColumn('uuid')
-    id: number
+@Entity('media')
+export default class Media extends AbstractEntity {
+    @Column({ nullable: false, length: 48 })
+    userId: string
 
-    @Column( { type: 'int', nullable: false } )
-    userId: number
+    @Column({ nullable: false, length: 48 })
+    sourceId: string
 
-    @Column( { type: 'int', nullable: true } )
-    sourceId: number
-
-    @Column( { nullable: false, type: 'enum', enum: PhotoSource } )
+    @Column({ nullable: false, type: 'enum', enum: PhotoSource })
     source: PhotoSource
 
-    @Column( { nullable: false } )
+    @Column({ nullable: false })
     name: string
 
-    @Column( { nullable: false } )
+    @Column({ nullable: false })
     type: string
 
-    @Column( { nullable: false } )
+    @Column({ nullable: false })
     url: string
-
-    @CreateDateColumn()
-    createdAt: Date
-
-    @UpdateDateColumn()
-    updatedAt: Date
 }

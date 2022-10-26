@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid"
 import path             from "path"
-import Media            from "@api/entities/Media"
+import Media            from "@entities/Media"
 import { PhotoSource }    from "@api/enums"
 import { UploadedFile } from "express-fileupload"
 

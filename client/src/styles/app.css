@@ -41,4 +41,8 @@
     .container {
         @apply max-w-[900px] m-auto
     }
+
+    .icon {
+        @apply mr-1 hover:bg-pink-100 rounded-full p-2 duration-300 cursor-pointer text-pink-500 inline-block
+    }
 }

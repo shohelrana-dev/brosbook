@@ -22,10 +22,10 @@ export interface ProfileState {
 }
 
 export interface InputErrors {
-    firstName?: { msg: string }
-    lastName?: { msg: string }
-    email?: { msg: string }
-    username?: { msg: string }
-    password?: { msg: string }
-    confirmPassword?: { msg: string }
+    firstName?: string
+    lastName?: string
+    email?: string
+    username?: string
+    password?: string
+    confirmPassword?: string
 }

@@ -14,29 +14,28 @@ export interface SignupPayload {
 export interface ResetPassPayload {
     password: string
     confirmPassword: string
-    email: string
-    key: string
+    token: string
 }
 
 export interface LoginErrors {
-    username?: { msg: string }
-    password?: { msg: string }
+    username?: string
+    password?: string
 }
 
 export interface SignupErrors {
-    firstName?: { msg: string }
-    lastName?: { msg: string }
-    email?: { msg: string }
-    username?: { msg: string }
-    password?: { msg: string }
-    confirmPassword?: { msg: string }
+    firstName?: string
+    lastName?: string
+    email?: string
+    username?: string
+    password?: string
+    confirmPassword?: string
 }
 
 export interface ForgotPasswordErrors {
-    email?: { msg: string }
+    email?: string
 }
 
 export interface ResetPasswordErrors {
-    password?: { msg: string }
-    confirmPassword?: { msg: string }
+    password?: string
+    confirmPassword?: string
 }

@@ -3,7 +3,7 @@ import useInfiniteScroll from "react-infinite-scroll-hook"
 import { useRouter } from "next/router"
 
 import ProfileLayout from "@components/layouts/ProfileLayout"
-import PostCard from "@components/home/PostCard"
+import Index from "@components/post/PostCard"
 import { useGetUserPostsQuery, useGetUserQuery, usersApi } from "@services/usersApi"
 import { wrapper } from "@store/store"
 import { Post } from "@interfaces/posts.interfaces"
@@ -36,7 +36,7 @@ export default function UserProfilePage() {
         <ProfileLayout>
             <>
                 {postItems && postItems.length > 0 ? postItems.map(post => (
-                    <PostCard post={post} key={post.id} />
+                    <Index post={post} key={post.id} />
                 )) : (
                     <p className="box text-center mt-5 py-10">{user?.fullName} has not posted yet.</p>
                 )}

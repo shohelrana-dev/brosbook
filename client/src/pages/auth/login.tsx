@@ -33,13 +33,13 @@ function Login(){
                 router.push( '/' )
                 toast.success( 'You have been logged in successfully.' )
             } else{
-                router.push( '/auth/email/verification-required' )
+                router.push( '/auth/email_verification/required' )
                 toast.error( 'Your email has not been verified yet.' )
             }
         } catch ( err: any ) {
             console.error( err )
-            if( err?.data?.errors ) setInputErrors( err.data.errors )
-            toast.error( 'Invalid credentials.' )
+            setInputErrors( err?.data?.errors || {} )
+            toast.error( err?.data?.message || 'Invalid credentials.' )
         }
     }
 
@@ -63,13 +63,13 @@ function Login(){
                             <AnimatedInput
                                 label="Username or email"
                                 value={username}
-                                error={ inputErrors?.username?.msg }
+                                error={ inputErrors?.username }
                                 onChange={ ( e ) => setUsername( e.target.value ) }
                             />
                             <PasswordInput
                                 label="Password"
                                 value={password}
-                                error={ inputErrors?.password?.msg }
+                                error={ inputErrors?.password }
                                 onChange={ ( e ) => setPassword( e.target.value ) }
                             />
                             <PrimaryButton fullWidth  type="submit" title="Log In" isLoading={ isLoading || isSuccess }/>
@@ -82,7 +82,7 @@ function Login(){
                         <GoogleLoginButton/>
 
                         <small className="block text-center">
-                            <Link href="/auth/forgot-password">
+                            <Link href="/auth/forgot_password">
                                 <a className="text-blue-500">
                                     Forgotten your password?
                                 </a>

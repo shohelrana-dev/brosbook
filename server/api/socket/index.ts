@@ -1,6 +1,6 @@
 import { Server }  from "socket.io"
 import ChatService from "@modules/chat/chat.service"
-import User        from "@api/entities/User"
+import User        from "@entities/User"
 import http        from "http"
 
 

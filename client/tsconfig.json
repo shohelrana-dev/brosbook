@@ -20,7 +20,7 @@
          "@images/*": ["images/*"],
          "@pages/*": ["pages/*"],
          "@store/*": ["store/*"],
-         "@features/*": ["features/*"],
+         "@slices/*": ["slices/*"],
          "@services/*": ["services/*"],
          "@styles/*": ["styles/*"],
          "@interfaces/*": ["interfaces/*"],

@@ -3,7 +3,7 @@ import { LinearProgress } from "@mui/material"
 import { toast }          from "react-toastify"
 import { useRouter }      from "next/router"
 import { useDispatch }    from "react-redux"
-import { logout }         from "@features/authSlice"
+import { logout }         from "@slices/authSlice"
 
 
 function Logout(){

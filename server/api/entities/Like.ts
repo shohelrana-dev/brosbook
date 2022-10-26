@@ -1,46 +1,29 @@
-import {
-    Entity,
-    Column,
-    ManyToOne,
-    JoinColumn,
-    PrimaryGeneratedColumn,
-    CreateDateColumn,
-    UpdateDateColumn, BaseEntity
-} from 'typeorm'
-
-import Post    from './Post'
-import User    from './User'
+import { AbstractEntity } from '@entities/AbstractEntity'
+import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm'
+import Post from './Post'
+import User from './User'
 import Comment from './Comment'
 
-@Entity( 'likes' )
-export default class Like extends BaseEntity{
-    @PrimaryGeneratedColumn('uuid')
-    id: number
+@Entity('likes')
+export default class Like extends AbstractEntity {
+    @Column({ nullable: false, length: 48 })
+    userId: string
 
-    @Column( { type: 'int', nullable: false } )
-    userId: number
+    @Column({ nullable: true, length: 48 })
+    postId: string
 
-    @Column( { type: 'int', nullable: true } )
-    postId: number
+    @Column({ nullable: true, length: 48 })
+    commentId: string
 
-    @Column( { type: 'int', nullable: true } )
-    commentId: number
-
-    @ManyToOne( () => User )
-    @JoinColumn( { name: 'userId', referencedColumnName: 'id' } )
+    @ManyToOne(() => User)
+    @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
     user: User
 
-    @ManyToOne( () => Post )
-    @JoinColumn( { name: 'postId', referencedColumnName: 'id' } )
+    @ManyToOne(() => Post)
+    @JoinColumn({ name: 'postId', referencedColumnName: 'id' })
     post: Post
 
-    @ManyToOne( () => Comment )
-    @JoinColumn( { name: 'commentId', referencedColumnName: 'id' } )
+    @ManyToOne(() => Comment)
+    @JoinColumn({ name: 'commentId', referencedColumnName: 'id' })
     comment: Comment
-
-    @CreateDateColumn()
-    createdAt: Date
-
-    @UpdateDateColumn()
-    updatedAt: Date
 }

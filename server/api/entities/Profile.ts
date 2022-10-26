@@ -1,17 +1,11 @@
-import User from "@api/entities/User"
-import {
-    BaseEntity, Column, CreateDateColumn,
-    Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn,
-    UpdateDateColumn
-} from "typeorm"
+import { AbstractEntity } from "@entities/AbstractEntity"
+import User from "@entities/User"
+import { Column, Entity, JoinColumn, OneToOne } from "typeorm"
 
 @Entity('profile')
-class Profile extends BaseEntity {
-    @PrimaryGeneratedColumn('uuid')
-    id: number
-
-    @Column({ type: "int", nullable: false })
-    userId: number
+class Profile extends AbstractEntity {
+    @Column({ nullable: false, length: 48 })
+    userId: string
 
     @Column({ length: 16, nullable: true })
     phone: string
@@ -38,12 +32,6 @@ class Profile extends BaseEntity {
     @OneToOne(() => User, (user) => user.profile)
     @JoinColumn()
     user: User
-
-    @CreateDateColumn()
-    createdAt: Date
-
-    @UpdateDateColumn()
-    updatedAt: Date
 }
 
 export default Profile

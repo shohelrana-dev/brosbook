@@ -1,13 +1,16 @@
-import { NextFunction, Request, Response } from "express"
-import { validationResult } from "express-validator"
-import HttpError            from "@utils/httpError"
-import httpStatus           from "http-status"
+import { RequestHandler } from 'express'
+import {validate} from "class-validator"
+import {plainToInstance} from "class-transformer"
+import UnprocessableEntityException from "@exceptions/UnprocessableEntityException"
+import mapErrors from "@utils/mapErrors"
 
-export function validationMiddleware( req: Request, res: Response, next: NextFunction ){
-    const errors = validationResult( req )
-    if( errors.isEmpty() ){
-        next()
-    } else{
-        next( new HttpError( httpStatus.UNPROCESSABLE_ENTITY, 'Validation failed.', {errors: errors.mapped()} ) )
+const validationMiddleware = (type: any): RequestHandler => async (req, res, next) => {
+    const errors = await validate(plainToInstance(type, req.body))
+
+    if(errors.length > 0){
+       return next(new UnprocessableEntityException('Validation error',   mapErrors(errors)))
     }
+    next()
 }
+
+export default validationMiddleware

@@ -1,6 +1,6 @@
 import { Router } from "express"
 
-import { ensureAuth } from "@middleware/auth.middleware"
+import authMiddleware from "@middleware/auth.middleware"
 import PostController from "@modules/posts/post.controller"
 import PostService    from "./post.service"
 
@@ -20,27 +20,27 @@ router.get( '/', postController.getManyPost )
  * @access Private
  * */
 
-router.post( '/', ensureAuth, postController.createPost )
+router.post( '/', authMiddleware, postController.createPost )
 
 /**
  * @desc get feed posts
  * @route GET posts
  * @access Private
  * */
-router.get( '/feed', ensureAuth, postController.getFeedPosts )
+router.get( '/feed', authMiddleware, postController.getFeedPosts )
 
 /**
  * @desc  save post like
  * @route POST posts/:postId/like
  * @access Private
  * */
-router.post( '/:postId/like', ensureAuth, postController.like )
+router.post( '/:postId/like', authMiddleware, postController.like )
 
 /**
  * @desc  remove post like
  * @route DELETE posts/:postId/unlike
  * @access Private
  * */
-router.post( '/:postId/unlike', ensureAuth, postController.unlike )
+router.post( '/:postId/unlike', authMiddleware, postController.unlike )
 
 export default router

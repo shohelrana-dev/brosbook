@@ -23,7 +23,7 @@
       "alwaysStrict": true,
       "noUnusedLocals": false,
       "noUnusedParameters": false,
-      "noImplicitReturns": true,
+      "noImplicitReturns": false,
       "noFallthroughCasesInSwitch": true,
       "resolveJsonModule": true,
       "typeRoots": [
@@ -39,6 +39,9 @@
          "@config/*": ["server/config/*"],
          "@startup/*": ["server/startup/*"],
          "@modules/*": ["server/api/modules/*"],
+         "@services/*": ["server/api/services/*"],
+         "@exceptions/*": ["server/api/exceptions/*"],
+         "@custom-validation/*": ["server/api/custom-validation/*"],
          "@enums/*": ["server/api/enums/*"],
          "@entities/*": ["server/api/entities/*"],
          "@middleware/*": ["server/api/middleware/*"],

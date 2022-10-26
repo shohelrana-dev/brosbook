@@ -16,7 +16,7 @@ import { Container }       from "@mui/material"
 import PermIdentityIcon    from '@mui/icons-material/PermIdentity'
 import LogoutIcon          from '@mui/icons-material/Logout'
 import SettingsIcon        from '@mui/icons-material/Settings'
-import { selectAuthState } from "@features/authSlice"
+import { selectAuthState } from "@slices/authSlice"
 import { useSelector }     from "react-redux"
 
 function NavBar(){

@@ -1,6 +1,6 @@
 import { Router } from "express"
 
-import { ensureAuth } from "@middleware/auth.middleware"
+import authMiddleware from "@middleware/auth.middleware"
 import UserController from "@modules/users/user.controller"
 import UserService    from "./user.service"
 
@@ -8,8 +8,15 @@ const router          = Router()
 const usersController = new UserController( new UserService() )
 
 /**
+ * @desc get current user
+ * @route GET /api/v1/users/me
+ * @access Private
+ */
+router.get( '/me', authMiddleware, usersController.getCurrentUser )
+
+/**
  * @desc get users
- * @route GET /users/search
+ * @route GET /api/v1/users/search
  * @access Private
  */
 router.get( '/search', usersController.getSearchUsers )
@@ -19,14 +26,14 @@ router.get( '/search', usersController.getSearchUsers )
  * @route GET /api/v1/users/suggest
  * @access Private
  */
-router.get( '/suggest', ensureAuth, usersController.getSuggestedUsers )
+router.get( '/suggest', authMiddleware, usersController.getSuggestedUsers )
 
 /**
  * @desc get user
  * @route GET /api/v1/users/:username
  * @access Public
  */
-router.get( '/:username', usersController.getUser )
+router.get( '/:username', usersController.getUserByUsername )
 
 /**
  * @desc get user
@@ -37,7 +44,7 @@ router.get( '/:userId/posts', usersController.getUserPosts )
 
 /**
  * @desc get followers
- * @route GET /api/v1users/:userId/followers
+ * @route GET /api/v1/users/:userId/followers
  * @access Public
  */
 router.get( '/:userId/followers', usersController.getFollowers )
@@ -52,16 +59,16 @@ router.get( '/:userId/following', usersController.getFollowing )
 
 /**
  * @desc follow
- * @route POST /api/v1/users/follow/:targetUserId
+ * @route POST /api/v1/users/follow/:userId
  * @access Private
  */
-router.post( '/follow/:targetUserId', ensureAuth, usersController.follow )
+router.post( '/follow/:userId', authMiddleware, usersController.follow )
 
 /**
  * @desc Add following
- * @route POST /api/v1/users/unfollow/:targetUserId
+ * @route POST /api/v1/users/unfollow/:userId
  * @access Private
  */
-router.post( '/unfollow/:targetUserId', ensureAuth, usersController.unfollow )
+router.post( '/unfollow/:userId', authMiddleware, usersController.unfollow )
 
 export default router

@@ -1,10 +1,30 @@
 import { NextFunction, Request, Response } from "express"
 import UserService from "./user.service"
-import HttpError   from "@utils/httpError"
+import HttpException   from "@exceptions/HttpException"
 import httpStatus  from "http-status"
 
 export default class UserController {
     constructor( private readonly usersService: UserService ){
+    }
+
+    public getCurrentUser = async( req: Request, res: Response, next: NextFunction ) => {
+        try {
+            const user = await this.usersService.getUserByUsername(req.user.username)
+
+            res.json( user)
+        } catch ( err ) {
+            next( new HttpException( httpStatus.CONFLICT, err.message ) )
+        }
+    }
+
+    public getUserByUsername = async( req: Request, res: Response, next: NextFunction ) => {
+        try {
+            const user = await this.usersService.getUserByUsername( req.params.username )
+
+            res.json( user )
+        } catch ( err ) {
+            next( new HttpException( httpStatus.CONFLICT, err.message ) )
+        }
     }
 
     public getSearchUsers = async( req: Request, res: Response, next: NextFunction ) => {
@@ -13,17 +33,7 @@ export default class UserController {
 
             res.json( { items: users, ...meta } )
         } catch ( err ) {
-            next( new HttpError( httpStatus.CONFLICT, err.message ) )
-        }
-    }
-
-    public getUser = async( req: Request, res: Response, next: NextFunction ) => {
-        try {
-            const user = await this.usersService.getUser( req )
-
-            res.json( user )
-        } catch ( err ) {
-            next( new HttpError( httpStatus.CONFLICT, err.message ) )
+            next( new HttpException( httpStatus.CONFLICT, err.message ) )
         }
     }
 
@@ -33,7 +43,7 @@ export default class UserController {
 
             res.json( { items: users, ...meta } )
         } catch ( err ) {
-            next( new HttpError( httpStatus.CONFLICT, err.message ) )
+            next( new HttpException( httpStatus.CONFLICT, err.message ) )
         }
     }
 
@@ -43,7 +53,7 @@ export default class UserController {
 
             res.json( { items: posts, ...meta } )
         } catch ( err ) {
-            next( new HttpError( httpStatus.CONFLICT, err.message ) )
+            next( new HttpException( httpStatus.CONFLICT, err.message ) )
         }
     }
 
@@ -54,7 +64,7 @@ export default class UserController {
 
             res.json( { items: following, ...meta } )
         } catch ( err ) {
-            next( new HttpError( httpStatus.CONFLICT, err.message ) )
+            next( new HttpException( httpStatus.CONFLICT, err.message ) )
         }
     }
 
@@ -64,7 +74,7 @@ export default class UserController {
 
             res.json( { items: followers, ...meta } )
         } catch ( err ) {
-            next( new HttpError( httpStatus.CONFLICT, err.message ) )
+            next( new HttpException( httpStatus.CONFLICT, err.message ) )
         }
     }
 
@@ -74,7 +84,7 @@ export default class UserController {
 
             res.json( following )
         } catch ( err ) {
-            next( new HttpError( httpStatus.CONFLICT, err.message ) )
+            next( new HttpException( httpStatus.CONFLICT, err.message ) )
         }
     }
 
@@ -84,7 +94,7 @@ export default class UserController {
 
             res.json( { message: 'Unfollow success.' } )
         } catch ( err ) {
-            next( new HttpError( httpStatus.CONFLICT, err.message ) )
+            next( new HttpException( httpStatus.CONFLICT, err.message ) )
         }
     }
 

@@ -1,4 +1,4 @@
-import User                                from '@api/entities/User'
+import User                                from '@entities/User'
 import { NextFunction, Request, Response } from 'express'
 import jwt                                 from 'jsonwebtoken'
 
@@ -24,8 +24,6 @@ export default async function deserializeUserMiddleware( req: Request, _: Respon
             req.isAuthenticated = true
             req.user            = decoded as User
         }
-    } catch ( err ) {
-        console.log( err.message )
-    }
+    } catch ( err ) { }
     next()
 }

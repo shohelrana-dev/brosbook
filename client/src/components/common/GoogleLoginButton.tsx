@@ -17,9 +17,9 @@ function GoogleLoginButton(){
             await login( response.credential! ).unwrap()
             router.push( '/' )
             toast.success( 'You have been logged in successfully.' )
-        } catch ( err ) {
+        } catch ( err: any ) {
             console.error( err )
-            toast.error( "Login has been failed." )
+            toast.error( err?.data?.message || "Login has been failed." )
         }
     }
 
