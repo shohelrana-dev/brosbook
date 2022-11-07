@@ -1,7 +1,7 @@
 import { User }                           from "@interfaces/user.interfaces"
 
 export interface Conversation {
-    id: number
+    id: string
     identifier: string
     lastMessage?: string
     ownerId: string
@@ -13,7 +13,7 @@ export interface Conversation {
 }
 
 export interface Message {
-    id: number
+    id: string
     conversationIdentifier: string
     senderId: number
     body?: string
@@ -40,7 +40,7 @@ export interface ReactionPayload {
 }
 
 export interface Reaction {
-    id: number
+    id: string
     senderId: number
     messageId: number
     name: string

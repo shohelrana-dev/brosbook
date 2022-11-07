@@ -1,21 +1,20 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { RootState } from "@store/store"
+import { RootState } from "@store/index"
 import { User } from "@interfaces/user.interfaces"
 import { authApi, LoginResponse } from "@services/authApi"
 import Cookies from "js-cookie"
 import { accountApi } from "@services/accountApi"
-import {usersApi} from "@services/usersApi";
 
 interface AuthState {
+    isLoading: boolean
     isAuthenticated: boolean
-    user: User,
-    access_token: null | string
+    user: User
 }
 
 const initialState: AuthState = {
+    isLoading: false,
     isAuthenticated: false,
-    user: {} as User,
-    access_token: null
+    user: {} as User
 }
 
 export const authSlice = createSlice({
@@ -25,11 +24,7 @@ export const authSlice = createSlice({
         logout: (state) => {
             state.isAuthenticated = false
             state.user = {} as User
-            state.access_token = null
             Cookies.remove('access_token')
-        },
-        setAccessToken: (state, { payload }: PayloadAction<string>) => {
-            state.access_token = payload
         }
     },
     extraReducers: (builder) => {
@@ -39,6 +34,7 @@ export const authSlice = createSlice({
 
         builder.addMatcher(authApi.endpoints.login.matchFulfilled, (state, { payload }: PayloadAction<LoginResponse>) => {
             if (payload.access_token && payload.user && payload.user.hasEmailVerified) {
+                state.isLoading = false
                 state.isAuthenticated = true
                 state.user = payload.user!
                 Cookies.set('access_token', payload.access_token)
@@ -48,14 +44,10 @@ export const authSlice = createSlice({
         })
 
         builder.addMatcher(authApi.endpoints.loginWithGoogle.matchFulfilled, (state, { payload }: PayloadAction<LoginResponse>) => {
+            state.isLoading = false
             state.isAuthenticated = true
             state.user = payload.user!
             Cookies.set('access_token', payload.access_token)
-        })
-
-        builder.addMatcher(usersApi.endpoints.getCurrentUser.matchFulfilled, (state, { payload }: PayloadAction<User>) => {
-            state.isAuthenticated = true
-            state.user = payload
         })
 
         builder.addMatcher(accountApi.endpoints.updateProfile.matchFulfilled, (state, { payload }: PayloadAction<User>) => {
@@ -66,4 +58,4 @@ export const authSlice = createSlice({
 
 export const selectAuthState = (state: RootState) => state.auth
 
-export const { logout, setAccessToken } = authSlice.actions
+export const { logout } = authSlice.actions

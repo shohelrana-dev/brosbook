@@ -8,7 +8,7 @@ import Avatar from "@components/common/Avatar"
 import { Comment } from "@interfaces/posts.interfaces"
 import { useLikeCommentMutation, useUnlikeCommentMutation } from "@services/commentsApi"
 import timeAgo from "@utils/timeAgo"
-import {BsThreeDots as ThreeDotsIcon} from "react-icons/bs";
+import {BsThreeDots as ThreeDotsIcon} from "react-icons/bs"
 
 interface CommentItemState {
     comment: Comment
@@ -43,21 +43,17 @@ function CommentItem({ comment }: CommentItemState) {
 
     return (
         <div className="flex">
-            <Link href={`/${comment.user.username}`}>
-                <a className="mt-3">
-                    <Avatar src={comment.user.photo} size="small" />
-                </a>
+            <Link href={`/${comment.user.username}`} className="mt-3">
+                <Avatar src={comment.user.photo} size="small" />
             </Link>
             <div>
                 <div className="flex items-center">
                     <div className="ml-2 mt-1 py-2 px-4 rounded-xl bg-theme-gray relative">
-                        <Link href={`/${comment.user.username}`}>
-                            <a className="flex">
-                                <h3 className="text-xs font-medium">
-                                    {comment.user.fullName}
-                                </h3>
-                                <p className="text-xs ml-1 text-gray-500">@{comment.user.username}</p>
-                            </a>
+                        <Link href={`/${comment.user.username}`} className="flex">
+                            <h3 className="text-xs font-medium">
+                                {comment.user.fullName}
+                            </h3>
+                            <p className="text-xs ml-1 text-gray-500">@{comment.user.username}</p>
                         </Link>
 
                         <div>

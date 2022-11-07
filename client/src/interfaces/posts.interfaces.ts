@@ -1,7 +1,7 @@
 import { User }         from "@interfaces/user.interfaces"
 
 export interface Post {
-    id: number
+    id: string
     username: string
     body: string
     likeCount: number
@@ -15,12 +15,12 @@ export interface Post {
 }
 
 export interface Comment {
-    id: number
+    id: string
     username: string
     user: User
     hasCurrentUserLike: boolean
     likeCount: number
-    postId: number
+    postId: string
     body: string
     createdAt: string
     updatedAt: string

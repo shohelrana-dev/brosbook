@@ -1,6 +1,8 @@
+"use client"
 import React, { useState }                        from 'react'
 import { User }                                   from "@interfaces/user.interfaces"
 import { useFollowMutation, useUnfollowMutation } from "@services/usersApi"
+import Button from "@components/common/Button"
 
 interface FollowButtonProps {
     user: User
@@ -12,7 +14,7 @@ function FollowButton( props: FollowButtonProps ){
     const [follow]        = useFollowMutation()
     const [unfollow]      = useUnfollowMutation()
 
-    async function handleFollowClick( userId: number ){
+    async function handleFollowClick( userId: string ){
         try {
             await follow( userId ).unwrap()
 
@@ -22,7 +24,7 @@ function FollowButton( props: FollowButtonProps ){
         }
     }
 
-    async function handleUnfollowClick( userId: number ){
+    async function handleUnfollowClick( userId: string ){
         try {
             await unfollow( userId ).unwrap()
 
@@ -35,15 +37,13 @@ function FollowButton( props: FollowButtonProps ){
     return (
         <>
             { user.isCurrentUserFollow ? (
-                <button onClick={ () => handleUnfollowClick( user.id ) }
-                        className="button-blue rounded-full py-2 px-5">
+                <Button onClick={ () => handleUnfollowClick( user.id ) }>
                     Unfollow
-                </button>
+                </Button>
             ) : (
-                <button onClick={ () => handleFollowClick( user.id ) }
-                        className="button-blue rounded-full py-2 px-5">
+                <Button onClick={ () => handleFollowClick( user.id ) }>
                     Follow
-                </button>
+                </Button>
             ) }
         </>
     )

@@ -1,6 +1,7 @@
 /**
  * @type {import('next').NextConfig}
  */
+
 const nextConfig = {
     reactStrictMode: false,
     images: {
@@ -9,7 +10,18 @@ const nextConfig = {
             'lh3.googleusercontent.com'
         ]
     },
-    swcMinify: true
+    swcMinify: true,
+    experimental: {
+        appDir: true,
+        fontLoaders: [
+            { loader: '@next/font/google', options: { subsets: ['latin'] } },
+        ]
+    },
+    compiler: {
+        removeConsole: {
+            exclude: ['error'],
+        }
+    },
 }
 
 module.exports = nextConfig

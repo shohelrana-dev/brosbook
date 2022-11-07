@@ -1,10 +1,17 @@
-import React                from 'react'
-import { CircularProgress } from "@mui/material"
+import React from 'react'
+import {PuffLoader} from "react-spinners"
 
-function Loading(  ) {
+interface LoadingProps {
+    loading?: boolean,
+    size?: number | string
+    className?: string
+    color?: string
+}
+
+function Loading({color="#36d7b7", ...rest}: LoadingProps) {
     return (
         <div className="flex justify-center">
-            <CircularProgress size={ 30 }/>
+            <PuffLoader color={color}  {...rest}/>
         </div>
     )
 }

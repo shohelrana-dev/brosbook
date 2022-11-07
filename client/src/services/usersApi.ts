@@ -9,7 +9,7 @@ export const usersApi = baseApi.injectEndpoints( {
             query: (  ) => `users/me`
         } ),
 
-        getUser: build.query<User, string>( {
+        getUserByUsername: build.query<User, string>( {
             query: ( username ) => `users/${ username }`
         } ),
 
@@ -20,35 +20,35 @@ export const usersApi = baseApi.injectEndpoints( {
             } )
         } ),
 
-        getUserPosts: build.query<ListResponse<Post>, { userId: number, page: number, limit?: number }>( {
+        getUserPosts: build.query<ListResponse<Post>, { userId: string, page: number, limit?: number }>( {
             query: ( { userId, ...params } ) => ( {
                 url: `users/${ userId }/posts`,
                 params: params
             } )
         } ),
 
-        follow: build.mutation<User, number>( {
+        follow: build.mutation<User, string>( {
             query: ( targetUserId ) => ( {
                 url: `users/follow/${ targetUserId }`,
                 method: 'POST',
             } )
         } ),
 
-        unfollow: build.mutation<User, number>( {
+        unfollow: build.mutation<User, string>( {
             query: ( targetUserId ) => ( {
                 url: `users/unfollow/${ targetUserId }`,
                 method: 'POST',
             } )
         } ),
 
-        getFollowers: build.query<ListResponse<User>, { userId: number, page: number, limit?: number }>( {
+        getFollowers: build.query<ListResponse<User>, { userId: string, page: number, limit?: number }>( {
             query: ( { userId, ...params } ) => ( {
                 url: `users/${ userId }/followers`,
                 params
             } )
         } ),
 
-        getFollowing: build.query<ListResponse<User>, { userId: number, page: number, limit?: number }>( {
+        getFollowing: build.query<ListResponse<User>, { userId: string, page: number, limit?: number }>( {
             query: ( { userId, ...params } ) => ( {
                 url: `users/${ userId }/following`,
                 params
@@ -58,7 +58,8 @@ export const usersApi = baseApi.injectEndpoints( {
 } )
 
 export const {
-                 useGetUserQuery,
+                 useGetCurrentUserQuery,
+                 useGetUserByUsernameQuery,
                  useGetSuggestedUsersQuery,
                  useGetUserPostsQuery,
                  useFollowMutation,

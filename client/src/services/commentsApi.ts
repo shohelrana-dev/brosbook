@@ -4,14 +4,14 @@ import { baseApi }      from "@services/baseApi"
 
 export const commentsApi = baseApi.injectEndpoints( {
     endpoints: ( build ) => ( {
-        getComments: build.query<ListResponse<Comment>, { postId: number, page: number, limit?: number }>( {
+        getComments: build.query<ListResponse<Comment>, { postId: string, page: number, limit?: number }>( {
             query: ( { postId, ...params } ) => ( {
                 url: `posts/${ postId }/comments`,
                 params
             } )
         } ),
 
-        createComment: build.mutation<Comment, { postId: number, body: string }>( {
+        createComment: build.mutation<Comment, { postId: string, body: string }>( {
             query: ( { postId, ...formData } ) => ( {
                 url: `posts/${ postId }/comments`,
                 method: 'POST',
@@ -19,14 +19,14 @@ export const commentsApi = baseApi.injectEndpoints( {
             } ),
         } ),
 
-        likeComment: build.mutation<Comment, { postId: number, commentId: number }>( {
+        likeComment: build.mutation<Comment, { postId: string, commentId: number }>( {
             query: ( { postId, commentId } ) => ( {
                 url: `posts/${ postId }/comments/${ commentId }/like`,
                 method: 'POST'
             } ),
         } ),
 
-        unlikeComment: build.mutation<Comment, { postId: number, commentId: number }>( {
+        unlikeComment: build.mutation<Comment, { postId: string, commentId: number }>( {
             query: ( { postId, commentId } ) => ( {
                 url: `posts/${ postId }/comments/${ commentId }/unlike`,
                 method: 'POST'

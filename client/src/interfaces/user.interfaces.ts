@@ -1,5 +1,5 @@
 export interface User {
-    id: number
+    id: string
     firstName: string
     lastName: string
     fullName: string
@@ -19,7 +19,7 @@ export interface User {
 }
 
 export interface Profile {
-    id: number
+    id: string
     username: string
     phone: string
     coverPhoto: string

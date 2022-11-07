@@ -16,12 +16,12 @@ export default function socketHandler( server: http.Server ) {
 
     //chat service for database action
     const chatService = new ChatService()
-    type SocketUser = { socketId: string, userId: number }
+    type SocketUser = { socketId: string, userId: string }
 
     //connected users
     let users: SocketUser[] = []
 
-    function addUser( socketId: string, userId: number ) {
+    function addUser( socketId: string, userId: string ) {
         !users.some( user => user.userId === userId ) && users.push( { socketId, userId } )
     }
 

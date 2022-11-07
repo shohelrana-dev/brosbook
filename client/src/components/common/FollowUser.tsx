@@ -25,10 +25,8 @@ function FollowUser( { user, isFollowing: defaultIsFollowing }: FollowUserProps 
 
     return (
         <div className="flex box p-4 mb-2">
-            <Link href={ `/${ user.username }` }>
-                <a className="block min-w-[40px] mr-2">
-                    <Avatar src={ user.photo }/>
-                </a>
+            <Link href={ `/${ user.username }` } className="block min-w-[40px] mr-2">
+                <Avatar src={ user.photo }/>
             </Link>
             <div className="w-full">
                 <div className="flex justify-between items-center">

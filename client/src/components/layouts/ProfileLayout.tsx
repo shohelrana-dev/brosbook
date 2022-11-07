@@ -2,14 +2,14 @@ import React, { ReactNode } from 'react'
 import Link from "next/link"
 import { SRLWrapper } from "simple-react-lightbox"
 import Image from "next/image"
-import { useRouter } from "next/router"
+import { useRouter } from "next/navigation"
 import LocationIcon from "@mui/icons-material/LocationOnOutlined"
 import CakeIcon from "@mui/icons-material/CakeOutlined"
 import ScheduleIcon from "@mui/icons-material/Schedule"
 import { Button } from "@mui/material"
 
 import MainLayout from "@components/layouts/MainLayout"
-import { useGetUserQuery } from "@services/usersApi"
+import { useGetUserByUsernameQuery } from "@services/usersApi"
 import { useSelector } from "react-redux"
 import { selectAuthState } from "@slices/authSlice"
 import FollowButton from "@components/common/FollowButton"
@@ -22,7 +22,7 @@ interface ProfileLayoutProps {
 export default function ProfileLayout({ children }: ProfileLayoutProps) {
     //hooks
     const router = useRouter()
-    const { data: user } = useGetUserQuery(router.query.username as string)
+    const { data: user } = useGetUserByUsernameQuery(router.query.username as string)
     const { isAuthenticated, user: currentUser } = useSelector(selectAuthState)
 
     return (

@@ -1,10 +1,10 @@
 import React                               from 'react'
-import { useRouter }                       from "next/router"
+import { useRouter }                       from "next/navigation"
 import { toast }                           from "react-toastify"
-import { GoogleLogin, CredentialResponse } from '@react-oauth/google'
-import { CircularProgress }                from "@mui/material"
+import {GoogleLogin, CredentialResponse, GoogleOAuthProvider} from '@react-oauth/google'
 
 import { useLoginWithGoogleMutation } from "@services/authApi"
+import Loading from "@components/common/Loading"
 
 function GoogleLoginButton(){
     //hooks
@@ -23,20 +23,18 @@ function GoogleLoginButton(){
         }
     }
 
-    if( isSuccess || isLoading ) return (
-        <div className="flex justify-center">
-            <CircularProgress/>
-        </div>
-    )
+    if( isSuccess || isLoading ) return  <Loading/>
 
     return (
-        <div className="flex justify-center my-2">
-            <GoogleLogin
-                onSuccess={ responseGoogle }
-                onError={ () => console.log( 'Google Login Failed' ) }
-                useOneTap={ true }
-            />
-        </div>
+        <GoogleOAuthProvider clientId={ process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID! }>
+            <div className="flex justify-center my-2">
+                <GoogleLogin
+                    onSuccess={ responseGoogle }
+                    onError={ () => console.log( 'Google Login Failed' ) }
+                    useOneTap={ true }
+                />
+            </div>
+        </GoogleOAuthProvider>
     )
 }
 

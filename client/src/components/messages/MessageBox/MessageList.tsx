@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import moment                       from "moment"
-import { useRouter }                from "next/router"
+import { useRouter }                from "next/navigation"
 import { useDispatch, useSelector } from "react-redux"
 
 import SingleMessage           from "@components/messages/MessageBox/SingleMessage"

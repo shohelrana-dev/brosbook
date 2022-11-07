@@ -2,6 +2,7 @@
 /client/.next
 /client/.swc
 **/node_modules
+**/.vscode
 .idea
 server_dist
 

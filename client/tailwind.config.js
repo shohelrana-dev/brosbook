@@ -3,10 +3,10 @@
 module.exports = {
   mode: 'jit',
   content: [
+    './src/app/**/*.{js,ts,jsx,tsx}',
     './src/pages/**/*.{js,ts,jsx,tsx}',
     './src/components/**/*.{js,ts,jsx,tsx}'
   ],
-  darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
       colors: {
@@ -34,6 +34,24 @@ module.exports = {
     extend: {},
   },
   plugins: [
-    require('tailwind-scrollbar-hide'),
-  ]
+    require('daisyui'),
+    require('tailwind-scrollbar-hide')
+  ],
+  daisyui: {
+    themes: [
+      {
+        mytheme: {
+          "primary": "rgb(58,141,245)",
+          "secondary": "#F000B8",
+          "accent": "#37CDBE",
+          "neutral": "#3D4451",
+          "base-100": "#FFFFFF",
+          "info": "#3ABFF8",
+          "success": "#36D399",
+          "warning": "#FBBD23",
+          "error": "#F87272",
+        },
+      },
+    ],
+  },
 }

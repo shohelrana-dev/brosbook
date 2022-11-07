@@ -9,6 +9,7 @@ import { useSelector }                                     from "react-redux"
 import Avatar                    from "@components/common/Avatar"
 import { selectAuthState }       from "@slices/authSlice"
 import { useCreatePostMutation } from "@services/postsApi"
+import Image from "next/image";
 
 function CreatePostForm(){
 
@@ -17,21 +18,21 @@ function CreatePostForm(){
     const [createPost, { isLoading }]       = useCreatePostMutation()
     const inputImageRef                     = useRef<HTMLInputElement | null>( null )
     const [selectedImage, setSelectedImage] = useState<any>( null )
-    const [postBody, setPostBody]           = useState<string>( '' )
+    const [body, setBody]           = useState<string>( '' )
 
     async function submitForm( event: FormEvent ){
         event.preventDefault()
 
-        if( ! postBody && ! selectedImage ) return
+        if( ! body && ! selectedImage ) return
 
         const formData = new FormData()
-        formData.append( 'body', postBody )
+        formData.append( 'body', body )
         formData.append( 'image', selectedImage )
 
         try {
             await createPost( formData ).unwrap()
             toast.success( 'Post has been published.' )
-            if( postBody ) setPostBody( '' )
+            if( body ) setBody( '' )
             if( selectedImage ) setSelectedImage( null )
         } catch ( err: any ) {
             console.error( err )
@@ -65,11 +66,10 @@ function CreatePostForm(){
             </div>
             <form onSubmit={ submitForm }>
                 <textarea
-                    name="postBody"
                     className="input-basic text-gray-600 text-lg font-medium p-4 my-2"
                     placeholder="What's your mind?"
-                    onChange={ ( e ) => setPostBody( e.target.value ) }
-                    value={ postBody }
+                    onChange={ ( e ) => setBody( e.target.value ) }
+                    value={ body }
                 />
                 <input
                     ref={ inputImageRef }
@@ -86,7 +86,7 @@ function CreatePostForm(){
                             onClick={ () => setSelectedImage( null ) }>
                             <CancelIcon className="bg-white rounded-full"/>
                         </button>
-                        <img className="rounded-2xl" src={ URL.createObjectURL( selectedImage ) } alt="post image"/>
+                        <Image className="rounded-2xl" src={ URL.createObjectURL( selectedImage ) } alt="post image"/>
                     </div>
                 ) }
 

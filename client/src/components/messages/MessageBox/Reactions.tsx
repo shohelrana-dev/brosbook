@@ -3,7 +3,7 @@ import { Popover }                   from "@mui/material"
 import InsertEmoticonIcon            from "@mui/icons-material/InsertEmoticon"
 import classNames                    from "classnames"
 import { useSelector }               from "react-redux"
-import { useRouter }                 from "next/router"
+import { useRouter }                 from "next/navigation"
 import Image                         from "next/image"
 
 import { RootState } from "@store/store"

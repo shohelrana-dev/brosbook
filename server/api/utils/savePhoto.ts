@@ -7,7 +7,7 @@ import { UploadedFile } from "express-fileupload"
 interface savePhotoProps {
     file: UploadedFile
     source: PhotoSource
-    userId: number
+    userId: string
     sourceId?: number
 }
 

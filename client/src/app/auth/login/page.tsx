@@ -1,0 +1,103 @@
+"use client"
+import { FormEvent, Fragment, useState } from 'react'
+import Head                                     from 'next/head'
+import Link                                     from 'next/link'
+import { LinearProgress }              from '@mui/material'
+import { Lock }              from "@mui/icons-material"
+import { FiLock }              from "react-icons/fi"
+
+import AnimatedInput         from '@components/common/AnimatedInput'
+import GoogleLoginButton     from '@components/common/GoogleLoginButton'
+import Button         from "@components/common/Button"
+import { useRouter }         from "next/navigation"
+import { useLoginMutation }  from "@services/authApi"
+import { toast }             from "react-toastify"
+import PasswordInput         from "@components/common/PasswordInput"
+import { LoginErrors }       from "@interfaces/auth.interfaces"
+
+export default function LoginPage(){
+    //hooks
+    const router                            = useRouter()
+    const [login, { isLoading, isSuccess }] = useLoginMutation()
+    const [inputErrors, setInputErrors]     = useState<LoginErrors>( {} )
+    const [username, setUsername]           = useState<string>( '' )
+    const [password, setPassword]           = useState<string>( '' )
+
+
+    //handle form submit
+    async function onLoginFormSubmit( event: FormEvent ){
+        event.preventDefault()
+
+        try {
+            const { user } = await login( { username, password } ).unwrap()
+            if( user.hasEmailVerified ){
+                router.push('/')
+                toast.success( 'You have been logged in successfully.' )
+            } else{
+                router.push('/auth/email_verification/required')
+                toast.error( 'Your email has not been verified yet.' )
+            }
+        } catch ( err: any ) {
+            console.error( err )
+            setInputErrors( err?.data?.errors || {} )
+            toast.error( err?.data?.message || 'Invalid credentials.' )
+        }
+    }
+
+    return (
+        <Fragment>
+            <Head>
+                <title>Log In | BrosBook</title>
+            </Head>
+
+            <div className="h-screen flex flex-col bg-theme-gray">
+                <div className="w-90 mx-auto mt-12 lg:mt-28">
+                    { isLoading || isSuccess && <LinearProgress/> }
+
+                    <div className="auth-box">
+                        <div className="flex justify-center mb-2">
+                            <FiLock size="30"/>
+                        </div>
+                        <h1 className="text-xl text-center mb-4 font-medium">Log In to {process.env.NEXT_PUBLIC_APP_NAME}</h1>
+
+                        <form method="post" onSubmit={ onLoginFormSubmit }>
+                            <AnimatedInput
+                                label="Username or email"
+                                value={username}
+                                error={ inputErrors?.username }
+                                onChange={ ( e ) => setUsername( e.target.value ) }
+                            />
+                            <PasswordInput
+                                label="Password"
+                                value={password}
+                                error={ inputErrors?.password }
+                                onChange={ ( e ) => setPassword( e.target.value ) }
+                            />
+                            <Button className="w-full mt-3"  type="submit" title="Log In" isLoading={ isLoading || isSuccess }/>
+                        </form>
+
+                        <div className="divider">OR</div>
+
+                        <GoogleLoginButton/>
+
+                        <small className="block text-center">
+                            <Link href="/auth/forgot_password" className="text-blue-500">
+                                    Forgotten your password?
+                            </Link>
+                        </small>
+                    </div>
+
+                    <div className="auth-box text-center mt-2">
+                        <p className="text-gray-800">
+                            Don&apos;t have an account?
+                            <Link href="/auth/signup" className="ml-1 text-blue-500 font-medium">
+                                    Sign Up
+                            </Link>
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </Fragment>
+    )
+}
