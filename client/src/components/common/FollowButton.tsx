@@ -1,51 +1,64 @@
 "use client"
-import React, { useState }                        from 'react'
-import { User }                                   from "@interfaces/user.interfaces"
-import { useFollowMutation, useUnfollowMutation } from "@services/usersApi"
+import React, {useState} from 'react'
+import {User} from "@interfaces/user.interfaces"
+import {useFollowMutation, useUnfollowMutation} from "@services/usersApi"
 import Button from "@components/common/Button"
-import ButtonOutline from "@components/common/ButtonOutline";
+import ButtonOutline from "@components/common/ButtonOutline"
+import ConfirmAlert from "@components/common/ConfirmAlert"
+
 
 interface FollowButtonProps {
     user: User
 }
 
-function FollowButton( props: FollowButtonProps ){
+function FollowButton(props: FollowButtonProps) {
     //hooks
-    const [user, setUser] = useState<User>( props.user )
-    const [follow]        = useFollowMutation()
-    const [unfollow]      = useUnfollowMutation()
+    const [user, setUser] = useState<User>(props.user)
+    const [follow] = useFollowMutation()
+    const [unfollow] = useUnfollowMutation()
+    const [isOpenUnfollowAlert, setIsOpenUnfollowAlert] = useState<boolean>(false)
 
-    async function handleFollowClick( userId: string ){
+    async function handleFollowClick() {
         try {
-            await follow( userId ).unwrap()
+            await follow(user.id).unwrap()
 
-            setUser( { ...user, isCurrentUserFollow: true } )
-        } catch ( err ) {
-            console.error( err )
+            setUser({...user, isCurrentUserFollow: true})
+        } catch (err) {
+            console.error(err)
         }
     }
 
-    async function handleUnfollowClick( userId: string ){
+    async function handleUnfollowClick() {
         try {
-            await unfollow( userId ).unwrap()
+            await unfollow(user.id).unwrap()
 
-            setUser( { ...user, isCurrentUserFollow: false } )
-        } catch ( err ) {
-            console.error( err )
+            setUser({...user, isCurrentUserFollow: false})
+        } catch (err) {
+            console.error(err)
         }
     }
 
     return (
         <>
-            { user.isCurrentUserFollow ? (
-                <ButtonOutline onClick={ () => handleUnfollowClick( user.id ) } size='sm' className="mt-0">
-                    Unfollow
-                </ButtonOutline>
+            {user.isCurrentUserFollow ? (
+                <>
+                    <ButtonOutline onClick={() => setIsOpenUnfollowAlert(true)} size='sm' className="mt-0">
+                        Unfollow
+                    </ButtonOutline>
+                    <ConfirmAlert
+                        isOpen={isOpenUnfollowAlert}
+                        title={`Unfollow ${user.username}?`}
+                        message="Their Posts will no longer show up in your home timeline. You can still view their profile."
+                        okButtonLabel="Unfollow"
+                        onClose={()=> setIsOpenUnfollowAlert(false)}
+                        onConfirm={handleUnfollowClick}
+                    />
+                </>
             ) : (
-                <Button onClick={ () => handleFollowClick( user.id ) } size="sm" className="mt-0">
+                <Button onClick={handleFollowClick} size="sm" className="mt-0">
                     Follow
                 </Button>
-            ) }
+            )}
         </>
     )
 }

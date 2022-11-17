@@ -33,7 +33,7 @@ class ChatService {
             const namePrefix = process.env.APP_NAME + "_image_"
             imageName        = namePrefix + uuidv4() + path.extname( imageName )
             imageUrl         = `${ process.env.SERVER_URL }/images/${ imageName }`
-            const imagePath  = path.resolve( process.cwd(), "public/images", imageName )
+            const imagePath  = path.resolve( process.cwd(), "public/uploads", imageName )
             const image      = Buffer.from( base64Image )
 
             //save the image file

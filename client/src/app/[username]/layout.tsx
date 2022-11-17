@@ -1,21 +1,18 @@
 import React, { ReactNode} from 'react'
 import Link from "next/link"
-import Image from "next/image"
 import {GoLocation} from "react-icons/go"
 import {HiOutlineCake} from "react-icons/hi"
 import {MdOutlineSchedule} from "react-icons/md"
 
 import FollowButton from "@components/common/FollowButton"
-import placeholderCoverPhoto from "@images/placeholder-cover-photo.png"
 import {http} from "@boot/axios"
 import {cookies} from "next/headers"
 import {User} from "@interfaces/user.interfaces"
-import LightboxImage from "@components/common/LightboxImage"
 import TabLinkList from "@components/common/TabLinkList"
 import authorizationConfig from "@utils/authorizationConfig"
 import ButtonOutline from "@components/common/ButtonOutline"
 import CoverPhoto from "@components/profile/CoverPhoto"
-import ProfilePhoto from "@components/profile/ProfilePhoto";
+import ProfilePhoto from "@components/profile/ProfilePhoto"
 
 interface ProfileLayoutProps {
     children: ReactNode
@@ -48,7 +45,7 @@ export default async function ProfileLayout({ children, params }: ProfileLayoutP
                             </div>
                         )}
                         {currentUser && currentUser?.username === user?.username && (
-                            <ButtonOutline>
+                            <ButtonOutline className="flex h-[35px] items-center">
                                 <Link href="/account/profile">
                                     Edit Profile
                                 </Link>

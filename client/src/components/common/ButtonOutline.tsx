@@ -8,13 +8,13 @@ interface ButtonOutlineProps extends ButtonProps {
 }
 
 function ButtonOutline(props: ButtonOutlineProps) {
-    let { title, children, className = '', size='sm', ...rest } = props
+    let { title, children, className = '', ...rest } = props
 
-    className = classNames(className, 'rounded-full flex items-center max-h-[35px] capitalize hover:bg-gray-50')
+    className = classNames('rounded-full capitalize hover:bg-gray-50', className)
 
     return (
         /*@ts-ignore*/
-        <Button variant="outlined" className={className} size={size} {...rest}>
+        <Button variant="outlined" className={className} {...rest}>
             {children}
         </Button>
     )

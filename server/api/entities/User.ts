@@ -60,7 +60,7 @@ class User extends AbstractEntity {
     @BeforeInsert()
     setDefaultProfilePhotoIfNotGiven() {
         if (!this.photo) {
-            this.photo = process.env.SERVER_URL! + '/images/avatar.png'
+            this.photo = process.env.SERVER_URL! + '/uploads/avatar.png'
         }
     }
 

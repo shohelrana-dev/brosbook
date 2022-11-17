@@ -2,13 +2,14 @@ import {PropsWithChildren} from "react"
 import { Kanit } from '@next/font/google'
 import 'react-toastify/dist/ReactToastify.css'
 import Sidebar from "@components/common/Sidebar"
-import ProvidersWrapper from "./ProvidersWrapper"
+import Providers from "./Providers"
 import Navbar from "@components/common/Navbar"
 import authorizationConfig from "@utils/authorizationConfig"
 import {cookies} from "next/headers"
 import {http} from "@boot/axios"
 import classNames from "classnames"
 import '@styles/app.css'
+import 'react-confirm-alert/src/react-confirm-alert.css'
 
 const font = Kanit({weight: '400'})
 
@@ -25,7 +26,7 @@ export default async function RootLayout ({children}:PropsWithChildren){
                 <link rel="shortcut icon" href="/images/favicon.png" />
             </head>
             <body>
-                <ProvidersWrapper>
+                <Providers>
                     <Navbar user={user} />
                     <div className="bg-theme-gray p-4">
                         <main className="max-w-4xl mx-auto min-h-[93vh]">
@@ -39,7 +40,7 @@ export default async function RootLayout ({children}:PropsWithChildren){
                             </div>
                         </main>
                     </div>
-                </ProvidersWrapper>
+                </Providers>
             </body>
         </html>
     )

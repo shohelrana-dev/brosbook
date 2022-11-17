@@ -15,7 +15,7 @@ export default async function savePhoto( { file, source, userId, sourceId }: Sav
     const type = path.extname( file.name )
     const name      = process.env.APP_NAME + '_image_' + uuidv4() + type
     const url       = `${ process.env.SERVER_URL }/images/${ name }`
-    const photoPath = path.join( process.cwd(), 'server/public/images', name )
+    const photoPath = path.join( process.cwd(), 'server/public/uploads', name )
 
     try {
         await file.mv( photoPath )

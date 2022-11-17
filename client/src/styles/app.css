@@ -5,6 +5,7 @@
 @layer base {
     body {
         font-size: 15px;
+        line-height: 1.3;
     }
 }
 
