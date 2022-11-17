@@ -26,5 +26,5 @@ export interface Profile {
     gender: string
     bio: string
     location: string
-    birthdate: string
+    birthdate: Date
 }

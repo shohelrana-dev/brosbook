@@ -5,13 +5,14 @@ import Image from "next/image"
 import Link from "next/link"
 import { useSelector } from "react-redux"
 import { useRouter } from "next/navigation"
-import { LinearProgress } from "@mui/material"
 import useAsyncEffect from "use-async-effect"
 import { toast } from "react-toastify"
 
 import { selectAuthState } from "@slices/authSlice"
 import mailImage from "@images/mail-with-value.png"
 import { useResendVerificationLinkMutation } from "@services/authApi"
+import Button from "@components/common/Button"
+import Loading from "@components/common/Loading"
 
 export default function RequiredPage() {
     const router = useRouter()
@@ -22,7 +23,7 @@ export default function RequiredPage() {
 
     useAsyncEffect(async () => {
         if (Object.keys(user).length < 1) {
-            await router.push('/auth/login')
+            router.push('/auth/login')
         }
         setIsCheckedUser(true)
     }, [router])
@@ -38,7 +39,7 @@ export default function RequiredPage() {
     }
 
     if (!isCheckedUser) {
-        return <LinearProgress />
+        return <Loading />
     }
 
     return (
@@ -66,8 +67,9 @@ export default function RequiredPage() {
                             {!isResendEmail ? (
                                 <span>
                                     Didn&apos;t receive the link email?&nbsp;
-                                    <Button  className="w-full mt-3"  onClick={resendEmail}
-                                        className="font-bold text-green-700">Resend email</button>
+                                    <Button  className="w-full mt-3 font-bold text-green-700"  onClick={resendEmail}>
+                                        Resend email
+                                    </Button>
                                 </span>) : (
                                 <span>Email resent. Please check your inbox.</span>
                             )}

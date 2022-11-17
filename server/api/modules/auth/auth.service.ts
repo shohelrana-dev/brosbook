@@ -12,8 +12,9 @@ import {SignupUserDTO} from "@modules/auth/auth.dto"
 import UnauthorizedException from "@exceptions/UnauthorizedException"
 import InternalServerException from "@exceptions/InternalServerException"
 import {EmailService} from "@services/email.service"
-import Media from "@entities/Media";
-import {PhotoSource} from "@api/enums";
+import Media from "@entities/Media"
+import {PhotoSource} from "@api/enums"
+import Profile from "@entities/Profile";
 
 class AuthService {
     private userRepository = appDataSource.getRepository(User)
@@ -31,6 +32,8 @@ class AuthService {
         user.password = payload.password
 
         user = await this.userRepository.save(user)
+
+        Profile.create({userId: user.id}).save()
 
         this.emailService.sendEmailVerificationLink(payload.email, payload.username)
 
@@ -95,6 +98,8 @@ class AuthService {
             user.photo = tokenPayload.picture
             user.password = uuid()
             await this.userRepository.save(user)
+
+            Profile.create({userId: user.id}).save()
 
             const media = new Media()
             media.name = 'Google id photo'

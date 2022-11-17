@@ -1,39 +1,41 @@
 import React, { InputHTMLAttributes } from 'react'
-import { Zoom }                       from "@mui/material"
 
-interface LabeledInputProps extends InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement> {
+interface BasicInputProps extends InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement> {
     label: string,
     textarea?: boolean
     error?: string
+    helpText?: string
+    labelHide?: boolean
 }
 
-export default function BasicInput( props: LabeledInputProps ) {
-    let { label, name, textarea, className, value, error, onChange, ...rest } = props
+export default function BasicInput( props: BasicInputProps ) {
+    let { label, name, textarea, className = '', type='text', error, helpText, labelHide= false, ...rest } = props
     if ( className ) {
-        className = className + ' input-basic'
+        className = 'block w-full outline-none py-2 px-3 rounded-lg border-2 border-blue-50 focus:border-blue-300 ' + className
     } else {
-        className = 'input-basic'
+        className = 'block w-full outline-none py-2 px-3 rounded-lg border-2 border-blue-50 focus:border-blue-300'
     }
+    const id = name ? name : label.replace(' ', '')
 
     return (
-        <div className="flex items-center">
-            <div className="w-3/12 p-4">
-                <label htmlFor={ name } className="font-medium text-gray-800 cursor-pointer block text-right">
-                    { label }
-                </label>
+        <div className="mb-4">
+            <div className="mb-2">
+                {!labelHide ? <label htmlFor={id} className="font-medium text-gray-800 cursor-pointer block">
+                    {label}
+                </label> : null}
+                {helpText ? <p className="text-gray-400 text-xs mb-3">{helpText}</p> : null}
             </div>
-            <div className="flex-auto p-4">
-                { !textarea && <input id={ name } className={ className } name={ name } value={ value }
-                                      onChange={ onChange } { ...rest } /> }
-                { textarea && <textarea id={ name } className={ className } name={ name } value={ value }
-                                        onChange={ onChange }/> }
-                { error && (
-                    <Zoom in>
-                        <p className="font-medium text-red-600 text-[12px]">
-                            { error }
-                        </p>
-                    </Zoom>
-                ) }
+            <div>
+                { !textarea ? (
+                    <input id={ id } type={type} className={ className } name={ name } placeholder={label}  { ...rest }/>
+                    ) : (
+                    <textarea id={ id } className={ className } name={ name } placeholder={label} { ...rest }/>
+                )}
+                { error ? (
+                    <p className="font-medium text-red-600 text-[12px]">
+                        { error }
+                    </p>
+                ): null }
             </div>
         </div>
     )

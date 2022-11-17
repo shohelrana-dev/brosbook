@@ -16,7 +16,8 @@ class Profile extends AbstractEntity {
     @Column({
         type: 'enum',
         enum: ['male', 'female'],
-        default: 'male'
+        default: 'male',
+        nullable: true
     })
     gender: string
 
@@ -26,7 +27,7 @@ class Profile extends AbstractEntity {
     @Column({ nullable: true })
     location: string
 
-    @Column({ type: 'date', nullable: true })
+    @Column({ type: 'datetime', nullable: true })
     birthdate: string
 
     @OneToOne(() => User, (user) => user.profile)

@@ -1,6 +1,6 @@
 import {useEffect} from "react"
 import {useRouter} from "next/navigation"
-import {useGetCurrentUserQuery} from "@services/usersApi";
+import {useGetCurrentUserQuery} from "@services/usersApi"
 
 export default function useAuth(redirectTo?: string, ifGuest: boolean = true){
     const router = useRouter()
@@ -14,7 +14,7 @@ export default function useAuth(redirectTo?: string, ifGuest: boolean = true){
                 router.push(redirectTo)
             }
         }
-    }, [isAuthenticated, isAuthenticated])
+    }, [isAuthenticated, isLoading])
 
     return {isLoading, isAuthenticated, user}
 }

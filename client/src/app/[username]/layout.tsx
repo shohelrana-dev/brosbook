@@ -12,6 +12,10 @@ import {cookies} from "next/headers"
 import {User} from "@interfaces/user.interfaces"
 import LightboxImage from "@components/common/LightboxImage"
 import TabLinkList from "@components/common/TabLinkList"
+import authorizationConfig from "@utils/authorizationConfig"
+import ButtonOutline from "@components/common/ButtonOutline"
+import CoverPhoto from "@components/profile/CoverPhoto"
+import ProfilePhoto from "@components/profile/ProfilePhoto";
 
 interface ProfileLayoutProps {
     children: ReactNode
@@ -19,37 +23,24 @@ interface ProfileLayoutProps {
 }
 
 export default async function ProfileLayout({ children, params }: ProfileLayoutProps) {
-    const config = {
-        headers: { Authorization: `Bearer ${cookies().get('access_token')?.value}` }
-    }
-
-    const currentUser: User = ( await http.get(`/users/me`, config)).data
+    const config = authorizationConfig(cookies())
+    const currentUser: User = await http.get(`/users/me`, config).then((res) => res.data).catch(() => null)
     const user: User = ( await http.get(`/users/${params.username}`, config)).data
 
     const tabLinks = [
-        {title: "Posts", link: `/${user?.username}`},
-        {title: "Followers", link: `/${user?.username}/followers`},
-        {title: "Following", link: `/${user?.username}/following`},
-        {title: "Media", link: `/${user?.username}/media`}
+        {label: "Posts", pathname: `/${user?.username}`},
+        {label: "Followers", pathname: `/${user?.username}/followers`},
+        {label: "Following", pathname: `/${user?.username}/following`},
+        {label: "Media", pathname: `/${user?.username}/media`}
     ]
 
     return (
         <div>
             <div className="bg-white pb-5">
                 <div>
-                    <div>
-                        {user?.profile?.coverPhoto ? (
-                                    <LightboxImage
-                                        src={user?.profile?.coverPhoto}
-                                        width={800}
-                                        height={400}
-                                        alt="cover photo"
-                                    />) : (
-                            <Image src={placeholderCoverPhoto} width={800} height={400} alt='cover photo' />
-                        )}
-                    </div>
-                    <div className="p-4 flex justify-between">
-                        <LightboxImage src={user?.photo} className="rounded-full !border-white !border-6 !border-solid mt-[-100px]" alt="User profile photo" width={150} height={150}/>
+                    <CoverPhoto user={user}/>
+                    <div className="p-4 flex justify-between relative z-10">
+                        <ProfilePhoto user={user}/>
 
                         {currentUser && currentUser?.username !== user?.username && (
                             <div>
@@ -57,11 +48,11 @@ export default async function ProfileLayout({ children, params }: ProfileLayoutP
                             </div>
                         )}
                         {currentUser && currentUser?.username === user?.username && (
-                            <div>
-                                <Link href="/account/profile" className="button-bordered rounded-full py-2 px-5 mt-3 mr-4">
+                            <ButtonOutline>
+                                <Link href="/account/profile">
                                     Edit Profile
                                 </Link>
-                            </div>
+                            </ButtonOutline>
                         )}
                     </div>
                 </div>
@@ -100,10 +91,10 @@ export default async function ProfileLayout({ children, params }: ProfileLayoutP
                     </ul>
                     <ul className="mt-4">
                         <li className="text-gray-600 inline-block mr-3">
-                            <span className="font-bold">{user?.followingCount}</span> Following
+                            <strong>{user?.followingCount}</strong> Following
                         </li>
                         <li className="text-gray-600 inline-block mr-3">
-                            <span className="font-bold">{user?.followerCount}</span> Followers
+                            <strong>{user?.followerCount}</strong> Followers
                         </li>
                     </ul>
                 </div>

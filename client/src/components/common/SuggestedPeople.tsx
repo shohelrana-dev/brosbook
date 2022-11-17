@@ -28,7 +28,7 @@ function SuggestedPeople(){
             {isLoading && <Loading size={30}/>}
 
             { userItems.length > 0 && userItems.map( user => (
-                <div className="flex justify-between" key={ user.id }>
+                <div className="flex justify-between items-center" key={ user.id }>
                     <div className="flex">
                         <Link href={ `/${ user.username }` } className="block min-w-[40px] mr-2">
                             <Avatar src={ user.photo }/>

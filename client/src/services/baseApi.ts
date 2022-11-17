@@ -1,8 +1,7 @@
 import { createApi }      from "@reduxjs/toolkit/query/react"
 import { fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react"
-import { HYDRATE }        from "next-redux-wrapper"
 import Cookies            from "js-cookie"
-import { RootState }      from "@store/store";
+import { RootState }      from "../store"
 
 const BASE_URL = process.env.NEXT_PUBLIC_SERVER_API_URL
 
@@ -19,10 +18,5 @@ export const baseApi = createApi( {
             return headers
         }
     } ),
-    extractRehydrationInfo( action, { reducerPath } ){
-        if( action.type === HYDRATE ){
-            return action.payload[reducerPath]
-        }
-    },
     endpoints: () => ( {} )
 } )

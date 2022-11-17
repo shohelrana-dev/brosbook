@@ -1,6 +1,7 @@
+"use client"
 import { useRouter }      from "next/navigation"
-import { LinearProgress } from "@mui/material"
 import { useEffect }      from "react"
+import Loading from "@components/common/Loading"
 
 function AuthPage() {
     const router = useRouter()
@@ -9,7 +10,7 @@ function AuthPage() {
         router.push( '/auth/login' )
     }, [router] )
 
-    return <LinearProgress/>
+    return <Loading/>
 }
 
 export default AuthPage

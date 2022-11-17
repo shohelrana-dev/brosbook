@@ -1,69 +1,87 @@
-import { User }         from "@interfaces/user.interfaces"
-import { baseApi }      from "./baseApi"
-import { ListResponse } from "@interfaces/index.interfaces"
-import { Post }         from "@interfaces/posts.interfaces"
+import {User} from "@interfaces/user.interfaces"
+import {baseApi} from "./baseApi"
+import {ListResponse} from "@interfaces/index.interfaces"
+import {Post} from "@interfaces/posts.interfaces"
 
-export const usersApi = baseApi.injectEndpoints( {
-    endpoints: ( build ) => ( {
-        getCurrentUser: build.query<User, void>( {
-            query: (  ) => `users/me`
-        } ),
+export const usersApi = baseApi.injectEndpoints({
+    endpoints: (build) => ({
+        getCurrentUser: build.query<User, void>({
+            query: () => `users/me`
+        }),
 
-        getUserByUsername: build.query<User, string>( {
-            query: ( username ) => `users/${ username }`
-        } ),
+        getUserByUsername: build.query<User, string>({
+            query: (username) => `users/${username}`
+        }),
 
-        getSuggestedUsers: build.query<ListResponse<User>, { page: number, limit?: number }>( {
-            query: ( params ) => ( {
+        getSuggestedUsers: build.query<ListResponse<User>, { page: number, limit?: number }>({
+            query: (params) => ({
                 url: `users/suggest`,
                 params
-            } )
-        } ),
+            })
+        }),
 
-        getUserPosts: build.query<ListResponse<Post>, { userId: string, page: number, limit?: number }>( {
-            query: ( { userId, ...params } ) => ( {
-                url: `users/${ userId }/posts`,
+        getUserPosts: build.query<ListResponse<Post>, { userId: string, page: number, limit?: number }>({
+            query: ({userId, ...params}) => ({
+                url: `users/${userId}/posts`,
                 params: params
-            } )
-        } ),
+            })
+        }),
 
-        follow: build.mutation<User, string>( {
-            query: ( targetUserId ) => ( {
-                url: `users/follow/${ targetUserId }`,
+        changeProfilePhoto: build.mutation<User, FormData>({
+            query: (payload) => ({
+                url: `users/me/profile_photo`,
                 method: 'POST',
-            } )
-        } ),
+                body: payload
+            })
+        }),
 
-        unfollow: build.mutation<User, string>( {
-            query: ( targetUserId ) => ( {
-                url: `users/unfollow/${ targetUserId }`,
+        changeCoverPhoto: build.mutation<User, FormData>({
+            query: (payload) => ({
+                url: `users/me/cover_photo`,
                 method: 'POST',
-            } )
-        } ),
+                body: payload
+            })
+        }),
 
-        getFollowers: build.query<ListResponse<User>, { userId: string, page: number, limit?: number }>( {
-            query: ( { userId, ...params } ) => ( {
-                url: `users/${ userId }/followers`,
-                params
-            } )
-        } ),
+        follow: build.mutation<User, string>({
+            query: (targetUserId) => ({
+                url: `users/follow/${targetUserId}`,
+                method: 'POST',
+            })
+        }),
 
-        getFollowing: build.query<ListResponse<User>, { userId: string, page: number, limit?: number }>( {
-            query: ( { userId, ...params } ) => ( {
-                url: `users/${ userId }/following`,
+        unfollow: build.mutation<User, string>({
+            query: (targetUserId) => ({
+                url: `users/unfollow/${targetUserId}`,
+                method: 'POST',
+            })
+        }),
+
+        getFollowers: build.query<ListResponse<User>, { userId: string, page: number, limit?: number }>({
+            query: ({userId, ...params}) => ({
+                url: `users/${userId}/followers`,
                 params
-            } )
-        } ),
-    } ),
-} )
+            })
+        }),
+
+        getFollowing: build.query<ListResponse<User>, { userId: string, page: number, limit?: number }>({
+            query: ({userId, ...params}) => ({
+                url: `users/${userId}/following`,
+                params
+            })
+        }),
+    }),
+})
 
 export const {
-                 useGetCurrentUserQuery,
-                 useGetUserByUsernameQuery,
-                 useGetSuggestedUsersQuery,
-                 useGetUserPostsQuery,
-                 useFollowMutation,
-                 useUnfollowMutation,
-                 useGetFollowersQuery,
-                 useGetFollowingQuery
-             } = usersApi
+    useGetCurrentUserQuery,
+    useChangeProfilePhotoMutation,
+    useChangeCoverPhotoMutation,
+    useGetUserByUsernameQuery,
+    useGetSuggestedUsersQuery,
+    useGetUserPostsQuery,
+    useFollowMutation,
+    useUnfollowMutation,
+    useGetFollowersQuery,
+    useGetFollowingQuery
+} = usersApi

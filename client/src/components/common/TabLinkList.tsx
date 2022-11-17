@@ -1,19 +1,30 @@
 "use client"
 import React from 'react'
-import TabLink from "@components/common/TabLink"
 import {usePathname} from "next/navigation"
+import Link from "next/link"
+import classNames from "classnames"
 
-interface TabLinkListProps {
-    links: {title: string, link: string}[]
+interface TabLinkListProps{
+    links: {label: string, pathname: string}[]
 }
 
-function TabLinkList({links}: TabLinkListProps) {
+function TabLinkList(props: TabLinkListProps) {
     const pathname = usePathname()
+
+    const className = 'inline-block py-2 px-4 text-gray-600 rounded mr-4 border-0 border-b-4 border-transparent hover:text-theme-blue'
+
     return (
-        <div className="px-6 mt-5 border-b-2 border-gray-100">
-            {links.map(link => (
-                <TabLink active={link.link === pathname} title={link.title} href={link.link} key={link.link}/>
+        <div className="mt-5">
+            {props.links.map(link => (
+                <Link
+                    key={link.pathname}
+                    href={link.pathname}
+                    className={classNames(className, pathname === link.pathname ? 'border-theme-blue text-theme-blue' : '')}
+                >
+                    {link.label}
+                </Link>
             ))}
+            <hr/>
         </div>
     )
 }

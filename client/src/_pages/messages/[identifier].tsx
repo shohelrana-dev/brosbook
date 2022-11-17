@@ -9,7 +9,7 @@ import Information                      from "@components/messages/Information"
 import { withAuth }                     from "@hoc/withEnsureAuth"
 import { setCurrentConversationAction } from "@actions/chatActions"
 import api                              from "../../api/index"
-import NavBar                           from "@components/common/NavBar";
+import Navbar                           from "@components/common/Navbar";
 
 function Identifier() {
     const router   = useRouter()
@@ -32,7 +32,7 @@ function Identifier() {
 
     return (
         <>
-            <NavBar/>
+            <Navbar/>
             <div className="grid grid-cols-12 md:px-10 sm:px-4 h-screen pt-16 -mt-16 bg-theme-gray">
                 <div className="hidden lg:block lg:col-span-3 p-5 h-full border-r-2 border-gray-20 none">
                     <Conversations/>

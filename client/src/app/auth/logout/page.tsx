@@ -1,10 +1,10 @@
 "use client"
 import { useEffect }      from "react"
-import { LinearProgress } from "@mui/material"
 import { toast }          from "react-toastify"
 import { useRouter }      from "next/navigation"
 import { useDispatch }    from "react-redux"
 import { logout }         from "@slices/authSlice"
+import Loading from "@components/common/Loading"
 
 
 function LogoutPage(){
@@ -18,7 +18,7 @@ function LogoutPage(){
         window.location.href = '/auth/login'
     }, [dispatch, router] )
 
-    return <LinearProgress/>
+    return <Loading/>
 }
 
 export default LogoutPage

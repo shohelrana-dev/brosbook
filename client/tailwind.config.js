@@ -1,10 +1,10 @@
-/** @type {import('tailwindcss').Config} */
+const withMT = require("@material-tailwind/react/utils/withMT")
 
-module.exports = {
+/** @type {import('tailwindcss').Config} */
+module.exports = withMT({
   mode: 'jit',
   content: [
     './src/app/**/*.{js,ts,jsx,tsx}',
-    './src/pages/**/*.{js,ts,jsx,tsx}',
     './src/components/**/*.{js,ts,jsx,tsx}'
   ],
   theme: {
@@ -34,24 +34,6 @@ module.exports = {
     extend: {},
   },
   plugins: [
-    require('daisyui'),
     require('tailwind-scrollbar-hide')
-  ],
-  daisyui: {
-    themes: [
-      {
-        mytheme: {
-          "primary": "rgb(58,141,245)",
-          "secondary": "#F000B8",
-          "accent": "#37CDBE",
-          "neutral": "#3D4451",
-          "base-100": "#FFFFFF",
-          "info": "#3ABFF8",
-          "success": "#36D399",
-          "warning": "#FBBD23",
-          "error": "#F87272",
-        },
-      },
-    ],
-  },
-}
+  ]
+})

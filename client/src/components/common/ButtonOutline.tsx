@@ -1,19 +1,22 @@
-import React, {ButtonHTMLAttributes, ReactNode} from 'react'
+"use client"
+import React from 'react'
+import classNames from "classnames"
+import {Button, ButtonProps} from "@material-tailwind/react"
 
-interface PrimaryButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-    title?: string
-    children?: ReactNode
+interface ButtonOutlineProps extends ButtonProps {
+
 }
 
-function ButtonOutline(props: PrimaryButtonProps) {
-    let { title, children, className = '', ...rest } = props
+function ButtonOutline(props: ButtonOutlineProps) {
+    let { title, children, className = '', size='sm', ...rest } = props
 
-    className = `btn btn-primary btn-outline btn-sm rounded-full text-white text-xs hover:!text-gray-100 hover:!bg-gray-200 hover:!text-theme-blue ${className}`
+    className = classNames(className, 'rounded-full flex items-center max-h-[35px] capitalize hover:bg-gray-50')
 
     return (
-        <button className={className} {...rest} >
-            {title ? title : children}
-        </button>
+        /*@ts-ignore*/
+        <Button variant="outlined" className={className} size={size} {...rest}>
+            {children}
+        </Button>
     )
 }
 

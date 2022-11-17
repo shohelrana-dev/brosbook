@@ -1,142 +1,132 @@
 "use client"
-import React, { useState, FormEvent } from 'react'
-import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers'
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Zoom } from "@mui/material"
-import { toast } from 'react-toastify'
-
-import Avatar from "@components/common/Avatar"
-import { ProfileErrors } from "@interfaces/account.interfaces"
-import AnimatedInput from '@components/common/AnimatedInput'
+import {useEffect} from "react"
+import DatePicker from 'react-date-picker'
+import {ProfilePayload} from "@interfaces/account.interfaces"
 import Button from '@components/common/Button'
-import { useUpdateProfileMutation } from '@services/accountApi'
+import {useUpdateProfileMutation} from '@services/accountApi'
+import BasicInput from "@components/common/BasicInput"
+import {Radio} from "@material-tailwind/react"
 import useAuth from "@hooks/useAuth"
+import Loading from "@components/common/Loading"
+import {useForm} from "@hooks/useForm"
+import {toast} from "react-toastify";
 
 export default function ProfileSettingsPage() {
     //hooks
-    const { user, isAuthenticated } = useAuth()
-    const [updateProfile, { isLoading }] = useUpdateProfileMutation()
+    const {user} = useAuth()
+    const [updateProfile, {isLoading, isSuccess}] = useUpdateProfileMutation()
+    const {formData, onChange, onSubmit, errors, setFormData} = useForm<ProfilePayload>(updateProfile)
 
-    //form data
-    const [firstName, setFirstName] = useState<string>(user?.firstName!)
-    const [lastName, setLastName] = useState<string>(user?.lastName!)
-    const [username, setUsername] = useState<string>(user?.username!)
-    const [bio, setBio] = useState<string>(user?.profile?.bio!)
-    const [phone, setPhone] = useState<string>(user?.profile?.phone!)
-    const [location, setLocation] = useState<string>(user?.profile?.location!)
-    const [birthdate, setBirthdate] = useState<any>(user?.profile?.birthdate!)
-    const [gender, setGender] = useState<string>(user?.profile?.gender!)
+    useEffect(() => {
+        setFormData({
+            firstName: user?.firstName || '',
+            lastName: user?.lastName || '',
+            birthdate: user?.profile?.birthdate ? new Date(user?.profile?.birthdate!) : undefined,
+            bio: user?.profile?.bio || '',
+            gender: user?.profile?.gender || '',
+            phone: user?.profile?.phone || '',
+            location: user?.profile?.location! || ''
+        })
+    }, [user])
 
-    const [inputErrors, setInputErrors] = useState<ProfileErrors>({})
+    useEffect(() => {
+        if (isSuccess) toast.success('Profile was updated.')
+    }, [isSuccess])
 
-    if(!isAuthenticated) return  null
-
-    async function submitFormHandle(event: FormEvent) {
-        event.preventDefault()
-        const formattedBirthdate = birthdate ? new Date(birthdate).toISOString() : ''
-
-        try {
-            await updateProfile({ firstName, lastName, username, bio, phone, location, gender, birthdate: formattedBirthdate }).unwrap()
-            setInputErrors({})
-            toast.success('Profile has been updated.')
-        } catch (err: any) {
-            console.error(err)
-            toast.error('Profile has not been updated.')
-            if (err?.data?.errors) setInputErrors(err.data.errors)
-        }
-    }
+    if (!user) return <Loading/>
 
     return (
-        <form className="flex-auto p-4 w-full" onSubmit={submitFormHandle}>
-            <h3 className="text-lg mb-6">Customize profile</h3>
-            <AnimatedInput
-                size="medium"
-                label="First Name"
-                value={firstName}
-                error={inputErrors?.firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-            />
-            <AnimatedInput
-                size="medium"
-                label="Last Name"
-                value={lastName}
-                error={inputErrors?.lastName}
-                onChange={(e) => setLastName(e.target.value)}
-            />
-            <AnimatedInput
-                multiline
-                size="medium"
-                label="Bio"
-                value={bio}
-                error={inputErrors?.bio}
-                onChange={(e) => setBio(e.target.value)}
-            />
-            <AnimatedInput
-                size="medium"
-                label="Username"
-                value={username}
-                error={inputErrors?.username}
-                onChange={(e) => setUsername(e.target.value)}
-            />
-            <AnimatedInput
-                size="medium"
-                label="Email Address"
-                value={user?.email}
-                disabled
-                className="text-gray-500"
-            />
-            <AnimatedInput
-                size="medium"
-                label="Phone Number"
-                type="number"
-                value={phone}
-                error={inputErrors?.phone}
-                onChange={(e) => setPhone(e.target.value)}
-            />
-            <AnimatedInput
-                size="medium"
-                label="Location"
-                value={location}
-                error={inputErrors?.location}
-                onChange={(e) => setLocation(e.target.value)}
-            />
-
-
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <MobileDatePicker
-                    label="Date of birth"
-                    inputFormat="DD/MM/YYYY"
-                    value={birthdate}
-                    onChange={(value) => setBirthdate(value)}
-                    renderInput={({ error, size, ...params }) => (
-                        <AnimatedInput size="medium" error={inputErrors?.birthdate} {...params} />
-                    )}
-                />
-            </LocalizationProvider>
-
-            <div className="mt-3">
-                <FormControl>
-                    <FormLabel id="demo-controlled-radio-buttons-group">Gender</FormLabel>
-                    <RadioGroup
-                        aria-labelledby="demo-controlled-radio-buttons-group"
-                        name="controlled-radio-buttons-group"
-                        value={gender}
-                        onChange={(e) => setGender(e.target.value)}
-                    >
-                        <FormControlLabel value="female" control={<Radio />} label="Female" />
-                        <FormControlLabel value="male" control={<Radio />} label="Male" />
-                    </RadioGroup>
-                </FormControl>
-                {inputErrors?.gender && (
-                    <Zoom in>
-                        <p className="font-medium text-red-600 text-[12px]">
-                            {inputErrors?.gender}
-                        </p>
-                    </Zoom>
-                )}
+        <form className="flex-auto p-4 w-full" onSubmit={onSubmit}>
+            <div className="mb-7">
+                <h3 className="text-lg mb-3">Customize profile</h3>
+                <small className="text-gray-500">PROFILE INFORMATION</small>
+                <hr/>
             </div>
 
-            <Button type="submit" title="Update" isLoading={isLoading} />
+            <BasicInput
+                label="First Name"
+                name="firstName"
+                value={formData.firstName}
+                error={errors?.firstName}
+                onChange={onChange}
+                helpText="Set a display name. This does not change your username."
+            />
+            <BasicInput
+                label="Last Name"
+                name="lastName"
+                value={formData.lastName}
+                error={errors?.lastName}
+                onChange={onChange}
+                helpText="Set a display name. This does not change your username."
+            />
+            <BasicInput
+                textarea
+                label="Bio"
+                name="bio"
+                value={formData.bio}
+                error={errors?.bio}
+                onChange={onChange}
+                helpText="A brief description of yourself shown on your profile."
+            />
+            <BasicInput
+                label="Phone Number"
+                name="phone"
+                type="number"
+                value={formData.phone}
+                error={errors?.phone}
+                onChange={onChange}
+                helpText="Your current phone number."
+            />
+            <BasicInput
+                label="Location"
+                name="location"
+                value={formData.location}
+                error={errors?.location}
+                onChange={onChange}
+                helpText="Your address."
+            />
+
+            <div className="flex flex-col">
+                <label htmlFor="birthdate" className="text-gray-800">Date of birth</label>
+                <DatePicker onChange={(value: Date) => setFormData({...formData, birthdate: value})}
+                            value={formData.birthdate} className="rounded-lg"/>
+                {errors?.birthdate ? (
+                    <p className="font-medium text-red-600 text-[12px]">
+                        {errors?.birthdate}
+                    </p>
+                ) : null}
+            </div>
+
+            <div className="my-5">
+                <h4 className="mb-2 text-lg">Gender</h4>
+                <div className="flex justify-between max-w-[100px]">
+                    <Radio
+                        id="male"
+                        name="male"
+                        label="Male"
+                        onChange={(e) => setFormData({...formData, gender: 'male'})}
+                        checked={formData.gender === 'male'}
+                    />
+                </div>
+                <div className="flex mt-3 justify-between max-w-[100px]">
+                    <Radio
+                        id="female"
+                        label="female"
+                        name="male"
+                        onChange={(e) => setFormData({...formData, gender: 'female'})}
+                        checked={formData.gender === 'female'}
+                    />
+                </div>
+                {errors?.gender ? (
+                    <p className="font-medium text-red-600 text-[12px]">
+                        {errors?.gender}
+                    </p>
+                ) : null}
+            </div>
+
+            <Button type="submit" isLoading={isLoading} className="w-32">
+                Update
+            </Button>
 
         </form>
     )

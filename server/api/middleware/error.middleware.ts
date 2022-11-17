@@ -5,7 +5,7 @@ export default function errorMiddleware(error: HttpException, req: Request, res:
     console.log(error)
 
     if (error instanceof HttpException) {
-        return  error.send(res)
+        return error.send(res)
     }
 
     res.status(500).json({message: 'Server error'})

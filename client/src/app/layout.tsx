@@ -3,12 +3,19 @@ import { Kanit } from '@next/font/google'
 import 'react-toastify/dist/ReactToastify.css'
 import Sidebar from "@components/common/Sidebar"
 import ProvidersWrapper from "./ProvidersWrapper"
+import Navbar from "@components/common/Navbar"
+import authorizationConfig from "@utils/authorizationConfig"
+import {cookies} from "next/headers"
+import {http} from "@boot/axios"
+import classNames from "classnames"
 import '@styles/app.css'
-import NavBar from "@components/common/NavBar"
 
 const font = Kanit({weight: '400'})
 
-export default function RootLayout ({children}:PropsWithChildren){
+export default async function RootLayout ({children}:PropsWithChildren){
+    const config = authorizationConfig(cookies())
+    const user = await http.get(`/users/me`, config).then((res) => res.data).catch(() => null)
+
     return (
         <html lang='eng' className={font.className}>
             <head>
@@ -19,16 +26,16 @@ export default function RootLayout ({children}:PropsWithChildren){
             </head>
             <body>
                 <ProvidersWrapper>
-                    <NavBar />
+                    <Navbar user={user} />
                     <div className="bg-theme-gray p-4">
                         <main className="max-w-4xl mx-auto min-h-[93vh]">
-                            <div className="w-full flex">
-                                <div className="w-8/12 mx-5">
+                            <div className="w-full flex justify-center">
+                                <div className={classNames('mx-5', user ? 'w-full lg:w-8/12' : 'w-full max-w-xl' )}>
                                     {children}
                                 </div>
-                                <aside className="w-4/12 mt-6">
+                                { user ? <aside className="hidden lg:block w-4/12 mt-6">
                                     <Sidebar />
-                                </aside>
+                                </aside> : null}
                             </div>
                         </main>
                     </div>

@@ -4,7 +4,7 @@ import Image, { ImageProps } from 'next/image'
 import { SRLWrapper } from 'simple-react-lightbox'
 
 export default function LightboxImage(props: ImageProps) {
-    const { src, ...rest } = props
+    const { src, placeholder, ...rest } = props
     return (
         <SRLWrapper>
             <a href={src as string}>

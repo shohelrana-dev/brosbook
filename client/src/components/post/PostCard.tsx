@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, {useState} from 'react'
 import Link from "next/link"
 import { BsThreeDots as ThreeDotsIcon } from 'react-icons/bs'
 
@@ -8,6 +8,7 @@ import CommentList from "@components/post/CommentList"
 import timeAgo from "@utils/timeAgo"
 import LightboxImage from '@components/common/LightboxImage'
 import PostBar from "@components/post/PostBar"
+import IconButton from "@components/common/IconButton"
 
 interface PostCardProps {
     post: Post
@@ -31,9 +32,9 @@ const PostCard = ({ post }: PostCardProps) => {
                                 <span className="ml-2 text-gray-600 font-normal">@{post.user.username}</span>
                             </h3>
                         </Link>
-                        <div className="icon absolute top-0 right-0">
+                        <IconButton className="!absolute top-0 right-0">
                             <ThreeDotsIcon size="18" />
-                        </div>
+                        </IconButton>
                     </div>
 
                     <p className="text-gray-500 font-medium text-xs">
@@ -50,13 +51,13 @@ const PostCard = ({ post }: PostCardProps) => {
                 )}
                 {post.photo && (
                     <div className="my-3">
-                        <LightboxImage src={post.photo} width="500" height="340"  alt="Post image"/>
+                        <LightboxImage src={post.photo} width={520} height={340}  alt="Post image"/>
                     </div>
                 )}
 
                 <PostBar post={post} showComment={showComment} setShowComment={setShowComment}/>
 
-                <CommentList postId={post.id} showComment={showComment} />
+                {showComment ? <CommentList postId={post.id}/> : null}
 
             </div>
         </div>

@@ -1,79 +1,71 @@
 "use client"
-import { FormEvent, useState } from 'react'
+import { useEffect} from 'react'
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import Head from "next/head"
-import { LinearProgress } from "@mui/material"
-import { Lock } from "@mui/icons-material"
 import { toast } from "react-toastify"
+import {FiLock} from "react-icons/fi"
 
 import Button from "@components/common/Button"
 import { useResetPasswordMutation } from "@services/authApi"
 import PasswordInput from "@components/common/PasswordInput"
 import {ResetPassPayload} from "@interfaces/auth.interfaces"
-import {useSearchParams} from "next/navigation"
+import {useForm} from "@hooks/useForm"
 
-export default function ResetPasswordPage() {
+type Props = {
+    params: {token: string}
+}
+
+export default function ResetPasswordPage({params}: Props) {
     //hooks
-    const searchParams = useSearchParams()
     const router = useRouter()
     const [resetPassword, { isLoading, isSuccess }] = useResetPasswordMutation()
+    const {formData, onChange, onSubmit, errors} = useForm<ResetPassPayload>(resetPassword, {
+        token: params.token,
+        password: '',
+        confirmPassword: ''
+    })
 
-    const [inputErrors, setInputErrors] = useState<ResetPassPayload>({})
-    const [password, setPassword] = useState<string>('')
-    const [confirmPassword, setConfirmPassword] = useState<string>('')
-
-    //handle form submit
-    async function submitForm(event: FormEvent) {
-        event.preventDefault()
-
-        const token = searchParams.get('token')
-        console.log(token)
-        try {
-            await resetPassword({ password, confirmPassword, token}).unwrap()
+    useEffect(()=> {
+        if(isSuccess){
             toast.success('Your login password has been changed.')
-            await router.push('/auth/login')
-        } catch (err: any) {
-            console.error(err)
-            if (err?.data?.errors) setInputErrors(err.data.errors)
-            toast.error(err?.data?.message)
+            router.push('/auth/login')
         }
-    }
+    }, [isSuccess])
 
     return (
         <>
-            <Head>
-                <title>Reset Password | BrosBook</title>
-            </Head>
-
             <div className="h-screen flex flex-col bg-theme-gray">
                 <div className="w-90 mx-auto mt-12 lg:mt-28">
-                    {isLoading || isSuccess && <LinearProgress />}
 
                     <div className="auth-box">
-                        <div className="text-center mb-2">
-                            <Lock fontSize="large" />
+                        <div className="flex justify-center mb-2">
+                            <FiLock size="30"/>
                         </div>
+
                         <h1 className="text-lg text-center mb-4 font-medium">Create a strong password</h1>
                         <small className="block text-gray-500 text-center mb-2">
-                            Enter your your new password to reset account password.
+                            Enter your new password to reset account password.
                             Your password must be at least six characters.
                         </small>
 
-                        <form method="post" onSubmit={submitForm}>
+                        <form method="post" onSubmit={onSubmit}>
                             <PasswordInput
                                 label="Password"
-                                value={password}
-                                error={inputErrors.password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                name="password"
+                                value={formData.password}
+                                error={errors.password}
+                                onChange={onChange}
                             />
                             <PasswordInput
                                 label="Confirm Password"
-                                value={confirmPassword}
-                                error={inputErrors.confirmPassword}
-                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                name="confirmPassword"
+                                value={formData.confirmPassword}
+                                error={errors.confirmPassword}
+                                onChange={onChange}
                             />
-                            <Button  className="w-full mt-3"  fullWidth type="submit" title="Reset" isLoading={isLoading || isSuccess} />
+                            <Button className="w-full mt-3" type="submit" isLoading={isLoading || isSuccess} >
+                                Reset
+                            </Button>
                         </form>
                     </div>
 

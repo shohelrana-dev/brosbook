@@ -83,6 +83,6 @@ export class IsPasswordValid implements ValidatorConstraintInterface {
         }
     }
     defaultMessage(validationArguments?: ValidationArguments): string {
-        return 'password invalid'
+        return 'invalid password'
     }
 }

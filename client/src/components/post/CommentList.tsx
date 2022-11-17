@@ -1,21 +1,20 @@
 import React, {FormEvent, useState} from 'react'
-import {CircularProgress} from "@mui/material"
 
 import Avatar from "@components/common/Avatar"
 import CommentItem from "@components/post/CommentItem"
 import {useCreateCommentMutation, useGetCommentsQuery} from "@services/commentsApi"
 import {Comment} from "@interfaces/posts.interfaces"
-import {useSelector} from "react-redux"
-import {selectAuthState} from "@slices/authSlice"
-import {useGetInfiniteListQuery} from "@hooks/useGetInfiniteListQuery";
+import {useGetInfiniteListQuery} from "@hooks/useGetInfiniteListQuery"
+import BasicInput from "@components/common/BasicInput"
+import useAuth from "@hooks/useAuth"
+import ButtonGray from "@components/common/ButtonGray"
 
 interface CommentListPost {
     postId: string
-    showComment: boolean
 }
 
-function CommentList({postId, showComment}: CommentListPost) {
-    const {user: currentUser} = useSelector(selectAuthState)
+function CommentList({postId}: CommentListPost) {
+    const {user: currentUser} = useAuth()
     const {isLoading, items: comments, hasMoreItem, loadMoreItem} = useGetInfiniteListQuery<Comment>(useGetCommentsQuery, {postId})
     const [createComment] = useCreateCommentMutation()
 
@@ -37,30 +36,32 @@ function CommentList({postId, showComment}: CommentListPost) {
     return (
         <div className="mt-2">
             <form onSubmit={handleSaveComment} className="mb-2 flex items-center">
-                <Avatar src={currentUser.photo} online size="small"/>
-                <input onChange={(e) => setCommentBody(e.target.value.trim())} type="text" name="comment"
-                       value={commentBody}
-                       className="input-basic rounded-full bg-theme-gray ml-2"
-                       placeholder="Write a comment..."/>
+                <div className="w-1/12 mt-[-2px]">
+                    <Avatar src={currentUser?.photo} online size="small"/>
+                </div>
+                <div className="ml-2 w-11/12">
+                    <BasicInput
+                        label="Write a comment..."
+                        labelHide
+                        type="text"
+                        value={commentBody}
+                        className="!rounded-full"
+                        onChange={(e) => setCommentBody(e.target.value.trim())}
+                    />
+                </div>
             </form>
 
-            {showComment && (comments.length > 0 ? comments.map(comment => (
+            {comments?.length > 0 ? comments.map(comment => (
                 <CommentItem comment={comment} key={comment.id}/>
             )) : (
                 <p className="mt-3">No comments</p>
-            ))}
-
-            {showComment && hasMoreItem && (
-                <button
-                    className="button mt-2 py-2 disabled:cursor-default min-w-[150px]"
-                    disabled={isLoading}
-                    onClick={() => loadMoreItem()}
-                >
-                    {isLoading ? <CircularProgress size={16}/> : 'See more comments'}
-                </button>
             )}
 
-            {isLoading && <CircularProgress size={16}/>}
+            { hasMoreItem ? (
+                <ButtonGray isLoading={isLoading} onClick={() => loadMoreItem()}>
+                    See more comments
+                </ButtonGray>
+            ): null}
 
         </div>
     )

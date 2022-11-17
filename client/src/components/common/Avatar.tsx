@@ -6,7 +6,7 @@ interface AvatarProps extends ImgHTMLAttributes<HTMLImageElement> {
     size?: 'small' | 'medium' | 'large'
 }
 
-function Avatar( { online, size, src}: AvatarProps ) {
+function Avatar( { online, size, src, className}: AvatarProps ) {
 
     let width  = 45
     let height = 45
@@ -19,8 +19,8 @@ function Avatar( { online, size, src}: AvatarProps ) {
     }
 
     return (
-        <div className="relative flex-none">
-            { src && <Image className="rounded-full" src={ src } width={ width } height={ height } alt="Profile photo" /> }
+        <div className="relative flex-none inline-block">
+            { src && <Image className={`rounded-full ${className ?? ''}`} src={ src } width={ width } height={ height } alt="Profile photo" /> }
             { online &&
                 <div className="bg-green-500 border-white w-3 h-3 absolute right-0 bottom-0 rounded-full border-2"/> }
         </div>

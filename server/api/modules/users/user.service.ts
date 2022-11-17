@@ -1,35 +1,68 @@
-import { Request } from "express"
+import {Request} from "express"
 import Relationship from "@entities/Relationship"
 import User from "@entities/User"
-import { paginateMeta } from "@utils/paginateMeta"
+import {paginateMeta} from "@utils/paginateMeta"
 import Post from "@entities/Post"
 import LikeEntity from "@entities/Like"
-import { appDataSource } from "@config/data-source.config"
-import { PaginateMeta } from "@api/types/index.types"
-import { SignupUserDTO } from "@api/modules/users/user.dto"
-import { v4 as uuid } from "uuid"
-import { PhotoSource } from "@api/enums"
-import Media from "@api/entities/Media"
-import { LoginTicket, OAuth2Client, TokenPayload } from "google-auth-library"
-import HttpException from "@api/utils/HttpException"
-import httpStatus from "http-status"
-import InternalServerException from "@exceptions/InternalServerException";
-import BadRequestException from "@exceptions/BadRequestException";
+import {appDataSource} from "@config/data-source.config"
+import {PaginateMeta} from "@api/types/index.types"
+import InternalServerException from "@exceptions/InternalServerException"
+import BadRequestException from "@exceptions/BadRequestException"
+import savePhoto from "@utils/savePhoto";
+import {PhotoSource} from "@api/enums";
+import {UploadedFile} from "express-fileupload"
+import Profile from "@entities/Profile"
 
 
 export default class UserService {
     private userRepository = appDataSource.getRepository(User)
 
-    public async getUserByUsername(username: string) {
+    public async getCurrentUser(req: Request) {
+        try {
+            const user = await this.userRepository.findOneOrFail({
+                where: {username: req.user.username},
+                relations: {profile: true}
+            })
+            delete user.password
+
+            return user
+        }catch (err) {
+            throw new InternalServerException('User was not found.')
+        }
+    }
+
+    public async getUserByUsername(req: Request) {
+        const {username} = req.params
         if (!username) throw new BadRequestException("Username is missing")
 
         try {
-            return await this.userRepository.findOneOrFail({
+            const user = await this.userRepository.findOneOrFail({
                 where: {username},
                 relations: {profile: true}
             })
+
+            //set isCurrentUserFollow
+            if (req.isAuthenticated && req.user.id !== user.id) {
+                const follow = await Relationship.findOneBy({
+                    followerId: req.user.id,
+                    followedId: user.id
+                })
+                user.isCurrentUserFollow = follow ? true : false
+            }
+
+            //followers count
+            //@ts-ignore
+            user.followerCount = await Relationship.countBy({followedId: user.id})
+
+            //followings count
+            //@ts-ignore
+            user.followingCount = await Relationship.countBy({followerId: user.id})
+
+            delete user.password
+
+            return user
         }catch (err) {
-            throw new InternalServerException('User couldn\'t be found.')
+            throw new InternalServerException('User was not found.')
         }
     }
 
@@ -46,6 +79,10 @@ export default class UserService {
                 .skip(limit * (page - 1))
                 .take(limit)
                 .getManyAndCount()
+
+            users.map(user => {
+                delete user.password
+            })
 
             return { users, meta: paginateMeta(count, page, limit) }
         } catch (err) {
@@ -78,6 +115,10 @@ export default class UserService {
             }
         }
 
+        users.map(user => {
+            delete user.password
+        })
+
         return { users, meta: paginateMeta(count, page, limit) }
     }
 
@@ -108,10 +149,7 @@ export default class UserService {
                 post.hasCurrentUserLike = like ? true : false
             }
         }
-        console.log('req.isAuthenticated')
-        console.log(req.user)
-        console.log(req.isAuthenticated)
-        console.log('req.isAuthenticated')
+
         return { posts, meta: paginateMeta(count, page, limit) }
     }
 
@@ -134,6 +172,10 @@ export default class UserService {
         for (let follow of follows) {
             followers.push(follow.follower)
         }
+
+        followers.map(user => {
+            delete user.password
+        })
 
         return { followers, meta: paginateMeta(count, page, limit) }
     }
@@ -159,25 +201,69 @@ export default class UserService {
             following.push(follow.following)
         }
 
+        following.map(user => {
+            delete user.password
+        })
+
+
         return { following, meta: paginateMeta(count, page, limit) }
     }
 
+    public async changeProfilePhoto(req: Request) {
+        try {
+            const photo = req.files.photo as UploadedFile
+
+            const url = await savePhoto({file: photo, userId: req.user.id, source: PhotoSource.PROFILE, sourceId: req.user.id})
+
+            let user = await this.userRepository.findOneByOrFail({id: req.user.id})
+            user.photo = url
+            user = await user.save()
+
+            delete user.password
+
+            return user
+        }catch (e) {
+            console.log(e)
+            throw new InternalServerException('Profile photo could not be uploaded.')
+        }
+    }
+
+    public async changeCoverPhoto(req: Request): Promise<User> {
+        try {
+            const photo = req.files.photo as UploadedFile
+
+            const url = await savePhoto({file: photo, userId: req.user.id, source: PhotoSource.PROFILE, sourceId: req.user.id})
+            console.log('photo url', url)
+            const profile = await Profile.findOneByOrFail({userId: req.user.id})
+            profile.coverPhoto = url
+            await profile.save()
+
+            const user = await this.userRepository.findOne({where: {id: req.user.id}, relations: {profile: true}})
+            delete user.password
+
+            return user
+        }catch (e) {
+            console.log(e)
+            throw new InternalServerException('Cover photo could not be uploaded.')
+        }
+    }
+
     public async follow(req: Request) {
-        const targetUserId = Number(req.params.targetUserId)
+        const {userId} = req.params
 
-        if (!targetUserId) throw new Error('Target user id is missing')
+        if (!userId) throw new BadRequestException('Target user id is missing')
 
-        const following = Relationship.create({ followerId: req.user.id, followedId: targetUserId })
+        const following = Relationship.create({ followerId: req.user.id, followedId: userId })
 
         return await following.save()
     }
 
     public async unfollow(req: Request) {
-        const targetUserId = Number(req.params.targetUserId)
+        const {userId} = req.params
 
-        if (!targetUserId) throw new Error('Target user id is missing')
+        if (!userId) throw new BadRequestException('Target user id is missing')
 
-        return await Relationship.delete({ followerId: req.user.id, followedId: targetUserId })
+        return await Relationship.delete({ followerId: req.user.id, followedId: userId })
     }
 
 }

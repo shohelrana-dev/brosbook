@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { RootState } from "@store/index"
+import { RootState } from "../store"
 import { User } from "@interfaces/user.interfaces"
 import { authApi, LoginResponse } from "@services/authApi"
 import Cookies from "js-cookie"
@@ -52,6 +52,10 @@ export const authSlice = createSlice({
 
         builder.addMatcher(accountApi.endpoints.updateProfile.matchFulfilled, (state, { payload }: PayloadAction<User>) => {
             state.user = payload
+        })
+
+        builder.addMatcher(accountApi.endpoints.changeUsername.matchFulfilled, (state, { payload }: PayloadAction<User>) => {
+            state.user.username = payload.username
         })
     }
 })

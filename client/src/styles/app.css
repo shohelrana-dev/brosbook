@@ -13,18 +13,6 @@
         @apply bg-theme-gray text-theme-blue transition duration-300 py-3 text-xs font-bold px-4 block text-center rounded
     }
 
-    .button-blue {
-        @apply button text-white bg-theme-blue border-theme-blue
-    }
-
-    .button-blue:hover {
-        @apply bg-blue-300 border-blue-300
-    }
-
-    .button-bordered {
-        @apply button text-blue-500 bg-white border border-theme-blue hover:bg-gray-100
-    }
-
     .box {
         @apply bg-white border-transparent border-r-2 shadow-sm rounded-lg shadow-inner shadow-lg
     }
@@ -33,15 +21,11 @@
         @apply bg-white p-8 border border-gray-200 rounded-2xl
     }
 
-    .input-basic {
-        @apply block w-full outline-none py-2 px-3 rounded-lg border-2 border-blue-50 focus:border-blue-300
-    }
-
     .container {
         @apply max-w-[900px] m-auto
     }
 
     .icon {
-        @apply mr-1 hover:bg-pink-100 rounded-full p-2 duration-300 cursor-pointer text-pink-500 inline-block
+        @apply mr-1 hover:bg-pink-50 rounded-full p-2 duration-300 cursor-pointer text-pink-500 inline-block
     }
 }

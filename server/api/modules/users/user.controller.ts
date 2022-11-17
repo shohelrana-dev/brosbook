@@ -1,7 +1,5 @@
 import { NextFunction, Request, Response } from "express"
 import UserService from "./user.service"
-import HttpException   from "@exceptions/HttpException"
-import httpStatus  from "http-status"
 
 export default class UserController {
     constructor( private readonly usersService: UserService ){
@@ -9,21 +7,21 @@ export default class UserController {
 
     public getCurrentUser = async( req: Request, res: Response, next: NextFunction ) => {
         try {
-            const user = await this.usersService.getUserByUsername(req.user.username)
+            const user = await this.usersService.getCurrentUser(req)
 
             res.json( user)
         } catch ( err ) {
-            next( new HttpException( httpStatus.CONFLICT, err.message ) )
+            next( err )
         }
     }
 
     public getUserByUsername = async( req: Request, res: Response, next: NextFunction ) => {
         try {
-            const user = await this.usersService.getUserByUsername( req.params.username )
+            const user = await this.usersService.getUserByUsername(req )
 
             res.json( user )
         } catch ( err ) {
-            next( new HttpException( httpStatus.CONFLICT, err.message ) )
+            next( err )
         }
     }
 
@@ -33,7 +31,7 @@ export default class UserController {
 
             res.json( { items: users, ...meta } )
         } catch ( err ) {
-            next( new HttpException( httpStatus.CONFLICT, err.message ) )
+            next( err )
         }
     }
 
@@ -43,7 +41,7 @@ export default class UserController {
 
             res.json( { items: users, ...meta } )
         } catch ( err ) {
-            next( new HttpException( httpStatus.CONFLICT, err.message ) )
+            next( err )
         }
     }
 
@@ -53,7 +51,7 @@ export default class UserController {
 
             res.json( { items: posts, ...meta } )
         } catch ( err ) {
-            next( new HttpException( httpStatus.CONFLICT, err.message ) )
+            next( err )
         }
     }
 
@@ -64,7 +62,7 @@ export default class UserController {
 
             res.json( { items: following, ...meta } )
         } catch ( err ) {
-            next( new HttpException( httpStatus.CONFLICT, err.message ) )
+            next( err )
         }
     }
 
@@ -74,7 +72,27 @@ export default class UserController {
 
             res.json( { items: followers, ...meta } )
         } catch ( err ) {
-            next( new HttpException( httpStatus.CONFLICT, err.message ) )
+            next( err )
+        }
+    }
+
+    public changeProfilePhoto = async( req: Request, res: Response, next: NextFunction ) => {
+        try {
+            const user = await this.usersService.changeProfilePhoto( req )
+
+            res.json( user )
+        } catch ( err ) {
+            next( err )
+        }
+    }
+
+    public changeCoverPhoto = async( req: Request, res: Response, next: NextFunction ) => {
+        try {
+            const user = await this.usersService.changeCoverPhoto( req )
+
+            res.json( user )
+        } catch ( err ) {
+            next( err )
         }
     }
 
@@ -84,7 +102,7 @@ export default class UserController {
 
             res.json( following )
         } catch ( err ) {
-            next( new HttpException( httpStatus.CONFLICT, err.message ) )
+            next( err )
         }
     }
 
@@ -94,7 +112,7 @@ export default class UserController {
 
             res.json( { message: 'Unfollow success.' } )
         } catch ( err ) {
-            next( new HttpException( httpStatus.CONFLICT, err.message ) )
+            next( err )
         }
     }
 

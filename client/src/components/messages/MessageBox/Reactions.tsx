@@ -6,7 +6,7 @@ import { useSelector }               from "react-redux"
 import { useRouter }                 from "next/navigation"
 import Image                         from "next/image"
 
-import { RootState } from "@store/store"
+import { RootState } from "../../../store"
 import { Reaction }  from "@interfaces/chat.interfaces"
 import { socket }   from "@components/common/AuthCheck"
 

@@ -1,14 +1,15 @@
 import React, { useState } from 'react'
 import Link from "next/link"
-import { Zoom } from "@mui/material"
-import LikeIcon from "@mui/icons-material/Favorite"
-import OutlinedLikeIcon from "@mui/icons-material/FavoriteBorderOutlined"
+import {BsHeartFill as LikeIcon} from "react-icons/bs"
+import {BsHeart as OutlinedLikeIcon} from "react-icons/bs"
 
 import Avatar from "@components/common/Avatar"
 import { Comment } from "@interfaces/posts.interfaces"
 import { useLikeCommentMutation, useUnlikeCommentMutation } from "@services/commentsApi"
 import timeAgo from "@utils/timeAgo"
 import {BsThreeDots as ThreeDotsIcon} from "react-icons/bs"
+import {motion} from "framer-motion"
+import IconButton from "@components/common/IconButton"
 
 interface CommentItemState {
     comment: Comment
@@ -21,7 +22,7 @@ function CommentItem({ comment }: CommentItemState) {
     const [hasCurrentUserLike, setHasCurrentUserLike] = useState<boolean>(comment.hasCurrentUserLike)
     const [likeCount, setLikeCount] = useState<number>(comment.likeCount || 0)
 
-    async function saveCommentLike() {
+    async function handleCommentLike() {
         try {
             await likeComment({ postId: comment.postId, commentId: comment.id }).unwrap()
             setHasCurrentUserLike(true)
@@ -31,7 +32,7 @@ function CommentItem({ comment }: CommentItemState) {
         }
     }
 
-    async function removeCommentLike() {
+    async function handleCommentUnlike() {
         try {
             await unlikeComment({ postId: comment.postId, commentId: comment.id }).unwrap()
             setHasCurrentUserLike(false)
@@ -62,22 +63,30 @@ function CommentItem({ comment }: CommentItemState) {
                             </div>
                         </div>
                     </div>
-                    <button className="icon h-[35px] ml-2">
+                    <IconButton className="ml-2">
                         <ThreeDotsIcon size="18" />
-                    </button>
+                    </IconButton>
                 </div>
 
                 <div className="flex items-center text-pink-500 relative">
-                    <Zoom in={hasCurrentUserLike}>
-                        <button onClick={removeCommentLike} className="icon absolute">
-                            <LikeIcon fontSize="small" />
-                        </button>
-                    </Zoom>
-                    <Zoom in={!hasCurrentUserLike}>
-                        <button onClick={saveCommentLike} className="icon">
-                            <OutlinedLikeIcon fontSize="small" />
-                        </button>
-                    </Zoom>
+                    <motion.button
+                        onClick={handleCommentUnlike}
+                        className="icon"
+                        initial={{scale: 0}}
+                        animate={{scale: hasCurrentUserLike ? 1 : 0}}
+                        transition={{duration: 0.1}}
+                    >
+                        <LikeIcon fontSize="small" color="#FF1493"/>
+                    </motion.button>
+                    <motion.button
+                        onClick={handleCommentLike}
+                        className="icon absolute"
+                        initial={{scale: 0}}
+                        animate={{scale: !hasCurrentUserLike ? 1 : 0}}
+                        transition={{duration: 0.1}}
+                    >
+                        <OutlinedLikeIcon fontSize="small"/>
+                    </motion.button>
                     <p>{likeCount}</p>
                     <p className="text-xs ml-5">
                         {timeAgo(comment.createdAt)}

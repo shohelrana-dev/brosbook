@@ -19,14 +19,14 @@ export const postsApi = baseApi.injectEndpoints( {
             } ),
         } ),
 
-        postLike: build.mutation<Post, number>( {
+        postLike: build.mutation<Post, string>( {
             query: ( postId ) => ( {
                 url: `posts/${ postId }/like`,
                 method: 'POST'
             } ),
         } ),
 
-        postUnlike: build.mutation<Post, number>( {
+        postUnlike: build.mutation<Post, string>( {
             query: ( postId ) => ( {
                 url: `posts/${ postId }/unlike`,
                 method: 'POST'

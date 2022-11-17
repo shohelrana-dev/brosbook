@@ -3,6 +3,7 @@ import React, { useState }                        from 'react'
 import { User }                                   from "@interfaces/user.interfaces"
 import { useFollowMutation, useUnfollowMutation } from "@services/usersApi"
 import Button from "@components/common/Button"
+import ButtonOutline from "@components/common/ButtonOutline";
 
 interface FollowButtonProps {
     user: User
@@ -37,11 +38,11 @@ function FollowButton( props: FollowButtonProps ){
     return (
         <>
             { user.isCurrentUserFollow ? (
-                <Button onClick={ () => handleUnfollowClick( user.id ) }>
+                <ButtonOutline onClick={ () => handleUnfollowClick( user.id ) } size='sm' className="mt-0">
                     Unfollow
-                </Button>
+                </ButtonOutline>
             ) : (
-                <Button onClick={ () => handleFollowClick( user.id ) }>
+                <Button onClick={ () => handleFollowClick( user.id ) } size="sm" className="mt-0">
                     Follow
                 </Button>
             ) }

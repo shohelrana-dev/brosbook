@@ -15,6 +15,20 @@ const usersController = new UserController( new UserService() )
 router.get( '/me', authMiddleware, usersController.getCurrentUser )
 
 /**
+ * @desc change profile photo
+ * @route POST /api/v1/users/me/profile_photo
+ * @access Private
+ */
+router.post( '/me/profile_photo', authMiddleware, usersController.changeProfilePhoto )
+
+/**
+ * @desc change cover photo
+ * @route POST /api/v1/users/me/cover_photo
+ * @access Private
+ */
+router.post( '/me/cover_photo', authMiddleware, usersController.changeCoverPhoto )
+
+/**
  * @desc get users
  * @route GET /api/v1/users/search
  * @access Private

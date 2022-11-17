@@ -2,27 +2,13 @@ import React, { useState } from 'react'
 import Link                from "next/link"
 import Avatar              from "@components/common/Avatar"
 import { User }            from "@interfaces/user.interfaces"
-import { useSelector }     from "react-redux"
-import { RootState }       from "@store/store"
+import FollowButton from "@components/common/FollowButton"
 
 interface FollowUserProps {
     user: User
-    isFollowing: boolean
 }
 
-function FollowUser( { user, isFollowing: defaultIsFollowing }: FollowUserProps ){
-
-    const { isAuthenticated }           = useSelector( ( state: RootState ) => state.auth )
-    const [isFollowing, setIsFollowing] = useState<boolean>( defaultIsFollowing )
-
-    async function handleMakeFollowing(){
-
-    }
-
-    async function handleMakeUnfollowing(){
-
-    }
-
+function FollowUser( { user }: FollowUserProps ){
     return (
         <div className="flex box p-4 mb-2">
             <Link href={ `/${ user.username }` } className="block min-w-[40px] mr-2">
@@ -30,29 +16,15 @@ function FollowUser( { user, isFollowing: defaultIsFollowing }: FollowUserProps 
             </Link>
             <div className="w-full">
                 <div className="flex justify-between items-center">
-                    <Link href={ `/${ user.username }` }>
-                        <a className="block">
+                    <Link href={ `/${ user.username }` } className="block">
                             <h3 className="text-md font-medium">
                                 { user.fullName }
                             </h3>
                             <h4 className="text-sm text-gray-700">
                                 @{ user.username }
                             </h4>
-                        </a>
                     </Link>
-                    { isAuthenticated && <div>
-                        { isFollowing ? (
-                            <button onClick={ () => handleMakeUnfollowing() }
-                                    className="button-blue rounded-full py-2 px-5">
-                                Unfollow
-                            </button>
-                        ) : (
-                            <button onClick={ () => handleMakeFollowing() }
-                                    className="button-blue rounded-full py-2 px-5">
-                                Follow
-                            </button>
-                        ) }
-                    </div> }
+                    <FollowButton user={user}/>
                 </div>
                 <div className="mt-2">{ user.profile?.bio }</div>
             </div>

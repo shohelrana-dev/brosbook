@@ -19,14 +19,14 @@ export const commentsApi = baseApi.injectEndpoints( {
             } ),
         } ),
 
-        likeComment: build.mutation<Comment, { postId: string, commentId: number }>( {
+        likeComment: build.mutation<Comment, { postId: string, commentId: string }>( {
             query: ( { postId, commentId } ) => ( {
                 url: `posts/${ postId }/comments/${ commentId }/like`,
                 method: 'POST'
             } ),
         } ),
 
-        unlikeComment: build.mutation<Comment, { postId: string, commentId: number }>( {
+        unlikeComment: build.mutation<Comment, { postId: string, commentId: string }>( {
             query: ( { postId, commentId } ) => ( {
                 url: `posts/${ postId }/comments/${ commentId }/unlike`,
                 method: 'POST'

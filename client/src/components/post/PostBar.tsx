@@ -1,14 +1,15 @@
 import React, {MouseEvent, useState} from 'react'
-import {Zoom} from "@mui/material"
-import LikeIcon from "@mui/icons-material/Favorite"
-import OutlinedLikeIcon from "@mui/icons-material/FavoriteBorderOutlined"
+import {BsHeartFill as LikeIcon} from "react-icons/bs"
+import {BsHeart as OutlinedLikeIcon} from "react-icons/bs"
 import {FaRegComment as CommentIcon, FaShareSquare as ShareIcon} from "react-icons/fa"
 import {Post} from "@interfaces/posts.interfaces"
 import {usePostLikeMutation, usePostUnlikeMutation} from "@services/postsApi"
+import {motion} from "framer-motion"
 
-interface PostBarProps{
+
+interface PostBarProps {
     post: Post
-    setShowComment: (_:boolean) => void
+    setShowComment: (_: boolean) => void
     showComment: boolean
 }
 
@@ -47,33 +48,35 @@ function PostBar({post, setShowComment, showComment}: PostBarProps) {
     return (
         <div className="flex mt-2 border-t-2 border-b-2 border-gray-100 py-1 border-solid justify-around">
             <div className="flex items-center relative">
-                <Zoom in={hasCurrentUserLike}>
-                    <button
-                        onClick={handlePostUnlike}
-                        className="icon absolute"
-                    >
-                        <LikeIcon fontSize="small" />
-                    </button>
-                </Zoom>
-                <Zoom in={!hasCurrentUserLike}>
-                    <button
-                        onClick={handlePostLike}
-                        className="icon"
-                    >
-                        <OutlinedLikeIcon fontSize="small" />
-                    </button>
-                </Zoom>
+                <motion.button
+                    onClick={handlePostUnlike}
+                    className="icon"
+                    initial={{scale: 0}}
+                    animate={{scale: hasCurrentUserLike ? 1 : 0}}
+                    transition={{duration: 0.1}}
+                >
+                    <LikeIcon fontSize="medium" color="#FF1493"/>
+                </motion.button>
+                <motion.button
+                    onClick={handlePostLike}
+                    className="icon absolute"
+                    initial={{scale: 0}}
+                    animate={{scale: !hasCurrentUserLike ? 1 : 0}}
+                    transition={{duration: 0.1}}
+                >
+                    <OutlinedLikeIcon fontSize="medium"/>
+                </motion.button>
                 <p className="text-gray-600">{likeCount}</p>
             </div>
             <div className="flex items-center">
                 <button className="icon" onClick={() => setShowComment(!showComment)}>
-                    <CommentIcon size="18" />
+                    <CommentIcon size="18"/>
                 </button>
                 <p className="text-gray-600">{post.commentCount}</p>
             </div>
             <div className="flex items-center text-gray-600">
                 <button className="icon">
-                    <ShareIcon size="18" />
+                    <ShareIcon size="18"/>
                 </button>
             </div>
         </div>

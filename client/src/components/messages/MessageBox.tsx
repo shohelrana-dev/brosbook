@@ -4,7 +4,7 @@ import { useDispatch, useSelector }   from "react-redux"
 
 import Avatar                                          from "@components/common/Avatar"
 import MessageList                                     from "@components/messages/MessageBox/MessageList"
-import { RootState }                                   from "@store/store"
+import { RootState }                                   from "../../store"
 import { receiveMessageAction, receiveReactionAction } from "@actions/chatActions"
 import moment                from "moment"
 import { socket }            from "@components/common/AuthCheck"

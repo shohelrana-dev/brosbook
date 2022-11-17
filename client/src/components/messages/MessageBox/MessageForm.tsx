@@ -8,7 +8,7 @@ import imageCompression                                       from "browser-imag
 import { useSelector }                                        from "react-redux"
 
 import { socket }    from "@components/common/AuthCheck"
-import { RootState } from "@store/store"
+import { RootState } from "../../../store"
 
 function MessageForm() {
     //hooks

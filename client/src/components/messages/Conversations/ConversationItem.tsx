@@ -4,7 +4,7 @@ import moment     from "moment"
 import Link       from "next/link"
 
 import { Conversation } from "@interfaces/chat.interfaces"
-import { shortText }    from "@utils/index"
+import { shortText }    from "@utils/shortText"
 import Avatar           from "@components/common/Avatar"
 
 interface SingleConversationProps {
