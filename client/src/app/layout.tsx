@@ -9,7 +9,6 @@ import {cookies} from "next/headers"
 import {http} from "@boot/axios"
 import classNames from "classnames"
 import '@styles/app.css'
-import 'react-confirm-alert/src/react-confirm-alert.css'
 
 const font = Kanit({weight: '400'})
 

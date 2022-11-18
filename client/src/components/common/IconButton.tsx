@@ -4,7 +4,9 @@ import classNames from "classnames"
 
 function IconButton(props: IconButtonProps) {
     let {children, className, variant, size='sm', ...rest} = props
-    className = classNames(className, 'rounded-full')
+
+    className = classNames('rounded-full', className)
+
     return (
         /*@ts-ignore*/
         <BaseIconButton variant="text" className={className} size={size} {...rest}>

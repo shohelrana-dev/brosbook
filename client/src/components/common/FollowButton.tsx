@@ -4,7 +4,7 @@ import {User} from "@interfaces/user.interfaces"
 import {useFollowMutation, useUnfollowMutation} from "@services/usersApi"
 import Button from "@components/common/Button"
 import ButtonOutline from "@components/common/ButtonOutline"
-import ConfirmAlert from "@components/common/ConfirmAlert"
+import useConfirm from "@hooks/useConfirm"
 
 
 interface FollowButtonProps {
@@ -16,7 +16,7 @@ function FollowButton(props: FollowButtonProps) {
     const [user, setUser] = useState<User>(props.user)
     const [follow] = useFollowMutation()
     const [unfollow] = useUnfollowMutation()
-    const [isOpenUnfollowAlert, setIsOpenUnfollowAlert] = useState<boolean>(false)
+    const confirm = useConfirm()
 
     async function handleFollowClick() {
         try {
@@ -29,6 +29,13 @@ function FollowButton(props: FollowButtonProps) {
     }
 
     async function handleUnfollowClick() {
+        const [isOk] = await confirm({
+            title: `Unfollow ${user.username}?`,
+            message: 'Their Posts will no longer show up in your home timeline. You can still view their profile.',
+            okButtonLabel: 'Unfollow'
+        })
+        if(!isOk) return
+
         try {
             await unfollow(user.id).unwrap()
 
@@ -42,17 +49,9 @@ function FollowButton(props: FollowButtonProps) {
         <>
             {user.isCurrentUserFollow ? (
                 <>
-                    <ButtonOutline onClick={() => setIsOpenUnfollowAlert(true)} size='sm' className="mt-0">
+                    <ButtonOutline onClick={handleUnfollowClick} size='sm' className="mt-0">
                         Unfollow
                     </ButtonOutline>
-                    <ConfirmAlert
-                        isOpen={isOpenUnfollowAlert}
-                        title={`Unfollow ${user.username}?`}
-                        message="Their Posts will no longer show up in your home timeline. You can still view their profile."
-                        okButtonLabel="Unfollow"
-                        onClose={()=> setIsOpenUnfollowAlert(false)}
-                        onConfirm={handleUnfollowClick}
-                    />
                 </>
             ) : (
                 <Button onClick={handleFollowClick} size="sm" className="mt-0">

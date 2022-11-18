@@ -4,7 +4,7 @@ import useAuth from "@hooks/useAuth"
 import Loading from "@components/common/Loading"
 import ButtonOutline from "@components/common/ButtonOutline"
 import ChangePasswordModal from "@components/account/ChangePasswordModal"
-import ChangeUsernameModal from "@components/account/ChangeUsernameModal";
+import ChangeUsernameModal from "@components/account/ChangeUsernameModal"
 
 export default function GeneralSettingsPage(){
     const {user, isAuthenticated} = useAuth('/auth/login')
@@ -24,7 +24,7 @@ export default function GeneralSettingsPage(){
                         <h4 className="text-md">Email address</h4>
                         <p className="text-xs text-gray-500">{user?.email} {!user?.hasEmailVerified ? 'Not verified!' : null}</p>
                     </div>
-                    <ButtonOutline disabled>
+                    <ButtonOutline disabled size="sm">
                         Change
                     </ButtonOutline>
                 </div>

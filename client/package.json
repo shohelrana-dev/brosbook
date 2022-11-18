@@ -8,7 +8,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@atlaskit/modal-dialog": "^12.4.1",
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
     "@material-tailwind/react": "^1.2.4",
@@ -24,6 +23,7 @@
     "js-cookie": "^3.0.1",
     "next": "^13.0.3",
     "react": "^18.2.0",
+    "react-alert-confirm": "^3.3.7",
     "react-content-loader": "^6.2.0",
     "react-date-picker": "^9.1.0",
     "react-dom": "^18.2.0",
