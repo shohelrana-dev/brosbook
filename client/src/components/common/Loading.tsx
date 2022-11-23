@@ -10,7 +10,7 @@ interface LoadingProps {
 
 function Loading({color="#36d7b7", ...rest}: LoadingProps) {
     return (
-        <div className="flex justify-center my-5">
+        <div className="flex justify-center my-3">
             <PuffLoader color={color}  {...rest}/>
         </div>
     )

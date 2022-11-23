@@ -5,16 +5,16 @@ import {TbCameraPlus} from "react-icons/tb"
 import {useChangeProfilePhotoMutation} from "@services/usersApi"
 import {toast} from "react-toastify"
 import Button from "@components/common/Button"
-import LightboxImage from "@components/common/LightboxImage"
+import ImageLightbox from "@components/common/ImageLightbox"
 import Image from "next/image"
 import {User} from "@interfaces/user.interfaces"
-import useAuth from "@hooks/useAuth"
+import useUser from "@hooks/useUser"
 import Modal from "@components/common/Modal"
 
 type Props = { user: User }
 
 export default function ProfilePhoto({user}: Props) {
-    const {user: currentUser} = useAuth()
+    const {user: currentUser} = useUser()
     const [changeProfilePhoto, {isLoading}] = useChangeProfilePhotoMutation()
     const inputRef = useRef<HTMLInputElement | null>(null)
     const [selectedPhoto, setSelectedPhoto] = useState<Blob>()
@@ -52,7 +52,7 @@ export default function ProfilePhoto({user}: Props) {
 
     if (user.id !== currentUser?.id) {
         return (
-            <LightboxImage
+            <ImageLightbox
                 src={profilePhoto}
                 className="rounded-full w-[150px] h-[150px] mt-[-100px]"
                 alt="User profile photo"
@@ -66,7 +66,7 @@ export default function ProfilePhoto({user}: Props) {
         <div className="relative">
             <input hidden name="photo" type="file" accept="image/*" onChange={fileInputChangeHandle}
                    ref={inputRef}/>
-            <LightboxImage
+            <ImageLightbox
                 src={profilePhoto}
                 className="rounded-full w-[150px] h-[150px] mt-[-100px]"
                 alt="User profile photo"
@@ -78,7 +78,7 @@ export default function ProfilePhoto({user}: Props) {
                 <TbCameraPlus fontSize={20} color="#fff"/>
             </IconButton>
 
-            <Modal isOpen={isModalOpen} onClose={handleModalOpen} iconAlignment="left" className="max-w-[600px]">
+            <Modal isOpen={isModalOpen} onClose={handleModalOpen} iconAlignment="left" className="max-w-[625px] !p-3">
                 <div>
                     <div className="flex justify-between p-2">
                         <h3 className="text-lg ml-6">New profile photo</h3>

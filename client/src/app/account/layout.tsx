@@ -1,6 +1,6 @@
 "use client"
 import React, {PropsWithChildren} from 'react'
-import useAuth from "@hooks/useAuth"
+import useUser from "@hooks/useUser"
 import TabLinkList from "@components/common/TabLinkList"
 import Avatar from "@components/common/Avatar"
 
@@ -10,7 +10,7 @@ const tabLinks = [
 ]
 
 export default function AccountLayout({children}:PropsWithChildren) {
-    const {user} = useAuth('/auth/login')
+    const {user} = useUser({redirectTo: '/auth/login'})
 
 
     return (

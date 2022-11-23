@@ -30,7 +30,7 @@ export default function ChangePasswordModal() {
             </ButtonOutline>
 
             <Modal isOpen={isModalOpen} onClose={handleModalOpen}>
-                <form className="flex-auto p-3 px-8 pt-6 pb-12" onSubmit={onSubmit}>
+                <form onSubmit={onSubmit}>
                     <h3 className="text-lg mb-3">Update your password</h3>
                     <PasswordInput
                         label="Current Password"

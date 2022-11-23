@@ -29,12 +29,12 @@ function FollowButton(props: FollowButtonProps) {
     }
 
     async function handleUnfollowClick() {
-        const [isOk] = await confirm({
+        const isConfirm = await confirm({
             title: `Unfollow ${user.username}?`,
             message: 'Their Posts will no longer show up in your home timeline. You can still view their profile.',
-            okButtonLabel: 'Unfollow'
+            confirmButtonLabel: 'Unfollow'
         })
-        if(!isOk) return
+        if(!isConfirm) return
 
         try {
             await unfollow(user.id).unwrap()

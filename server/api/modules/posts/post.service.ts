@@ -78,7 +78,7 @@ export default class PostService {
         try {
             if (image) {
                 const imageName = process.env.APP_NAME + '_image_' + uuid() + path.extname(image.name)
-                const imageUrl = `${process.env.SERVER_URL}/images/${imageName}`
+                const imageUrl = `${process.env.SERVER_URL}/uploads/${imageName}`
                 const imagePath = path.resolve(process.cwd(), 'server/public/uploads', imageName)
                 await image.mv(imagePath)
 

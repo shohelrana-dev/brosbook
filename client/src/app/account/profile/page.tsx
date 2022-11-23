@@ -6,14 +6,14 @@ import Button from '@components/common/Button'
 import {useUpdateProfileMutation} from '@services/accountApi'
 import BasicInput from "@components/common/BasicInput"
 import {Radio} from "@material-tailwind/react"
-import useAuth from "@hooks/useAuth"
+import useUser from "@hooks/useUser"
 import Loading from "@components/common/Loading"
 import {useForm} from "@hooks/useForm"
-import {toast} from "react-toastify";
+import {toast} from "react-toastify"
 
 export default function ProfileSettingsPage() {
     //hooks
-    const {user} = useAuth()
+    const {user} = useUser()
     const [updateProfile, {isLoading, isSuccess}] = useUpdateProfileMutation()
     const {formData, onChange, onSubmit, errors, setFormData} = useForm<ProfilePayload>(updateProfile)
 

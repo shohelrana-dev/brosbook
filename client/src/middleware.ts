@@ -1,23 +1,19 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import isAuthenticated from "@utils/isAuthenticated"
 
 export async function middleware(request: NextRequest) {
-    const access_token = request.cookies.get('access_token')?.value
-    const url = `${process.env["NEXT_PUBLIC_SERVER_API_URL"]}/users/me`
-
     console.log('---------------middleware trigged================')
-    try {
-        const res = await fetch(url, {headers: {Authorization: `Bearer ${access_token}`}})
-        if(res.ok){
-            return NextResponse.next()
+
+    if(await isAuthenticated(request)){
+        if(request.nextUrl.pathname.startsWith('/auth') && ((request.nextUrl.pathname !== '/auth/logout') && (request.nextUrl.pathname !== '/auth/forgot_password'))){
+            return NextResponse.redirect(new URL('/', request.url))
         }
-    }catch (err:any) {
-        console.log(`Middleware error: ${err.message}`)
+        return NextResponse.next()
+    }else {
+        if(request.nextUrl.pathname.startsWith('/account') || request.nextUrl.pathname === '/'){
+            return NextResponse.redirect(new URL('/auth/login', request.url))
+        }
+        return NextResponse.next()
     }
-
-    return NextResponse.redirect(new URL('/auth/login', request.url))
-}
-
-export const config = {
-    matcher: ['/']
 }

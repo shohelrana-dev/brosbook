@@ -67,7 +67,7 @@ export default function RequiredPage() {
                             {!isResendEmail ? (
                                 <span>
                                     Didn&apos;t receive the link email?&nbsp;
-                                    <Button  className="w-full mt-3 font-bold text-green-700"  onClick={resendEmail}>
+                                    <Button onClick={resendEmail}>
                                         Resend email
                                     </Button>
                                 </span>) : (

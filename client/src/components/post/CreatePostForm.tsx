@@ -8,12 +8,12 @@ import Avatar from "@components/common/Avatar"
 import {useCreatePostMutation} from "@services/postsApi"
 import BasicInput from "@components/common/BasicInput"
 import Button from "@components/common/Button"
-import useAuth from "@hooks/useAuth"
+import useUser from "@hooks/useUser"
 import IconButton from "@components/common/IconButton"
 
 function CreatePostForm() {
     //hooks
-    const {user} = useAuth()
+    const {user} = useUser()
     const [createPost, {isLoading}] = useCreatePostMutation()
     const inputImageRef = useRef<HTMLInputElement | null>(null)
     const [selectedImage, setSelectedImage] = useState<any>(null)

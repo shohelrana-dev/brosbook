@@ -14,7 +14,7 @@ interface SavePhoto {
 export default async function savePhoto( { file, source, userId, sourceId }: SavePhoto ): Promise<string> {
     const type = path.extname( file.name )
     const name      = process.env.APP_NAME + '_image_' + uuidv4() + type
-    const url       = `${ process.env.SERVER_URL }/images/${ name }`
+    const url       = `${ process.env.SERVER_URL }/uploads/${ name }`
     const photoPath = path.join( process.cwd(), 'server/public/uploads', name )
 
     try {

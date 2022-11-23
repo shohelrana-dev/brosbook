@@ -84,7 +84,7 @@ export default function SignupPage() {
                             }}
                         />
                         {passwordWarning ? (
-                            <Alert color="amber">{passwordWarning}</Alert>
+                            <Alert color="red" className="mt-3">{passwordWarning}</Alert>
                         ) : null}
                         <Button className="w-full mt-3" type="submit" isLoading={isLoading || isSuccess} >
                             Sign Up

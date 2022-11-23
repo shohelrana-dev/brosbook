@@ -6,7 +6,7 @@ import Avatar from "@components/common/Avatar"
 import { Post } from "@interfaces/posts.interfaces"
 import CommentList from "@components/post/CommentList"
 import timeAgo from "@utils/timeAgo"
-import LightboxImage from '@components/common/LightboxImage'
+import ImageLightbox from '@components/common/ImageLightbox'
 import PostBar from "@components/post/PostBar"
 import IconButton from "@components/common/IconButton"
 
@@ -51,7 +51,7 @@ const PostCard = ({ post }: PostCardProps) => {
                 )}
                 {post.photo && (
                     <div className="my-3">
-                        <LightboxImage src={post.photo} width={520} height={340}  alt="Post image"/>
+                        <ImageLightbox src={post.photo} width={520} height={340} alt="Post image"/>
                     </div>
                 )}
 

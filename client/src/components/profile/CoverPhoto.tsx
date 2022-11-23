@@ -5,17 +5,17 @@ import {TbCameraPlus} from "react-icons/tb"
 import {useChangeCoverPhotoMutation} from "@services/usersApi"
 import {toast} from "react-toastify"
 import Button from "@components/common/Button"
-import LightboxImage from "@components/common/LightboxImage"
+import ImageLightbox from "@components/common/ImageLightbox"
 import Image from "next/image"
 import {User} from "@interfaces/user.interfaces"
 import placeholderCoverPhoto from "@images/placeholder-cover-photo.png"
-import useAuth from "@hooks/useAuth"
+import useUser from "@hooks/useUser"
 import Modal from "@components/common/Modal"
 
 type Props = { user: User }
 
 export default function CoverPhoto({user}: Props) {
-    const {user: currentUser} = useAuth()
+    const {user: currentUser} = useUser()
     const [changeCoverPhoto, {isLoading}] = useChangeCoverPhotoMutation()
     const inputRef = useRef<HTMLInputElement | null>(null)
     const [selectedPhoto, setSelectedPhoto] = useState<Blob>()
@@ -55,7 +55,7 @@ export default function CoverPhoto({user}: Props) {
         return (
             <div className="relative w-full h-[320px]">
                 {coverPhoto ? (
-                    <LightboxImage
+                    <ImageLightbox
                         src={coverPhoto}
                         fill={true}
                         alt="cover photo"
@@ -72,7 +72,7 @@ export default function CoverPhoto({user}: Props) {
                    ref={inputRef}/>
             <div className="relative w-full h-[320px]">
                 {coverPhoto ? (
-                    <LightboxImage
+                    <ImageLightbox
                         src={coverPhoto}
                         fill={true}
                         alt="cover photo"
@@ -86,7 +86,7 @@ export default function CoverPhoto({user}: Props) {
                 <TbCameraPlus fontSize={25} color="#fff"/>
             </IconButton>
 
-            <Modal isOpen={isModalOpen} onClose={handleModalOpen} iconAlignment="left" className="max-w-[600px]">
+            <Modal isOpen={isModalOpen} onClose={handleModalOpen} iconAlignment="left" className="max-w-[625px] !p-3">
                 <div>
                     <div className="flex justify-between p-2">
                         <h3 className="text-lg ml-6">New cover photo</h3>

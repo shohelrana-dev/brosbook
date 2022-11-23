@@ -1,13 +1,13 @@
 "use client"
 import React from 'react'
-import useAuth from "@hooks/useAuth"
+import useUser from "@hooks/useUser"
 import Loading from "@components/common/Loading"
 import ButtonOutline from "@components/common/ButtonOutline"
 import ChangePasswordModal from "@components/account/ChangePasswordModal"
 import ChangeUsernameModal from "@components/account/ChangeUsernameModal"
 
 export default function GeneralSettingsPage(){
-    const {user, isAuthenticated} = useAuth('/auth/login')
+    const {user, isAuthenticated} = useUser({redirectTo: '/auth/login'})
 
     if(!isAuthenticated) return <Loading/>
 

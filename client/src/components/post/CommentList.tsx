@@ -6,7 +6,7 @@ import {useCreateCommentMutation, useGetCommentsQuery} from "@services/commentsA
 import {Comment} from "@interfaces/posts.interfaces"
 import {useGetInfiniteListQuery} from "@hooks/useGetInfiniteListQuery"
 import BasicInput from "@components/common/BasicInput"
-import useAuth from "@hooks/useAuth"
+import useUser from "@hooks/useUser"
 import ButtonGray from "@components/common/ButtonGray"
 
 interface CommentListPost {
@@ -14,7 +14,7 @@ interface CommentListPost {
 }
 
 function CommentList({postId}: CommentListPost) {
-    const {user: currentUser} = useAuth()
+    const {user: currentUser} = useUser()
     const {isLoading, items: comments, hasMoreItem, loadMoreItem} = useGetInfiniteListQuery<Comment>(useGetCommentsQuery, {postId})
     const [createComment] = useCreateCommentMutation()
 
