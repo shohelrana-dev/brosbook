@@ -37,7 +37,7 @@ function CommentList({postId}: CommentListPost) {
         <div className="mt-2">
             <form onSubmit={handleSaveComment} className="mb-2 flex items-center">
                 <div className="w-1/12 mt-[-2px]">
-                    <Avatar src={currentUser?.photo} online size="small"/>
+                    <Avatar src={currentUser?.avatar} online size="small"/>
                 </div>
                 <div className="ml-2 w-11/12">
                     <BasicInput

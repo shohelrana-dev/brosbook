@@ -7,13 +7,13 @@ export interface User {
     email: string
     password?: string
     phone?: string
-    photo: string
+    avatar: string
     profile?: Profile
     active: number
     hasEmailVerified: boolean
     followerCount?: number
     followingCount?: number
-    isCurrentUserFollow: boolean,
+    isViewerFollow: boolean,
     createdAt: string
     updatedAt: string
 }

@@ -1,43 +1,44 @@
+"use client"
 import React, {useState} from 'react'
 import Link from "next/link"
-import { BsThreeDots as ThreeDotsIcon } from 'react-icons/bs'
-
 import Avatar from "@components/common/Avatar"
-import { Post } from "@interfaces/posts.interfaces"
+import {Post} from "@interfaces/posts.interfaces"
 import CommentList from "@components/post/CommentList"
 import timeAgo from "@utils/timeAgo"
 import ImageLightbox from '@components/common/ImageLightbox'
 import PostBar from "@components/post/PostBar"
-import IconButton from "@components/common/IconButton"
+import MoreOptions from "@components/post/MoreOptions"
+
 
 interface PostCardProps {
     post: Post
 }
 
-const PostCard = ({ post }: PostCardProps) => {
+const PostCard = (props: PostCardProps) => {
     //hooks
-    const [showComment, setShowComment] = useState<boolean>(false)
+    const [post, setPost] = useState<Post | null>(props.post)
+    const [isCommentsHidden, setIsCommentsHidden] = useState<boolean>(true)
+
+    if(!post) return null
 
     return (
         <div className="box p-6 mt-6" id={`post-${post.id}`}>
             <div className="flex">
-                <Link href={`/${post.user.username}`}>
-                    <Avatar src={post.user.photo} />
+                <Link href={`/${post.author.username}`}>
+                    <Avatar src={post.author.avatar} />
                 </Link>
                 <div className="ml-4 w-full">
-                    <div className="relative">
-                        <Link href={`/${post.user.username}`}>
+                    <div className="flex justify-between">
+                        <Link href={`/${post.author.username}`}>
                             <h3 className="text-md font-medium">
-                                {post.user.fullName}
-                                <span className="ml-2 text-gray-600 font-normal">@{post.user.username}</span>
+                                {post.author.fullName}
+                                <span className="ml-2 text-gray-600 font-normal">@{post.author.username}</span>
                             </h3>
                         </Link>
-                        <IconButton className="!absolute top-0 right-0">
-                            <ThreeDotsIcon size="18" />
-                        </IconButton>
+                        <MoreOptions post={post} setPost={setPost}/>
                     </div>
 
-                    <p className="text-gray-500 font-medium text-xs">
+                    <p className="text-gray-500 font-medium text-xs mt-[-8px]">
                         {timeAgo(post.createdAt)}
                     </p>
 
@@ -55,9 +56,9 @@ const PostCard = ({ post }: PostCardProps) => {
                     </div>
                 )}
 
-                <PostBar post={post} showComment={showComment} setShowComment={setShowComment}/>
+                <PostBar post={post} setPost={setPost} isCommentsHidden={isCommentsHidden} setIsCommentsHidden={setIsCommentsHidden}/>
 
-                {showComment ? <CommentList postId={post.id}/> : null}
+                {!isCommentsHidden ? <CommentList postId={post.id}/> : null}
 
             </div>
         </div>

@@ -7,8 +7,8 @@ export interface Post {
     likeCount: number
     comments: Comment[]
     commentCount: number
-    hasCurrentUserLike: boolean
-    user: User
+    isViewerLiked: boolean
+    author: User
     photo: string
     createdAt: string
     updatedAt: string
@@ -17,8 +17,8 @@ export interface Post {
 export interface Comment {
     id: string
     username: string
-    user: User
-    hasCurrentUserLike: boolean
+    author: User
+    isViewerLiked: boolean
     likeCount: number
     postId: string
     body: string

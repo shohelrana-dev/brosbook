@@ -12,7 +12,7 @@ function FollowUser( { user }: FollowUserProps ){
     return (
         <div className="flex box p-4 mb-2">
             <Link href={ `/${ user.username }` } className="block min-w-[40px] mr-2">
-                <Avatar src={ user.photo }/>
+                <Avatar src={ user.avatar }/>
             </Link>
             <div className="w-full">
                 <div className="flex justify-between items-center">

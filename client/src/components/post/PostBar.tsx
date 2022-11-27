@@ -5,29 +5,28 @@ import {FaRegComment as CommentIcon, FaShareSquare as ShareIcon} from "react-ico
 import {Post} from "@interfaces/posts.interfaces"
 import {usePostLikeMutation, usePostUnlikeMutation} from "@services/postsApi"
 import {motion, AnimatePresence} from "framer-motion"
+import {CopyToClipboard} from 'react-copy-to-clipboard'
+import {toast} from "react-toastify"
 
 
 interface PostBarProps {
     post: Post
-    setShowComment: (_: boolean) => void
-    showComment: boolean
+    setPost: (post: Post) => void
+    isCommentsHidden: boolean
+    setIsCommentsHidden: (_: boolean) => void
 }
 
-function PostBar({post, setShowComment, showComment}: PostBarProps) {
+function PostBar({post, setPost, setIsCommentsHidden, isCommentsHidden}: PostBarProps) {
     //hooks
     const [postLike] = usePostLikeMutation()
     const [postUnlike] = usePostUnlikeMutation()
-
-    const [hasCurrentUserLike, setHasCurrentUserLike] = useState<boolean>(post.hasCurrentUserLike)
-    const [likeCount, setLikeCount] = useState<number>(post.likeCount)
 
     async function handlePostLike(event: MouseEvent<HTMLButtonElement>) {
         event.currentTarget.disabled = true
 
         try {
-            await postLike(post.id).unwrap()
-            setHasCurrentUserLike(true)
-            setLikeCount(likeCount + 1)
+            const likedPost = await postLike(post.id).unwrap()
+            setPost(likedPost)
         } catch (err) {
             console.error(err)
         }
@@ -37,9 +36,8 @@ function PostBar({post, setShowComment, showComment}: PostBarProps) {
         event.currentTarget.disabled = true
 
         try {
-            await postUnlike(post.id).unwrap()
-            setHasCurrentUserLike(false)
-            setLikeCount(likeCount - 1)
+            const unlikedPost = await postUnlike(post.id).unwrap()
+            setPost(unlikedPost)
         } catch (err) {
             console.error(err)
         }
@@ -53,7 +51,7 @@ function PostBar({post, setShowComment, showComment}: PostBarProps) {
                         onClick={handlePostUnlike}
                         className="icon"
                         initial={{scale: 0}}
-                        animate={{scale: hasCurrentUserLike ? 1 : 0}}
+                        animate={{scale: post.isViewerLiked ? 1 : 0}}
                         transition={{duration: 0.1}}
                     >
                         <LikeIcon fontSize="medium" color="#FF1493"/>
@@ -62,30 +60,33 @@ function PostBar({post, setShowComment, showComment}: PostBarProps) {
                         onClick={handlePostLike}
                         className="icon absolute"
                         initial={{scale: 0}}
-                        animate={{scale: !hasCurrentUserLike ? 1 : 0}}
+                        animate={{scale: !post.isViewerLiked ? 1 : 0}}
                         transition={{duration: 0.1}}
                     >
                         <OutlinedLikeIcon fontSize="medium"/>
                     </motion.button>
                     <motion.p
-                        key={likeCount}
+                        key={post.likeCount}
                         initial={{ y: -10, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
+                        transition={{duration: 0.3}}
                         className="text-gray-600">
-                        {likeCount}
+                        {post.likeCount}
                     </motion.p>
                 </AnimatePresence>
             </div>
             <div className="flex items-center">
-                <button className="icon" onClick={() => setShowComment(!showComment)}>
+                <button className="icon" onClick={() => setIsCommentsHidden(!isCommentsHidden)}>
                     <CommentIcon size="18"/>
                 </button>
                 <p className="text-gray-600">{post.commentCount}</p>
             </div>
             <div className="flex items-center text-gray-600">
-                <button className="icon">
-                    <ShareIcon size="18"/>
-                </button>
+                <CopyToClipboard text={`${process.env.NEXT_PUBLIC_APP_URL}/${post.author.username}/posts/${post.id}`} onCopy={()=> toast.success('Link copied.')}>
+                    <button className="icon">
+                        <ShareIcon size="18"/>
+                    </button>
+                </CopyToClipboard>
             </div>
         </div>
     )

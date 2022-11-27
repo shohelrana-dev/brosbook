@@ -19,13 +19,13 @@ function CommentItem({ comment }: CommentItemState) {
     //hooks
     const [likeComment] = useLikeCommentMutation()
     const [unlikeComment] = useUnlikeCommentMutation()
-    const [hasCurrentUserLike, setHasCurrentUserLike] = useState<boolean>(comment.hasCurrentUserLike)
+    const [isViewerLiked, setIsViewerLiked] = useState<boolean>(comment.isViewerLiked)
     const [likeCount, setLikeCount] = useState<number>(comment.likeCount || 0)
 
     async function handleCommentLike() {
         try {
             await likeComment({ postId: comment.postId, commentId: comment.id }).unwrap()
-            setHasCurrentUserLike(true)
+            setIsViewerLiked(true)
             setLikeCount(likeCount + 1)
         } catch (err) {
             console.error(err)
@@ -35,7 +35,7 @@ function CommentItem({ comment }: CommentItemState) {
     async function handleCommentUnlike() {
         try {
             await unlikeComment({ postId: comment.postId, commentId: comment.id }).unwrap()
-            setHasCurrentUserLike(false)
+            setIsViewerLiked(false)
             setLikeCount(likeCount - 1)
         } catch (err) {
             console.error(err)
@@ -45,7 +45,7 @@ function CommentItem({ comment }: CommentItemState) {
     return (
         <div className="flex">
             <Link href={`/${comment.user.username}`} className="mt-3">
-                <Avatar src={comment.user.photo} size="small" />
+                <Avatar src={comment.user.avatar} size="small" />
             </Link>
             <div>
                 <div className="flex items-center">
@@ -73,7 +73,7 @@ function CommentItem({ comment }: CommentItemState) {
                         onClick={handleCommentUnlike}
                         className="icon"
                         initial={{scale: 0}}
-                        animate={{scale: hasCurrentUserLike ? 1 : 0}}
+                        animate={{scale: isViewerLiked ? 1 : 0}}
                         transition={{duration: 0.1}}
                     >
                         <LikeIcon fontSize="small" color="#FF1493"/>
@@ -82,7 +82,7 @@ function CommentItem({ comment }: CommentItemState) {
                         onClick={handleCommentLike}
                         className="icon absolute"
                         initial={{scale: 0}}
-                        animate={{scale: !hasCurrentUserLike ? 1 : 0}}
+                        animate={{scale: !isViewerLiked ? 1 : 0}}
                         transition={{duration: 0.1}}
                     >
                         <OutlinedLikeIcon fontSize="small"/>

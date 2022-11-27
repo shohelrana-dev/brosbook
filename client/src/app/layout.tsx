@@ -18,13 +18,7 @@ export default async function RootLayout ({children}:PropsWithChildren){
 
     return (
         <html lang='eng' className={font.className}>
-            <head>
-                <meta property="og:site_name" content="brosbook"/>
-                <meta property="twitter:card" content="summary"/>
-                <meta property="og:type" content="website"/>
-                <title>{process.env.NEXT_PUBLIC_APP_NAME || 'Brosbook'}</title>
-                <link rel="shortcut icon" href="/images/favicon.png" />
-            </head>
+            <head/>
             <body>
                 <Providers>
                     <Navbar />

@@ -37,7 +37,7 @@ function SearchUserItem( { user }: SingleSearchUserProps ) {
             disabled={ loading }
         >
             <Avatar
-                src={ user.photo }
+                src={ user.avatar }
                 online={ user.active === 1 }
                 alt={ user.fullName }
                 size="small"

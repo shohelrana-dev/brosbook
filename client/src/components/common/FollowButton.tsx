@@ -22,7 +22,7 @@ function FollowButton(props: FollowButtonProps) {
         try {
             await follow(user.id).unwrap()
 
-            setUser({...user, isCurrentUserFollow: true})
+            setUser({...user, isViewerFollow: true})
         } catch (err) {
             console.error(err)
         }
@@ -39,7 +39,7 @@ function FollowButton(props: FollowButtonProps) {
         try {
             await unfollow(user.id).unwrap()
 
-            setUser({...user, isCurrentUserFollow: false})
+            setUser({...user, isViewerFollow: false})
         } catch (err) {
             console.error(err)
         }
@@ -47,7 +47,7 @@ function FollowButton(props: FollowButtonProps) {
 
     return (
         <>
-            {user.isCurrentUserFollow ? (
+            {user.isViewerFollow ? (
                 <>
                     <ButtonOutline onClick={handleUnfollowClick} size='sm' className="mt-0">
                         Unfollow

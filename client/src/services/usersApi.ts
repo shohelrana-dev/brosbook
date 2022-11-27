@@ -29,7 +29,7 @@ export const usersApi = baseApi.injectEndpoints({
 
         changeProfilePhoto: build.mutation<User, FormData>({
             query: (payload) => ({
-                url: `users/me/profile_photo`,
+                url: `users/me/avatar`,
                 method: 'POST',
                 body: payload
             })

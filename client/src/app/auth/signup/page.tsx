@@ -1,10 +1,10 @@
 "use client"
 import { useEffect, useState} from 'react'
 import Link from 'next/link'
-import zxcvbn from 'zxcvbn-typescript'
 import { toast } from "react-toastify"
 import { useRouter } from "next/navigation"
 import {Alert} from "@material-tailwind/react"
+import { passwordStrength } from 'check-password-strength'
 
 import AnimatedInput from '@components/common/AnimatedInput'
 import GoogleLoginButton from "@components/common/GoogleLoginButton"
@@ -31,7 +31,7 @@ export default function SignupPage() {
     }, [isSuccess])
 
     function checkPasswordWarning() {
-        setPasswordWarning(zxcvbn(formData.password, [])?.feedback?.warning)
+        setPasswordWarning(passwordStrength(formData.password).value)
     }
 
     return (
@@ -84,7 +84,7 @@ export default function SignupPage() {
                             }}
                         />
                         {passwordWarning ? (
-                            <Alert color="red" className="mt-3">{passwordWarning}</Alert>
+                            <Alert color="amber" className="mt-3 py-1">{passwordWarning}</Alert>
                         ) : null}
                         <Button className="w-full mt-3" type="submit" isLoading={isLoading || isSuccess} >
                             Sign Up

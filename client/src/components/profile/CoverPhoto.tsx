@@ -32,7 +32,7 @@ export default function CoverPhoto({user}: Props) {
 
         try {
             const formData = new FormData()
-            formData.append('photo', selectedPhoto)
+            formData.append('coverPhoto', selectedPhoto)
             const data = await changeCoverPhoto(formData).unwrap()
             setIsModalOpen(false)
             setSelectedPhoto(undefined)

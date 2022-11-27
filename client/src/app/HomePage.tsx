@@ -17,7 +17,7 @@ export default function HomePage() {
         hasNextPage: hasMoreItem,
         onLoadMore: loadMoreItem,
     })
-
+    console.log(posts)
     return (
         <div className=" pt-6 mb-6">
             <CreatePostForm/>

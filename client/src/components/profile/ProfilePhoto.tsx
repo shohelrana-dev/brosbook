@@ -18,7 +18,7 @@ export default function ProfilePhoto({user}: Props) {
     const [changeProfilePhoto, {isLoading}] = useChangeProfilePhotoMutation()
     const inputRef = useRef<HTMLInputElement | null>(null)
     const [selectedPhoto, setSelectedPhoto] = useState<Blob>()
-    const [profilePhoto, setProfilePhoto] = useState<string>(user.photo)
+    const [profilePhoto, setProfilePhoto] = useState<string>(user.avatar)
 
     const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -31,11 +31,11 @@ export default function ProfilePhoto({user}: Props) {
 
         try {
             const formData = new FormData()
-            formData.append('photo', selectedPhoto)
+            formData.append('avatar', selectedPhoto)
             const data = await changeProfilePhoto(formData).unwrap()
             setIsModalOpen(false)
             setSelectedPhoto(undefined)
-            setProfilePhoto(data.photo)
+            setProfilePhoto(data.avatar)
             toast.success('Profile photo was saved.')
         } catch (err: any) {
             console.error(err)

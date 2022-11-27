@@ -49,13 +49,14 @@ export function ConfirmProvider({children}: PropsWithChildren) {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{duration: 0.3}}
+                        style={{zIndex: 2000}}
                         className="fixed flex items-center justify-center w-full h-full top-0 left-0 bg-[#00000066]"
                     >
                         <motion.div
                             initial={{scale: 0.9}}
                             animate={{scale: 1}}
                             exit={{ opacity: 0, scale: 0.6 }}
-                            style={{maxWidth: '350px', zIndex: 99}}
+                            style={{maxWidth: '350px'}}
                             transition={{duration: 0.3}}
                             className="box w-[80%] rounded-2xl p-6"
                         >

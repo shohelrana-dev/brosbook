@@ -48,7 +48,7 @@ function NavBar(){
                         <Menu>
                             <MenuHandler>
                                 <button className="rounded-full">
-                                    <Avatar src={user?.photo}/>
+                                    <Avatar src={user?.avatar}/>
                                 </button>
                             </MenuHandler>
                             <MenuList>
