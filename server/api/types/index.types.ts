@@ -1,5 +1,14 @@
 import User from "@entities/User"
 
+export interface Auth {
+    user?: {
+        id: string,
+        username: string,
+        email: string
+    }
+    isAuthenticated: boolean
+}
+
 export interface LoginTokenPayload {
     access_token: string
     expires_in: number | string
@@ -30,4 +39,10 @@ export interface PaginateMeta {
     nextPage: number,
     prevPage: number,
     lastPage: number,
+}
+
+export interface PaginateQuery {
+    page?: number
+    limit?: number
+    userId?: string
 }

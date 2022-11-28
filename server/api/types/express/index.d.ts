@@ -1,10 +1,12 @@
 declare namespace Express {
     export interface Request {
-        user?: {
-            id: string,
-            username: string,
-            email: string
+        auth: {
+            user?: {
+                id: string,
+                username: string,
+                email: string
+            }
+            isAuthenticated: boolean
         }
-        isAuthenticated?: boolean
     }
 }

@@ -1,7 +1,7 @@
 import { AfterLoad, BeforeInsert, Column, Entity, OneToMany, OneToOne } from "typeorm"
 import argon2 from 'argon2'
 import Profile from "./Profile"
-import FollowingRelationship from "./Relationship"
+import Relationship from "./Relationship"
 import { AbstractEntity } from "@entities/AbstractEntity"
 
 @Entity('users')
@@ -22,7 +22,7 @@ class User extends AbstractEntity {
     password: string
 
     @Column({ nullable: true })
-    photo: string
+    avatar: string
 
     @Column({ type: 'tinyint', default: 0 })
     active: number
@@ -33,16 +33,18 @@ class User extends AbstractEntity {
     @OneToOne(() => Profile, (profile) => profile.user)
     profile: Profile
 
-    @OneToMany(() => FollowingRelationship, follow => follow.follower)
-    followers: FollowingRelationship[]
+    @OneToMany(() => Relationship, relationship => relationship.follower)
+    followers: Relationship[]
 
-    @OneToMany(() => FollowingRelationship, follow => follow.following)
-    following: FollowingRelationship[]
+    @OneToMany(() => Relationship, relationship => relationship.followedUser)
+    followedUsers: Relationship[]
 
     //virtual columns
     fullName: string
-    isCurrentUserFollow: boolean
+    isViewerFollow: boolean
     hasEmailVerified: boolean
+    followerCount: number
+    followingCount: number
 
     @BeforeInsert()
     async makePasswordHash() {
@@ -58,9 +60,9 @@ class User extends AbstractEntity {
     }
 
     @BeforeInsert()
-    setDefaultProfilePhotoIfNotGiven() {
-        if (!this.photo) {
-            this.photo = process.env.SERVER_URL! + '/avatar.png'
+    setDefaultProfilePhoto() {
+        if (!this.avatar) {
+            this.avatar = process.env.SERVER_URL! + '/avatar.png'
         }
     }
 

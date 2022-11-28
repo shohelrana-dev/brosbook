@@ -1,78 +1,26 @@
-import { Request } from "express"
 import path from "path"
-import { v4 as uuid } from "uuid"
-import { UploadedFile } from "express-fileupload"
+import {v4 as uuid} from "uuid"
+import {UploadedFile} from "express-fileupload"
 
 import Post from "@entities/Post"
 import Like from "@entities/Like"
-import { paginateMeta } from "@utils/paginateMeta"
-import { PaginateMeta } from "@api/types/index.types"
-import { appDataSource } from "@config/data-source.config"
+import {paginateMeta} from "@utils/paginateMeta"
+import {Auth, PaginateMeta, PaginateQuery} from "@api/types/index.types"
+import {appDataSource} from "@config/data-source.config"
 import Media from "@entities/Media"
-import { PhotoSource } from "@api/enums"
+import {PhotoSource} from "@api/enums"
+import NotFoundException from "@exceptions/NotFoundException"
+import InternalServerException from "@exceptions/InternalServerException"
+import Relationship from "@entities/Relationship"
+import formatPost from "@utils/formatPost"
+import BadRequestException from "@exceptions/BadRequestException"
 
 export default class PostService {
     private postRepository = appDataSource.getRepository(Post)
 
-    public async getManyPost(req: Request): Promise<{ posts: Post[], meta: PaginateMeta }> {
-        const page = Number(req.query.page) || 1
-        const limit = Number(req.query.limit) || 6
-        const skip = limit * (page - 1)
-
-        const [posts, count] = await this.postRepository
-            .createQueryBuilder('post')
-            .leftJoinAndSelect('post.user', 'user')
-            .loadRelationCountAndMap('post.commentCount', 'post.comments')
-            .leftJoinAndSelect('post.likes', 'like')
-            .loadRelationCountAndMap('post.likeCount', 'post.likes')
-            .orderBy('post.createdAt', 'DESC')
-            .skip(skip)
-            .take(limit)
-            .getManyAndCount()
-
-        //check and set current user like
-        for (let post of posts) {
-            const like = await Like.findOneBy({ userId: req.user.id, postId: post.id })
-            post.hasCurrentUserLike = like ? true : false
-        }
-
-        return { posts, meta: paginateMeta(count, page, limit) }
-    }
-
-
-    public async getFeedPosts(req: Request): Promise<{ posts: Post[], meta: PaginateMeta }> {
-        const page = Number(req.query.page) || 1
-        const limit = Number(req.query.limit) || 6
-        const skip = limit * (page - 1)
-
-        const [posts, count] = await this.postRepository
-            .createQueryBuilder('post')
-            .where('post.userId != :userId', { userId: req.user.id })
-            .leftJoinAndSelect('post.user', 'user')
-            .loadRelationCountAndMap('post.commentCount', 'post.comments')
-            .leftJoinAndSelect('post.likes', 'like')
-            .loadRelationCountAndMap('post.likeCount', 'post.likes')
-            .orderBy('post.createdAt', 'DESC')
-            .skip(skip)
-            .take(limit)
-            .getManyAndCount()
-
-        //check and set current user like
-        for (let post of posts) {
-            const like = await Like.findOneBy({ userId: req.user.id, postId: post.id })
-            post.hasCurrentUserLike = like ? true : false
-        }
-
-        return { posts, meta: paginateMeta(count, page, limit) }
-    }
-
-    public async createPost(req: Request): Promise<Post> {
-        const { body } = req.body
-
-        const image = req.files?.image as UploadedFile
-
+    public async create({body, image}: { body?: string, image: UploadedFile }, auth: Auth): Promise<Post> {
         if (!body && !image) {
-            throw new Error('Input field missing')
+            throw new Error('Post content not given.')
         }
 
         try {
@@ -84,14 +32,14 @@ export default class PostService {
 
                 //save post
                 const post = new Post()
-                post.userId = req.user.id
+                post.authorId = auth.user.id
                 post.body = body
                 post.photo = imageUrl
                 const savedPost = await this.postRepository.save(post)
 
                 //save photo
                 const media = new Media()
-                media.userId = req.user.id
+                media.userId = auth.user.id
                 media.sourceId = post.id
                 media.source = PhotoSource.POST
                 media.name = image.name
@@ -104,7 +52,7 @@ export default class PostService {
 
             //save post
             const post = new Post()
-            post.userId = req.user.id
+            post.authorId = auth.user.id
             post.body = body
 
             return await this.postRepository.save(post)
@@ -113,29 +61,127 @@ export default class PostService {
         }
     }
 
-    public async like(req: Request): Promise<Like> {
-        const {postId} = req.params
+    public async getPostById(id: string, auth: Auth): Promise<Post> {
+        try {
+            const post = await this.postRepository.findOneOrFail({
+                where: {id},
+                relations: {author: true}
+            })
 
-        if (!postId) throw new Error('Post id missing')
+            return await formatPost(post, auth)
+        } catch (e) {
+            throw new NotFoundException('Post was not found.')
+        }
+    }
+
+    public async delete(id: string): Promise<Post> {
+        const post = await this.postRepository.findOneBy({id})
+
+        if (!post) throw new NotFoundException('Post was not found.')
+
+        try {
+            await this.postRepository.delete({id})
+            return post
+        } catch (e) {
+            throw new InternalServerException('Post couldn\'t be deleted.')
+        }
+    }
+
+    public async getManyPost(payload: PaginateQuery, auth: Auth): Promise<{ posts: Post[], meta: PaginateMeta }> {
+        const page = payload.page || 1
+        const limit = payload.limit || 6
+        const skip = limit * (page - 1)
+
+        try {
+            const [posts, count] = await this.postRepository
+                .createQueryBuilder('post')
+                .leftJoinAndSelect('post.author', 'user')
+                .orderBy('post.createdAt', 'DESC')
+                .skip(skip)
+                .take(limit)
+                .getManyAndCount()
+
+            const formattedPosts = await Promise.all(posts.map((async post => await formatPost(post, auth))))
+
+            return {posts: formattedPosts, meta: paginateMeta(count, page, limit)}
+        } catch (e) {
+            throw new InternalServerException('Unknown error during database operation.')
+        }
+    }
+
+
+    public async getFeedPosts(payload: PaginateQuery, auth: Auth): Promise<{ posts: Post[], meta: PaginateMeta }> {
+        const page = payload.page || 1
+        const limit = payload.limit || 6
+        const skip = limit * (page - 1)
+
+        try {
+            const relationships = await Relationship.find({
+                where: {followerId: auth.user.id},
+            })
+            const authorIds = relationships.map(rel => rel.followedId)
+
+            if (authorIds.length > 0) {
+                const [posts, count] = await this.postRepository
+                    .createQueryBuilder('post')
+                    .leftJoinAndSelect('post.author', 'author')
+                    .where('post.authorId!=:authorId', {authorId: auth.user.id})
+                    .where('post.authorId IN (:authorIds)', {authorIds})
+                    .orderBy('post.createdAt', 'DESC')
+                    .skip(skip)
+                    .take(limit)
+                    .getManyAndCount()
+
+                const formattedPosts = await Promise.all(posts.map((async post => await formatPost(post, auth))))
+
+                return {posts: formattedPosts, meta: paginateMeta(count, page, limit)}
+            }
+
+            return {posts: [], meta: paginateMeta(0, page, limit)}
+        } catch (err) {
+            console.log(err)
+            throw new InternalServerException('Unknown error during database operation.')
+        }
+    }
+
+    public async like(postId: string, auth: Auth): Promise<Post> {
+        const post = await this.postRepository.findOne({
+            where: {id: postId},
+            relations: {author: true}
+        })
+
+        if (!post) throw new BadRequestException('Post was not found.')
 
         try {
             const like = new Like()
             like.postId = postId
-            like.userId = req.user.id
+            like.userId = auth.user.id
+            await like.save()
 
-            return await like.save()
+            post.isViewerLiked = true
+            post.likeCount = Number(post.likeCount) + 1
+
+            return post
         } catch (err) {
             throw new Error('The post couldn\'t be liked.')
         }
     }
 
-    public async unlike(req: Request): Promise<void> {
-        const {postId} = req.params
+    public async unlike(postId: string, auth: Auth): Promise<Post> {
+        const post = await this.postRepository.findOne({
+            where: {id: postId},
+            relations: {author: true}
+        })
 
-        if (!postId) throw new Error('Post id missing')
+        if (!post) throw new BadRequestException('Post was not found.')
 
         try {
-            await Like.delete({ postId, userId: req.user.id })
+            await Like.delete({postId, userId: auth.user.id})
+
+            post.isViewerLiked = false
+            post.likeCount = Number(post.likeCount) - 1
+
+            return post
         } catch (err) {
             throw new Error('The post couldn\'t be unliked.')
         }

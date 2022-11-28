@@ -26,10 +26,10 @@ export default class CommentService {
             .getManyAndCount()
 
         //check and set current user like
-        if (req.isAuthenticated) {
+        if (req.auth.isAuthenticated) {
             for (let comment of comments) {
-                const like = await Like.findOneBy({ userId: req.user?.id, commentId: comment.id })
-                comment.hasCurrentUserLike = like ? true : false
+                const like = await Like.findOneBy({ userId: req.auth.user?.id, commentId: comment.id })
+                comment.isViewerLiked = like ? true : false
             }
         }
 
@@ -45,12 +45,12 @@ export default class CommentService {
 
         try {
             const comment = new Comment()
-            comment.userId = req.user.id
+            comment.userId = req.auth.user.id
             comment.body = body
             comment.postId = postId
 
             const savedComment = await comment.save()
-            savedComment.user = await User.findOneBy({ id: req.user.id })
+            savedComment.user = await User.findOneBy({ id: req.auth.user.id })
 
             return savedComment
         } catch (err) {
@@ -64,7 +64,7 @@ export default class CommentService {
         if (!commentId) throw new Error('Comment id missing.')
 
         try {
-            const like = Like.create({ commentId, userId: req.user.id })
+            const like = Like.create({ commentId, userId: req.auth.user.id })
             return await like.save()
         } catch (err) {
             throw new Error('The Comment couldn\'t be liked.')
@@ -78,7 +78,7 @@ export default class CommentService {
         if (!commentId) throw new Error('Comment id missing.')
 
         try {
-            await Like.delete({ commentId, userId: req.user.id })
+            await Like.delete({ commentId, userId: req.auth.user.id })
         } catch (error) {
             throw new Error('The Comment couldn\'t be unliked.')
         }

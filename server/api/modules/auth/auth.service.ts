@@ -14,7 +14,7 @@ import InternalServerException from "@exceptions/InternalServerException"
 import {EmailService} from "@services/email.service"
 import Media from "@entities/Media"
 import {PhotoSource} from "@api/enums"
-import Profile from "@entities/Profile";
+import Profile from "@entities/Profile"
 
 class AuthService {
     private userRepository = appDataSource.getRepository(User)
@@ -95,15 +95,15 @@ class AuthService {
             user.firstName= tokenPayload.given_name
             user.lastName = tokenPayload.family_name
             user.email = tokenPayload.email
-            user.photo = tokenPayload.picture
+            user.avatar = tokenPayload.picture
             user.password = uuid()
             await this.userRepository.save(user)
 
             Profile.create({userId: user.id}).save()
 
             const media = new Media()
-            media.name = 'Google id photo'
-            media.source = PhotoSource.PROFILE
+            media.name = 'Google photo'
+            media.source = PhotoSource.AVATAR
             media.sourceId = user.id
             media.type = 'jpg'
             media.userId = user.id

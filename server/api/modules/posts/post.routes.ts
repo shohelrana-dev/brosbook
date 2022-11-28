@@ -20,7 +20,7 @@ router.get( '/', postController.getManyPost )
  * @access Private
  * */
 
-router.post( '/', authMiddleware, postController.createPost )
+router.post( '/', authMiddleware, postController.create )
 
 /**
  * @desc get feed posts
@@ -28,6 +28,21 @@ router.post( '/', authMiddleware, postController.createPost )
  * @access Private
  * */
 router.get( '/feed', authMiddleware, postController.getFeedPosts )
+
+/**
+ * @desc get post by id
+ * @route GET posts/:id
+ * @access Public
+ * */
+router.get( '/:id', postController.getPostById )
+
+/**
+ * @desc delete post
+ * @route DELETE posts/:id
+ * @access Private
+ * */
+
+router.delete( '/:id', authMiddleware, postController.delete )
 
 /**
  * @desc  save post like

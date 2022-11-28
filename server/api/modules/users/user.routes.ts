@@ -16,10 +16,10 @@ router.get( '/me', authMiddleware, usersController.getCurrentUser )
 
 /**
  * @desc change profile photo
- * @route POST /api/v1/users/me/profile_photo
+ * @route POST /api/v1/users/me/avatar
  * @access Private
  */
-router.post( '/me/profile_photo', authMiddleware, usersController.changeProfilePhoto )
+router.post( '/me/avatar', authMiddleware, usersController.changeAvatar )
 
 /**
  * @desc change cover photo
@@ -69,7 +69,7 @@ router.get( '/:userId/followers', usersController.getFollowers )
  * @route GET /api/v1/users/:userId/following
  * @access Public
  */
-router.get( '/:userId/following', usersController.getFollowing )
+router.get( '/:userId/following', usersController.getFollowedUsers )
 
 /**
  * @desc follow

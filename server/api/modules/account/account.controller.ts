@@ -7,7 +7,7 @@ export default class AccountController {
 
     public updateProfile = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
-            const user = await this.accountService.updateProfile({userId: req.user.id, ...req.body})
+            const user = await this.accountService.updateProfile({userId: req.auth.user.id, ...req.body})
 
             res.json(user)
         } catch (err) {
@@ -17,7 +17,7 @@ export default class AccountController {
 
     public changeUsername = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
-            const user = await this.accountService.changeUsername({userId: req.user.id, ...req.body})
+            const user = await this.accountService.changeUsername({userId: req.auth.user.id, ...req.body})
 
             res.json(user)
         } catch (err) {
@@ -27,7 +27,7 @@ export default class AccountController {
 
     public changePassword = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
-            await this.accountService.changePassword({userId: req.user.id, ...req.body})
+            await this.accountService.changePassword({userId: req.auth.user.id, ...req.body})
 
             res.json({ message: 'Password has been changed.' })
         } catch (err) {

@@ -1,118 +1,131 @@
-import { NextFunction, Request, Response } from "express"
+import {NextFunction, Request, Response} from "express"
 import UserService from "./user.service"
+import {UploadedFile} from "express-fileupload"
 
 export default class UserController {
-    constructor( private readonly usersService: UserService ){
+    constructor(private readonly usersService: UserService) {
     }
 
-    public getCurrentUser = async( req: Request, res: Response, next: NextFunction ) => {
+    public getCurrentUser = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const user = await this.usersService.getCurrentUser(req)
+            const user = await this.usersService.getCurrentUser(req.auth)
 
-            res.json( user)
-        } catch ( err ) {
-            next( err )
+            res.json(user)
+        } catch (err) {
+            next(err)
         }
     }
 
-    public getUserByUsername = async( req: Request, res: Response, next: NextFunction ) => {
+    public getUserByUsername = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const user = await this.usersService.getUserByUsername(req )
+            const user = await this.usersService.getUserByUsername(req.params.username, req.auth)
 
-            res.json( user )
-        } catch ( err ) {
-            next( err )
+            res.json(user)
+        } catch (err) {
+            next(err)
         }
     }
 
-    public getSearchUsers = async( req: Request, res: Response, next: NextFunction ) => {
+    public getSearchUsers = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const { users, meta } = await this.usersService.getSearchUsers( req )
+            const {users, meta} = await this.usersService.getSearchUsers(req.query, req.auth)
 
-            res.json( { items: users, ...meta } )
-        } catch ( err ) {
-            next( err )
+            res.json({items: users, ...meta})
+        } catch (err) {
+            next(err)
         }
     }
 
-    public getSuggestedUsers = async( req: Request, res: Response, next: NextFunction ) => {
+    public getSuggestedUsers = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const { users, meta } = await this.usersService.getSuggestedUsers( req )
+            const {users, meta} = await this.usersService.getSuggestedUsers(req.query, req.auth)
 
-            res.json( { items: users, ...meta } )
-        } catch ( err ) {
-            next( err )
+            res.json({items: users, ...meta})
+        } catch (err) {
+            next(err)
         }
     }
 
-    public getUserPosts = async( req: Request, res: Response, next: NextFunction ) => {
-        try {
-            const { posts, meta } = await this.usersService.getUserPosts( req )
+    public getUserPosts = async (req: Request, res: Response, next: NextFunction) => {
+        const userId = req.params.userId as string
+        const page = Number(req.query.page)
+        const limit = Number(req.query.limit)
 
-            res.json( { items: posts, ...meta } )
-        } catch ( err ) {
-            next( err )
+        try {
+            const {posts, meta} = await this.usersService.getUserPosts({userId, page, limit}, req.auth)
+
+            res.json({items: posts, ...meta})
+        } catch (err) {
+            next(err)
         }
     }
 
 
-    public getFollowing = async( req: Request, res: Response, next: NextFunction ) => {
-        try {
-            const { following, meta } = await this.usersService.getFollowing( req )
+    public getFollowedUsers = async (req: Request, res: Response, next: NextFunction) => {
+        const userId = req.params.userId as string
+        const page = Number(req.query.page)
+        const limit = Number(req.query.limit)
 
-            res.json( { items: following, ...meta } )
-        } catch ( err ) {
-            next( err )
+        try {
+            const {followedUsers, meta} = await this.usersService.getFollowedUsers({userId, page, limit}, req.auth)
+
+            res.json({items: followedUsers, ...meta})
+        } catch (err) {
+            next(err)
         }
     }
 
-    public getFollowers = async( req: Request, res: Response, next: NextFunction ) => {
-        try {
-            const { followers, meta } = await this.usersService.getFollowers( req )
+    public getFollowers = async (req: Request, res: Response, next: NextFunction) => {
+        const userId = req.params.userId as string
+        const page = Number(req.query.page)
+        const limit = Number(req.query.limit)
 
-            res.json( { items: followers, ...meta } )
-        } catch ( err ) {
-            next( err )
+        try {
+            const {followers, meta} = await this.usersService.getFollowers({userId, page, limit}, req.auth)
+
+            res.json({items: followers, ...meta})
+        } catch (err) {
+            next(err)
         }
     }
 
-    public changeProfilePhoto = async( req: Request, res: Response, next: NextFunction ) => {
+    public changeAvatar = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const user = await this.usersService.changeProfilePhoto( req )
+            const user = await this.usersService.changeAvatar(req.files?.avatar as UploadedFile, req.auth)
 
-            res.json( user )
-        } catch ( err ) {
-            next( err )
+            res.json(user)
+        } catch (err) {
+            next(err)
         }
     }
 
-    public changeCoverPhoto = async( req: Request, res: Response, next: NextFunction ) => {
+    public changeCoverPhoto = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const user = await this.usersService.changeCoverPhoto( req )
+            const user = await this.usersService.changeCoverPhoto(req.files?.coverPhoto as UploadedFile, req.auth)
 
-            res.json( user )
-        } catch ( err ) {
-            next( err )
+            res.json(user)
+        } catch (err) {
+            next(err)
         }
     }
 
-    public follow = async( req: Request, res: Response, next: NextFunction ) => {
+    public follow = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const following = await this.usersService.follow( req )
+            const followedUser = await this.usersService.follow(req.params.userId, req.auth)
 
-            res.json( following )
-        } catch ( err ) {
-            next( err )
+            res.json(followedUser)
+        } catch (err) {
+            next(err)
         }
     }
 
-    public unfollow = async( req: Request, res: Response, next: NextFunction ) => {
+    public unfollow = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            await this.usersService.unfollow( req )
+            const unfollowedUser = await this.usersService.unfollow(req.params.userId, req.auth)
 
-            res.json( { message: 'Unfollow success.' } )
-        } catch ( err ) {
-            next( err )
+            res.json(unfollowedUser)
+        } catch (err) {
+            next(err)
         }
     }
 

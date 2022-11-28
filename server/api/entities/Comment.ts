@@ -1,8 +1,9 @@
-import { Entity, Column, JoinColumn, ManyToOne, OneToMany } from "typeorm"
+import {Entity, Column, JoinColumn, ManyToOne, OneToMany, AfterLoad} from "typeorm"
 import Post from "./Post"
 import User from "./User"
 import Like from "./Like"
 import { AbstractEntity } from "@entities/AbstractEntity"
+import {appDataSource} from "@config/data-source.config"
 
 @Entity('comments')
 class Comment extends AbstractEntity {
@@ -29,7 +30,21 @@ class Comment extends AbstractEntity {
 
     //virtual columns
     likeCount: number
-    hasCurrentUserLike: boolean
+    isViewerLiked: boolean
+
+    @AfterLoad()
+    async count(): Promise<void> {
+        const commentRepository = appDataSource.getRepository(Comment)
+
+        const {likeCount}  = await commentRepository
+            .createQueryBuilder('post')
+            .leftJoin('post.likes', 'like')
+            .select('COUNT(like.id)', 'likeCount')
+            .where('post.id = :id', { id: this.id })
+            .getRawOne()
+
+        this.likeCount = likeCount
+    }
 }
 
 export default Comment

@@ -1,20 +1,20 @@
 import { AbstractEntity } from '@entities/AbstractEntity'
-import { Entity, Column, JoinColumn, OneToOne } from 'typeorm'
+import {Entity, Column, JoinColumn, ManyToOne} from 'typeorm'
 import User from "./User"
 
 @Entity('relationships')
-export default class FollowingRelationship extends AbstractEntity {
-    @Column({ nullable: false, length: 48 })
+export default class Relationship extends AbstractEntity {
+    @Column({ nullable: false, length: 48, unique: false })
     followedId: string
 
-    @Column({ nullable: false, length: 48 })
+    @Column({ nullable: false, length: 48, unique: false })
     followerId: string
 
-    @OneToOne(() => User)
+    @ManyToOne(() => User, user => user.followedUsers)
     @JoinColumn({ name: 'followedId', referencedColumnName: 'id' })
-    following: User
+    followedUser: User
 
-    @OneToOne(() => User)
+    @ManyToOne(() => User,user => user.followers)
     @JoinColumn({ name: 'followerId', referencedColumnName: 'id' })
     follower: User
 }

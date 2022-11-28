@@ -63,25 +63,25 @@ class ChatService {
 
     public async createConversation( req: Request ): Promise<Conversation>{
         const { participantId } = req.body
-        const identifier        = hashids.encode( req.user.id + participantId + Date.now() )
+        const identifier        = hashids.encode( req.auth.user.id + participantId + Date.now() )
 
         if( ! participantId ) throw new HttpException( "Participant id missing", httpStatus.UNPROCESSABLE_ENTITY )
 
         //check conversation exists
-        const conversation = await Conversation.findOneBy( { ownerId: req.user.id } )
+        const conversation = await Conversation.findOneBy( { ownerId: req.auth.user.id } )
         if( conversation ) return conversation
 
         try {
             const conversation    = Conversation.create( {
                 identifier,
                 participantId,
-                ownerId: req.user.id,
+                ownerId: req.auth.user.id,
                 lastMessage: 'Just connected'
             } )
             const conversationTwo = Conversation.create( {
                 identifier,
                 ownerId: participantId,
-                participantId: req.user.id,
+                participantId: req.auth.user.id,
                 lastMessage: 'Just connected'
             } )
 
@@ -122,7 +122,7 @@ class ChatService {
     public async getConversations( req: Request ){
         const conversations = await Conversation.find( {
             relations: ["participant"],
-            where: { ownerId: req.user.id },
+            where: { ownerId: req.auth.user.id },
             order: {
                 updatedAt: "DESC",
             },
@@ -141,7 +141,7 @@ class ChatService {
         try {
             return await Conversation.findOneOrFail( {
                 relations: ["participant"],
-                where: { identifier, ownerId: req.user.id },
+                where: { identifier, ownerId: req.auth.user.id },
             } )
         } catch ( e ) {
             throw new HttpException( "Conversation couldn't found", httpStatus.CONFLICT )

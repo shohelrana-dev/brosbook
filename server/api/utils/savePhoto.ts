@@ -11,7 +11,7 @@ interface SavePhoto {
     sourceId?: string
 }
 
-export default async function savePhoto( { file, source, userId, sourceId }: SavePhoto ): Promise<string> {
+export default async function savePhoto( { file, source, userId, sourceId }: SavePhoto ): Promise<Media> {
     const type = path.extname( file.name )
     const name      = process.env.APP_NAME + '_image_' + uuidv4() + type
     const url       = `${ process.env.SERVER_URL }/uploads/${ name }`
@@ -19,10 +19,8 @@ export default async function savePhoto( { file, source, userId, sourceId }: Sav
 
     try {
         await file.mv( photoPath )
-        await Media.create( { name, url, source, userId, sourceId, type } ).save()
-        return url
+        return await Media.create( { name, url, source, userId, sourceId, type } ).save()
     } catch ( err ) {
-        console.log( err )
         throw new Error( 'Media could not be saved' )
     }
 }
