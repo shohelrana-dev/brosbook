@@ -1,59 +1,52 @@
-import {Entity, Column, JoinColumn, OneToMany, ManyToOne, AfterLoad} from "typeorm"
-import Comment from "./Comment"
-import User from "./User"
-import Like from "./Like"
-import {AbstractEntity} from "@entities/AbstractEntity"
-import {appDataSource} from "@config/data-source.config";
+import {
+    Entity,
+    Column,
+    OneToMany,
+    ManyToOne,
+    OneToOne, JoinColumn
+}                         from "typeorm"
+import Comment            from "./Comment"
+import User               from "./User"
+import PostLike           from "./PostLike"
+import { AbstractEntity } from "@entities/AbstractEntity"
+import Media              from "@entities/Media"
+import { Auth }           from "@api/types/index.types"
 
-@Entity('posts')
-class Post extends AbstractEntity {
-    @Column({nullable: false, length: 48})
-    authorId: string
-
-    @Column({type: 'text', nullable: true})
+@Entity( 'posts' )
+export default class Post extends AbstractEntity {
+    @Column( { type: 'text', nullable: true } )
     body: string
 
-    @Column({nullable: true})
-    photo: string
+    @Column( { type: 'int', default: 0 } )
+    commentsCount: number
 
-    @ManyToOne(() => User)
-    @JoinColumn({name: 'authorId', referencedColumnName: 'id'})
+    @Column( { type: 'int', default: 0 } )
+    likesCount: number
+
+    @OneToOne( () => Media, { eager: true, nullable: true } )
+    @JoinColumn()
+    image: Media
+
+    @ManyToOne( () => User, { eager: true, nullable: false } )
     author: User
 
-    @OneToMany(() => Comment, comment => comment.post)
-    @JoinColumn({name: 'id', referencedColumnName: 'postId'})
+    @OneToMany( () => Comment, comment => comment.post )
     comments: Comment[]
 
-    @OneToMany(() => Like, like => like.post)
-    @JoinColumn({name: 'id', referencedColumnName: 'postId'})
-    likes: Like[]
+    @OneToMany( () => PostLike, like => like.post )
+    likes: PostLike[]
 
     //virtual columns
-    likeCount: number
-    commentCount: number
     isViewerLiked: boolean
 
-    @AfterLoad()
-    async count(): Promise<void> {
-        const postRepository = appDataSource.getRepository(Post)
+    async setViewerProperties( auth: Auth ): Promise<Post>{
+        const like = await PostLike.findOneBy( { user: { id: auth.user.id }, post: { id: this.id } } )
 
-        const {likeCount, commentCount}  = await postRepository
-            .createQueryBuilder('post')
-            .leftJoin('post.likes', 'like')
-            .leftJoin('post.comments', 'comment')
-            .select('COUNT(like.id)', 'likeCount')
-            .addSelect('COUNT(comment.id)', 'commentCount')
-            .where('post.id = :id', { id: this.id })
-            .getRawOne()
+        this.isViewerLiked = Boolean( like )
+        if( this.author ){
+            await this.author.setViewerProperties( auth )
+        }
 
-        this.likeCount = likeCount
-        this.commentCount = commentCount
-    }
-
-    @AfterLoad()
-    removePasswordProperty(){
-        delete this.author.password
+        return this
     }
 }
-
-export default Post

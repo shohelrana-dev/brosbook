@@ -39,11 +39,11 @@ export default class PostController {
         }
     }
 
-    public getManyPost = async( req: Request, res: Response, next: NextFunction ): Promise<void> => {
+    public getMany = async( req: Request, res: Response, next: NextFunction ): Promise<void> => {
         try {
-            const { posts, meta } = await this.postService.getManyPost( req.query, req.auth )
+            const posts = await this.postService.getMany( req.query, req.auth )
 
-            res.json( { items: posts, ...meta } )
+            res.json( posts )
         } catch ( err ) {
             next(err)
         }
@@ -51,9 +51,9 @@ export default class PostController {
 
     public getFeedPosts = async( req: Request, res: Response, next: NextFunction ): Promise<void> => {
         try {
-            const { posts, meta } = await this.postService.getFeedPosts( req.query, req.auth )
+            const posts = await this.postService.getFeedPosts( req.query, req.auth )
 
-            res.json( { items: posts, ...meta } )
+            res.json( posts )
         } catch ( err ) {
             next(err)
         }

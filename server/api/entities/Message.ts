@@ -1,20 +1,16 @@
-import { AbstractEntity } from "@entities/AbstractEntity"
-import { Entity, Column, JoinColumn, OneToMany } from "typeorm"
-import Reaction from "./Reaction"
+import { AbstractEntity }                                   from "@entities/AbstractEntity"
+import { Entity, Column, OneToMany, ManyToOne } from "typeorm"
+import Reaction                                             from "./Reaction"
+import Conversation                                         from "@entities/Conversation"
+import User                                                 from "@entities/User"
 
 @Entity('messages')
 class Message extends AbstractEntity {
-    @Column({ length: 55, nullable: false })
-    conversationIdentifier: string
-
-    @Column({ nullable: false, length: 48 })
-    senderId: string
-
     @Column({ type: 'text', nullable: true })
     body: string
 
     @Column({ nullable: true })
-    image: string
+    photo: string
 
     @Column({
         type: 'enum',
@@ -24,8 +20,13 @@ class Message extends AbstractEntity {
     )
     type: string
 
+    @ManyToOne(() => Conversation, conversation => conversation.messages)
+    conversation: Conversation
+
+    @ManyToOne(() => User)
+    owner: User
+
     @OneToMany(() => Reaction, reaction => reaction.message)
-    @JoinColumn({ name: 'id', referencedColumnName: 'messageId' })
     reactions: Reaction[]
 }
 

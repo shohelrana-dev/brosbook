@@ -2,7 +2,7 @@ import {PropsWithChildren} from "react"
 import { Kanit } from '@next/font/google'
 import 'react-toastify/dist/ReactToastify.css'
 import Sidebar from "@components/common/Sidebar"
-import Providers from "./Providers"
+import Providers from "./providers"
 import Navbar from "@components/common/Navbar"
 import authorizationConfig from "@utils/authorizationConfig"
 import {cookies} from "next/headers"

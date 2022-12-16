@@ -1,4 +1,4 @@
-export enum PhotoSource {
+export enum MediaSource {
     CONVERSATION = 'conversation',
     POST = 'post',
     AVATAR = 'avatar',

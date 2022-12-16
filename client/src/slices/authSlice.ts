@@ -28,18 +28,12 @@ export const authSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
-        builder.addMatcher(authApi.endpoints.signup.matchFulfilled, (state, { payload }: PayloadAction<User>) => {
-            state.user = payload
-        })
-
         builder.addMatcher(authApi.endpoints.login.matchFulfilled, (state, { payload }: PayloadAction<LoginResponse>) => {
             if (payload.access_token && payload.user && payload.user.hasEmailVerified) {
                 state.isLoading = false
                 state.isAuthenticated = true
                 state.user = payload.user!
                 Cookies.set('access_token', payload.access_token)
-            } else {
-                state.user = payload.user!
             }
         })
 

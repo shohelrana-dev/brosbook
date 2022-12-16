@@ -1,11 +1,11 @@
-import { Router } from "express"
-
+import { Router }     from "express"
 import authMiddleware from "@middleware/auth.middleware"
 import UserController from "@modules/users/user.controller"
 import UserService    from "./user.service"
 
 const router          = Router()
-const usersController = new UserController( new UserService() )
+const userService     = new UserService()
+const usersController = new UserController( userService )
 
 /**
  * @desc get current user
@@ -37,24 +37,17 @@ router.get( '/search', usersController.getSearchUsers )
 
 /**
  * @desc get suggested users
- * @route GET /api/v1/users/suggest
+ * @route GET /api/v1/users/suggestions
  * @access Private
  */
-router.get( '/suggest', authMiddleware, usersController.getSuggestedUsers )
+router.get( '/suggestions', authMiddleware, usersController.getSuggestions )
 
 /**
- * @desc get user
- * @route GET /api/v1/users/:username
+ * @desc get user by username or user id
+ * @route GET /api/v1/users/:identifier
  * @access Public
  */
-router.get( '/:username', usersController.getUserByUsername )
-
-/**
- * @desc get user
- * @route GET /api/v1/users/:userId/posts
- * @access Public
- */
-router.get( '/:userId/posts', usersController.getUserPosts )
+router.get( '/:identifier', usersController.getUser )
 
 /**
  * @desc get followers
@@ -69,7 +62,7 @@ router.get( '/:userId/followers', usersController.getFollowers )
  * @route GET /api/v1/users/:userId/following
  * @access Public
  */
-router.get( '/:userId/following', usersController.getFollowedUsers )
+router.get( '/:userId/following', usersController.getFollowings )
 
 /**
  * @desc follow

@@ -1,18 +1,18 @@
-import { Router } from "express"
-
+import { Router }     from "express"
 import authMiddleware from "@middleware/auth.middleware"
 import PostController from "@modules/posts/post.controller"
 import PostService    from "./post.service"
 
 const router         = Router()
-const postController = new PostController( new PostService() )
+const postService    = new PostService()
+const postController = new PostController( postService )
 
 /**
  * @desc get all posts
  * @route GET posts
  * @access Public
  * */
-router.get( '/', postController.getManyPost )
+router.get( '/', postController.getMany )
 
 /**
  * @desc create post

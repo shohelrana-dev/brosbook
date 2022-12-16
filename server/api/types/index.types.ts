@@ -41,8 +41,17 @@ export interface PaginateMeta {
     lastPage: number,
 }
 
-export interface PaginateQuery {
+export interface ListResponse<T> extends PaginateMeta{
+    items: T[]
+}
+
+export interface ListQueryParams {
     page?: number
     limit?: number
+}
+
+export interface PostsQueryParams {
     userId?: string
+    page?: number
+    limit?: number
 }

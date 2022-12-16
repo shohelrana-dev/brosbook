@@ -1,24 +1,24 @@
-import { AbstractEntity } from "@entities/AbstractEntity"
-import { Entity, Column, ManyToOne, JoinColumn } from "typeorm"
-import Message from "./Message"
+import { AbstractEntity }            from "./AbstractEntity"
+import { Entity, Column, ManyToOne } from "typeorm"
+import Message                       from "./Message"
+import User                          from "./User"
 
-@Entity('reactions')
+@Entity( 'reactions' )
 class Reaction extends AbstractEntity {
-  @Column({ nullable: false, length: 48 })
-  messageId: string
+    @Column( { nullable: false, length: 48 } )
+    senderId: string
 
-  @Column({ nullable: false, length: 48 })
-  senderId: string
+    @Column( { length: 10, nullable: false } )
+    name: string
 
-  @Column({ length: 10, nullable: false })
-  name: string
+    @Column( { nullable: false } )
+    url: string
 
-  @Column({ nullable: false })
-  url: string
+    @ManyToOne( () => User )
+    sender: User
 
-  @ManyToOne(() => Message, message => message.reactions)
-  @JoinColumn({ name: 'messageId', referencedColumnName: 'id' })
-  message: Message
+    @ManyToOne( () => Message, message => message.reactions )
+    message: Message
 }
 
 export default Reaction

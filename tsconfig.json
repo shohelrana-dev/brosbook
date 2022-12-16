@@ -41,7 +41,6 @@
          "@modules/*": ["server/api/modules/*"],
          "@services/*": ["server/api/services/*"],
          "@exceptions/*": ["server/api/exceptions/*"],
-         "@custom-validation/*": ["server/api/custom-validation/*"],
          "@enums/*": ["server/api/enums/*"],
          "@entities/*": ["server/api/entities/*"],
          "@middleware/*": ["server/api/middleware/*"],

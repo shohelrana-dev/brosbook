@@ -8,6 +8,7 @@ import AnimatedInput from "@components/common/AnimatedInput"
 import Button from "@components/common/Button"
 import { useForgotPasswordMutation } from "@services/authApi"
 import {useForm} from "@hooks/useForm"
+import ButtonOutline from "@components/common/ButtonOutline"
 
 export default function ForgotPasswordPage() {
     //hooks
@@ -28,11 +29,13 @@ export default function ForgotPasswordPage() {
                     </div>
 
                     {isSuccess ? (
-                        <>
+                        <div className="text-center">
                             <h1 className="text-xl text-center mb-4 font-medium">Reset Password</h1>
-                            <p className="mb-3">Check your email for a link to reset your password. If it doesn’t appear within a few minutes, check your spam folder.</p>
-                            <Link href="/auth/login" className="button-bordered">Return to login</Link>
-                        </>
+                            <p className="mb-3">Check your email for a link to reset your password. If it doesn't appear within a few minutes, check your spam folder.</p>
+                            <Link href="/auth/login">
+                                <ButtonOutline>Return to login</ButtonOutline>
+                            </Link>
+                        </div>
                     ) : (
                         <>
                             <h1 className="text-xl text-center mb-4 font-medium">Trouble with logging in?</h1>

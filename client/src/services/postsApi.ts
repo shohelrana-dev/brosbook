@@ -11,6 +11,13 @@ export const postsApi = baseApi.injectEndpoints( {
             } )
         } ),
 
+        getPosts: build.query<ListResponse<Post>, { userId?: string, page?: number, limit?: number }>( {
+            query: ( params ) => ( {
+                url: 'posts',
+                params
+            } )
+        } ),
+
         createPost: build.mutation<Post, FormData>( {
             query: ( formData ) => ( {
                 url: 'posts',
@@ -21,7 +28,7 @@ export const postsApi = baseApi.injectEndpoints( {
 
         deletePost: build.mutation<Post, string>( {
             query: ( id ) => ( {
-                url: `posts/${id}`,
+                url: `posts/${ id }`,
                 method: 'DELETE'
             } ),
         } ),
@@ -42,4 +49,11 @@ export const postsApi = baseApi.injectEndpoints( {
     } ),
 } )
 
-export const { useGetFeedPostsQuery, useCreatePostMutation, useDeletePostMutation, usePostLikeMutation, usePostUnlikeMutation } = postsApi
+export const {
+                 useGetFeedPostsQuery,
+                 useGetPostsQuery,
+                 useCreatePostMutation,
+                 useDeletePostMutation,
+                 usePostLikeMutation,
+                 usePostUnlikeMutation
+             } = postsApi

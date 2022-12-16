@@ -6,7 +6,7 @@ import {
     MatchValue
 } from "@utils/customValidation"
 
-export class SignupUserDTO {
+export class CreateUserDTO {
     @MaxLength(48)
     @IsNotEmpty()
     firstName: string

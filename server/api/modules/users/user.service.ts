@@ -1,265 +1,292 @@
-import Relationship from "@entities/Relationship"
-import User from "@entities/User"
-import {paginateMeta} from "@utils/paginateMeta"
-import Post from "@entities/Post"
-import {appDataSource} from "@config/data-source.config"
-import {Auth, PaginateMeta, PaginateQuery} from "@api/types/index.types"
-import InternalServerException from "@exceptions/InternalServerException"
-import BadRequestException from "@exceptions/BadRequestException"
-import savePhoto from "@utils/savePhoto"
-import {PhotoSource} from "@api/enums"
-import {UploadedFile} from "express-fileupload"
-import Profile from "@entities/Profile"
-import formatPost from "@utils/formatPost"
-import formatUser from "@utils/formatUser"
+import { UploadedFile }                            from "express-fileupload"
+import Relationship                                from "@entities/Relationship"
+import User                                        from "@entities/User"
+import { paginateMeta }                            from "@utils/paginateMeta"
+import { appDataSource }                           from "@config/data-source.config"
+import { Auth, ListResponse, ListQueryParams }     from "@api/types/index.types"
+import BadRequestException                         from "@exceptions/BadRequestException"
+import { MediaSource }                             from "@api/enums"
+import MediaService                                from "@services/media.service"
+import NotFoundException                           from "@exceptions/NotFoundException"
+import isEmpty                                     from "is-empty"
+import Profile                                     from "@entities/Profile"
+import { CreateUserDTO }                           from "@modules/auth/auth.dto"
+import { LoginTicket, OAuth2Client, TokenPayload } from "google-auth-library"
+import UnauthorizedException                       from "@exceptions/UnauthorizedException"
+import Media                                       from "@entities/Media"
+import { v4 as uuid }                              from "uuid"
 
 
 export default class UserService {
-    private userRepository = appDataSource.getRepository(User)
+    public readonly repository             = appDataSource.getRepository( User )
+    public readonly profileRepository      = appDataSource.getRepository( Profile )
+    public readonly relationshipRepository = appDataSource.getRepository( Relationship )
+    public readonly mediaService           = new MediaService()
 
-    public async getCurrentUser(auth: Auth) {
-        try {
-            const user = await this.userRepository.findOneOrFail({
-                where: {id: auth.user.id},
-                relations: {profile: true}
-            })
-            delete user.password
+    public async create( userData: CreateUserDTO ): Promise<User>{
+        if( isEmpty( userData ) ) throw new BadRequestException( 'User data is empty.' )
 
-            return user
-        } catch (err) {
-            throw new InternalServerException('User was not found.')
-        }
+        let user       = new User()
+        user.firstName = userData.firstName
+        user.lastName  = userData.lastName
+        user.email     = userData.email
+        user.username  = userData.username
+        user.password  = userData.password
+        await this.repository.save( user )
+
+        await this.profileRepository.create( { user } ).save()
+
+        return user
     }
 
-    public async getUserByUsername(username: string, auth: Auth): Promise<User> {
-        if (!username) throw new BadRequestException("Username was not given.")
+    public async createWithGoogle( token: string ): Promise<User>{
+        if( ! token ) throw new BadRequestException( 'Token is empty.' )
+
+        const oAuthClient              = new OAuth2Client( process.env.GOOGLE_CLIENT_ID )
+        let tokenPayload: TokenPayload = null
 
         try {
-            const user = await this.userRepository.findOneOrFail({
-                where: {username},
-                relations: {profile: true}
-            })
-
-            //followers count
-            user.followerCount = await Relationship.countBy({followedId: user.id})
-
-            //followings count
-            user.followingCount = await Relationship.countBy({followerId: user.id})
-
-            return await formatUser(user, auth)
-        } catch (err) {
-            throw new InternalServerException('User was not found.')
+            const ticket: LoginTicket = await oAuthClient.verifyIdToken( {
+                idToken: token,
+                audience: process.env.GOOGLE_CLIENT_ID
+            } )
+            tokenPayload              = ticket.getPayload()
+        } catch ( e ) {
+            throw new UnauthorizedException( 'Invalid access token.' )
         }
+
+        let user = await this.repository.findOneBy( { email: tokenPayload.email } )
+
+        //make user verified
+        if( user && ! user.hasEmailVerified ){
+            user.emailVerifiedAt = new Date( Date.now() ).toISOString()
+            await this.repository.save( user )
+        }
+
+        if( user ) return user
+
+        //save photo
+        let media          = new Media()
+        media.name         = uuid()
+        media.originalName = 'Google photo'
+        media.source       = MediaSource.AVATAR
+        media.mimetype     = 'image/jpeg'
+        media.creator      = user
+        media.url          = tokenPayload.picture
+        await this.mediaService.repository.save( media )
+
+        //create user
+        user           = new User()
+        user.firstName = tokenPayload.given_name
+        user.lastName  = tokenPayload.family_name
+        user.email     = tokenPayload.email
+        user.avatar    = media
+        user.password  = uuid()
+        user           = await this.repository.save( user )
+
+        await this.profileRepository.create( { user } ).save()
+
+        return user
     }
 
-    public async getSearchUsers(data: PaginateQuery, auth: Auth): Promise<{ users: User[], meta: PaginateMeta }> {
-        const page = data.page || 1
-        const limit = data.limit || 6
-        const skip = limit * (page - 1)
-
-        try {
-            const [users, count] = await this.userRepository
-                .createQueryBuilder('user')
-                .where('user.id != :id', {id: auth.user.id})
-                .leftJoinAndSelect('user.profile', 'profile')
-                .orderBy('user.createdAt', 'DESC')
-                .skip(skip)
-                .take(limit)
-                .getManyAndCount()
-
-            const formattedUsers = await Promise.all(users.map(user => formatUser(user, auth)))
-
-            return {users: formattedUsers, meta: paginateMeta(count, page, limit)}
-        } catch (err) {
-            throw new InternalServerException("Unknown error during database operation.")
-        }
+    public async getCurrentUser( auth: Auth ){
+        return await this.repository.findOneOrFail( {
+            where: { id: auth.user.id },
+            relations: { profile: true }
+        } )
     }
 
-    public async getSuggestedUsers(data: PaginateQuery, auth: Auth): Promise<{ users: User[], meta: PaginateMeta }> {
-        const page = data.page || 1
-        const limit = data.limit || 6
-        const skip = limit * (page - 1)
+    public async getUserByUsernameOrId( usernameOrId: string, auth: Auth ): Promise<User>{
+        if( ! usernameOrId ) throw new BadRequestException( "Username or user id is empty." )
 
-        try {
-            const [users, count] = await this.userRepository
-                .createQueryBuilder('user')
-                .leftJoinAndSelect('user.profile', 'profile')
-                .where('user.id != :userId', {userId: auth.user?.id || 0})
-                .orderBy('user.createdAt', 'DESC')
-                .skip(skip)
-                .take(limit)
-                .getManyAndCount()
+        const user = await this.repository.findOne( {
+            where: [{ username: usernameOrId }, { id: usernameOrId }],
+            relations: { profile: true }
+        } )
 
-            const formattedUsers = await Promise.all(users.map(user => formatUser(user, auth)))
+        if( ! user ) throw new NotFoundException( 'User doesn\'t exists.' )
 
-            return {users: formattedUsers, meta: paginateMeta(count, page, limit)}
-        } catch (e) {
-            throw new InternalServerException("Unknown error during database operation.")
-        }
+        //set is current user follow
+        await user.setViewerProperties( auth )
+
+        //followers count
+        user.followersCount = await Relationship.countBy( { following: { id: user.id } } )
+
+        //followings count
+        user.followingsCount = await Relationship.countBy( { follower: { id: user.id } } )
+
+        return user
     }
 
-    public async getUserPosts(data: PaginateQuery, auth: Auth): Promise<{ posts: Post[], meta: PaginateMeta }> {
-        const userId = data.userId
-        const page = data.page || 1
-        const limit = data.limit || 6
-        const skip = limit * (page - 1)
+    public async getSearchUsers( params: ListQueryParams, auth: Auth ): Promise<ListResponse<User>>{
+        const page  = params.page || 1
+        const limit = params.limit || 6
+        const skip  = limit * ( page - 1 )
 
-        if (!userId) throw new BadRequestException("User id was not given.")
-
-        try {
-            const [posts, count] = await appDataSource.getRepository(Post)
-                .createQueryBuilder('post')
-                .where('post.authorId = :userId', {userId})
-                .leftJoinAndSelect('post.author', 'user')
-                .loadRelationCountAndMap('post.commentCount', 'post.comments')
-                .leftJoinAndSelect('post.likes', 'like')
-                .loadRelationCountAndMap('post.likeCount', 'post.likes')
-                .orderBy('post.createdAt', 'DESC')
-                .skip(skip)
-                .take(limit)
-                .getManyAndCount()
-
-            const formattedPosts = await Promise.all(posts.map((post => formatPost(post, auth))))
-
-            return {posts: formattedPosts, meta: paginateMeta(count, page, limit)}
-        } catch (e) {
-            throw new InternalServerException('Unknown error during database operation.')
-        }
-    }
-
-    public async getFollowers(data: PaginateQuery, auth: Auth): Promise<{ followers: User[], meta: PaginateMeta }> {
-        const userId = data.userId
-        const page = data.page || 1
-        const limit = data.limit || 10
-        const skip = limit * (page - 1)
-
-        const [relationships, count] = await appDataSource.getRepository(Relationship)
-            .createQueryBuilder('relationship')
-            .leftJoinAndSelect('relationship.follower', 'follower')
-            .leftJoinAndSelect('follower.profile', 'profile')
-            .where('relationship.followedId = :followedId', {followedId: userId})
-            .take(limit)
-            .skip(skip)
+        const [users, count] = await this.repository
+            .createQueryBuilder( 'user' )
+            .leftJoinAndSelect( 'user.profile', 'profile' )
+            .leftJoinAndSelect( 'user.avatar', 'avatar' )
+            .where( 'user.id != :id', { id: auth.user.id } )
+            .orderBy( 'user.createdAt', 'DESC' )
+            .skip( skip )
+            .take( limit )
             .getManyAndCount()
 
-        const followers = <User[]>[]
-        for (let relationship of relationships) {
-            followers.push(relationship.follower)
-        }
+        const formattedUsers = await Promise.all( users.map( user => user.setViewerProperties( auth ) ) )
 
-        const formattedFollowers = await Promise.all(followers.map(user => formatUser(user, auth)))
+        return { items: formattedUsers, ...paginateMeta( count, page, limit ) }
+    }
 
-        return {followers: formattedFollowers, meta: paginateMeta(count, page, limit)}
+    public async getSuggestions( params: ListQueryParams, auth: Auth ): Promise<ListResponse<User>>{
+        const page  = params.page || 1
+        const limit = params.limit || 6
+        const skip  = limit * ( page - 1 )
+
+        const currentUserFollowings = await this.relationshipRepository
+            .createQueryBuilder( 'relationship' )
+            .leftJoin( 'relationship.follower', 'follower' )
+            .leftJoin( 'relationship.following', 'following' )
+            .where( 'follower.id = :userId', { userId: auth.user.id } )
+            .select( 'relationship.id' )
+            .addSelect( 'following.id' )
+            .getMany()
+
+        let currentUserFollowingIds = currentUserFollowings.map( rel => rel.following.id )
+        currentUserFollowingIds     = isEmpty( currentUserFollowings ) ? [""] : currentUserFollowingIds
+
+        const [users, count] = await this.repository
+            .createQueryBuilder( 'user' )
+            .leftJoin( 'user.followings', 'following' )
+            .leftJoin( 'user.followers', 'follower' )
+            .leftJoinAndSelect( 'user.avatar', 'avatar' )
+            .where( 'user.id != :userId', { userId: auth.user.id } )
+            .andWhere( 'user.id NOT IN (:...userIds)', { userIds: currentUserFollowingIds } )
+            .orderBy( 'user.createdAt', 'DESC' )
+            .skip( skip )
+            .take( limit )
+            .getManyAndCount()
+
+        const formattedUsers = await Promise.all( users.map( user => user.setViewerProperties( auth ) ) )
+
+        return { items: formattedUsers, ...paginateMeta( count, page, limit ) }
+    }
+
+    public async getFollowers( userId: string, params: ListQueryParams, auth: Auth ): Promise<ListResponse<User>>{
+        if( ! userId ) throw new BadRequestException( "User id is empty." )
+
+        const page  = params.page || 1
+        const limit = params.limit || 10
+        const skip  = limit * ( page - 1 )
+
+        const [relationships, count] = await this.relationshipRepository
+            .createQueryBuilder( 'relationship' )
+            .leftJoin( 'relationship.follower', 'follower' )
+            .leftJoin( 'relationship.following', 'following' )
+            .leftJoinAndSelect( 'follower.avatar', 'followerAvatar' )
+            .leftJoinAndSelect( 'following.avatar', 'followingAvatar' )
+            .where( 'following.id = :followingId', { followingId: userId } )
+            .select( 'relationship.id' )
+            .addSelect( 'follower' )
+            .addSelect( 'following' )
+            .take( limit )
+            .skip( skip )
+            .getManyAndCount()
+
+        const followers = relationships.map( rel => rel.follower )
+
+        const formattedFollowers = await Promise.all( followers.map( user => user.setViewerProperties( auth ) ) )
+
+        return { items: formattedFollowers, ...paginateMeta( count, page, limit ) }
     }
 
 
-    public async getFollowedUsers(data: PaginateQuery, auth: Auth): Promise<{ followedUsers: User[], meta: PaginateMeta }> {
-        const userId = data.userId
-        const page = data.page || 1
-        const limit = data.limit || 10
-        const skip = limit * (page - 1)
+    public async getFollowings( userId: string, params: ListQueryParams, auth: Auth ): Promise<ListResponse<User>>{
+        if( ! userId ) throw new BadRequestException( "User id is empty." )
 
-        try {
-            const [relationships, count] = await appDataSource.getRepository(Relationship)
-                .createQueryBuilder('relationship')
-                .leftJoinAndSelect('relationship.followedUser', 'followedUser')
-                .leftJoinAndSelect('followedUser.profile', 'profile')
-                .where('relationship.followerId = :followerId', {followerId: userId})
-                .take(limit)
-                .skip(skip)
-                .getManyAndCount()
+        const page  = params.page || 1
+        const limit = params.limit || 10
+        const skip  = limit * ( page - 1 )
 
-            const followedUsers = <User[]>[]
-            for (let relationship of relationships) {
-                followedUsers.push(relationship.followedUser)
-            }
+        const [relationships, count] = await this.relationshipRepository
+            .createQueryBuilder( 'relationship' )
+            .leftJoin( 'relationship.following', 'following' )
+            .leftJoin( 'relationship.follower', 'follower' )
+            .leftJoinAndSelect( 'follower.avatar', 'followerAvatar' )
+            .leftJoinAndSelect( 'following.avatar', 'followingAvatar' )
+            .where( 'follower.id = :followerId', { followerId: userId } )
+            .select( 'relationship.id' )
+            .addSelect( 'following' )
+            .addSelect( 'follower' )
+            .take( limit )
+            .skip( skip )
+            .getManyAndCount()
 
-            const formattedFollowedUsers = await Promise.all(followedUsers.map(user => formatUser(user, auth)))
+        const followings = relationships.map( rel => rel.following )
 
-            return {followedUsers: formattedFollowedUsers, meta: paginateMeta(count, page, limit)}
-        }catch (e){
-            throw new InternalServerException('Unknown error during database operation.')
-        }
+        const formattedFollowings = await Promise.all( followings.map( user => user.setViewerProperties( auth ) ) )
+
+        return { items: formattedFollowings, ...paginateMeta( count, page, limit ) }
     }
 
-    public async changeAvatar(avatar: UploadedFile, auth: Auth) {
-        try {
-            const media = await savePhoto({
-                file: avatar,
-                userId: auth.user.id,
-                source: PhotoSource.AVATAR,
-                sourceId: auth.user.id
-            })
+    public async changeAvatar( avatar: UploadedFile, auth: Auth ){
+        if( ! avatar ) throw new BadRequestException( "Avatar is empty." )
 
-            let user = await this.userRepository.findOneByOrFail({id: auth.user.id})
-            user.avatar = media.url
-            user = await user.save()
+        const user = await this.repository.findOneBy( { id: auth.user.id } )
 
-            delete user.password
+        user.avatar = await this.mediaService.save( {
+            file: avatar,
+            creator: auth.user,
+            source: MediaSource.AVATAR
+        } )
 
-            return user
-        } catch (e) {
-            throw new InternalServerException('Profile photo could not be uploaded.')
-        }
+        return await this.repository.save( user )
     }
 
-    public async changeCoverPhoto(coverPhoto: UploadedFile, auth: Auth): Promise<User> {
-        try {
-            const media = await savePhoto({
-                file: coverPhoto,
-                userId: auth.user.id,
-                source: PhotoSource.COVER_PHOTO,
-                sourceId: auth.user.id
-            })
-            const profile = await Profile.findOneByOrFail({userId: auth.user.id})
-            profile.coverPhoto = media.url
-            await profile.save()
+    public async changeCoverPhoto( coverPhoto: UploadedFile, auth: Auth ): Promise<User>{
+        if( ! coverPhoto ) throw new BadRequestException( "Cover photo is empty." )
 
-            const user = await this.userRepository.findOne({
-                where: {id: auth.user.id},
-                relations: {profile: true}
-            })
-            delete user.password
+        const user    = await this.repository.findOneBy( { id: auth.user.id } )
+        const profile = await this.profileRepository.findOneBy( { user: { id: auth.user.id } } )
 
-            return user
-        } catch (e) {
-            throw new InternalServerException('Cover photo could not be uploaded.')
-        }
+        if( ! user || ! profile ) throw new BadRequestException( "User does not exists." )
+
+        profile.coverPhoto = await this.mediaService.save( {
+            file: coverPhoto,
+            creator: auth.user,
+            source: MediaSource.COVER_PHOTO
+        } )
+        await this.profileRepository.save( profile )
+        user.profile = profile
+
+        return user
     }
 
-    public async follow(targetUserId: string, auth: Auth): Promise<User> {
-        const user = await this.userRepository.findOneBy({id: targetUserId})
+    public async follow( targetUserId: string, auth: Auth ): Promise<User>{
+        if( ! targetUserId ) throw new BadRequestException( 'Target user id is empty.' )
 
-        if (!user) throw new BadRequestException('Target user does not exists.')
+        const targetUser = await this.repository.findOneBy( { id: targetUserId } )
 
-        try {
-            await Relationship.create({followerId: auth.user.id, followedId: targetUserId}).save()
+        if( ! targetUser ) throw new BadRequestException( 'Target user does not exists.' )
 
-            user.isViewerFollow = true
-            delete user.password
+        await this.relationshipRepository.create( { follower: { id: auth.user.id }, following: targetUser } ).save()
 
-            return user
-        }catch (e){
-            console.log(e)
-            throw new InternalServerException('Unknown error during database operation.')
-        }
+        targetUser.isViewerFollow = true
+
+        return targetUser
     }
 
-    public async unfollow(targetUserId: string, auth: Auth): Promise<User> {
-        const user = await this.userRepository.findOneBy({id: targetUserId})
+    public async unfollow( targetUserId: string, auth: Auth ): Promise<User>{
+        if( ! targetUserId ) throw new BadRequestException( 'Target user id is empty.' )
 
-        if (!user) throw new BadRequestException('Target user does not exists.')
+        const targetUser = await this.repository.findOneBy( { id: targetUserId } )
 
-        try {
-            await Relationship.delete({followerId: auth.user.id, followedId: targetUserId})
+        if( ! targetUser ) throw new BadRequestException( 'Target user does not exists.' )
 
-            user.isViewerFollow = false
-            delete user.password
+        await this.relationshipRepository.delete( { follower: { id: auth.user.id }, following: { id: targetUser.id } } )
 
-            return user
-        }catch (e){
-            throw new InternalServerException('Unknown error during database operation.')
-        }
+        targetUser.isViewerFollow = false
+
+        return targetUser
     }
-
 }

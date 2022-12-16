@@ -14,7 +14,7 @@ function LogoutPage(){
 
     useEffect( () => {
         dispatch( logout() )
-        toast.success( 'You have been logged out.' )
+        toast.success( 'Logged out.' )
         window.location.href = '/auth/login'
     }, [dispatch, router] )
 

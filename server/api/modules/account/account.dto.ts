@@ -9,8 +9,6 @@ export class ChangeUsernameDTO {
     @Length(5, 20)
     @IsNotEmpty()
     username: string
-
-    userId: string
 }
 
 export class ChangePasswordDTO {
@@ -25,8 +23,6 @@ export class ChangePasswordDTO {
     @Length(6, 30)
     @IsNotEmpty()
     confirmNewPassword: string
-
-    userId: string
 }
 
 export class UpdateProfileDTO {
@@ -57,6 +53,4 @@ export class UpdateProfileDTO {
     @IsEnum(['male', 'email'])
     @IsNotEmpty()
     gender: string
-
-    userId: string
 }

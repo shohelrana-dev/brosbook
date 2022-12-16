@@ -33,7 +33,7 @@ function SuggestedPeople() {
                 <div className="flex justify-between items-center mb-4" key={user.id}>
                     <div className="flex">
                         <Link href={`/${user.username}`} className="block min-w-[40px] mr-2">
-                            <Avatar src={user.avatar}/>
+                            <Avatar src={user.avatar.url}/>
                         </Link>
                         <div>
                             <div className="flex justify-between">

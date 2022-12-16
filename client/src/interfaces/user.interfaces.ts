@@ -1,3 +1,5 @@
+import {Media} from "@interfaces/index.interfaces";
+
 export interface User {
     id: string
     firstName: string
@@ -7,12 +9,12 @@ export interface User {
     email: string
     password?: string
     phone?: string
-    avatar: string
+    avatar: Media
     profile?: Profile
     active: number
     hasEmailVerified: boolean
-    followerCount?: number
-    followingCount?: number
+    followersCount?: number
+    followingsCount?: number
     isViewerFollow: boolean,
     createdAt: string
     updatedAt: string
@@ -22,7 +24,7 @@ export interface Profile {
     id: string
     username: string
     phone: string
-    coverPhoto: string
+    coverPhoto: Media
     gender: string
     bio: string
     location: string

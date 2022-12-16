@@ -18,10 +18,10 @@ export default function EmailVerifyPage({params}: Props){
 
         try {
             await verifyEmail( token ).unwrap()
-            toast.success( 'Your email was verified.' )
+            toast.success( 'Email verified.' )
         } catch ( err: any ) {
             console.error( err )
-            toast.error( err?.data?.message || 'Email verification was failed.' )
+            toast.error( err?.data?.message || 'Email verification failed.' )
         } finally {
             router.push( '/auth/login' )
         }

@@ -7,7 +7,7 @@ interface UseUserOptions {
     isProtected?: boolean
 }
 
-export default function useUser({redirectTo, isProtected = true}: UseUserOptions = {}){
+export default function useCurrentUser({redirectTo, isProtected = true}: UseUserOptions = {}){
     const router = useRouter()
     const {data: user, isSuccess: isAuthenticated, isLoading} = useGetCurrentUserQuery()
 

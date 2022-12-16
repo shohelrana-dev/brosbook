@@ -1,5 +1,5 @@
 "use client"
-import React               from 'react'
+import React from 'react'
 import Link from "next/link"
 import {CgProfile as ProfileIcon} from "react-icons/cg"
 import {HiMail as MessageIcon} from "react-icons/hi"
@@ -13,21 +13,21 @@ import {
     MenuList,
     MenuItem
 } from "@material-tailwind/react"
-import useUser from "@hooks/useUser"
+import useCurrentUser from "@hooks/useCurrentUser"
 import {motion} from "framer-motion"
 import IconButton from "@components/common/IconButton"
 
-function NavBar(){
-    const {user, isAuthenticated} = useUser()
+function NavBar() {
+    const {user, isAuthenticated} = useCurrentUser()
 
-    if(! isAuthenticated ) return null
+    if (!isAuthenticated) return null
 
 
     return (
         <motion.header
-        initial={{opacity: 0}}
-        animate={{opacity: 1}}
-        exit={{opacity: 0}}
+            initial={{opacity: 0}}
+            animate={{opacity: 1}}
+            exit={{opacity: 0}}
         >
             <BaseNavbar fullWidth className="mx-auto py-2 px-4 lg:px-8 lg:py-4">
                 <div className="container mx-auto flex items-center justify-between text-blue-gray-900">
@@ -48,7 +48,7 @@ function NavBar(){
                         <Menu>
                             <MenuHandler>
                                 <button className="rounded-full">
-                                    <Avatar src={user?.avatar}/>
+                                    <Avatar src={user?.avatar.url}/>
                                 </button>
                             </MenuHandler>
                             <MenuList>

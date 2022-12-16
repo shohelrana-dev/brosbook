@@ -2,14 +2,14 @@ import { BaseEntity, CreateDateColumn, DeleteDateColumn, PrimaryGeneratedColumn,
 
 export class AbstractEntity extends BaseEntity {
     @PrimaryGeneratedColumn('uuid')
-    id: string
+    readonly id: string
     
     @CreateDateColumn()
-    createdAt: Date
+    readonly createdAt: Date
 
     @UpdateDateColumn()
-    updatedAt: Date
+    readonly updatedAt: Date
 
     @DeleteDateColumn()
-    deletedAt: Date
+    readonly deletedAt: Date
 }

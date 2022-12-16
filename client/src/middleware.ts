@@ -3,8 +3,6 @@ import type { NextRequest } from 'next/server'
 import isAuthenticated from "@utils/isAuthenticated"
 
 export async function middleware(request: NextRequest) {
-    console.log('---------------middleware trigged================')
-
     if(await isAuthenticated(request)){
         if(request.nextUrl.pathname.startsWith('/auth') && ((request.nextUrl.pathname !== '/auth/logout') && (request.nextUrl.pathname !== '/auth/forgot_password'))){
             return NextResponse.redirect(new URL('/', request.url))

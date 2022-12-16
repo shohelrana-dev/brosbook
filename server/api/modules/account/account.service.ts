@@ -1,77 +1,87 @@
-import argon2 from "argon2"
-import Profile from "@entities/Profile"
-import User from "@entities/User"
-import BadRequestException from "@exceptions/BadRequestException"
-import UnprocessableEntityException from "@exceptions/UnprocessableEntityException"
-import InternalServerException from "@exceptions/InternalServerException"
-import {ChangePasswordDTO, ChangeUsernameDTO, UpdateProfileDTO} from "@modules/account/account.dto"
+import argon2                                                     from "argon2"
+import Profile                                                    from "@entities/Profile"
+import User                                                       from "@entities/User"
+import BadRequestException                                        from "@exceptions/BadRequestException"
+import UnprocessableEntityException                               from "@exceptions/UnprocessableEntityException"
+import { ChangePasswordDTO, ChangeUsernameDTO, UpdateProfileDTO } from "@modules/account/account.dto"
+import isEmpty                                                    from "is-empty"
+import UserService                                                from "@modules/users/user.service"
+import { Auth }                                                   from "@api/types/index.types"
+import { selectAllColumns }                                       from "@utils/selectAllColumns"
 
 export default class AccountService {
+    private readonly userService = new UserService()
 
-    public async updateProfile(payload: UpdateProfileDTO): Promise<User> {
-        try {
-            const {userId, firstName, lastName, bio, phone, location, birthdate, gender } = payload
+    public async updateProfile( userData: UpdateProfileDTO, auth: Auth ): Promise<User>{
+        if( isEmpty( userData ) ) throw new BadRequestException( 'User data is empty' )
 
-            const profile = await Profile.findOneBy({ userId })
-            profile.userId = userId
-            profile.bio = bio
-            profile.phone = phone
-            profile.location = location
-            profile.birthdate = birthdate
-            profile.gender = gender
-            await profile.save()
+        const { firstName, lastName, bio, phone, location, birthdate, gender } = userData
 
-            const user = await User.findOneBy({ id: userId })
-            user.firstName = firstName
-            user.lastName = lastName
-            await user.save()
+        const user = await this.userService.repository.findOneBy( { id: auth.user.id } )
 
-            user.profile = profile
+        if( ! user ) throw new BadRequestException( 'User doesn\'t exists.' )
 
-            delete user.password
+        const profile     = await Profile.findOneBy( { user: { id: user.id } } )
+        profile.bio       = bio
+        profile.phone     = phone
+        profile.location  = location
+        profile.birthdate = birthdate
+        profile.gender    = gender
+        await this.userService.profileRepository.save( profile )
 
-            return user
-        }catch (err) {
-            throw new InternalServerException('Profile couldn\'t be updated')
-        }
+        user.firstName = firstName
+        user.lastName  = lastName
+        user.profile   = profile
+        await this.userService.repository.save( user )
+
+        return user
     }
 
-    public async changeUsername({username, password, userId}: ChangeUsernameDTO) {
+    public async changeUsername( changeUsernameData: ChangeUsernameDTO, auth: Auth ){
+        if( isEmpty( changeUsernameData ) ) throw new BadRequestException( 'Change username data is empty' )
 
-        const user = await User.findOneBy({ id: userId })
+        const { username, password } = changeUsernameData
 
-        if (!username) throw new BadRequestException("Username field not be empty.")
+        const user = await this.userService.repository.findOne( {
+            where: { id: auth.user.id },
+            select: selectAllColumns( this.userService.repository )
+        } )
 
-        if (!user) throw new BadRequestException("User not found.")
+        if( ! user ) throw new BadRequestException( "User doesn't exists." )
 
-        const isMatched = await argon2.verify(user.password, password)
+        const isPasswordMatching = await argon2.verify( user.password, password )
 
-        if (!isMatched) throw new UnprocessableEntityException("Invalid Password.")
+        if( ! isPasswordMatching ) throw new UnprocessableEntityException( "Invalid Password." )
 
-        try {
-            user.username = username
-            return await user.save()
-        } catch (err) {
-            throw new InternalServerException("Username couldn't be changed")
-        }
+        user.username = username
+        await this.userService.repository.save( user )
+
+        delete user.password
+
+        return user
     }
 
-    public async changePassword({currentPassword, newPassword, userId}: ChangePasswordDTO) {
+    public async changePassword( changePasswordData: ChangePasswordDTO, auth: Auth ){
+        if( isEmpty( changePasswordData ) ) throw new BadRequestException( 'Change password data is empty' )
 
-        const user = await User.findOneBy({ id: userId })
+        const { currentPassword, newPassword } = changePasswordData
 
-        if (!user) throw new BadRequestException("Password couldn't be change")
+        const user = await this.userService.repository.findOne( {
+            where: { id: auth.user.id },
+            select: selectAllColumns( this.userService.repository )
+        } )
 
-        const isMatched = await argon2.verify(user.password, currentPassword)
+        if( ! user ) throw new BadRequestException( "User doesn't exists." )
 
-        if (!isMatched) throw new UnprocessableEntityException("Current password didn't match")
+        const isPasswordMatching = await argon2.verify( user.password, currentPassword )
 
-        user.password = await argon2.hash(newPassword)
+        if( ! isPasswordMatching ) throw new UnprocessableEntityException( "Current password invalid." )
 
-        try {
-            await user.save()
-        } catch (err) {
-            throw new InternalServerException("Password couldn't be changed")
-        }
+        user.password = await argon2.hash( newPassword )
+        await this.userService.repository.save( user )
+
+        delete user.password
+
+        return user
     }
 }

@@ -1,5 +1,5 @@
 "use client"
-import React, {ChangeEvent, useRef, useState} from 'react'
+import React, {useState} from 'react'
 import IconButton from "@components/common/IconButton"
 import {TbCameraPlus} from "react-icons/tb"
 import {useChangeProfilePhotoMutation} from "@services/usersApi"
@@ -8,21 +8,23 @@ import Button from "@components/common/Button"
 import ImageLightbox from "@components/common/ImageLightbox"
 import Image from "next/image"
 import {User} from "@interfaces/user.interfaces"
-import useUser from "@hooks/useUser"
+import useCurrentUser from "@hooks/useCurrentUser"
 import Modal from "@components/common/Modal"
+import useSelectFile from "@hooks/useSelectFile"
 
 type Props = { user: User }
 
 export default function ProfilePhoto({user}: Props) {
-    const {user: currentUser} = useUser()
+    const {user: currentUser} = useCurrentUser()
     const [changeProfilePhoto, {isLoading}] = useChangeProfilePhotoMutation()
-    const inputRef = useRef<HTMLInputElement | null>(null)
-    const [selectedPhoto, setSelectedPhoto] = useState<Blob>()
-    const [profilePhoto, setProfilePhoto] = useState<string>(user.avatar)
-
+    const [profilePhoto, setProfilePhoto] = useState<string>(user.avatar.url)
     const [isModalOpen, setIsModalOpen] = useState(false)
+    const {onChange, onClick, inputRef, selectedFile: selectedPhoto, removeSelectedFile} = useSelectFile()
 
-    function handleModalOpen(){
+    function handleModalOpen() {
+        if(isModalOpen){
+            removeSelectedFile()
+        }
         setIsModalOpen(!isModalOpen)
     }
 
@@ -33,20 +35,14 @@ export default function ProfilePhoto({user}: Props) {
             const formData = new FormData()
             formData.append('avatar', selectedPhoto)
             const data = await changeProfilePhoto(formData).unwrap()
+
             setIsModalOpen(false)
-            setSelectedPhoto(undefined)
-            setProfilePhoto(data.avatar)
-            toast.success('Profile photo was saved.')
+            removeSelectedFile()
+            setProfilePhoto(data.avatar.url)
+            toast.success('Profile photo saved.')
         } catch (err: any) {
             console.error(err)
             toast.error(err?.data?.message || 'Something went wrong!, Please try again.')
-        }
-    }
-
-    function fileInputChangeHandle(event: ChangeEvent<HTMLInputElement>) {
-        if (event.target.files && event.target.files.length > 0) {
-            setSelectedPhoto(event.target.files[0])
-            setIsModalOpen(true)
         }
     }
 
@@ -64,7 +60,10 @@ export default function ProfilePhoto({user}: Props) {
 
     return (
         <div className="relative">
-            <input hidden name="photo" type="file" accept="image/*" onChange={fileInputChangeHandle}
+            <input hidden name="photo" type="file" accept="image/*" onChange={(event) => {
+                onChange(event);
+                setIsModalOpen(true)
+            }}
                    ref={inputRef}/>
             <ImageLightbox
                 src={profilePhoto}
@@ -74,7 +73,7 @@ export default function ProfilePhoto({user}: Props) {
                 height={150}
             />
 
-            <IconButton className="!absolute p-3 right-3 bottom-0 bg-gray-600 hover:bg-gray-700" onClick={() => inputRef.current?.click()}>
+            <IconButton className="!absolute p-3 right-3 bottom-0 bg-gray-600 hover:bg-gray-700" onClick={onClick}>
                 <TbCameraPlus fontSize={20} color="#fff"/>
             </IconButton>
 

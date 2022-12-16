@@ -1,3 +1,4 @@
+/*
 import { Server }  from "socket.io"
 import ChatService from "@modules/chat/chat.service"
 import User        from "@entities/User"
@@ -105,4 +106,4 @@ export default function socketHandler( server: http.Server ) {
         } )
     } )
 
-}
+}*/

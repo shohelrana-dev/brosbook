@@ -1,30 +1,24 @@
-import { AbstractEntity } from "@entities/AbstractEntity"
-import { Entity, Column, ManyToOne, JoinColumn } from "typeorm"
-import User from "./User"
+import { AbstractEntity }                                               from "@entities/AbstractEntity"
+import { Entity, Column, OneToMany, ManyToOne } from "typeorm"
+import User                                                             from "./User"
+import Message                                                          from "@entities/Message"
 
-@Entity('conversations')
+@Entity( 'conversations' )
 class Conversation extends AbstractEntity {
-    @Column({ length: 55, nullable: false })
-    identifier: string
+    @ManyToOne( () => User )
+    user1: User
 
-    @Column({ nullable: false, length: 48 })
-    ownerId: string
+    @ManyToOne( () => User )
+    user2: User
 
-    @Column({ nullable: false, length: 48 })
-    participantId: string
+    @OneToMany( () => Message, message => message.conversation )
+    messages: Message[]
 
-    @ManyToOne(() => User)
-    @JoinColumn({ name: 'participantId', referencedColumnName: 'id' })
-    participant: User
-
-    @Column({ type: 'text', nullable: true })
+    @Column( { type: 'text', nullable: true } )
     lastMessage: string
 
-    @Column({ type: 'tinyint', default: 0 })
-    seen: number
-
-    @Column({ type: 'int', nullable: true })
-    unseenCount: number
+    @Column( { type: 'datetime', nullable: true } )
+    readAt: Date
 }
 
 export default Conversation

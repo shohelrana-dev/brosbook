@@ -15,15 +15,8 @@ export const usersApi = baseApi.injectEndpoints({
 
         getSuggestedUsers: build.query<ListResponse<User>, { page: number, limit?: number }>({
             query: (params) => ({
-                url: `users/suggest`,
+                url: `users/suggestions`,
                 params
-            })
-        }),
-
-        getUserPosts: build.query<ListResponse<Post>, { userId: string, page: number, limit?: number }>({
-            query: ({userId, ...params}) => ({
-                url: `users/${userId}/posts`,
-                params: params
             })
         }),
 
@@ -79,7 +72,6 @@ export const {
     useChangeCoverPhotoMutation,
     useGetUserByUsernameQuery,
     useGetSuggestedUsersQuery,
-    useGetUserPostsQuery,
     useFollowMutation,
     useUnfollowMutation,
     useGetFollowersQuery,

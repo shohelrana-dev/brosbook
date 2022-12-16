@@ -20,7 +20,7 @@ export default function ChangePasswordModal() {
     }
 
     useEffect(()=> {
-        if(isSuccess) toast.success('Password changing was success.')
+        if(isSuccess) toast.success('Password changed.')
     }, [isSuccess])
 
     return (

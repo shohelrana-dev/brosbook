@@ -1,15 +1,16 @@
 import { User }         from "@interfaces/user.interfaces"
+import {Media} from "@interfaces/index.interfaces"
 
 export interface Post {
     id: string
     username: string
     body: string
-    likeCount: number
+    likesCount: number
     comments: Comment[]
-    commentCount: number
+    commentsCount: number
     isViewerLiked: boolean
     author: User
-    photo: string
+    photo: Media
     createdAt: string
     updatedAt: string
 }
@@ -19,7 +20,7 @@ export interface Comment {
     username: string
     author: User
     isViewerLiked: boolean
-    likeCount: number
+    likesCount: number
     postId: string
     body: string
     createdAt: string

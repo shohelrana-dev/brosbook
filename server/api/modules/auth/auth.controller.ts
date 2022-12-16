@@ -1,10 +1,9 @@
 import { NextFunction, Request, Response } from "express"
-import AuthService from "./auth.service"
+import AuthService                         from "./auth.service"
 
 class AuthController {
 
-    constructor( private readonly authService: AuthService ){
-    }
+    constructor( private readonly authService: AuthService ){}
 
     public signup = async( req: Request, res: Response, next: NextFunction ): Promise<void> => {
         try {
@@ -12,7 +11,7 @@ class AuthController {
             const user = await this.authService.signup( req.body )
 
             //send success response
-            res.status( 201).json( user )
+            res.status( 201 ).json( user )
         } catch ( err ) {
             next( err )
         }
@@ -30,9 +29,9 @@ class AuthController {
         }
     }
 
-    public google = async( req: Request, res: Response, next: NextFunction ): Promise<void> => {
+    public loginWithGoogle = async( req: Request, res: Response, next: NextFunction ): Promise<void> => {
         try {
-            const loginData = await this.authService.google( req.body.token )
+            const loginData = await this.authService.loginWithGoogle( req.body.token )
 
             res.json( loginData )
         } catch ( err ) {
@@ -52,7 +51,7 @@ class AuthController {
 
     public resetPassword = async( req: Request, res: Response, next: NextFunction ): Promise<void> => {
         try {
-            await this.authService.resetPassword({...req.body, token: req.params.token} )
+            await this.authService.resetPassword( { ...req.body, token: req.params.token } )
 
             res.json( { message: 'Password has been changed' } )
         } catch ( err ) {

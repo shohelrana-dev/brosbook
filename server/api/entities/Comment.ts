@@ -1,50 +1,44 @@
-import {Entity, Column, JoinColumn, ManyToOne, OneToMany, AfterLoad} from "typeorm"
-import Post from "./Post"
-import User from "./User"
-import Like from "./Like"
-import { AbstractEntity } from "@entities/AbstractEntity"
-import {appDataSource} from "@config/data-source.config"
+import {
+    Entity,
+    Column,
+    ManyToOne,
+    OneToMany
+}                         from "typeorm"
+import { AbstractEntity } from "./AbstractEntity"
+import Post               from "./Post"
+import User               from "./User"
+import PostLike           from "./PostLike"
+import CommentLike        from "@entities/CommentLike"
+import { Auth }           from "@api/types/index.types"
 
-@Entity('comments')
-class Comment extends AbstractEntity {
-    @Column({ nullable: false, length: 48 })
-    postId: string
-
-    @Column({ nullable: false, length: 48 })
-    userId: string
-
-    @Column({ type: 'text', nullable: true })
+@Entity( 'comments' )
+export default class Comment extends AbstractEntity {
+    @Column( { type: 'text', nullable: true } )
     body: string
 
-    @ManyToOne(() => User)
-    @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
-    user: User
+    @Column( { type: 'int', default: 0 } )
+    likesCount: number
 
-    @ManyToOne(() => Post)
-    @JoinColumn({ name: 'postId', referencedColumnName: 'id' })
+    @ManyToOne( () => User, { eager: true } )
+    author: User
+
+    @ManyToOne( () => Post )
     post: Post
 
-    @OneToMany(() => Like, like => like.comment)
-    @JoinColumn({ name: 'id', referencedColumnName: 'commentId' })
-    likes: Like[]
+    @OneToMany( () => CommentLike, like => like.comment )
+    likes: PostLike[]
 
     //virtual columns
-    likeCount: number
     isViewerLiked: boolean
 
-    @AfterLoad()
-    async count(): Promise<void> {
-        const commentRepository = appDataSource.getRepository(Comment)
+    async setViewerProperties( auth: Auth ): Promise<Comment>{
+        const like = await CommentLike.findOneBy( { user: { id: auth.user.id }, comment: { id: this.id } } )
 
-        const {likeCount}  = await commentRepository
-            .createQueryBuilder('post')
-            .leftJoin('post.likes', 'like')
-            .select('COUNT(like.id)', 'likeCount')
-            .where('post.id = :id', { id: this.id })
-            .getRawOne()
+        this.isViewerLiked = Boolean( like )
+        if( this.author ){
+            await this.author.setViewerProperties( auth )
+        }
 
-        this.likeCount = likeCount
+        return this
     }
 }
-
-export default Comment

@@ -1,11 +1,11 @@
-import { Router } from "express"
-
+import { Router }        from "express"
 import authMiddleware    from "@middleware/auth.middleware"
 import CommentController from "@modules/comments/comment.controller"
 import CommentService    from "./comment.service"
 
 const router            = Router()
-const commentController = new CommentController( new CommentService() )
+const commentService    = new CommentService()
+const commentController = new CommentController( commentService )
 
 /**
  * @desc get comments

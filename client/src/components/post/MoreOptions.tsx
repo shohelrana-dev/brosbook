@@ -9,7 +9,7 @@ import {toast} from "react-toastify"
 import ButtonGray from "@components/common/ButtonGray"
 import {useFollowMutation, useUnfollowMutation} from "@services/usersApi"
 import {useDeletePostMutation} from "@services/postsApi"
-import useUser from "@hooks/useUser"
+import useCurrentUser from "@hooks/useCurrentUser"
 import useConfirm from "@hooks/useConfirm"
 import {Post} from "@interfaces/posts.interfaces"
 import {User} from "@interfaces/user.interfaces"
@@ -24,7 +24,7 @@ function MoreOptions({post, setPost}: Props) {
     const [unfollow] = useUnfollowMutation()
     const [deletePost] = useDeletePostMutation()
 
-    const {user: currentUser} = useUser()
+    const {user: currentUser} = useCurrentUser()
     const confirm = useConfirm()
     const [author, setAuthor] = useState<User>(post.author)
 

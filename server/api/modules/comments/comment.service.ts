@@ -1,86 +1,120 @@
-import { Request } from "express"
-import Comment from "@entities/Comment"
-import Like from "@entities/Like"
-import { paginateMeta } from "@utils/paginateMeta"
-import { PaginateMeta } from "@api/types/index.types"
-import { appDataSource } from "@config/data-source.config"
-import User from "@entities/User"
+import Comment                               from "@entities/Comment"
+import { paginateMeta }                      from "@utils/paginateMeta"
+import { Auth, ListResponse, ListQueryParams } from "@api/types/index.types"
+import User                                  from "@entities/User"
+import BadRequestException                   from "@exceptions/BadRequestException"
+import NotFoundException                     from "@exceptions/NotFoundException"
+import Post                                  from "@entities/Post"
+import { appDataSource }                     from "@config/data-source.config"
+import PostService                           from "@modules/posts/post.service"
+import CommentLike                           from "@entities/CommentLike"
 
 export default class CommentService {
-    private commentRepository = appDataSource.getRepository(Comment)
+    public readonly repository     = appDataSource.getRepository( Comment )
+    public readonly likeRepository = appDataSource.getRepository( CommentLike )
+    public readonly postService    = new PostService()
 
-    public async getMany(req: Request): Promise<{ comments: Comment[], meta: PaginateMeta }> {
-        const postId = req.params.postId
-        const page = Number(req.query.page) || 1
-        const limit = Number(req.query.limit) || 5
-        const skip = limit * (page - 1)
+    public async getComments( postId: string, params: ListQueryParams, auth: Auth ): Promise<ListResponse<Comment>>{
+        if( ! postId ) throw new BadRequestException( "Post id is empty." )
 
-        const [comments, count] = await this.commentRepository
-            .createQueryBuilder('comment')
-            .leftJoinAndSelect('comment.user', 'user')
-            .loadRelationCountAndMap('comment.likeCount', 'comment.likes')
-            .where('comment.postId = :postId', { postId })
-            .orderBy('comment.createdAt', 'DESC')
-            .skip(skip)
-            .take(limit)
+        const page  = params.page || 1
+        const limit = params.limit || 5
+        const skip  = limit * ( page - 1 )
+
+        const [comments, count] = await this.repository
+            .createQueryBuilder( 'comment' )
+            .leftJoinAndSelect( 'comment.author', 'author' )
+            .where( 'comment.postId = :postId', { postId } )
+            .orderBy( 'comment.createdAt', 'DESC' )
+            .skip( skip )
+            .take( limit )
             .getManyAndCount()
 
-        //check and set current user like
-        if (req.auth.isAuthenticated) {
-            for (let comment of comments) {
-                const like = await Like.findOneBy({ userId: req.auth.user?.id, commentId: comment.id })
-                comment.isViewerLiked = like ? true : false
-            }
-        }
+        const formattedComments = await Promise.all( comments.map( ( comment ) => comment.setViewerProperties( auth ) ) )
 
-        return { comments, meta: paginateMeta(count, page, limit) }
+        return { items: formattedComments, ...paginateMeta( count, page, limit ) }
     }
 
-    public async create(req: Request) {
-        const { body } = req.body
-        const postId = req.params.postId
+    public async create( { postId, body }: { body: string, postId: string }, auth: Auth ): Promise<Comment>{
+        if( ! postId ) throw new BadRequestException( 'Post id is empty.' )
+        if( ! body ) throw new BadRequestException( 'Comment body is empty.' )
 
-        if (!postId) throw new Error('Post id missing.')
-        if (!body) throw new Error('Comment body not be empty.')
+        const post = await this.postService.repository.findOneBy( { id: postId } )
+        if( ! post ) throw new BadRequestException( 'Post doesn\'t exists.' )
 
-        try {
-            const comment = new Comment()
-            comment.userId = req.auth.user.id
-            comment.body = body
-            comment.postId = postId
+        const author = await User.findOneBy( { id: auth.user.id } )
+        if( ! author ) throw new BadRequestException( 'Author doesn\'t exists.' )
 
-            const savedComment = await comment.save()
-            savedComment.user = await User.findOneBy({ id: req.auth.user.id })
 
-            return savedComment
-        } catch (err) {
-            throw new Error('Comment couldn\'t be created.')
-        }
+        const comment  = new Comment()
+        comment.author = author
+        comment.body   = body
+        comment.post   = post
+        await this.repository.save( comment )
+
+        this.updatePostCommentsCount( post )
+
+        return comment
     }
 
-    public async like(req: Request) {
-        const { commentId } = req.params
+    public async delete( commentId: string ): Promise<Comment>{
+        if( ! commentId ) throw new BadRequestException( "Comment id is empty." )
 
-        if (!commentId) throw new Error('Comment id missing.')
+        const comment = await this.repository.findOneBy( { id: commentId } )
 
-        try {
-            const like = Like.create({ commentId, userId: req.auth.user.id })
-            return await like.save()
-        } catch (err) {
-            throw new Error('The Comment couldn\'t be liked.')
-        }
+        if( ! comment ) throw new NotFoundException( 'comment doesn\'t exists.' )
 
+        await comment.remove()
+
+        return comment
     }
 
-    public async unlike(req: Request) {
-        const { commentId } = req.params
+    public async like( commentId: string, auth: Auth ): Promise<Comment>{
+        if( ! commentId ) throw new BadRequestException( "Comment id is empty." )
 
-        if (!commentId) throw new Error('Comment id missing.')
+        const comment = await this.repository.findOneBy( { id: commentId } )
 
-        try {
-            await Like.delete({ commentId, userId: req.auth.user.id })
-        } catch (error) {
-            throw new Error('The Comment couldn\'t be unliked.')
-        }
+        if( ! comment ) throw new NotFoundException( 'Comment doesn\'t exists.' )
+
+        const like   = new CommentLike()
+        like.comment = comment
+        like.user    = auth.user as User
+        await this.likeRepository.save( like )
+
+        this.updateCommentLikesCount( comment )
+
+        comment.isViewerLiked = true
+        comment.likesCount    = Number( comment.likesCount ) + 1
+
+        return comment
+    }
+
+    public async unlike( commentId: string ): Promise<Comment>{
+        if( ! commentId ) throw new BadRequestException( "Comment id is empty." )
+
+        const comment = await this.repository.findOneBy( { id: commentId } )
+
+        if( ! comment ) throw new BadRequestException( 'Comment doesn\'t exists.' )
+
+        await this.likeRepository.delete( { comment: { id: comment.id } } )
+
+        this.updateCommentLikesCount( comment )
+
+        comment.isViewerLiked = false
+        comment.likesCount    = Number( comment.likesCount ) - 1
+
+        return comment
+    }
+
+    private updateCommentLikesCount( comment: Comment ){
+        this.likeRepository.countBy( { comment: { id: comment.id } } ).then( ( count ) => {
+            this.repository.update( { id: comment.id }, { likesCount: count } )
+        } )
+    }
+
+    private updatePostCommentsCount( post: Post ){
+        this.repository.countBy( { post: { id: post.id } } ).then( ( count ) => {
+            this.postService.repository.update( { id: post.id }, { commentsCount: count } )
+        } )
     }
 }

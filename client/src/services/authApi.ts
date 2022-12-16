@@ -36,10 +36,10 @@ export const authApi = baseApi.injectEndpoints( {
         } ),
 
         forgotPassword: build.mutation<{ message: string }, { email: string }>( {
-            query: ({email} ) => ( {
+            query: ( payload ) => ( {
                 url: `/auth/forgot_password`,
                 method: 'POST',
-                body: { email }
+                body: payload
             } )
         } ),
 

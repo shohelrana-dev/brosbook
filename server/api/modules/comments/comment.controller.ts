@@ -1,7 +1,5 @@
 import { NextFunction, Request, Response } from "express"
 import CommentService                      from "./comment.service"
-import httpStatus from "http-status";
-import HttpException  from "@exceptions/HttpException";
 
 export default class CommentController {
     constructor( private readonly commentService: CommentService ){
@@ -9,41 +7,41 @@ export default class CommentController {
 
     public getMany = async( req: Request, res: Response, next: NextFunction ): Promise<void> => {
         try {
-            const { comments, meta } = await this.commentService.getMany( req )
+            const comments = await this.commentService.getComments( req.params.postId, req.query, req.auth )
 
-            res.json( { items: comments, ...meta } )
+            res.json( comments )
         } catch ( err ) {
-            next( new HttpException( httpStatus.CONFLICT, err.message ) )
+            next( err )
         }
     }
 
     public create = async( req: Request, res: Response, next: NextFunction ): Promise<void> => {
         try {
-            const comment = await this.commentService.create( req )
+            const comment = await this.commentService.create( {postId: req.params.postId, body: req.body.body}, req.auth )
 
             res.status( 201 ).json( comment )
         } catch ( err ) {
-            next( new HttpException( httpStatus.CONFLICT, err.message ) )
+            next( err )
         }
     }
 
     public like = async( req: Request, res: Response, next: NextFunction ): Promise<void> => {
         try {
-            const like = await this.commentService.like( req )
+            const comment = await this.commentService.like( req.params.commentId, req.auth )
 
-            res.json( like )
+            res.json( comment )
         } catch ( err ) {
-            next( new HttpException( httpStatus.CONFLICT, err.message ) )
+            next( err )
         }
     }
 
     public unlike = async( req: Request, res: Response, next: NextFunction ): Promise<void> => {
         try {
-            await this.commentService.unlike( req )
+            const comment = await this.commentService.unlike( req.params.commentId )
 
-            res.json( { message: 'Unlike success' } )
+            res.json( comment )
         } catch ( err ) {
-            next( new HttpException( httpStatus.CONFLICT, err.message ) )
+            next( err )
         }
     }
 

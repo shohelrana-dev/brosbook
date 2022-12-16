@@ -6,7 +6,7 @@ import {useCreateCommentMutation, useGetCommentsQuery} from "@services/commentsA
 import {Comment} from "@interfaces/posts.interfaces"
 import {useGetInfiniteListQuery} from "@hooks/useGetInfiniteListQuery"
 import BasicInput from "@components/common/BasicInput"
-import useUser from "@hooks/useUser"
+import useCurrentUser from "@hooks/useCurrentUser"
 import ButtonGray from "@components/common/ButtonGray"
 
 interface CommentListPost {
@@ -14,7 +14,7 @@ interface CommentListPost {
 }
 
 function CommentList({postId}: CommentListPost) {
-    const {user: currentUser} = useUser()
+    const {user: currentUser} = useCurrentUser()
     const {isLoading, items: comments, hasMoreItem, loadMoreItem} = useGetInfiniteListQuery<Comment>(useGetCommentsQuery, {postId})
     const [createComment] = useCreateCommentMutation()
 
@@ -37,7 +37,7 @@ function CommentList({postId}: CommentListPost) {
         <div className="mt-2">
             <form onSubmit={handleSaveComment} className="mb-2 flex items-center">
                 <div className="w-1/12 mt-[-2px]">
-                    <Avatar src={currentUser?.avatar} online size="small"/>
+                    <Avatar src={currentUser?.avatar.url} online size="small"/>
                 </div>
                 <div className="ml-2 w-11/12">
                     <BasicInput

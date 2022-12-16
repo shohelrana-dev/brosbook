@@ -1,37 +1,35 @@
-import { AbstractEntity } from "@entities/AbstractEntity"
-import User from "@entities/User"
+import { AbstractEntity }                       from "@entities/AbstractEntity"
+import User                                     from "@entities/User"
 import { Column, Entity, JoinColumn, OneToOne } from "typeorm"
+import Media                                    from "@entities/Media"
 
-@Entity('profile')
+@Entity( 'profile' )
 class Profile extends AbstractEntity {
-    @Column({ nullable: false, length: 48 })
-    userId: string
-
-    @Column({ length: 16, nullable: true })
+    @Column( { length: 16, nullable: true } )
     phone: string
 
-    @Column({ nullable: true })
-    coverPhoto: string
+    @OneToOne( () => Media, {eager: true} )
+    @JoinColumn()
+    coverPhoto: Media
 
-    @Column({
+    @Column( {
         type: 'enum',
         enum: ['male', 'female'],
-        default: 'male',
         nullable: true
-    })
+    } )
     gender: string
 
-    @Column({ type: 'text', nullable: true })
+    @Column( { type: 'text', nullable: true } )
     bio: string
 
-    @Column({ nullable: true })
+    @Column( { nullable: true } )
     location: string
 
-    @Column({ type: 'datetime', nullable: true })
+    @Column( { type: 'datetime', nullable: true } )
     birthdate: string
 
-    @OneToOne(() => User, (user) => user.profile)
-    @JoinColumn()
+    @OneToOne( () => User )
+    @JoinColumn( { name: 'userId' } )
     user: User
 }
 

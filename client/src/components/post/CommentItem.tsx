@@ -20,13 +20,13 @@ function CommentItem({ comment }: CommentItemState) {
     const [likeComment] = useLikeCommentMutation()
     const [unlikeComment] = useUnlikeCommentMutation()
     const [isViewerLiked, setIsViewerLiked] = useState<boolean>(comment.isViewerLiked)
-    const [likeCount, setLikeCount] = useState<number>(comment.likeCount || 0)
+    const [likesCount, setLikeCount] = useState<number>(comment.likesCount || 0)
 
     async function handleCommentLike() {
         try {
             await likeComment({ postId: comment.postId, commentId: comment.id }).unwrap()
             setIsViewerLiked(true)
-            setLikeCount(likeCount + 1)
+            setLikeCount(likesCount + 1)
         } catch (err) {
             console.error(err)
         }
@@ -36,7 +36,7 @@ function CommentItem({ comment }: CommentItemState) {
         try {
             await unlikeComment({ postId: comment.postId, commentId: comment.id }).unwrap()
             setIsViewerLiked(false)
-            setLikeCount(likeCount - 1)
+            setLikeCount(likesCount - 1)
         } catch (err) {
             console.error(err)
         }
@@ -44,17 +44,17 @@ function CommentItem({ comment }: CommentItemState) {
 
     return (
         <div className="flex">
-            <Link href={`/${comment.user.username}`} className="mt-3">
-                <Avatar src={comment.user.avatar} size="small" />
+            <Link href={`/${comment.author.username}`} className="mt-3">
+                <Avatar src={comment.author.avatar?.url} size="small" />
             </Link>
             <div>
                 <div className="flex items-center">
                     <div className="ml-2 mt-1 py-2 px-4 rounded-xl bg-theme-gray relative">
-                        <Link href={`/${comment.user.username}`} className="flex">
+                        <Link href={`/${comment.author.username}`} className="flex">
                             <h3 className="text-xs font-medium">
-                                {comment.user.fullName}
+                                {comment.author.fullName}
                             </h3>
-                            <p className="text-xs ml-1 text-gray-500">@{comment.user.username}</p>
+                            <p className="text-xs ml-1 text-gray-500">@{comment.author.username}</p>
                         </Link>
 
                         <div>
@@ -87,7 +87,7 @@ function CommentItem({ comment }: CommentItemState) {
                     >
                         <OutlinedLikeIcon fontSize="small"/>
                     </motion.button>
-                    <p>{likeCount}</p>
+                    <p>{likesCount}</p>
                     <p className="text-xs ml-5">
                         {timeAgo(comment.createdAt)}
                     </p>

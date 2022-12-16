@@ -9,21 +9,21 @@ import ImageLightbox from "@components/common/ImageLightbox"
 import Image from "next/image"
 import {User} from "@interfaces/user.interfaces"
 import placeholderCoverPhoto from "@images/placeholder-cover-photo.png"
-import useUser from "@hooks/useUser"
+import useCurrentUser from "@hooks/useCurrentUser"
 import Modal from "@components/common/Modal"
+import useSelectFile from "@hooks/useSelectFile"
 
 type Props = { user: User }
 
 export default function CoverPhoto({user}: Props) {
-    const {user: currentUser} = useUser()
+    const {user: currentUser} = useCurrentUser()
     const [changeCoverPhoto, {isLoading}] = useChangeCoverPhotoMutation()
-    const inputRef = useRef<HTMLInputElement | null>(null)
-    const [selectedPhoto, setSelectedPhoto] = useState<Blob>()
-    const [coverPhoto, setCoverPhoto] = useState<string>(user.profile?.coverPhoto!)
+    const [coverPhoto, setCoverPhoto] = useState<string>(user.profile?.coverPhoto?.url!)
+    const {inputRef, selectedFile: selectedPhoto, removeSelectedFile, onClick, onChange} = useSelectFile()
 
     const [isModalOpen, setIsModalOpen] = useState(false)
 
-    function handleModalOpen(){
+    function handleModalOpen() {
         setIsModalOpen(!isModalOpen)
     }
 
@@ -35,9 +35,9 @@ export default function CoverPhoto({user}: Props) {
             formData.append('coverPhoto', selectedPhoto)
             const data = await changeCoverPhoto(formData).unwrap()
             setIsModalOpen(false)
-            setSelectedPhoto(undefined)
-            setCoverPhoto(data.profile?.coverPhoto!)
-            toast.success('Cover photo was saved.')
+            removeSelectedFile()
+            setCoverPhoto(data.profile?.coverPhoto?.url!)
+            toast.success('Cover photo saved.')
         } catch (err: any) {
             console.error(err)
             toast.error(err?.data?.message || 'Something went wrong!, Please try again.')
@@ -45,10 +45,8 @@ export default function CoverPhoto({user}: Props) {
     }
 
     function fileInputChangeHandle(event: ChangeEvent<HTMLInputElement>) {
-        if (event.target.files && event.target.files.length > 0) {
-            setSelectedPhoto(event.target.files[0])
-            setIsModalOpen(true)
-        }
+        onChange(event)
+        setIsModalOpen(true)
     }
 
     if (user.id !== currentUser?.id) {
@@ -81,8 +79,7 @@ export default function CoverPhoto({user}: Props) {
                 )}
             </div>
 
-            <IconButton className="!absolute p-5 right-3 bottom-3 bg-gray-600 hover:bg-gray-700"
-                        onClick={() => inputRef.current?.click()}>
+            <IconButton className="!absolute p-5 right-3 bottom-3 bg-gray-600 hover:bg-gray-700" onClick={onClick}>
                 <TbCameraPlus fontSize={25} color="#fff"/>
             </IconButton>
 
