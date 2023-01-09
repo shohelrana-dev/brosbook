@@ -1,11 +1,9 @@
-import React          from 'react'
-import { SRLWrapper} from "simple-react-lightbox"
+import React from 'react'
+import Reactions from "@components/messages/MessageBox/Reactions"
+import { Message } from "@interfaces/conversation.interfaces"
+import ImageLightbox from "@components/common/ImageLightbox"
+import useCurrentUser from "@hooks/useCurrentUser"
 
-import Reactions   from "@components/messages/MessageBox/Reactions"
-import { Message } from "@interfaces/chat.interfaces"
-
-
-//the component classes
 const classes = {
     text: ( isOwn: boolean, hasReaction: boolean ) => (
         `box relative py-2 px-4 my-1 
@@ -16,24 +14,18 @@ const classes = {
     image: 'relative max-w-[200px] mb-4'
 }
 
-interface MessageContentProps {
-    isOwnMessage: boolean
+interface Props {
     message: Message
 }
 
-function MessageContent( { isOwnMessage, message }: MessageContentProps ) {
-
-    const hasReaction = message.reactions.length > 0
-
-    const reactionMarkup = (
-        <Reactions reactions={ message.reactions } isOwnMessage={ isOwnMessage } messageId={ message.id }/>
-    )
+function MessageContent( { message }: Props ){
+    const hasReaction = message.reactions?.length > 0
 
     switch ( message.type ) {
         case 'text':
             return (
-                <div className={ classes.text( isOwnMessage, hasReaction ) }>
-                    { reactionMarkup }
+                <div className={ classes.text( message.isMeSender, hasReaction ) }>
+                    <Reactions message={ message }/>
                     { message.body }
                 </div>
             )
@@ -41,7 +33,7 @@ function MessageContent( { isOwnMessage, message }: MessageContentProps ) {
         case 'emoji':
             return (
                 <div className={ classes.emoji( hasReaction ) }>
-                    { reactionMarkup }
+                    <Reactions message={ message }/>
                     { message.body }
                 </div>
             )
@@ -49,12 +41,8 @@ function MessageContent( { isOwnMessage, message }: MessageContentProps ) {
         case 'image':
             return (
                 <div className={ classes.image }>
-                    { reactionMarkup }
-                    <SRLWrapper>
-                        <a href={ message.imageUrl }>
-                            <img src={ message.imageUrl } alt="thumb"/>
-                        </a>
-                    </SRLWrapper>
+                    <Reactions message={ message }/>
+                    <ImageLightbox src={ message.image?.url! } alt="message image" width={ 400 } height={ 400 }/>
                 </div>
             )
 

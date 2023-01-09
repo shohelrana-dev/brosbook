@@ -10,7 +10,7 @@ export interface Post {
     commentsCount: number
     isViewerLiked: boolean
     author: User
-    photo: Media
+    image: Media
     createdAt: string
     updatedAt: string
 }

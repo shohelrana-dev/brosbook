@@ -1,98 +1,68 @@
-import React, { ChangeEvent, FocusEvent, Fragment, useEffect, useState } from 'react'
-import { Fade }                                                          from "@mui/material"
-import { useDispatch, useSelector }                                      from "react-redux"
+import React, { useState } from 'react'
+import ConversationItem from "@components/messages/Conversations/ConversationItem"
+import { useGetConversationsQuery } from "@services/conversationApi"
+import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
+import Loading from "@components/common/Loading"
+import { Conversation } from "@interfaces/conversation.interfaces"
+import { useDebouncedCallback } from "use-debounce"
+import BasicInput from "@components/common/BasicInput"
+import SearchUserList from "@components/messages/Conversations/SearchUserList"
+import { useSelector } from "react-redux"
+import { selectChatState } from "@slices/chatSlice"
 
-import { fetchConversationsAction } from "@actions/chatActions"
-import { RootState }                from "../../store"
-import api                          from "../../api/index"
-import { User }      from "@interfaces/user.interfaces"
-import ConversationItem             from "@components/messages/Conversations/ConversationItem"
-import SearchUserItem               from "@components/messages/Conversations/SearchUserItem"
-import ConversationsSkeleton        from "@components/messages/Conversations/Skeletons/ConversationsSkeleton"
-import UsersSkeleton                from "@components/messages/Conversations/Skeletons/UsersSkeleton"
-
-function Conversations() {
+function Conversations(){
     //hooks
-    const dispatch                                  = useDispatch()
-    const { conversations, isLoadingConversations } = useSelector( ( state: RootState ) => state.chat )
-    const [ timer, setTimer ]                       = useState( null )
-    const [ users, setUsers ]                       = useState<User[]>( [] )
-    const [ isSearching, setSearching ]             = useState<boolean>( false )
-    const [ isSearchLoading, setSearchLoading ]     = useState<boolean>( true )
+    const [query, setQuery]             = useState<string>( '' )
+    const { isLoading }                 = useGetInfiniteListQuery<Conversation>( useGetConversationsQuery, {} )
+    const { conversations }             = useSelector( selectChatState )
+    const [isSearching, setIsSearching] = useState<boolean>( false )
 
-    useEffect( () => {
-        dispatch( fetchConversationsAction() )
-    }, [ dispatch ] )
+    const onChange = useDebouncedCallback(
+        ( value ) => {
+            setQuery( value )
+        },
+        500,
+    )
 
-    function SearchUserHandle( event: ChangeEvent<HTMLInputElement> ) {
-        setSearchLoading( true )
-        clearTimeout( timer! )
-        const timeout: any = setTimeout( async () => {
-            try {
-                const { data } = await api.users.searchUser( event.target.value )
-                setUsers( data.users )
-            } catch ( err ) {
-                console.error( err )
-            } finally {
-                setSearchLoading( false )
-            }
-        }, 500 )
-
-        setTimer( timeout )
-    }
-
-    function inputOnBlurHandle( event: FocusEvent<HTMLInputElement> ) {
-        setSearching( false )
-        event.target.value = ''
-    }
+    const onBlur = useDebouncedCallback(
+        () => {
+            setIsSearching( false )
+        },
+        200,
+    )
 
     return (
-        <Fragment>
+        <>
             <h2 className="text-2xl font-medium mb-2">Chats</h2>
 
             {/*Search user*/ }
             <div className="mb-3">
-                <input
-                    onBlur={ inputOnBlurHandle }
-                    onFocus={ () => setSearching( true ) }
-                    onChange={ SearchUserHandle }
-                    className="input-basic"
-                    placeholder="Search user for messages"
+                <BasicInput
+                    label="Search user"
+                    labelHide={ true }
+                    onBlur={ onBlur }
+                    onFocus={ () => setIsSearching( true ) }
+                    onChange={ ( e ) => {onChange( e.target.value )} }
                 />
-                <Fade in={ isSearching }>
-                    <div className="relative">
-                        <div
-                            className="box max-w-5xl p-3 absolute top-full left-0 w-full mt-3 bg-gray-200 drop-shadow-2xl">
-                            { isSearchLoading && <UsersSkeleton/> }
-
-                            { !isSearchLoading && users && users.map( user => (
-                                <SearchUserItem user={ user } key={ user.id }/>
-                            ) ) }
-
-                            { !isSearchLoading && users.length < 1 && (
-                                < h2 className="text-xl text-gray-700">No result found</h2>
-                            ) }
-                        </div>
-                    </div>
-                </Fade>
+                <SearchUserList query={ query } isSearching={ isSearching }/>
             </div>
 
             {/*Conversations*/ }
-            { !isSearching && (
+            { ! isSearching ? (
                 <div>
                     <h2 className="text-lg font-medium mb-3">Recent chats</h2>
-                    { isLoadingConversations && <ConversationsSkeleton/> }
+                    { isLoading ? <Loading/> : null }
 
-                    { conversations && conversations.map( cv => (
-                        <ConversationItem conversation={ cv } key={ cv.id }/>
+                    { conversations && conversations.map( ( conversation: Conversation ) => (
+                        <ConversationItem conversation={ conversation } key={ conversation.id }/>
                     ) ) }
 
-                    { !isLoadingConversations && conversations.length < 1 && (
+                    { ! isLoading && conversations.length < 1 && (
                         <p className="text-gray-700">You have no conversation</p>
                     ) }
                 </div>
-            ) }
-        </Fragment>
+            ) : null }
+        </>
     )
 }
 

@@ -1,7 +1,7 @@
-import React                               from 'react'
-import { useRouter }                       from "next/navigation"
-import { toast }                           from "react-toastify"
-import {GoogleLogin, CredentialResponse, GoogleOAuthProvider} from '@react-oauth/google'
+import React from 'react'
+import { useRouter, useSearchParams } from "next/navigation"
+import { toast } from "react-toastify"
+import { GoogleLogin, CredentialResponse, GoogleOAuthProvider } from '@react-oauth/google'
 
 import { useLoginWithGoogleMutation } from "@services/authApi"
 import Loading from "@components/common/Loading"
@@ -9,21 +9,21 @@ import Loading from "@components/common/Loading"
 function GoogleLoginButton(){
     //hooks
     const router                            = useRouter()
+    const params                            = useSearchParams()
     const [login, { isLoading, isSuccess }] = useLoginWithGoogleMutation()
-
 
     async function responseGoogle( response: CredentialResponse ){
         try {
             await login( response.credential! ).unwrap()
-            router.push( '/' )
-            toast.success( 'You have been logged in successfully.' )
+            router.push( params.get( 'redirect_path' ) ? params.get( 'redirect_path' )! : '/' )
+            toast.success( 'Logged in.' )
         } catch ( err: any ) {
             console.error( err )
-            toast.error( err?.data?.message || "Login has been failed." )
+            toast.error( err?.data?.message || "Login failed." )
         }
     }
 
-    if( isSuccess || isLoading ) return  <Loading/>
+    if( isSuccess || isLoading ) return <Loading/>
 
     return (
         <GoogleOAuthProvider clientId={ process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID! }>

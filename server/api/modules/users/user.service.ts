@@ -1,20 +1,21 @@
-import { UploadedFile }                            from "express-fileupload"
-import Relationship                                from "@entities/Relationship"
-import User                                        from "@entities/User"
-import { paginateMeta }                            from "@utils/paginateMeta"
-import { appDataSource }                           from "@config/data-source.config"
-import { Auth, ListResponse, ListQueryParams }     from "@api/types/index.types"
-import BadRequestException                         from "@exceptions/BadRequestException"
-import { MediaSource }                             from "@api/enums"
-import MediaService                                from "@services/media.service"
-import NotFoundException                           from "@exceptions/NotFoundException"
-import isEmpty                                     from "is-empty"
-import Profile                                     from "@entities/Profile"
-import { CreateUserDTO }                           from "@modules/auth/auth.dto"
+import { UploadedFile } from "express-fileupload"
+import Relationship from "@entities/Relationship"
+import User from "@entities/User"
+import { paginateMeta } from "@utils/paginateMeta"
+import { appDataSource } from "@config/data-source.config"
+import { Auth, ListQueryParams, ListResponse, SearchQueryParams } from "@api/types/index.types"
+import BadRequestException from "@exceptions/BadRequestException"
+import Media, { MediaSource } from "@entities/Media"
+import MediaService from "@services/media.service"
+import NotFoundException from "@exceptions/NotFoundException"
+import isEmpty from "is-empty"
+import Profile from "@entities/Profile"
+import { CreateUserDTO } from "@modules/auth/auth.dto"
 import { LoginTicket, OAuth2Client, TokenPayload } from "google-auth-library"
-import UnauthorizedException                       from "@exceptions/UnauthorizedException"
-import Media                                       from "@entities/Media"
-import { v4 as uuid }                              from "uuid"
+import UnauthorizedException from "@exceptions/UnauthorizedException"
+import { v4 as uuid } from "uuid"
+import NotificationService from "@modules/notifications/notification.service"
+import { NotificationTypes } from "@entities/Notification";
 
 
 export default class UserService {
@@ -22,6 +23,7 @@ export default class UserService {
     public readonly profileRepository      = appDataSource.getRepository( Profile )
     public readonly relationshipRepository = appDataSource.getRepository( Relationship )
     public readonly mediaService           = new MediaService()
+    //public readonly notificationService    = new NotificationService()
 
     public async create( userData: CreateUserDTO ): Promise<User>{
         if( isEmpty( userData ) ) throw new BadRequestException( 'User data is empty.' )
@@ -90,44 +92,68 @@ export default class UserService {
     }
 
     public async getCurrentUser( auth: Auth ){
-        return await this.repository.findOneOrFail( {
+        const user = await this.repository.findOneOrFail( {
             where: { id: auth.user.id },
             relations: { profile: true }
         } )
+
+        return user
     }
 
-    public async getUserByUsernameOrId( usernameOrId: string, auth: Auth ): Promise<User>{
-        if( ! usernameOrId ) throw new BadRequestException( "Username or user id is empty." )
+    public async getUserById( userId: string, auth: Auth ): Promise<User>{
+        if( ! userId ) throw new BadRequestException( "User id is empty." )
 
         const user = await this.repository.findOne( {
-            where: [{ username: usernameOrId }, { id: usernameOrId }],
+            where: { id: userId },
             relations: { profile: true }
         } )
 
         if( ! user ) throw new NotFoundException( 'User doesn\'t exists.' )
 
-        //set is current user follow
         await user.setViewerProperties( auth )
-
-        //followers count
-        user.followersCount = await Relationship.countBy( { following: { id: user.id } } )
-
-        //followings count
-        user.followingsCount = await Relationship.countBy( { follower: { id: user.id } } )
 
         return user
     }
 
-    public async getSearchUsers( params: ListQueryParams, auth: Auth ): Promise<ListResponse<User>>{
+    public async getUserByUsername( username: string, auth: Auth ): Promise<User>{
+        if( ! username ) throw new BadRequestException( "Username is empty." )
+
+        const user = await this.repository.findOne( {
+            where: { username },
+            relations: { profile: true }
+        } )
+
+        if( ! user ) throw new NotFoundException( 'User doesn\'t exists.' )
+
+        await user.setViewerProperties( auth )
+
+        return user
+    }
+
+    public async getFollowersCount( userId: string ): Promise<number>{
+        if( ! userId ) throw new BadRequestException( "User id is empty." )
+
+        return await Relationship.countBy( { following: { id: userId } } )
+    }
+
+    public async getFollowingsCount( userId: string ): Promise<number>{
+        if( ! userId ) throw new BadRequestException( "User id is empty." )
+
+        return await Relationship.countBy( { follower: { id: userId } } )
+    }
+
+    public async searchUsers( params: SearchQueryParams, auth: Auth ): Promise<ListResponse<User>>{
+        const query = params.query
         const page  = params.page || 1
-        const limit = params.limit || 6
+        const limit = params.limit || 16
         const skip  = limit * ( page - 1 )
 
         const [users, count] = await this.repository
             .createQueryBuilder( 'user' )
-            .leftJoinAndSelect( 'user.profile', 'profile' )
             .leftJoinAndSelect( 'user.avatar', 'avatar' )
-            .where( 'user.id != :id', { id: auth.user.id } )
+            .where( 'user.firstName LIKE :query', { query: `%${ query }%` } )
+            .where( 'user.lastName LIKE :query', { query: `%${ query }%` } )
+            .andWhere( 'user.id != :id', { id: auth.user.id } )
             .orderBy( 'user.createdAt', 'DESC' )
             .skip( skip )
             .take( limit )
@@ -272,6 +298,12 @@ export default class UserService {
         await this.relationshipRepository.create( { follower: { id: auth.user.id }, following: targetUser } ).save()
 
         targetUser.isViewerFollow = true
+
+        /*this.notificationService.create( {
+            initiatorId: auth.user.id,
+            recipientId: targetUserId,
+            type: NotificationTypes.FOLLOWED
+        } )*/
 
         return targetUser
     }

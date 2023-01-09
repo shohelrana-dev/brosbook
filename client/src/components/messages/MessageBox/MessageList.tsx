@@ -1,85 +1,67 @@
 import React, { useEffect, useRef } from 'react'
-import moment                       from "moment"
-import { useRouter }                from "next/navigation"
-import { useDispatch, useSelector } from "react-redux"
+import SingleMessage from "@components/messages/MessageBox/SingleMessage"
+import { useGetMessagesQuery } from "@services/conversationApi"
+import Loading from "@components/common/Loading"
+import { Conversation, Message } from "@interfaces/conversation.interfaces"
+import { io } from "socket.io-client"
+import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 
-import SingleMessage           from "@components/messages/MessageBox/SingleMessage"
-import { RootState }           from "../../../store"
-import { fetchMessagesAction } from "@actions/chatActions"
-import { Message }             from "@interfaces/chat.interfaces"
-import MessagesSkeleton        from "@components/messages/MessageBox/Skeletons/MessagesSkeleton"
+interface Props {
+    conversation: Conversation
+}
 
-function MessageList() {
+function MessageList( { conversation }: Props ){
     //hooks
-    const messagesDivRef                                       = useRef<HTMLDivElement>( null )
-    const { messages, currentConversation, isLoadingMessages } = useSelector( ( state: RootState ) => state.chat )
-    const { user: currentUser }                                = useSelector( ( state: RootState ) => state.auth )
-    const router                                               = useRouter()
-    const dispatch                                             = useDispatch()
+    const messagesDivRef                                         = useRef<HTMLDivElement>( null )
+    const { items: messages, isLoading, setItems: setMessages } = useGetInfiniteListQuery<Message>(
+        useGetMessagesQuery, { conversationId: conversation?.id! }
+    )
 
-    useEffect( loadMessages, [ dispatch, router ] )
-    useEffect( scrollToBottom, [ messagesDivRef ] )
+    useEffect( () => {
+        const socket = io( process.env.NEXT_PUBLIC_SERVER_BASE_URL! )
 
-    function loadMessages() {
-        const identifier = router.query.identifier as string
-        if ( identifier && identifier !== 'undefined' ) {
-            dispatch( fetchMessagesAction( identifier ) )
+        if( conversation ){
+            socket.on( `new_message_${ conversation.id }`, addMessage )
+
+            socket.on( `new_reaction_${ conversation.id }`, updateMessage )
         }
+
+        if( socket ) return () => {
+            socket.close()
+        }
+    }, [conversation] )
+
+    function addMessage( message: Message ){
+        setMessages( ( prevMessages: Message[] ) => {
+            return [message, ...prevMessages]
+        } )
     }
 
-    //scroll message box to bottom
-    function scrollToBottom() {
-        if ( messagesDivRef && messagesDivRef.current ) {
-            messagesDivRef.current.scrollTop = messagesDivRef.current.scrollHeight
-        }
-    }
+    function updateMessage( message: Message ){
+        setMessages( ( prevMessages: Message[] ) => {
+            const index        = prevMessages.findIndex( ( msg ) => msg.id === message.id )
+            const newMessages  = [...prevMessages]
+            newMessages[index] = message
 
-    //Make Grouped Message per user
-    let messageGroup: Message[]      = []
-    let isEndGroupedMessage: boolean = false
-
-    function makeGroupedMessage( msg: Message, i: number, messages: Message[] ) {
-        const prevMsg = i > 0 ? messages[i - 1] : {} as Message
-        const minutes = moment( prevMsg.createdAt ).diff( msg.createdAt, 'minutes' )
-
-        if ( prevMsg.senderId === msg.senderId ) {
-            isEndGroupedMessage = false
-            if ( minutes <= 5 ) {
-                if ( messageGroup.length < 1 ) {
-                    messageGroup.unshift( prevMsg )
-                }
-                messageGroup.unshift( msg )
-            } else {
-                messageGroup        = []
-                isEndGroupedMessage = true
-            }
-        } else {
-            messageGroup        = []
-            isEndGroupedMessage = true
-        }
+            return newMessages
+        } )
     }
 
     return (
         <div ref={ messagesDivRef } className="overflow-y-scroll h-full scrollbar-hide flex flex-col-reverse">
 
-            { isLoadingMessages && <MessagesSkeleton/> }
+            { isLoading ? <Loading/> : null }
 
-            { !isLoadingMessages && messages && messages.map( ( msg, i, array ) => {
-                makeGroupedMessage( msg, i, array )
-                if ( !isEndGroupedMessage ) return
-                return <SingleMessage
-                    key={ msg.id }
-                    message={ msg }
-                    currentUser={ currentUser }
-                    participant={ currentConversation?.participant }
-                    group={ messageGroup }
-                />
-            } ) }
-            { !isLoadingMessages && messages.length < 1 && (
+            { ( messages && messages.length > 0 ) ? messages.map( ( message: Message, index: number ) => (
+                <SingleMessage key={ message.id } message={ message }
+                               prevMessage={ index === 0 ? null : messages[index - 1] }/>
+            ) ) : null }
+
+            { ! isLoading && messages.length < 1 ? (
                 <div className="h-full flex justify-center items-center">
                     <h4 className="text-gray-700 text-lg">No chatting yet</h4>
                 </div>
-            ) }
+            ) : null }
         </div>
     )
 }

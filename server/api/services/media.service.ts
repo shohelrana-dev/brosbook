@@ -4,7 +4,7 @@ import { UploadedFile }  from "express-fileupload"
 import path              from "path"
 import { v4 as uuidv4 }  from "uuid"
 import isEmpty           from "is-empty"
-import { MediaSource }   from "@api/enums"
+import { MediaSource }   from "@entities/Media"
 import User              from "@entities/User"
 import { appDataSource } from "@config/data-source.config"
 

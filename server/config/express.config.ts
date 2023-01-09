@@ -16,7 +16,7 @@ dotenv.config()
 import notFoundMiddleware        from "@middleware/not-found.middleware"
 import errorMiddleware           from '@middleware/error.middleware'
 import deserializeUserMiddleware from '@middleware/deserialize-user.middleware'
-//import socketInit                from "@api/socket"
+import socketInit                from "@startup/socket"
 import fileUpload                from "express-fileupload"
 import routes                    from '@startup/routes'
 
@@ -24,9 +24,9 @@ import routes                    from '@startup/routes'
 const app: Application = express()
 
 //create server
-const server = http.createServer( app )
+const server    = http.createServer( app )
 //socket server init
-//socketInit( server )
+export const io = socketInit( server )
 
 //initial configs
 app.use( morgan( 'dev' ) )

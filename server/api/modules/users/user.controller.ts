@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express"
-import UserService                         from "./user.service"
-import { UploadedFile }                    from "express-fileupload"
+import UserService from "./user.service"
+import { UploadedFile } from "express-fileupload"
 
 export default class UserController {
     constructor( private readonly usersService: UserService ){
@@ -16,9 +16,9 @@ export default class UserController {
         }
     }
 
-    public getUser = async( req: Request, res: Response, next: NextFunction ) => {
+    public getUserById = async( req: Request, res: Response, next: NextFunction ) => {
         try {
-            const user = await this.usersService.getUserByUsernameOrId( req.params.identifier, req.auth )
+            const user = await this.usersService.getUserById( req.params.userId, req.auth )
 
             res.json( user )
         } catch ( err ) {
@@ -26,9 +26,19 @@ export default class UserController {
         }
     }
 
-    public getSearchUsers = async( req: Request, res: Response, next: NextFunction ) => {
+    public getUserByUsername = async( req: Request, res: Response, next: NextFunction ) => {
         try {
-            const users = await this.usersService.getSearchUsers( req.query, req.auth )
+            const user = await this.usersService.getUserByUsername( req.params.username, req.auth )
+
+            res.json( user )
+        } catch ( err ) {
+            next( err )
+        }
+    }
+
+    public searchUsers = async( req: Request, res: Response, next: NextFunction ) => {
+        try {
+            const users = await this.usersService.searchUsers( req.query as any, req.auth )
 
             res.json( users )
         } catch ( err ) {
@@ -60,6 +70,18 @@ export default class UserController {
         }
     }
 
+    public getFollowingsCount = async( req: Request, res: Response, next: NextFunction ) => {
+        const userId = req.params.userId as string
+
+        try {
+            const count = await this.usersService.getFollowingsCount( userId )
+
+            res.json( { count } )
+        } catch ( err ) {
+            next( err )
+        }
+    }
+
     public getFollowers = async( req: Request, res: Response, next: NextFunction ) => {
         const userId = req.params.userId as string
         const page   = Number( req.query.page )
@@ -69,6 +91,19 @@ export default class UserController {
             const followers = await this.usersService.getFollowers( userId, { page, limit }, req.auth )
 
             res.json( followers )
+        } catch ( err ) {
+            next( err )
+        }
+    }
+
+
+    public getFollowersCount = async( req: Request, res: Response, next: NextFunction ) => {
+        const userId = req.params.userId as string
+
+        try {
+            const count = await this.usersService.getFollowersCount( userId )
+
+            res.json( { count } )
         } catch ( err ) {
             next( err )
         }

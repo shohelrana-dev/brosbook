@@ -1,7 +1,14 @@
 import { Entity, Column, ManyToOne } from 'typeorm'
-import { MediaSource }               from "@api/enums"
 import { AbstractEntity }            from '@entities/AbstractEntity'
 import User                          from "@entities/User"
+
+export enum MediaSource {
+    CONVERSATION = 'conversation',
+    POST         = 'post',
+    AVATAR       = 'avatar',
+    COVER_PHOTO  = 'cover_photo',
+    COMMENT      = 'comment'
+}
 
 @Entity( 'media' )
 export default class Media extends AbstractEntity {

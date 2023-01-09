@@ -1,22 +1,25 @@
-import { UploadedFile }                         from "express-fileupload"
-import isEmpty                                  from "is-empty"
-import Post                                     from "@entities/Post"
-import PostLike                                 from "@entities/PostLike"
-import { paginateMeta }                         from "@utils/paginateMeta"
+import { UploadedFile } from "express-fileupload"
+import isEmpty from "is-empty"
+import Post from "@entities/Post"
+import PostLike from "@entities/PostLike"
+import { paginateMeta } from "@utils/paginateMeta"
 import { Auth, ListResponse, PostsQueryParams } from "@api/types/index.types"
-import { MediaSource }                          from "@api/enums"
-import NotFoundException                        from "@exceptions/NotFoundException"
-import Relationship                             from "@entities/Relationship"
-import BadRequestException                      from "@exceptions/BadRequestException"
-import MediaService                             from "@services/media.service"
-import User                                     from "@entities/User"
-import { appDataSource }                        from "@config/data-source.config"
-import Comment                                  from "@entities/Comment"
+import { MediaSource } from "@entities/Media"
+import NotFoundException from "@exceptions/NotFoundException"
+import Relationship from "@entities/Relationship"
+import BadRequestException from "@exceptions/BadRequestException"
+import MediaService from "@services/media.service"
+import User from "@entities/User"
+import { appDataSource } from "@config/data-source.config"
+import Comment from "@entities/Comment"
+import NotificationService from "@modules/notifications/notification.service"
+import { NotificationTypes } from "@entities/Notification";
 
 export default class PostService {
-    public readonly repository     = appDataSource.getRepository( Post )
-    public readonly likeRepository = appDataSource.getRepository( PostLike )
-    public readonly mediaService   = new MediaService()
+    public readonly repository          = appDataSource.getRepository( Post )
+    public readonly likeRepository      = appDataSource.getRepository( PostLike )
+    public readonly mediaService        = new MediaService()
+    public readonly notificationService = new NotificationService()
 
     public async create( postData: { body?: string, image: UploadedFile }, auth: Auth ): Promise<Post>{
         if( isEmpty( postData ) ) throw new BadRequestException( 'Post data is empty.' )
@@ -109,7 +112,7 @@ export default class PostService {
         const user = await User.findOneBy( { id: userId } )
         if( ! user ) throw new BadRequestException( "User doesn't exists." )
 
-        const [posts, count] = await appDataSource.getRepository( Post )
+        const [posts, count] = await this.repository
             .createQueryBuilder( 'post' )
             .leftJoinAndSelect( 'post.author', 'author' )
             .leftJoinAndSelect( 'author.avatar', 'avatar' )
@@ -168,6 +171,13 @@ export default class PostService {
 
         post.isViewerLiked = true
         post.likesCount    = Number( post.likesCount ) + 1
+
+        this.notificationService.create( {
+            initiatorId: auth.user.id,
+            recipientId: post.author.id,
+            type: NotificationTypes.LIKED_POST,
+            postId
+        } )
 
         return post
     }

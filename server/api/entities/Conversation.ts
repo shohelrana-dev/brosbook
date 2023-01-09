@@ -1,10 +1,13 @@
-import { AbstractEntity }                                               from "@entities/AbstractEntity"
-import { Entity, Column, OneToMany, ManyToOne } from "typeorm"
-import User                                                             from "./User"
-import Message                                                          from "@entities/Message"
+import { Entity, Column, OneToMany, ManyToOne, OneToOne, JoinColumn } from "typeorm"
+import { AbstractEntity } from "./AbstractEntity"
+import User from "./User"
+import Message from "./Message"
 
 @Entity( 'conversations' )
 class Conversation extends AbstractEntity {
+    @Column( { length: 48, nullable: true } )
+    lastMessageId: string
+
     @ManyToOne( () => User )
     user1: User
 
@@ -14,11 +17,12 @@ class Conversation extends AbstractEntity {
     @OneToMany( () => Message, message => message.conversation )
     messages: Message[]
 
-    @Column( { type: 'text', nullable: true } )
-    lastMessage: string
+    @OneToOne( () => Message )
+    @JoinColumn( { name: 'lastMessageId' } )
+    lastMessage: Message
 
-    @Column( { type: 'datetime', nullable: true } )
-    readAt: Date
+    //virtual column
+    participant: User
 }
 
 export default Conversation

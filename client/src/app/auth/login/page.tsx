@@ -1,29 +1,30 @@
 "use client"
 import { useEffect } from 'react'
-import Link          from 'next/link'
-import { FiLock }    from "react-icons/fi"
-import { toast }     from "react-toastify"
+import Link from 'next/link'
+import { FiLock } from "react-icons/fi"
+import { toast } from "react-toastify"
 
-import AnimatedInput         from '@components/common/AnimatedInput'
-import GoogleLoginButton     from '@components/common/GoogleLoginButton'
-import Button                from "@components/common/Button"
-import { useRouter }         from "next/navigation"
-import { useLoginMutation }  from "@services/authApi"
-import PasswordInput         from "@components/common/PasswordInput"
+import AnimatedInput from '@components/common/AnimatedInput'
+import GoogleLoginButton from '@components/common/GoogleLoginButton'
+import Button from "@components/common/Button"
+import { useRouter, useSearchParams } from "next/navigation"
+import { useLoginMutation } from "@services/authApi"
+import PasswordInput from "@components/common/PasswordInput"
 import { CredentialPayload } from "@interfaces/auth.interfaces"
-import Divider               from "@components/common/Divider"
-import { useForm }           from "@hooks/useForm"
+import Divider from "@components/common/Divider"
+import { useForm } from "@hooks/useForm"
 
 function LoginPage(){
     //hooks
     const router                                   = useRouter()
+    const params                                   = useSearchParams()
     const [login, { isLoading, isSuccess, data }]  = useLoginMutation()
     const { formData, onChange, onSubmit, errors } = useForm<CredentialPayload>( login )
 
     useEffect( () => {
         if( isSuccess ){
             if( data?.user?.hasEmailVerified ){
-                router.push( '/' )
+                router.push( params.get( 'redirect_path' ) ? params.get( 'redirect_path' )! : '/' )
                 toast.success( 'Logged in.' )
             } else{
                 localStorage.setItem( 'email', data?.user?.email! || '' )

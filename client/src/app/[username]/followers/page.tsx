@@ -1,10 +1,10 @@
 "use client"
-import useInfiniteScroll from "react-infinite-scroll-hook"
 import {useGetFollowersQuery, useGetUserByUsernameQuery} from "@services/usersApi"
 import {useGetInfiniteListQuery} from "@hooks/useGetInfiniteListQuery"
 import Loading from "@components/common/Loading"
 import {User} from "@interfaces/user.interfaces"
 import FollowUser from "@components/common/FollowUser"
+import InfiniteScroll from "react-infinite-scroll-component"
 
 interface Props {
     params: { username: string }
@@ -20,27 +20,23 @@ export default function FollowersPage(props: Props) {
         hasMoreItem
     } = useGetInfiniteListQuery<User>(useGetFollowersQuery, {userId: user?.id!})
 
-    const [scrollBottomRef] = useInfiniteScroll({
-        loading: isLoading,
-        hasNextPage: hasMoreItem,
-        onLoadMore: loadMoreItem
-    })
+    const endMessage = followers?.length > 0 ? 'No more followers' : 'You have no follower.'
 
     return (
         <>
-            {(followers && followers.length > 0) ? followers.map(user => (
-                <FollowUser user={user} key={user.id}/>
-            )) : null}
+            { ( ! followers && isLoading ) ? <Loading/> : null }
 
-            {hasMoreItem ? <div ref={scrollBottomRef}><Loading/></div> : null}
-
-            {!isLoading && followers.length < 1 ? (
-                <p className="box text-center py-10">You have no follower</p>
-            ) : null}
-
-            {(!isLoading && followers.length > 1 && hasMoreItem) ? (
-                <p className="box text-center py-10">No more followers</p>
-            ) : null}
+            <InfiniteScroll
+                next={ loadMoreItem }
+                hasMore={ hasMoreItem }
+                loader={ <Loading/> }
+                dataLength={ followers?.length }
+                endMessage={ <p className="box text-center mt-5 py-10">{ endMessage }</p> }
+            >
+                { followers.map( ( user: User) => (
+                    <FollowUser user={user} key={user.id}/>
+                ) ) }
+            </InfiniteScroll>
         </>
     )
 }

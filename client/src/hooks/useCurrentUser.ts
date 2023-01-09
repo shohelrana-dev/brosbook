@@ -1,24 +1,25 @@
-import {useEffect} from "react"
-import {useRouter} from "next/navigation"
-import {useGetCurrentUserQuery} from "@services/usersApi"
+import { useEffect } from "react"
+import { usePathname, useRouter } from "next/navigation"
+import { useGetCurrentUserQuery } from "@services/usersApi"
 
-interface UseUserOptions {
+interface UseCurrentUserOptions {
     redirectTo?: string
     isProtected?: boolean
 }
 
-export default function useCurrentUser({redirectTo, isProtected = true}: UseUserOptions = {}){
-    const router = useRouter()
-    const {data: user, isSuccess: isAuthenticated, isLoading} = useGetCurrentUserQuery()
+export default function useCurrentUser( { redirectTo, isProtected = true }: UseCurrentUserOptions = {} ){
+    const router                                                = useRouter()
+    const pathname                                              = usePathname()
+    const { data: user, isLoading, isSuccess: isAuthenticated } = useGetCurrentUserQuery()
 
-    useEffect(() => {
-        if(!isLoading && redirectTo){
-            if(isAuthenticated && isProtected) return
-            if(!isAuthenticated && !isProtected) return
+    useEffect( () => {
+        if( ! isLoading && redirectTo ){
+            if( isAuthenticated && isProtected ) return
+            if( ! isAuthenticated && ! isProtected ) return
 
-            router.push(redirectTo)
+            router.push( `${ redirectTo }?redirect_path=${ pathname }` )
         }
-    }, [isAuthenticated, isLoading])
+    }, [isAuthenticated, isLoading] )
 
-    return {isLoading, isAuthenticated, user}
+    return { isLoading, isAuthenticated, user }
 }

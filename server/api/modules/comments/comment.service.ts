@@ -1,18 +1,21 @@
-import Comment                               from "@entities/Comment"
-import { paginateMeta }                      from "@utils/paginateMeta"
+import Comment from "@entities/Comment"
+import { paginateMeta } from "@utils/paginateMeta"
 import { Auth, ListResponse, ListQueryParams } from "@api/types/index.types"
-import User                                  from "@entities/User"
-import BadRequestException                   from "@exceptions/BadRequestException"
-import NotFoundException                     from "@exceptions/NotFoundException"
-import Post                                  from "@entities/Post"
-import { appDataSource }                     from "@config/data-source.config"
-import PostService                           from "@modules/posts/post.service"
-import CommentLike                           from "@entities/CommentLike"
+import User from "@entities/User"
+import BadRequestException from "@exceptions/BadRequestException"
+import NotFoundException from "@exceptions/NotFoundException"
+import Post from "@entities/Post"
+import { appDataSource } from "@config/data-source.config"
+import PostService from "@modules/posts/post.service"
+import CommentLike from "@entities/CommentLike"
+import NotificationService from "@modules/notifications/notification.service"
+import { NotificationTypes } from "@entities/Notification";
 
 export default class CommentService {
-    public readonly repository     = appDataSource.getRepository( Comment )
-    public readonly likeRepository = appDataSource.getRepository( CommentLike )
-    public readonly postService    = new PostService()
+    public readonly repository          = appDataSource.getRepository( Comment )
+    public readonly likeRepository      = appDataSource.getRepository( CommentLike )
+    public readonly postService         = new PostService()
+    //public readonly notificationService = new NotificationService()
 
     public async getComments( postId: string, params: ListQueryParams, auth: Auth ): Promise<ListResponse<Comment>>{
         if( ! postId ) throw new BadRequestException( "Post id is empty." )
@@ -54,6 +57,13 @@ export default class CommentService {
 
         this.updatePostCommentsCount( post )
 
+        /*this.notificationService.create( {
+            initiatorId: auth.user.id,
+            recipientId: post.author.id,
+            type: NotificationTypes.COMMENTED_POST,
+            postId
+        } )*/
+
         return comment
     }
 
@@ -85,6 +95,13 @@ export default class CommentService {
 
         comment.isViewerLiked = true
         comment.likesCount    = Number( comment.likesCount ) + 1
+
+        /*this.notificationService.create( {
+            initiatorId: auth.user.id,
+            recipientId: comment.author.id,
+            type: NotificationTypes.LIKED_COMMENT,
+            commentId
+        } )*/
 
         return comment
     }

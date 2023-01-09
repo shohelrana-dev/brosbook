@@ -1,15 +1,15 @@
-import React  from 'react'
-import moment from "moment"
-
-import Avatar         from "@components/common/Avatar"
-import { Message }    from "@interfaces/chat.interfaces"
-import { User }       from "@interfaces/user.interfaces"
+import React from 'react'
+import Avatar from "@components/common/Avatar"
+import { Message } from "@interfaces/conversation.interfaces"
 import MessageContent from "@components/messages/MessageBox/MessageContent"
+import useCurrentUser from "@hooks/useCurrentUser"
+import timeAgo from "@utils/timeAgo"
+import moment from "moment/moment"
 
 //the component classes
 const classes = {
-    ownRow: 'flex items-end float-right mb-6 max-w-[70%]',
-    partnerRow: 'flex items-end float-left mb-6 max-w-[70%]',
+    ownRow: 'flex items-end float-right mb-2 max-w-[70%]',
+    partnerRow: 'flex items-end float-left mb-1 max-w-[70%]',
     ownMessageWrap: 'w-full mr-4',
     partnerMessageWrap: 'w-full ml-4',
     date: 'text-gray-500 text-center text-sm',
@@ -19,72 +19,61 @@ const classes = {
 
 interface SingleMessageProps {
     message: Message
-    participant: User
-    currentUser: User
-    group: Message[]
+    prevMessage: Message | null
 }
 
-function SingleMessage( { message, participant, group, currentUser }: SingleMessageProps ) {
-
-    const messageSender = currentUser.id === message.senderId ? currentUser : participant || {} as User
-    const isOwnMessage  = currentUser.id === message.senderId
-
-    //message date
-    let messageDate = ''
-    const hoursDiff = moment( Date.now() ).diff( message.createdAt, 'hours' )
-    if ( hoursDiff > 24 ) {
-        messageDate = moment( message.createdAt ).format( 'DDDo MMM YY' )
-    }
+function SingleMessage( { message, prevMessage }: SingleMessageProps ){
+    const { user: currentUser } = useCurrentUser()
 
     const avatarMarkup = (
         <Avatar
-            online={ messageSender.active === 1 }
-            alt={ messageSender.fullName }
-            src={ messageSender.photo }
+            online={ message.sender.active === 1 }
+            alt={ message.sender.fullName }
+            src={ message.sender.avatar.url }
             size="small"
         />
     )
 
+    const timeDiff                         = moment( prevMessage?.createdAt ).diff( message.createdAt, "minutes" )
+    const isSameUser                       = prevMessage && ( message.sender.id === prevMessage?.sender.id )
+    const isSameUserAndTimeLessThanFiveMin = isSameUser && ( timeDiff <= 5 )
 
     return (
         <div>
-            <div className={ classes.date }>
-                { messageDate }
-            </div>
 
-            { isOwnMessage && (
+            { message.isMeSender ? (
                 <div className={ classes.ownRow }>
                     <div className={ classes.ownMessageWrap }>
-                        { group.length > 0 ? group.map( ( msg, key ) => (
-                            <MessageContent isOwnMessage={ isOwnMessage } message={ msg } key={ key }/>
-                        ) ) : (
-                            <MessageContent isOwnMessage={ isOwnMessage } message={ message }/>
-                        ) }
-                        <time className={ classes.time }>
-                            { moment( message.createdAt ).format( 'hh:mm A' ) }
-                        </time>
+                        <MessageContent message={ message }/>
+                        { ! isSameUserAndTimeLessThanFiveMin ? (
+                            <time className={ classes.time }>
+                                { timeAgo( message.createdAt ) }
+                            </time>
+                        ) : null }
                     </div>
-                    { avatarMarkup }
+                    <div className="min-w-[35px]">
+                        { ! isSameUser ? avatarMarkup : null }
+                    </div>
                 </div>
-            ) }
+            ) : null }
 
             <div className="clear-both"/>
 
-            { !isOwnMessage && (
+            { ! message.isMeSender ? (
                 <div className={ classes.partnerRow }>
-                    { avatarMarkup }
+                    <div className="min-w-[35px]">
+                        { ! isSameUserAndTimeLessThanFiveMin ? avatarMarkup : null }
+                    </div>
                     <div className={ classes.partnerMessageWrap }>
-                        { group.length > 0 ? group.map( ( msg, key ) => (
-                            <MessageContent isOwnMessage={ isOwnMessage } message={ msg } key={ key }/>
-                        ) ) : (
-                            <MessageContent isOwnMessage={ isOwnMessage } message={ message }/>
-                        ) }
-                        <time className={ classes.time }>
-                            { moment( message.createdAt ).format( 'hh:mm A' ) }
-                        </time>
+                        <MessageContent message={ message }/>
+                        { ! isSameUser ? (
+                            <time className={ classes.time }>
+                                { timeAgo( message.createdAt ) }
+                            </time>
+                        ) : null }
                     </div>
                 </div>
-            ) }
+            ) : null }
 
         </div>
     )

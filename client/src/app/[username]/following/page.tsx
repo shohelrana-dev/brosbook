@@ -1,46 +1,42 @@
 "use client"
-import useInfiniteScroll from "react-infinite-scroll-hook"
-import {useGetFollowingQuery, useGetUserByUsernameQuery} from "@services/usersApi"
-import {useGetInfiniteListQuery} from "@hooks/useGetInfiniteListQuery"
+import { useGetFollowingsQuery, useGetUserByUsernameQuery } from "@services/usersApi"
+import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import Loading from "@components/common/Loading"
-import {User} from "@interfaces/user.interfaces"
+import { User } from "@interfaces/user.interfaces"
 import FollowUser from "@components/common/FollowUser"
+import InfiniteScroll from "react-infinite-scroll-component"
 
 interface Props {
     params: { username: string }
 }
 
-export default function FollowingPage(props: Props) {
+export default function FollowingPage( props: Props ){
     //hooks
-    const {data: user} = useGetUserByUsernameQuery(props.params.username)
+    const { data: user } = useGetUserByUsernameQuery( props.params.username )
     const {
-        isLoading,
-        items: followings,
-        loadMoreItem,
-        hasMoreItem
-    } = useGetInfiniteListQuery<User>(useGetFollowingQuery, {userId: user?.id!})
+              isLoading,
+              items: followings,
+              loadMoreItem,
+              hasMoreItem
+          }              = useGetInfiniteListQuery<User>( useGetFollowingsQuery, { userId: user?.id! } )
 
-    const [scrollBottomRef] = useInfiniteScroll({
-        loading: isLoading,
-        hasNextPage: hasMoreItem,
-        onLoadMore: loadMoreItem
-    })
+    const endMessage = followings?.length > 0 ? 'No more followers' : 'You have no follower.'
 
     return (
         <>
-            {(followings && followings.length > 0) ? followings.map(user => (
-                <FollowUser user={user} key={user.id}/>
-            )) : null}
+            { ( ! followings && isLoading ) ? <Loading/> : null }
 
-            {hasMoreItem ? <div ref={scrollBottomRef}><Loading/></div> : null}
-
-            {!isLoading && followings.length < 1 ? (
-                <p className="box text-center py-10">You haven't followed yet</p>
-            ) : null}
-
-            {(!isLoading && followings.length > 1 && hasMoreItem) ? (
-                <p className="box text-center py-10">No more following</p>
-            ) : null}
+            <InfiniteScroll
+                next={ loadMoreItem }
+                hasMore={ hasMoreItem }
+                loader={ <Loading/> }
+                dataLength={ followings?.length }
+                endMessage={ <p className="box text-center mt-5 py-10">{ endMessage }</p> }
+            >
+                { followings.map( ( user: User) => (
+                    <FollowUser user={ user } key={ user.id }/>
+                ) ) }
+            </InfiniteScroll>
         </>
     )
 }

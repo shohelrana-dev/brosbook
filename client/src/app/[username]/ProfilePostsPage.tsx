@@ -1,13 +1,12 @@
 "use client"
-import useInfiniteScroll from 'react-infinite-scroll-hook'
-import { Facebook }      from "react-content-loader"
-
 import PostCard from "@components/post/PostCard"
 import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import { useGetPostsQuery } from "@services/postsApi"
 import { Post } from "@interfaces/posts.interfaces"
 import { ListResponse } from "@interfaces/index.interfaces"
 import { User } from "@interfaces/user.interfaces"
+import InfiniteScroll from "react-infinite-scroll-component"
+import LoadingPosts from "@components/loading/LoadingPosts"
 
 interface ProfilePostsPageProps {
     user: User
@@ -16,49 +15,33 @@ interface ProfilePostsPageProps {
 
 export default function ProfilePostsPage( { user, initialPosts }: ProfilePostsPageProps ){
     //hooks
-    const {
-              isLoading,
-              items: posts,
-              hasMoreItem,
-              loadMoreItem
-          } = useGetInfiniteListQuery<Post>( useGetPostsQuery, { userId: user?.id }, initialPosts )
+    let {
+            isLoading,
+            items: posts,
+            hasMoreItem,
+            loadMoreItem
+        } = useGetInfiniteListQuery<Post>( useGetPostsQuery, { userId: user?.id } )
 
-    const [scrollBottomRef] = useInfiniteScroll( {
-        loading: isLoading,
-        hasNextPage: hasMoreItem,
-        onLoadMore: loadMoreItem,
-    } )
+    if( posts.length < 1 ){
+        posts = initialPosts.items
+    }
+    const endMessage = posts?.length > 0 ? 'No more posts' : 'User haven\'t any post.'
 
     return (
         <div className="pt-1">
-            { posts && posts.length > 0 ? posts.map( post => (
-                <PostCard post={ post } key={ post.id }/>
-            ) ) : (
-                <p className="box text-center mt-5 py-10">User haven't any post.</p>
-            ) }
+            { ( ! posts && isLoading ) ? <LoadingPosts/> : null }
 
-            { isLoading ? (
-                <>
-                    <div className="box p-6 mt-6">
-                        <Facebook/>
-                    </div>
-                    <div className="box p-6 mt-6">
-                        <Facebook/>
-                    </div>
-                </>
-            ) : null }
-
-
-            { hasMoreItem ? (
-                <div className="box mt-5 p-5" ref={ scrollBottomRef }>
-                    <Facebook/>
-                </div>
-            ) : null }
-
-            { ( posts.length > 0 && ! hasMoreItem ) ? (
-                <p className="box text-center mt-5 py-10">No more posts</p>
-            ) : null }
-
+            <InfiniteScroll
+                next={ loadMoreItem }
+                hasMore={ hasMoreItem }
+                loader={ <LoadingPosts/> }
+                dataLength={ posts?.length }
+                endMessage={ <p className="box text-center mt-5 py-10">{ endMessage }</p> }
+            >
+                { posts.map( ( post: Post ) => (
+                    <PostCard post={ post } key={ post.id }/>
+                ) ) }
+            </InfiniteScroll>
         </div>
     )
 }

@@ -1,100 +1,71 @@
-import React, { Fragment, useState } from 'react'
-import { Popover }                   from "@mui/material"
-import InsertEmoticonIcon            from "@mui/icons-material/InsertEmoticon"
-import classNames                    from "classnames"
-import { useSelector }               from "react-redux"
-import { useRouter }                 from "next/navigation"
-import Image                         from "next/image"
-
-import { RootState } from "../../../store"
-import { Reaction }  from "@interfaces/chat.interfaces"
-import { socket }   from "@components/common/AuthCheck"
+import React, { Fragment } from 'react'
+import classNames from "classnames"
+import Image from "next/image"
+import { HiOutlineEmojiHappy as EmojiIcon } from "react-icons/hi"
+import { Popover, PopoverHandler, PopoverContent } from "@material-tailwind/react"
+import IconButton from "@components/common/IconButton"
+import { useSendReactionMutation } from "@services/conversationApi"
+import { Message } from "@interfaces/conversation.interfaces"
 
 type ReactionsProps = {
-    isOwnMessage: boolean,
-    messageId: number,
-    reactions: Reaction[]
+    message: Message,
 }
 
-function Reactions( { isOwnMessage, messageId, reactions }: ReactionsProps ) {
+function Reactions( { message }: ReactionsProps ){
     //hooks
-    const [ anchorEl, setAnchorEl ] = useState<HTMLButtonElement | null>()
-    const user                      = useSelector( ( state: RootState ) => state.auth.user )
-    const currentConversation       = useSelector( ( state: RootState ) => state.chat.currentConversation )
+    const [sendReaction] = useSendReactionMutation()
 
     //default message reactions
-    const defaultReactions = [ 'love', 'smile', 'wow', 'sad', 'angry', 'like' ]
+    const defaultReactions = ['love', 'smile', 'wow', 'sad', 'angry', 'like']
 
-    function handleSubmitReaction( name: string ) {
-        //send_reaction event fire
-        socket.emit( 'send_reaction', {
-            senderId: user.id,
-            participantId: currentConversation.participantId,
-            name,
-            messageId
-        } )
+    async function handleSubmitReaction( name: string ){
+        try {
+            await sendReaction( { name, conversationId: message.conversationId, messageId: message.id } ).unwrap()
+        } catch ( err ) {
+            console.log( err )
+        }
     }
-
-    const handlePopoverClose = () => {
-        setAnchorEl( null )
-    }
-
-    const isOpen = Boolean( anchorEl )
-
-    const anchorClassName = classNames( 'absolute top-[50%] translate-y-[-50%]', {
-        "-right-8": !isOwnMessage,
-        "-left-8": isOwnMessage,
-    } )
 
     return (
         <Fragment>
-            <button
-                className={ anchorClassName }
-                onClick={ ( e ) => setAnchorEl( e.currentTarget ) }
-            >
-                <InsertEmoticonIcon className="text-gray-400" fontSize="small"/>
-            </button>
-
-            <Popover
-                open={ isOpen }
-                anchorEl={ anchorEl }
-                onClose={ handlePopoverClose }
-                classes={ { paper: '!rounded-full' } }
-                anchorOrigin={ {
-                    vertical: 'top',
-                    horizontal: isOwnMessage ? 'right' : 'left',
-                } }
-                transformOrigin={ {
-                    vertical: 'bottom',
-                    horizontal: isOwnMessage ? 'right' : 'left'
-                } }
-                onClick={ () => setAnchorEl( null ) }
-            >
-                <div className="py-1 px-3">
-                    { defaultReactions.map( reaction => (
-                        <button className="m-1" onClick={ () => handleSubmitReaction( reaction ) } key={ reaction }>
-                            <img
-                                className="w-7"
-                                src={ `${ process.env.NEXT_PUBLIC_SERVER_BASE_URL! }/reactions/${ reaction }.png` }
-                                alt="reaction"
-                            />
-                        </button>
-                    ) ) }
-                </div>
+            <Popover>
+                <PopoverHandler>
+                    <div className={ classNames( 'absolute top-[50%] translate-y-[-50%]', {
+                        "-right-9": ! message.isMeSender,
+                        "-left-9": message.isMeSender,
+                    } ) }>
+                        <IconButton type="button">
+                            <EmojiIcon className="text-gray-400" fontSize={ 20 }/>
+                        </IconButton>
+                    </div>
+                </PopoverHandler>
+                <PopoverContent className="p-0 rounded-full z-20">
+                    <div className="py-1 px-3">
+                        { defaultReactions.map( reaction => (
+                            <button className="m-1" onClick={ () => handleSubmitReaction( reaction ) } key={ reaction }>
+                                <img
+                                    className="w-7"
+                                    src={ `${ process.env.NEXT_PUBLIC_SERVER_BASE_URL! }/reactions/${ reaction }.png` }
+                                    alt="reaction"
+                                />
+                            </button>
+                        ) ) }
+                    </div>
+                </PopoverContent>
             </Popover>
 
-            { reactions.length > 0 && (
+            { message.reactions?.length > 0 ? (
                 <div
-                    className={ classNames( 'absolute -bottom-4 flex justify-center py-1 bg-white rounded-full px-1 z-10', {
-                        "left-2": isOwnMessage,
-                        "right-2": !isOwnMessage
+                    className={ classNames( 'absolute w-max bottom-[-16px] flex justify-center p-[2px] bg-white rounded-full px-1 z-10', {
+                        "left-2": message.isMeSender,
+                        "right-2": ! message.isMeSender
                     } ) }>
-                    { reactions.map( reaction => (
-                            <Image width={ 18 } height={ 18 } src={ reaction.url } alt="Reaction"
-                               key={ reaction.id }/>
+                    { message.reactions.map( reaction => (
+                        <Image width={ 18 } height={ 18 } src={ reaction.url } alt="Reaction" key={ reaction.id }
+                               className=""/>
                     ) ) }
                 </div>
-            ) }
+            ) : null }
         </Fragment>
     )
 }

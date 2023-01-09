@@ -1,8 +1,9 @@
 "use client"
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import Link from "next/link"
+import ShowMoreText from "react-show-more-text"
 import Avatar from "@components/common/Avatar"
-import {Post} from "@interfaces/posts.interfaces"
+import { Post } from "@interfaces/posts.interfaces"
 import CommentList from "@components/post/CommentList"
 import timeAgo from "@utils/timeAgo"
 import ImageLightbox from '@components/common/ImageLightbox'
@@ -14,51 +15,60 @@ interface PostCardProps {
     post: Post
 }
 
-const PostCard = (props: PostCardProps) => {
+const PostCard = ( props: PostCardProps ) => {
     //hooks
-    const [post, setPost] = useState<Post | null>(props.post)
-    const [isCommentsHidden, setIsCommentsHidden] = useState<boolean>(true)
+    const [post, setPost]                         = useState<Post | null>( props.post )
+    const [isCommentsHidden, setIsCommentsHidden] = useState<boolean>( true )
 
-    if(!post) return null
+    if( ! post ) return null
 
     return (
         <div className="box p-6 mt-6">
             <div className="flex">
-                <Link href={`/${post.author.username}`}>
-                    <Avatar src={post.author.avatar.url} />
+                <Link href={ `/${ post.author.username }` }>
+                    <Avatar src={ post.author.avatar.url }/>
                 </Link>
                 <div className="ml-4 w-full">
                     <div className="flex justify-between">
-                        <Link href={`/${post.author.username}`}>
+                        <Link href={ `/${ post.author.username }` }>
                             <h3 className="text-md font-medium">
-                                {post.author.fullName}
-                                <span className="ml-2 text-gray-600 font-normal">@{post.author.username}</span>
+                                { post.author.fullName }
+                                <span className="ml-2 text-gray-600 font-normal">@{ post.author.username }</span>
                             </h3>
                         </Link>
-                        <MoreOptions post={post} setPost={setPost}/>
+                        <MoreOptions post={ post } setPost={ setPost }/>
                     </div>
 
                     <p className="text-gray-500 font-medium text-xs mt-[-8px]">
-                        {timeAgo(post.createdAt)}
+                        { timeAgo( post.createdAt ) }
                     </p>
 
                 </div>
             </div>
             <div>
-                {post.body && (
+                { post.body && (
                     <div className="mb-1 mt-2">
-                        {post.body}
+                        <ShowMoreText
+                            lines={ 3 }
+                            more={ <span className="text-blue-600">Show more</span> }
+                            less={ <span className="text-blue-600">Show less</span> }
+                            expanded={ false }
+                            truncatedEndingComponent={ "... " }
+                        >
+                            { post.body }
+                        </ShowMoreText>
                     </div>
-                )}
-                {post.image ? (
+                ) }
+                { post.image ? (
                     <div className="my-3">
-                        <ImageLightbox src={post.image.url} width={520} height={340} alt="Post image"/>
+                        <ImageLightbox src={ post.image.url } width={ 520 } height={ 340 } alt="Post image"/>
                     </div>
-                ) : null}
+                ) : null }
 
-                <PostBar post={post} setPost={setPost} isCommentsHidden={isCommentsHidden} setIsCommentsHidden={setIsCommentsHidden}/>
+                <PostBar post={ post } setPost={ setPost } isCommentsHidden={ isCommentsHidden }
+                         setIsCommentsHidden={ setIsCommentsHidden }/>
 
-                {!isCommentsHidden ? <CommentList postId={post.id}/> : null}
+                { ! isCommentsHidden ? <CommentList postId={ post.id }/> : null }
 
             </div>
         </div>

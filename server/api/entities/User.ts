@@ -30,7 +30,7 @@ class User extends AbstractEntity {
     @Column( { length: 100, nullable: false, select: false } )
     password: string
 
-    @OneToOne( () => Media, { eager: true, nullable: true } )
+    @OneToOne( () => Media, { eager: true} )
     @JoinColumn()
     avatar: Media
 

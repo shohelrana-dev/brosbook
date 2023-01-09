@@ -1,7 +1,7 @@
-import { Router }     from "express"
+import { Router } from "express"
 import authMiddleware from "@middleware/auth.middleware"
 import UserController from "@modules/users/user.controller"
-import UserService    from "./user.service"
+import UserService from "./user.service"
 
 const router          = Router()
 const userService     = new UserService()
@@ -33,7 +33,7 @@ router.post( '/me/cover_photo', authMiddleware, usersController.changeCoverPhoto
  * @route GET /api/v1/users/search
  * @access Private
  */
-router.get( '/search', usersController.getSearchUsers )
+router.get( '/search', usersController.searchUsers )
 
 /**
  * @desc get suggested users
@@ -43,11 +43,18 @@ router.get( '/search', usersController.getSearchUsers )
 router.get( '/suggestions', authMiddleware, usersController.getSuggestions )
 
 /**
- * @desc get user by username or user id
- * @route GET /api/v1/users/:identifier
+ * @desc get user by user id
+ * @route GET /api/v1/users/:userId
  * @access Public
  */
-router.get( '/:identifier', usersController.getUser )
+router.get( '/:userId', usersController.getUserById )
+
+/**
+ * @desc get user by username =
+ * @route GET /api/v1/users/by/username/:username
+ * @access Public
+ */
+router.get( '/by/username/:username', usersController.getUserByUsername )
 
 /**
  * @desc get followers
@@ -56,13 +63,28 @@ router.get( '/:identifier', usersController.getUser )
  */
 router.get( '/:userId/followers', usersController.getFollowers )
 
-
 /**
- * @desc get following
- * @route GET /api/v1/users/:userId/following
+ * @desc get followers count
+ * @route GET /api/v1/users/:userId/followers/count
  * @access Public
  */
-router.get( '/:userId/following', usersController.getFollowings )
+router.get( '/:userId/followers/count', usersController.getFollowersCount )
+
+
+/**
+ * @desc get followings
+ * @route GET /api/v1/users/:userId/followings
+ * @access Public
+ */
+router.get( '/:userId/followings', usersController.getFollowings )
+
+
+/**
+ * @desc get followings count
+ * @route GET /api/v1/users/:userId/followings/count
+ * @access Public
+ */
+router.get( '/:userId/followings/count', usersController.getFollowingsCount )
 
 /**
  * @desc follow
