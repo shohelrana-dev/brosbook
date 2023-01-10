@@ -12,7 +12,6 @@ import Loading from "@components/common/Loading"
 
 function Page(){
     const {}                                                             = useCurrentUser( { redirectTo: '/auth/login' } )
-    const [UpdateAllNotification]                                        = useUpdateAllNotificationMutation()
     const { isLoading, items: notifications, loadMoreItem, hasMoreItem } = useGetInfiniteListQuery<Notification>(
         useGetNotificationsQuery, {
             page: 1,
@@ -21,10 +20,6 @@ function Page(){
         // @ts-ignore
         { refetchOnMountOrArgChange: true }
     )
-
-    useEffect( () => {
-        UpdateAllNotification()
-    }, [] )
 
     const endMessage = notifications?.length > 0 ? 'No more notifications' : 'No notifications.'
 

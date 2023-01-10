@@ -17,11 +17,12 @@ import useCurrentUser from "@hooks/useCurrentUser"
 import { motion } from "framer-motion"
 import IconButton from "@components/common/IconButton"
 import { IoMdNotifications as NotificationIcon } from "react-icons/io"
-import { useGetUnreadNotificationsCountQuery } from "@services/notificationsApi"
-import { io } from "socket.io-client";
+import { useGetUnreadNotificationsCountQuery, useUpdateAllNotificationMutation } from "@services/notificationsApi"
+import { io } from "socket.io-client"
 
 function NavBar(){
     const { user, isAuthenticated }                               = useCurrentUser()
+    const [UpdateAllNotification]                                 = useUpdateAllNotificationMutation()
     const { data }                                                = useGetUnreadNotificationsCountQuery()
     const [unreadNotificationsCount, setUnreadNotificationsCount] = useState<number>( data?.count || 0 )
 
@@ -41,6 +42,14 @@ function NavBar(){
         }
     }, [user] )
 
+    function onNotificationsCLick(){
+        UpdateAllNotification()
+    }
+
+    function onMessagesCLick(){
+
+    }
+
     if( ! isAuthenticated ) return null
 
     return (
@@ -59,7 +68,7 @@ function NavBar(){
 
                     <div className="flex">
                         <div className="mr-3 flex">
-                            <Link href="/notifications" className="block">
+                            <Link href="/notifications" className="block" onClick={ onNotificationsCLick }>
                                 <IconButton className="p-6">
                                     { unreadNotificationsCount ? (
                                         <div
@@ -70,7 +79,7 @@ function NavBar(){
                                     <NotificationIcon size={ 30 }/>
                                 </IconButton>
                             </Link>
-                            <Link href="/messages" className="block">
+                            <Link href="/messages" className="block" onClick={ onMessagesCLick }>
                                 <IconButton className="p-6">
                                     <MessageIcon size={ 30 }/>
                                 </IconButton>

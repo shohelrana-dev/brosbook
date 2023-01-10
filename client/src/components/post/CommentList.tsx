@@ -1,10 +1,10 @@
-import React, {FormEvent, useState} from 'react'
+import React, { FormEvent, useState } from 'react'
 
 import Avatar from "@components/common/Avatar"
 import CommentItem from "@components/post/CommentItem"
-import {useCreateCommentMutation, useGetCommentsQuery} from "@services/commentsApi"
-import {Comment} from "@interfaces/posts.interfaces"
-import {useGetInfiniteListQuery} from "@hooks/useGetInfiniteListQuery"
+import { useCreateCommentMutation, useGetCommentsQuery } from "@services/commentsApi"
+import { Comment } from "@interfaces/posts.interfaces"
+import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import BasicInput from "@components/common/BasicInput"
 import useCurrentUser from "@hooks/useCurrentUser"
 import ButtonGray from "@components/common/ButtonGray"
@@ -13,55 +13,63 @@ interface CommentListPost {
     postId: string
 }
 
-function CommentList({postId}: CommentListPost) {
-    const {user: currentUser} = useCurrentUser()
-    const {isLoading, items: comments, hasMoreItem, loadMoreItem} = useGetInfiniteListQuery<Comment>(useGetCommentsQuery, {postId})
-    const [createComment] = useCreateCommentMutation()
+function CommentList( { postId }: CommentListPost ){
+    const { user: currentUser } = useCurrentUser()
+    const {
+              isLoading,
+              items: comments,
+              hasMoreItem,
+              loadMoreItem,
+              setItems
+          }                     = useGetInfiniteListQuery<Comment>( useGetCommentsQuery, { postId } )
+    const [createComment]       = useCreateCommentMutation()
 
-    const [commentBody, setCommentBody] = useState('')
+    const [commentBody, setCommentBody] = useState( '' )
 
-    async function handleSaveComment(event: FormEvent) {
+    async function handleSaveComment( event: FormEvent ){
         event.preventDefault()
-        if (!commentBody) return
+        if( ! commentBody ) return
 
         try {
-            const comment = await createComment({postId, body: commentBody}).unwrap()
-            comments.push(comment)
-            setCommentBody('')
-        } catch (err) {
-            console.error(err)
+            const comment = await createComment( { postId, body: commentBody } ).unwrap()
+            setItems( ( prevState: Comment[] ) => (
+                [comment, ...prevState]
+            ) )
+            setCommentBody( '' )
+        } catch ( err ) {
+            console.error( err )
         }
     }
 
     return (
         <div className="mt-2">
-            <form onSubmit={handleSaveComment} className="mb-2 flex items-center">
+            <form onSubmit={ handleSaveComment } className="mb-2 flex items-center">
                 <div className="w-1/12 mt-[-2px]">
-                    <Avatar src={currentUser?.avatar.url} online size="small"/>
+                    <Avatar src={ currentUser?.avatar.url } online size="small"/>
                 </div>
                 <div className="ml-2 w-11/12">
                     <BasicInput
                         label="Write a comment..."
                         labelHide
                         type="text"
-                        value={commentBody}
+                        value={ commentBody }
                         className="!rounded-full"
-                        onChange={(e) => setCommentBody(e.target.value.trim())}
+                        onChange={ ( e ) => setCommentBody( e.target.value ) }
                     />
                 </div>
             </form>
 
-            {comments?.length > 0 ? comments.map(( comment: Comment) => (
-                <CommentItem comment={comment} key={comment.id}/>
-            )) : (
+            { comments?.length > 0 ? comments.map( ( comment: Comment ) => (
+                <CommentItem comment={ comment } key={ comment.id }/>
+            ) ) : (
                 <p className="mt-3">No comments</p>
-            )}
+            ) }
 
             { hasMoreItem ? (
-                <ButtonGray isLoading={isLoading} onClick={() => loadMoreItem()}>
+                <ButtonGray isLoading={ isLoading } onClick={ () => loadMoreItem() }>
                     See more comments
                 </ButtonGray>
-            ): null}
+            ) : null }
 
         </div>
     )

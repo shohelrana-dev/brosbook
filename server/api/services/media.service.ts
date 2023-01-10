@@ -24,7 +24,7 @@ export default class MediaService {
         const name         = process.env.APP_NAME + '_image_' + uuidv4() + extname
         const originalName = file.name
         const url          = `${ process.env.SERVER_URL }/uploads/${ name }`
-        const uploadPath   = path.join( process.cwd(), 'server/public/uploads', name )
+        const uploadPath   = path.join( process.cwd(), 'public/uploads', name )
 
         await file.mv( uploadPath )
 
@@ -47,7 +47,7 @@ export default class MediaService {
 
         if( ! media ) throw new Error( 'Media doesn\'t exists.' )
 
-        const uploadPath = path.join( process.cwd(), 'server/public/uploads', media.name )
+        const uploadPath = path.join( process.cwd(), 'public/uploads', media.name )
 
         fs.unlinkSync( uploadPath )
 
