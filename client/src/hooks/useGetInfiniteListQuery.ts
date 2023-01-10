@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { UseQuery, UseQueryStateOptions } from "@reduxjs/toolkit/src/query/react/buildHooks"
+import { UseQuery, UseQueryStateOptions } from "@reduxjs/toolkit/dist/query/react/buildHooks"
 import { QueryDefinition } from "@reduxjs/toolkit/query"
 
 export function useGetInfiniteListQuery<T>( useQueryHook: UseQuery<QueryDefinition<any, any, any, any>>, queryParams = {}, options?: UseQueryStateOptions<any, any> ){

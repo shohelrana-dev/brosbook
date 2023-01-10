@@ -38,6 +38,7 @@
     "react-show-more-text": "^1.6.2",
     "react-spinners": "^0.13.7",
     "react-toastify": "^9.0.5",
+    "sharp": "^0.31.3",
     "socket.io-client": "^4.5.4",
     "use-async-effect": "^2.2.5",
     "use-debounce": "^9.0.2"

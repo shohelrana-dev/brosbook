@@ -32,7 +32,6 @@ export const io = socketInit( server )
 app.use( morgan( 'dev' ) )
 app.use( express.json() )
 app.use( express.urlencoded( { extended: false } ) )
-app.use( express.static( path.join( __dirname, '../public' ) ) )
 app.use( cors( {
     credentials: true,
     origin: process.env.CLIENT_URL,

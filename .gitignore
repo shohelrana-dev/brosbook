@@ -1,5 +1,5 @@
 /server/dist
-/server/public/uploads
+/public/uploads
 /client/.next
 /client/.swc
 **/node_modules

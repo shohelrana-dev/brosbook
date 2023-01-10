@@ -51,7 +51,7 @@ function CommentList({postId}: CommentListPost) {
                 </div>
             </form>
 
-            {comments?.length > 0 ? comments.map(comment => (
+            {comments?.length > 0 ? comments.map(( comment: Comment) => (
                 <CommentItem comment={comment} key={comment.id}/>
             )) : (
                 <p className="mt-3">No comments</p>

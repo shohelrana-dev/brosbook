@@ -28,7 +28,7 @@ function SuggestedPeople(){
                 loader={ <Loading size={ 25 }/> }
                 dataLength={ users?.length }
             >
-                { users.length > 0 ? users.map( user => (
+                { users.length > 0 ? users.map( ( user: User) => (
                     <div className="flex justify-between items-center mb-4" key={ user.id }>
                         <div className="flex">
                             <Link href={ `/${ user.username }` } className="block min-w-[40px] mr-2">

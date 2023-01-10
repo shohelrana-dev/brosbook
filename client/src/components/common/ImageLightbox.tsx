@@ -2,8 +2,8 @@
 import React, {useState} from 'react'
 import Image, { ImageProps } from 'next/image'
 import Lightbox from 'react-image-lightbox'
-import 'react-image-lightbox/style.css'
 import classNames from "classnames"
+import 'react-image-lightbox/style.css'
 
 
 export default function ImageLightbox(props: ImageProps) {
