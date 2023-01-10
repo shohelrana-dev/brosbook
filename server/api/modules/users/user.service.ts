@@ -15,7 +15,7 @@ import { LoginTicket, OAuth2Client, TokenPayload } from "google-auth-library"
 import UnauthorizedException from "@exceptions/UnauthorizedException"
 import { v4 as uuid } from "uuid"
 import NotificationService from "@modules/notifications/notification.service"
-import { NotificationTypes } from "@entities/Notification";
+import { NotificationTypes } from "@entities/Notification"
 
 
 export default class UserService {
@@ -23,7 +23,7 @@ export default class UserService {
     public readonly profileRepository      = appDataSource.getRepository( Profile )
     public readonly relationshipRepository = appDataSource.getRepository( Relationship )
     public readonly mediaService           = new MediaService()
-    //public readonly notificationService    = new NotificationService()
+    public readonly notificationService    = new NotificationService()
 
     public async create( userData: CreateUserDTO ): Promise<User>{
         if( isEmpty( userData ) ) throw new BadRequestException( 'User data is empty.' )
@@ -299,11 +299,11 @@ export default class UserService {
 
         targetUser.isViewerFollow = true
 
-        /*this.notificationService.create( {
+        this.notificationService.create( {
             initiatorId: auth.user.id,
             recipientId: targetUserId,
             type: NotificationTypes.FOLLOWED
-        } )*/
+        } )
 
         return targetUser
     }
