@@ -15,7 +15,7 @@ export default class CommentService {
     public readonly repository          = appDataSource.getRepository( Comment )
     public readonly likeRepository      = appDataSource.getRepository( CommentLike )
     public readonly postService         = new PostService()
-    //public readonly notificationService = new NotificationService()
+    public readonly notificationService = new NotificationService()
 
     public async getComments( postId: string, params: ListQueryParams, auth: Auth ): Promise<ListResponse<Comment>>{
         if( ! postId ) throw new BadRequestException( "Post id is empty." )
@@ -57,12 +57,13 @@ export default class CommentService {
 
         this.updatePostCommentsCount( post )
 
-        /*this.notificationService.create( {
+        this.notificationService.create( {
             initiatorId: auth.user.id,
             recipientId: post.author.id,
             type: NotificationTypes.COMMENTED_POST,
-            postId
-        } )*/
+            postId,
+            commentId: comment.id
+        } )
 
         return comment
     }
@@ -82,7 +83,10 @@ export default class CommentService {
     public async like( commentId: string, auth: Auth ): Promise<Comment>{
         if( ! commentId ) throw new BadRequestException( "Comment id is empty." )
 
-        const comment = await this.repository.findOneBy( { id: commentId } )
+        const comment = await this.repository.findOne( {
+            where: { id: commentId },
+            relations: { post: true }
+        } )
 
         if( ! comment ) throw new NotFoundException( 'Comment doesn\'t exists.' )
 
@@ -96,12 +100,13 @@ export default class CommentService {
         comment.isViewerLiked = true
         comment.likesCount    = Number( comment.likesCount ) + 1
 
-        /*this.notificationService.create( {
+        this.notificationService.create( {
             initiatorId: auth.user.id,
             recipientId: comment.author.id,
             type: NotificationTypes.LIKED_COMMENT,
+            postId: comment.post.id,
             commentId
-        } )*/
+        } )
 
         return comment
     }
