@@ -10,7 +10,7 @@
     "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\" --names server,client",
     "server:start": "npm run build && cross-env NODE_ENV=production node server_dist/main.js",
     "server:dev": "nodemon",
-    "client:start": "cd client && npm run start",
+    "client:start": "cd client && npm run build && npm run start",
     "client:dev": "cd client && npm run dev",
     "build": "tsc -p tsconfig.json && tsc-alias -p tsconfig.json"
   },
