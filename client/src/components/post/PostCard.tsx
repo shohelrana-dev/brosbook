@@ -46,19 +46,19 @@ const PostCard = ( props: PostCardProps ) => {
                 </div>
             </div>
             <div>
-                { post.body && (
+                { post.body ? (
                     <div className="mb-1 mt-2">
                         <ShowMoreText
                             lines={ 3 }
-                            more={ <span className="text-blue-600">Show more</span> }
-                            less={ <span className="text-blue-600">Show less</span> }
+                            more={ <span className="text-blue-600">See more</span> }
+                            less={ <span className="text-blue-600">See less</span> }
                             expanded={ false }
                             truncatedEndingComponent={ "... " }
                         >
                             { post.body }
                         </ShowMoreText>
                     </div>
-                ) }
+                ) : null }
                 { post.image ? (
                     <div className="my-3">
                         <ImageLightbox src={ post.image.url } width={ 520 } height={ 340 } alt="Post image"/>

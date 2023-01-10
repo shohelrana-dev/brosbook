@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Link from "next/link"
 import {BsHeartFill as LikeIcon} from "react-icons/bs"
 import {BsHeart as OutlinedLikeIcon} from "react-icons/bs"
+import ShowMoreText from "react-show-more-text"
 
 import Avatar from "@components/common/Avatar"
 import { Comment } from "@interfaces/posts.interfaces"
@@ -59,7 +60,15 @@ function CommentItem({ comment }: CommentItemState) {
 
                         <div>
                             <div className="text-sm text-gray-700">
-                                {comment.body}
+                                <ShowMoreText
+                                    lines={ 3 }
+                                    more={ <span className="text-blue-600">See more</span> }
+                                    less={ <span className="text-blue-600">See less</span> }
+                                    expanded={ false }
+                                    truncatedEndingComponent={ "... " }
+                                >
+                                    { comment.body }
+                                </ShowMoreText>
                             </div>
                         </div>
                     </div>
