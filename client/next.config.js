@@ -7,7 +7,7 @@ const nextConfig = {
     images: {
         domains: [
             'localhost',
-            process.env.NEXT_PUBLIC_SERVER_BASE_URL,
+            'brosbook.up.railway.app',
             'lh3.googleusercontent.com'
         ]
     },
