@@ -7,6 +7,7 @@ const nextConfig = {
     images: {
         domains: [
             'localhost',
+            process.env.NEXT_PUBLIC_SERVER_BASE_URL,
             'lh3.googleusercontent.com'
         ]
     },
