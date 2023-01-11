@@ -12,7 +12,6 @@ interface Props {
 
 function MessageList( { conversation }: Props ){
     //hooks
-    const messagesDivRef                                         = useRef<HTMLDivElement>( null )
     const { items: messages, isLoading, setItems: setMessages } = useGetInfiniteListQuery<Message>(
         useGetMessagesQuery, { conversationId: conversation?.id! }
     )
@@ -48,7 +47,7 @@ function MessageList( { conversation }: Props ){
     }
 
     return (
-        <div ref={ messagesDivRef } className="overflow-y-scroll h-full scrollbar-hide flex flex-col-reverse">
+        <div className="overflow-y-scroll h-full scrollbar-hide flex flex-col-reverse mb-3">
 
             { isLoading ? <Loading/> : null }
 

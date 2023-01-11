@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, MouseEvent } from 'react'
 import Link from "next/link"
 import { CgProfile as ProfileIcon } from "react-icons/cg"
 import { HiMail as MessageIcon } from "react-icons/hi"
@@ -11,7 +11,7 @@ import {
     Menu,
     MenuHandler,
     MenuList,
-    MenuItem
+    MenuItem, Button
 } from "@material-tailwind/react"
 import useCurrentUser from "@hooks/useCurrentUser"
 import { motion } from "framer-motion"
@@ -19,6 +19,12 @@ import IconButton from "@components/common/IconButton"
 import { IoMdNotifications as NotificationIcon } from "react-icons/io"
 import { useGetUnreadNotificationsCountQuery, useUpdateAllNotificationMutation } from "@services/notificationsApi"
 import { io } from "socket.io-client"
+import {
+    Popover,
+    PopoverHandler,
+    PopoverContent,
+} from "@material-tailwind/react"
+import NotificationList from "@components/notifications/NotificationList";
 
 function NavBar(){
     const { user, isAuthenticated }                               = useCurrentUser()
@@ -68,17 +74,26 @@ function NavBar(){
 
                     <div className="flex">
                         <div className="mr-3 flex">
-                            <Link href="/notifications" className="block" onClick={ onNotificationsCLick }>
-                                <IconButton className="p-6">
-                                    { unreadNotificationsCount ? (
-                                        <div
-                                            className="absolute top-[-5px] right-0 bg-red-500 text-white rounded-full font-bold p-[2px] h-[18px] w-[18px]">
-                                            { unreadNotificationsCount }
-                                        </div>
-                                    ) : null }
-                                    <NotificationIcon size={ 30 }/>
-                                </IconButton>
-                            </Link>
+                            <Popover>
+                                <PopoverHandler>
+                                    <div>
+                                        <IconButton className="p-6 block relative" onClick={ onNotificationsCLick }>
+                                            { unreadNotificationsCount ? (
+                                                <div
+                                                    className="absolute top-[-5px] right-0 bg-red-500 text-white rounded-full font-bold p-[2px] h-[18px] w-[18px]">
+                                                    { unreadNotificationsCount }
+                                                </div>
+                                            ) : null }
+                                            <NotificationIcon size={ 30 }/>
+                                        </IconButton>
+                                    </div>
+                                </PopoverHandler>
+                                <PopoverContent>
+                                    <div className="overflow-auto max-h-[500px]">
+                                        <NotificationList/>
+                                    </div>
+                                </PopoverContent>
+                            </Popover>
                             <Link href="/messages" className="block" onClick={ onMessagesCLick }>
                                 <IconButton className="p-6">
                                     <MessageIcon size={ 30 }/>
