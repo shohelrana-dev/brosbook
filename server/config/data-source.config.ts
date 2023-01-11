@@ -1,6 +1,11 @@
 import path           from 'path'
 import { DataSource } from 'typeorm'
 
+console.log('MYSQLPORT', process.env.MYSQLPORT)
+console.log('MYSQLUSER', process.env.MYSQLUSER)
+console.log('MYSQLPASSWORD', process.env.MYSQLPASSWORD)
+console.log('MYSQLDATABASE', process.env.MYSQLDATABASE)
+
 const dbConnection: any = process.env.DB_CONNECTION || 'mysql'
 const host: string      = process.env.DB_HOST || process.env.MYSQLHOST || 'localhost'
 const port: number      = Number( process.env.DB_PORT || process.env.MYSQLPORT) || 3306
