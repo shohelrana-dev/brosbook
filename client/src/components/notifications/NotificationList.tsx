@@ -20,6 +20,10 @@ export default function NotificationList(){
 
     const endMessage = notifications?.length > 0 ? 'No more notifications' : 'No notifications.'
 
+    if( isLoading ){
+        return <Loading/>
+    }
+
     return (
         <AnimatePage>
             <div>

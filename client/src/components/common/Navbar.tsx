@@ -89,7 +89,7 @@ function NavBar(){
                                     </div>
                                 </PopoverHandler>
                                 <PopoverContent>
-                                    <div className="overflow-auto max-h-[500px]">
+                                    <div className="max-h-[500px] overflow-auto">
                                         <NotificationList/>
                                     </div>
                                 </PopoverContent>
