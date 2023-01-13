@@ -1,0 +1,10 @@
+{
+  "buildCommand": "yarn build",
+  "installCommand": "yarn install",
+  "builds": [
+    {
+      "src": "./server_dist/main.js",
+      "use": "@vercel/node"
+    }
+  ]
+}

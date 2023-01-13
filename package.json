@@ -5,6 +5,9 @@
   "author": "Shohel Rana",
   "license": "MIT",
   "private": true,
+  "engines": {
+    "node": "16.x"
+  },
   "scripts": {
     "start": "concurrently \"npm run server:start\" \"npm run client:start\" --names server,client",
     "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\" --names server,client",
