@@ -8,6 +8,8 @@ interface Props {
     }
 }
 
+export const dynamic = 'force-dynamic'
+
 export default async function SinglePostPage( { params }: Props ){
     const post = ( await http.get<Post>( `/posts/${ params.postId }` ) ).data
 

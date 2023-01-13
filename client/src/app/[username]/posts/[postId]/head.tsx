@@ -9,8 +9,6 @@ interface Props{
     children: ReactNode
 }
 
-export const dynamic = 'force-dynamic'
-
 export default async function Head(props: Props) {
     const post = (await http.get<Post>(`/posts/${props.params.postId}`)).data
     return (
