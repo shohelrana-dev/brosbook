@@ -1,5 +1,6 @@
 {
   "name": "brosbookclient",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -26,6 +27,7 @@
     "moment": "^2.29.4",
     "next": "^13.1.1",
     "react": "^18.2.0",
+    "react-18-image-lightbox": "^5.1.4",
     "react-content-loader": "^6.2.0",
     "react-copy-to-clipboard": "^5.1.0",
     "react-date-picker": "^9.1.0",
