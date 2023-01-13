@@ -15,7 +15,7 @@ export const appDataSource = new DataSource( {
     username: username,
     password: password,
     database: database,
-    ssl: { rejectUnauthorized: true },
+    ssl: { rejectUnauthorized: false },
     synchronize: false,
     logging: false,
     migrationsRun: false,
