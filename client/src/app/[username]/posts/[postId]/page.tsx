@@ -14,8 +14,13 @@ export default async function SinglePostPage( { params }: Props ){
     const post = ( await http.get<Post>( `/posts/${ params.postId }` ) ).data
 
     return (
-        <div className="container">
-            <PostCard post={ post }/>
-        </div>
+        <>
+            <head>
+                <title>{ post.body || 'Post Image' }</title>
+            </head>
+            <div className="container">
+                <PostCard post={ post }/>
+            </div>
+        </>
     )
 }
