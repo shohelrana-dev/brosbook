@@ -8,6 +8,10 @@ module.exports = withMT({
     './src/components/**/*.{js,ts,jsx,tsx}'
   ],
   theme: {
+    colors: {
+      blue: 'rgb(58,141,245)',
+      "gray-light": '#F1F6FB'
+    },
     extend: {
       colors: {
         "theme-blue": 'rgb(58,141,245)',
