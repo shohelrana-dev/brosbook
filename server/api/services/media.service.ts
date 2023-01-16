@@ -6,7 +6,7 @@ import { v4 as uuidv4 }  from "uuid"
 import isEmpty           from "is-empty"
 import { MediaSource }   from "@entities/Media"
 import User              from "@entities/User"
-import { appDataSource } from "@config/data-source.config"
+import { appDataSource } from "@config/data-source"
 
 interface SaveMedia {
     file: UploadedFile

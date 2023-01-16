@@ -10,7 +10,7 @@ import Relationship from "@entities/Relationship"
 import BadRequestException from "@exceptions/BadRequestException"
 import MediaService from "@services/media.service"
 import User from "@entities/User"
-import { appDataSource } from "@config/data-source.config"
+import { appDataSource } from "@config/data-source"
 import Comment from "@entities/Comment"
 import NotificationService from "@modules/notifications/notification.service"
 import { NotificationTypes } from "@entities/Notification";

@@ -1,4 +1,4 @@
-import { appDataSource } from "@config/data-source.config"
+import { appDataSource } from "@config/data-source"
 import { Notification, NotificationTypes } from "@entities/Notification"
 import { Auth, ListQueryParams, ListResponse } from "@api/types/index.types"
 import { paginateMeta } from "@utils/paginateMeta"
@@ -8,7 +8,7 @@ import User from "@entities/User"
 import Post from "@entities/Post"
 import Comment from "@entities/Comment"
 import { IsNull } from "typeorm"
-import { io } from "@config/express.config"
+import { io } from "@config/express"
 
 export default class NotificationService {
     public readonly repository = appDataSource.getRepository( Notification )

@@ -2,7 +2,7 @@ import { AfterInsert, Entity, ManyToOne } from 'typeorm'
 import { AbstractEntity }                 from './AbstractEntity'
 import User                               from './User'
 import Comment                            from "./Comment"
-import { appDataSource }                  from "@config/data-source.config"
+import { appDataSource }                  from "@config/data-source"
 
 @Entity( 'comment_likes' )
 export default class CommentLike extends AbstractEntity {

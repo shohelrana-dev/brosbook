@@ -34,7 +34,7 @@ app.use( express.json() )
 app.use( express.urlencoded( { extended: false } ) )
 app.use( cors( {
     credentials: true,
-    origin: process.env.CLIENT_URL,
+    origin: '*',
     optionsSuccessStatus: 200
 } ) )
 app.use( cookieParser() )

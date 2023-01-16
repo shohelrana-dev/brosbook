@@ -1,6 +1,6 @@
 //dependencies
-import { server }        from '@config/express.config'
-import { appDataSource } from "@config/data-source.config"
+import { server }        from '@config/express'
+import { appDataSource } from "@config/data-source"
 
 //server run
 const PORT = process.env.SERVER_PORT || 4000;
