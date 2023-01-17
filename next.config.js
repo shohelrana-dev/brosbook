@@ -11,7 +11,7 @@ const nextConfig = {
             'lh3.googleusercontent.com'
         ]
     },
-    swcMinify: true,
+    swcMinify: false,
     experimental: {
         appDir: true,
         fontLoaders: [
