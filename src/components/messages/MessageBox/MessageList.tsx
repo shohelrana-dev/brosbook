@@ -5,6 +5,7 @@ import Loading from "@components/common/Loading"
 import { Conversation, Message } from "@interfaces/conversation.interfaces"
 import { io } from "socket.io-client"
 import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
+import useCurrentUser from "@hooks/useCurrentUser";
 
 interface Props {
     conversation: Conversation
@@ -12,6 +13,7 @@ interface Props {
 
 function MessageList( { conversation }: Props ){
     //hooks
+    const { user }                                              = useCurrentUser()
     const { items: messages, isLoading, setItems: setMessages } = useGetInfiniteListQuery<Message>(
         useGetMessagesQuery, { conversationId: conversation?.id! }
     )
@@ -31,12 +33,16 @@ function MessageList( { conversation }: Props ){
     }, [conversation] )
 
     function addMessage( message: Message ){
+        message.isMeSender = user?.id === message.sender.id
+
         setMessages( ( prevMessages: Message[] ) => {
             return [message, ...prevMessages]
         } )
     }
 
     function updateMessage( message: Message ){
+        message.isMeSender = user?.id === message.sender.id
+
         setMessages( ( prevMessages: Message[] ) => {
             const index        = prevMessages.findIndex( ( msg ) => msg.id === message.id )
             const newMessages  = [...prevMessages]

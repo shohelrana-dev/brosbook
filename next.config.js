@@ -7,7 +7,7 @@ const nextConfig = {
     images: {
         domains: [
             'localhost',
-            'brosbook-src.up.railway.app',
+            'brosbook-api.up.railway.app',
             'lh3.googleusercontent.com'
         ]
     },

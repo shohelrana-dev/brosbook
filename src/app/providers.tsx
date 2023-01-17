@@ -10,7 +10,7 @@ function Providers( { children }: { children: ReactNode } ){
         <Provider store={ store }>
             <ConfirmProvider>
                 { children }
-                <ToastContainer position="top-right"/>
+                <ToastContainer position="bottom-center"/>
             </ConfirmProvider>
         </Provider>
     )
