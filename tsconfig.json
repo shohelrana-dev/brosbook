@@ -1,61 +1,46 @@
 {
-   "compilerOptions": {
-      // https://www.typescriptlang.org/tsconfig
-      "lib": ["es2017"],
-      "target": "es2017",
-      "module": "commonjs",
-      "moduleResolution": "node",
-      "outDir": "server_dist",
-      "emitDecoratorMetadata": true,
-      "experimentalDecorators": true,
-      "sourceMap": true,
-      // Additions
-      "esModuleInterop": true,
-      // Strict stuff
-      // "strict": true,
-      "noImplicitAny": true,
-      "strictNullChecks": false,
-      "strictFunctionTypes": true,
-      "strictBindCallApply": true,
-      // "strictPropertyInitialization": true,
-      "noImplicitThis": true,
-      // Extra
-      "alwaysStrict": true,
-      "noUnusedLocals": false,
-      "noUnusedParameters": false,
-      "noImplicitReturns": false,
-      "noFallthroughCasesInSwitch": true,
-      "resolveJsonModule": true,
-      "typeRoots": [
-        "server/api/types",
-         "node_modules/@types"
-      ],
-      "allowJs": false,
-      "importHelpers": true,
-      "allowSyntheticDefaultImports": true,
-      "baseUrl": "./",
-      "paths": {
-         "@api/*": ["server/api/*"],
-         "@config/*": ["server/config/*"],
-         "@startup/*": ["server/startup/*"],
-         "@modules/*": ["server/api/modules/*"],
-         "@services/*": ["server/api/services/*"],
-         "@exceptions/*": ["server/api/exceptions/*"],
-         "@enums/*": ["server/api/enums/*"],
-         "@entities/*": ["server/api/entities/*"],
-         "@middleware/*": ["server/api/middleware/*"],
-         "@utils/*": ["server/api/utils/*"]
-      }
-   },
-   "include": [
-     "custom.d.ts",
-     "server/**/*.ts",
-     "server/**/*.json",
-     ".env"
-   ],
-   "exclude": [
-      "node_modules",
-      "client",
-      "dist"
-   ]
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom","dom.iterable","esnext"
+    ],
+    "experimentalDecorators": true,
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "baseUrl": "./src",
+    "paths": {
+      "@/": ["*"],
+      "@boot/*": ["boot/*"],
+      "@components/*": ["components/*"],
+      "@ui/*": ["ui/*"],
+      "@images/*": ["images/*"],
+      "@hooks/*": ["hooks/*"],
+      "@store/*": ["store/*"],
+      "@slices/*": ["slices/*"],
+      "@services/*": ["services/*"],
+      "@styles/*": ["styles/*"],
+      "@interfaces/*": ["interfaces/*"],
+      "@utils/*": ["utils/*"]
+    },
+    "plugins": [{"name": "next"}
+    ]
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

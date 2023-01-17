@@ -1,13 +1,7 @@
-/server/dist
-/public/uploads
-/client/.next
-/client/.swc
-**/node_modules
-**/.vscode
-.idea
-server_dist
+.next
+.swc
+node_modules
 
-*.env.local
-*.env
+.env.local
 *yarn.lock
 *yarn-error.log
