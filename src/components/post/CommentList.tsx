@@ -44,10 +44,10 @@ function CommentList( { postId }: CommentListPost ){
     return (
         <div className="mt-2">
             <form onSubmit={ handleSaveComment } className="mb-2 flex items-center">
-                <div className="w-1/12 mt-[-2px]">
+                <div className="mt-[-4px]">
                     <Avatar src={ currentUser?.avatar.url } online size="small"/>
                 </div>
-                <div className="ml-2 w-11/12">
+                <div className="ml-2 w-full">
                     <BasicInput
                         label="Write a comment..."
                         labelHide

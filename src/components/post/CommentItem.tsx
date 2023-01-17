@@ -51,7 +51,7 @@ function CommentItem({ comment }: CommentItemState) {
             <div>
                 <div className="flex items-center">
                     <div className="ml-2 mt-1 py-2 px-4 rounded-xl bg-theme-gray relative">
-                        <Link href={`/${comment.author.username}`} className="flex">
+                        <Link href={`/${comment.author.username}`} className="flex flex-wrap">
                             <h3 className="text-xs font-medium">
                                 {comment.author.fullName}
                             </h3>

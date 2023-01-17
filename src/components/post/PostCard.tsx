@@ -31,9 +31,9 @@ const PostCard = ( props: PostCardProps ) => {
                 <div className="ml-4 w-full">
                     <div className="flex justify-between">
                         <Link href={ `/${ post.author.username }` }>
-                            <h3 className="text-md font-medium">
-                                { post.author.fullName }
-                                <span className="ml-2 text-gray-600 font-normal">@{ post.author.username }</span>
+                            <h3 className="text-md font-medium flex flex-wrap mb-3">
+                                <p>{ post.author.fullName }</p>
+                                <p className="ml-2 text-gray-600 text-xs lg:text-sm font-normal">@{ post.author.username }</p>
                             </h3>
                         </Link>
                         <MoreOptions post={ post } setPost={ setPost }/>
