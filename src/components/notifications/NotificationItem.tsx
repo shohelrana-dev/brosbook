@@ -42,14 +42,14 @@ function NotificationItem( { notification }: Props ){
             <Avatar src={ notification.initiator.avatar.url }/>
             <div>
                 <div className="flex gap-2">
-                    <h3 className="text-base font-medium">
+                    <h3 className="text-sm font-medium text-black">
                         { notification.initiator.fullName }
                     </h3>
-                    <h4 className="text-sm text-gray-700">
+                    <h4 className="text-xs text-gray-700">
                         @{ notification.initiator.username }
                     </h4>
                 </div>
-                <p className="text-gray-700">
+                <p className="text-gray-800">
                     { title }
                     <small className="text-gray-600 ml-3">
                         { timeAgo( notification.createdAt ) }
