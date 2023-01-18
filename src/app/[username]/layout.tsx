@@ -23,6 +23,8 @@ interface ProfileLayoutProps {
     }
 }
 
+export const revalidate = false
+
 export default async function ProfileLayout( { children, params }: ProfileLayoutProps ){
     const config     = authorizationConfig( cookies() )
     const user: User = await http.get( `/users/by/username/${ params.username }`, config ).then( ( res ) => res.data ).catch( () => null )
