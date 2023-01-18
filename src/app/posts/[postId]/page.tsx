@@ -9,6 +9,8 @@ interface Props {
     }
 }
 
+export const revalidate = 0
+
 export default async function SinglePostPage( { params }: Props ){
     const post = ( await http.get<Post>( `/posts/${ params.postId }` ) ).data
 
