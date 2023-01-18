@@ -20,7 +20,7 @@ export default function FollowersPage(props: Props) {
         hasMoreItem
     } = useGetInfiniteListQuery<User>(useGetFollowersQuery, {userId: user?.id!})
 
-    const endMessage = followers?.length > 0 ? 'No more followers' : 'You have no follower.'
+    const endMessage = followers?.length > 0 ? 'No more followers' : 'User haven\'t follower.'
 
     return (
         <>

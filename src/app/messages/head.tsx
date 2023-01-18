@@ -4,7 +4,7 @@ export default function Head(){
     return (
         <>
             <DefaultTags/>
-            <title>Messages | Brosbook</title>
+            <title>{ `Messages | ${ process.env.NEXT_PUBLIC_APP_NAME }` }</title>
         </>
     )
 }
