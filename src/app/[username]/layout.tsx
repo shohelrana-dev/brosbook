@@ -23,7 +23,7 @@ interface ProfileLayoutProps {
     }
 }
 
-export const revalidate = false
+export const revalidate = 0
 
 export default async function ProfileLayout( { children, params }: ProfileLayoutProps ){
     const config     = authorizationConfig( cookies() )
