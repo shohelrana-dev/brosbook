@@ -12,11 +12,11 @@ import { toast }                                                   from "react-t
 interface PostBarProps {
     post: Post
     setPost: ( post: Post ) => void
-    isCommentsHidden: boolean
-    setIsCommentsHidden: ( _: boolean ) => void
+    isCommentsShow: boolean
+    setIsCommentsShow: ( _: boolean ) => void
 }
 
-function PostBar( { post, setPost, setIsCommentsHidden, isCommentsHidden }: PostBarProps ){
+function PostBar( { post, setPost, setIsCommentsShow, isCommentsShow }: PostBarProps ){
     //hooks
     const [postLike]   = usePostLikeMutation()
     const [postUnlike] = usePostUnlikeMutation()
@@ -76,14 +76,14 @@ function PostBar( { post, setPost, setIsCommentsHidden, isCommentsHidden }: Post
                 </AnimatePresence>
             </div>
             <div className="flex items-center">
-                <button className="icon" onClick={ () => setIsCommentsHidden( ! isCommentsHidden ) }>
+                <button className="icon" onClick={ () => setIsCommentsShow( ! isCommentsShow ) }>
                     <CommentIcon size="18"/>
                 </button>
                 <p className="text-gray-600">{ post.commentsCount }</p>
             </div>
             <div className="flex items-center text-gray-600">
                 <CopyToClipboard
-                    text={ `${ process.env.NEXT_PUBLIC_APP_URL }/${ post.author.username }/posts/${ post.id }` }
+                    text={ `${ process.env.NEXT_PUBLIC_APP_URL }/posts/${ post.id }` }
                     onCopy={ () => toast.success( 'Link copied.' ) }>
                     <button className="icon">
                         <ShareIcon size="18"/>

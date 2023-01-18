@@ -13,12 +13,13 @@ import MoreOptions from "@components/post/MoreOptions"
 
 interface PostCardProps {
     post: Post
+    isCommentsShow?: boolean
 }
 
 const PostCard = ( props: PostCardProps ) => {
     //hooks
-    const [post, setPost]                         = useState<Post | null>( props.post )
-    const [isCommentsHidden, setIsCommentsHidden] = useState<boolean>( true )
+    const [post, setPost]                       = useState<Post | null>( props.post )
+    const [isCommentsShow, setIsCommentsShow] = useState<boolean>( Boolean( props.isCommentsShow ) )
 
     if( ! post ) return null
 
@@ -65,10 +66,10 @@ const PostCard = ( props: PostCardProps ) => {
                     </div>
                 ) : null }
 
-                <PostBar post={ post } setPost={ setPost } isCommentsHidden={ isCommentsHidden }
-                         setIsCommentsHidden={ setIsCommentsHidden }/>
+                <PostBar post={ post } setPost={ setPost } isCommentsShow={ isCommentsShow }
+                         setIsCommentsShow={ setIsCommentsShow }/>
 
-                { ! isCommentsHidden ? <CommentList postId={ post.id }/> : null }
+                { isCommentsShow ? <CommentList postId={ post.id }/> : null }
 
             </div>
         </div>

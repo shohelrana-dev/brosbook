@@ -11,7 +11,7 @@ import {
     Menu,
     MenuHandler,
     MenuList,
-    MenuItem, Button
+    MenuItem
 } from "@material-tailwind/react"
 import useCurrentUser from "@hooks/useCurrentUser"
 import { motion } from "framer-motion"
@@ -36,7 +36,7 @@ function NavBar(){
         setUnreadNotificationsCount( data?.count! )
     }, [data] )
 
-    /*useEffect( () => {
+    useEffect( () => {
         const socket = io( process.env.NEXT_PUBLIC_API_URL! )
 
         socket.on( `unread_notification_count_${ user?.id }`, ( count ) => {
@@ -46,7 +46,7 @@ function NavBar(){
         if( socket ) return () => {
             socket.close()
         }
-    }, [user] )*/
+    }, [user] )
 
     function onNotificationsCLick(){
         UpdateAllNotification()
