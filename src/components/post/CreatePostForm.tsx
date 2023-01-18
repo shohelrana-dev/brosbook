@@ -90,7 +90,7 @@ function CreatePostForm() {
                         <HiPhotograph fontSize={30}/>
                     </IconButton>
                     <div>
-                        <Button type="submit" isLoading={isLoading}>
+                        <Button type="submit" isLoading={isLoading} size="sm">
                             Publish Post
                         </Button>
                     </div>

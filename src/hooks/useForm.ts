@@ -36,9 +36,9 @@ export function useForm<TPayload>( mutationFN: MutationTrigger<MutationDefinitio
         }
     }
 
-    function setErrorsEmpty(){
+    function clearErrors(){
         setErrors( {} as Errors<TPayload> )
     }
 
-    return { formData, onChange, onSubmit, errors, setFormData, setErrorsEmpty }
+    return { formData, onChange, onSubmit, errors, setFormData, clearErrors }
 }

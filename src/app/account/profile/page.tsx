@@ -16,7 +16,7 @@ export default function ProfileSettingsPage(){
     //hooks
     const { user, isAuthenticated }                             = useCurrentUser()
     const [updateProfile, { isLoading, isSuccess }]             = useUpdateProfileMutation()
-    const { formData, onChange, onSubmit, errors, setFormData, setErrorsEmpty } = useForm<ProfilePayload>( updateProfile )
+    const { formData, onChange, onSubmit, errors, setFormData, clearErrors } = useForm<ProfilePayload>( updateProfile )
 
     useEffect( () => {
         setFormData( {
@@ -33,7 +33,7 @@ export default function ProfileSettingsPage(){
     useEffect( () => {
         if( isSuccess ){
             toast.success( 'Profile was updated.' )
-            setErrorsEmpty()
+            clearErrors()
         }
     }, [isLoading, isSuccess] )
 
