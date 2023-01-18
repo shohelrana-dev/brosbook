@@ -3,8 +3,8 @@ import React, { PropsWithChildren } from 'react'
 import useCurrentUser from "@hooks/useCurrentUser"
 import TabLinkList from "@components/common/TabLinkList"
 import Avatar from "@components/common/Avatar"
-import Loading from "@components/common/Loading";
-import SidebarLayout from "@components/common/SidebarLayout";
+import Loading from "@components/common/Loading"
+import SidebarLayout from "@components/common/SidebarLayout"
 
 const tabLinks = [
     { label: 'Account', pathname: '/account' },

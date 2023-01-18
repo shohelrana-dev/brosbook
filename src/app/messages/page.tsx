@@ -2,7 +2,7 @@
 import React from 'react'
 import Conversations from "@components/messages/Conversations"
 import useCurrentUser from "@hooks/useCurrentUser"
-import AnimatePage from "@components/common/AnimatePage";
+import AnimatePage from "@components/common/AnimatePage"
 
 function Page(){
     const {} = useCurrentUser( { redirectTo: '/auth/login' } )

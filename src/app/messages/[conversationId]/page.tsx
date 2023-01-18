@@ -10,7 +10,7 @@ interface Props {
     params: { conversationId: string }
 }
 
-function Page( { params }: Props ){
+export default function ConversationPage( { params }: Props ){
     const {} = useCurrentUser( { redirectTo: '/auth/login' } )
 
     return (
@@ -33,5 +33,3 @@ function Page( { params }: Props ){
         </div>
     )
 }
-
-export default Page

@@ -44,9 +44,6 @@ export default async function ProfileLayout( { children, params }: ProfileLayout
 
     return (
         <SidebarLayout>
-            <head>
-                <title>{ user.username }</title>
-            </head>
             <div>
                 <div className="bg-white pb-5 mb-3">
                     <div>

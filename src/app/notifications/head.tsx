@@ -4,7 +4,7 @@ export default function Head(){
     return (
         <>
             <DefaultTags/>
-            <title>{ `Home | ${ process.env.NEXT_PUBLIC_APP_NAME }` }</title>
+            <title>{ `Notifications | ${ process.env.NEXT_PUBLIC_APP_NAME }` }</title>
         </>
     )
 }
