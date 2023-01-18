@@ -18,7 +18,7 @@ export default function BasicInput( props: BasicInputProps ) {
     const id = name ? name : label.replace(' ', '')
 
     return (
-        <div className="mb-4">
+        <div className="mb-2 md:mb-4">
             <div className="mb-2">
                 {!labelHide ? <label htmlFor={id} className="font-medium text-gray-800 cursor-pointer block">
                     {label}

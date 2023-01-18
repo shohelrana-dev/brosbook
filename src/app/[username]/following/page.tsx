@@ -33,8 +33,10 @@ export default function FollowingPage( props: Props ){
                 dataLength={ followings?.length }
                 endMessage={ <p className="box text-center mt-5 py-10">{ endMessage }</p> }
             >
-                { followings.map( ( user: User) => (
-                    <FollowUser user={ user } key={ user.id }/>
+                { followings.map( ( user: User ) => (
+                    <div className="bg-white p-3 pb-1">
+                        <FollowUser user={ user } key={ user.id }/>
+                    </div>
                 ) ) }
             </InfiniteScroll>
         </>

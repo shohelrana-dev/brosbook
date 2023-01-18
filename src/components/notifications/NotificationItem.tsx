@@ -42,7 +42,7 @@ function NotificationItem( { notification }: Props ){
             <Avatar src={ notification.initiator.avatar.url }/>
             <div>
                 <div className="flex gap-2">
-                    <h3 className="text-md font-medium">
+                    <h3 className="text-base font-medium">
                         { notification.initiator.fullName }
                     </h3>
                     <h4 className="text-sm text-gray-700">

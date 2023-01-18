@@ -12,6 +12,9 @@ module.exports = withMT({
       blue: 'rgb(58,141,245)',
       "gray-light": '#F1F6FB'
     },
+    container: {
+      center: true,
+    },
     extend: {
       colors: {
         "theme-blue": 'rgb(58,141,245)',
@@ -33,9 +36,6 @@ module.exports = withMT({
         160: '40rem',
       }
     },
-  },
-  variants: {
-    extend: {},
   },
   plugins: [
     require('tailwind-scrollbar-hide')

@@ -50,10 +50,10 @@ export default function ProfilePhoto({user}: Props) {
         return (
             <ImageLightbox
                 src={profilePhoto}
-                className="rounded-full w-[150px] h-[150px] mt-[-100px]"
+                className="rounded-full w-[130px] h-[130px] mt-[-100px]"
                 alt="User profile photo"
-                width={150}
-                height={150}
+                width={130}
+                height={130}
             />
         )
     }
@@ -67,10 +67,10 @@ export default function ProfilePhoto({user}: Props) {
                    ref={inputRef}/>
             <ImageLightbox
                 src={profilePhoto}
-                className="rounded-full w-[150px] h-[150px] mt-[-100px]"
+                className="rounded-full w-[130px] h-[130px] mt-[-100px]"
                 alt="User profile photo"
-                width={150}
-                height={150}
+                width={130}
+                height={130}
             />
 
             <IconButton className="!absolute p-3 right-3 bottom-0 bg-gray-600 hover:bg-gray-700" onClick={onClick}>

@@ -51,7 +51,7 @@ function CreatePostForm() {
             <div className="flex items-center">
                 <Avatar src={user?.avatar?.url}/>
                 <div className="ml-4">
-                    <h3 className="text-md lg:text-lg font-medium">
+                    <h3 className="text-base lg:text-lg font-medium">
                         {user?.fullName}
                     </h3>
                     <p className="flex text-gray-600 font-medium gap-1 items-center">

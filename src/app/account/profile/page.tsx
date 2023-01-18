@@ -16,7 +16,7 @@ export default function ProfileSettingsPage(){
     //hooks
     const { user, isAuthenticated }                             = useCurrentUser()
     const [updateProfile, { isLoading, isSuccess }]             = useUpdateProfileMutation()
-    const { formData, onChange, onSubmit, errors, setFormData } = useForm<ProfilePayload>( updateProfile )
+    const { formData, onChange, onSubmit, errors, setFormData, setErrorsEmpty } = useForm<ProfilePayload>( updateProfile )
 
     useEffect( () => {
         setFormData( {
@@ -31,8 +31,11 @@ export default function ProfileSettingsPage(){
     }, [user] )
 
     useEffect( () => {
-        if( isSuccess ) toast.success( 'Profile was updated.' )
-    }, [isSuccess] )
+        if( isSuccess ){
+            toast.success( 'Profile was updated.' )
+            setErrorsEmpty()
+        }
+    }, [isLoading, isSuccess] )
 
     if( ! isAuthenticated ) return <Loading/>
 
@@ -40,7 +43,7 @@ export default function ProfileSettingsPage(){
         <AnimatePage>
             <form className="flex-auto p-4 w-full" onSubmit={ onSubmit }>
                 <div className="mb-7">
-                    <h3 className="text-lg mb-3">Customize profile</h3>
+                    <h3 className="text-base sm:text-lg mb-3">Customize profile</h3>
                     <small className="text-gray-500">PROFILE INFORMATION</small>
                     <hr/>
                 </div>

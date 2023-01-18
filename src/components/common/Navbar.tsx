@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState, MouseEvent } from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from "next/link"
 import { CgProfile as ProfileIcon } from "react-icons/cg"
 import { HiMail as MessageIcon } from "react-icons/hi"
@@ -24,7 +24,7 @@ import {
     PopoverHandler,
     PopoverContent,
 } from "@material-tailwind/react"
-import NotificationList from "@components/notifications/NotificationList";
+import NotificationList from "@components/notifications/NotificationList"
 
 function NavBar(){
     const { user, isAuthenticated }                               = useCurrentUser()

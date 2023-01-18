@@ -52,36 +52,36 @@ export default async function ProfileLayout( { children, params }: ProfileLayout
                         <div className="p-4 flex justify-between relative z-10">
                             <ProfilePhoto user={ user }/>
 
-                            { currentUser && currentUser?.username !== user?.username && (
+                            { currentUser && currentUser?.username !== user?.username ? (
                                 <div>
                                     <FollowButton user={ user! }/>
                                 </div>
-                            ) }
-                            { currentUser && currentUser?.username === user?.username && (
+                            ) : null }
+                            { currentUser && currentUser?.username === user?.username ? (
                                 <ButtonOutline className="flex h-[35px] items-center">
                                     <Link href="/account/profile">
                                         Edit Profile
                                     </Link>
                                 </ButtonOutline>
-                            ) }
+                            ) : null }
                         </div>
                     </div>
 
-                    <div className="px-6">
+                    <div className="px-2 sm:px-6">
                         <div>
-                            <h2 className="text-xl font-bold">{ user?.fullName }</h2>
+                            <h2 className="text:lg md:text-xl font-bold">{ user?.fullName }</h2>
                             <p className="text-gray-600 mb-2">@{ user?.username }</p>
                             <div>{ user?.profile?.bio }</div>
                         </div>
                         <ul className="mt-4">
                             { user?.profile?.location && (
-                                <li className="text-gray-600 inline-block mr-3">
+                                <li className="text-gray-600 inline-block mr-3 mb-1">
                                     <GoLocation className="inline-block text-lg"/>&nbsp;
                                     { user?.profile?.location }
                                 </li>
                             ) }
                             { user?.profile?.birthdate && (
-                                <li className="text-gray-600 inline-block mr-3">
+                                <li className="text-gray-600 inline-block mr-3 mb-1">
                                     <HiOutlineCake className="inline-block text-lg"/>&nbsp;
                                     Born { new Date( user?.profile?.birthdate ).toLocaleDateString( 'en-us', {
                                     day: "numeric",
@@ -90,7 +90,7 @@ export default async function ProfileLayout( { children, params }: ProfileLayout
                                 } ) }
                                 </li>
                             ) }
-                            <li className="text-gray-600 inline-block mr-3">
+                            <li className="text-gray-600 inline-block mr-3 mb-1">
                                 <MdOutlineSchedule className="inline-block text-lg"/>&nbsp;
                                 Joined { new Date( user?.createdAt! ).toLocaleDateString( 'en-us', {
                                 day: "numeric",
