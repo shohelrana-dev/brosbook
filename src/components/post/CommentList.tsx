@@ -69,7 +69,7 @@ function CommentList( { postId }: CommentListPost ){
 
             { isLoading || isFetching ? <Loading size={ 35 }/> : null }
 
-            { hasMoreItem ? (
+            { hasMoreItem && !isLoading ? (
                 <ButtonGray isLoading={ isLoading } onClick={ () => loadMoreItem() }>
                     See more comments
                 </ButtonGray>
