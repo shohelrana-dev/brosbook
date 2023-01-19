@@ -5,7 +5,7 @@ import Loading from "@components/common/Loading"
 import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import FollowUser from "@components/common/FollowUser"
 import Link from "next/link"
-import ButtonGray from "@components/common/ButtonGray";
+import ButtonGray from "@components/common/ButtonGray"
 
 function SuggestedPeople(){
     const {
@@ -18,7 +18,7 @@ function SuggestedPeople(){
         <>
             <h2 className="text-xl font-medium mb-5">Suggested People</h2>
 
-            { isLoading && ! hasMoreItem ? <Loading size={ 30 }/> : null }
+            { isLoading ? <Loading size={ 30 }/> : null }
 
             { users.length > 0 ? users.map( ( user: User ) => (
                 <FollowUser user={ user } key={user.id}/>

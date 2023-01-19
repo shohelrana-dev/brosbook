@@ -13,7 +13,6 @@ import {
     MenuList,
     MenuItem
 } from "@material-tailwind/react"
-import useCurrentUser from "@hooks/useCurrentUser"
 import { motion } from "framer-motion"
 import IconButton from "@components/common/IconButton"
 import { IoMdNotifications as NotificationIcon } from "react-icons/io"
@@ -25,12 +24,20 @@ import {
     PopoverContent,
 } from "@material-tailwind/react"
 import NotificationList from "@components/notifications/NotificationList"
+import { User } from "@interfaces/user.interfaces"
+import useConfirm from "@hooks/useConfirm"
+import { useRouter } from "next/navigation"
 
-function NavBar(){
-    const { user, isAuthenticated }                               = useCurrentUser()
+interface Props {
+    user: User
+}
+
+function NavBar( { user }: Props ){
     const [UpdateAllNotification]                                 = useUpdateAllNotificationMutation()
     const { data }                                                = useGetUnreadNotificationsCountQuery()
     const [unreadNotificationsCount, setUnreadNotificationsCount] = useState<number>( data?.count || 0 )
+    const confirm                                                 = useConfirm()
+    const router                                                  = useRouter()
 
     useEffect( () => {
         setUnreadNotificationsCount( data?.count! )
@@ -56,7 +63,19 @@ function NavBar(){
 
     }
 
-    if( ! isAuthenticated ) return null
+    async function onLogoutCLick(){
+        const isOk = await confirm( {
+            title: `Log out of ${ process.env.NEXT_PUBLIC_APP_NAME }?`,
+            message: 'You can always log back in at any time.',
+            confirmButtonLabel: 'Log out',
+        } )
+
+        if( isOk ){
+            router.push( '/auth/logout' )
+        }
+    }
+
+    if( ! user ) return null
 
     return (
         <motion.header
@@ -119,11 +138,9 @@ function NavBar(){
                                         Settings
                                     </Link>
                                 </MenuItem>
-                                <MenuItem>
-                                    <Link href="/auth/logout" className="block">
-                                        <LogoutIcon className="inline-block mr-2" size={ 20 }/>
-                                        Logout
-                                    </Link>
+                                <MenuItem onClick={ onLogoutCLick }>
+                                    <LogoutIcon className="inline-block mr-2" size={ 20 }/>
+                                    Logout
                                 </MenuItem>
                             </MenuList>
                         </Menu>
