@@ -8,6 +8,7 @@ import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import BasicInput from "@components/common/BasicInput"
 import useCurrentUser from "@hooks/useCurrentUser"
 import ButtonGray from "@components/common/ButtonGray"
+import Loading from "@components/common/Loading"
 
 interface CommentListPost {
     postId: string
@@ -59,11 +60,13 @@ function CommentList( { postId }: CommentListPost ){
                 </div>
             </form>
 
-            { comments?.length > 0 ? comments.map( ( comment: Comment ) => (
+            { ! isLoading ? comments?.length > 0 ? comments.map( ( comment: Comment ) => (
                 <CommentItem comment={ comment } key={ comment.id }/>
             ) ) : (
                 <p className="mt-3">No comments</p>
-            ) }
+            ) : null }
+
+            { isLoading ? <Loading size={30}/> : null }
 
             { hasMoreItem ? (
                 <ButtonGray isLoading={ isLoading } onClick={ () => loadMoreItem() }>

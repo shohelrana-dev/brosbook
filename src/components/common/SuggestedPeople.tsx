@@ -21,7 +21,7 @@ function SuggestedPeople(){
             { isLoading && ! hasMoreItem ? <Loading size={ 30 }/> : null }
 
             { users.length > 0 ? users.map( ( user: User ) => (
-                <FollowUser user={ user }/>
+                <FollowUser user={ user } key={user.id}/>
             ) ) : null }
 
             { hasMoreItem ? (

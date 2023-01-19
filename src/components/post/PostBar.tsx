@@ -47,32 +47,34 @@ function PostBar( { post, setPost, setIsCommentsShow, isCommentsShow }: PostBarP
         <div className="flex mt-2 border-t-2 border-b-2 border-gray-100 py-1 border-solid justify-around">
             <div className="flex items-center relative">
                 <AnimatePresence>
-                    <motion.button
-                        onClick={ handlePostUnlike }
-                        className="icon"
-                        initial={ { scale: 0 } }
-                        animate={ { scale: post.isViewerLiked ? 1 : 0 } }
-                        transition={ { duration: 0.1 } }
-                    >
-                        <LikeIcon fontSize="medium" color="#FF1493"/>
-                    </motion.button>
-                    <motion.button
-                        onClick={ handlePostLike }
-                        className="icon absolute"
-                        initial={ { scale: 0 } }
-                        animate={ { scale: ! post.isViewerLiked ? 1 : 0 } }
-                        transition={ { duration: 0.1 } }
-                    >
-                        <OutlinedLikeIcon fontSize="medium"/>
-                    </motion.button>
-                    <motion.p
-                        key={ post.likesCount }
-                        initial={ { y: -10, opacity: 0 } }
-                        animate={ { y: 0, opacity: 1 } }
-                        transition={ { duration: 0.3 } }
-                        className="text-gray-600">
-                        { post.likesCount }
-                    </motion.p>
+                    <>
+                        <motion.button
+                            onClick={ handlePostUnlike }
+                            className="icon"
+                            initial={ { scale: 0 } }
+                            animate={ { scale: post.isViewerLiked ? 1 : 0 } }
+                            transition={ { duration: 0.1 } }
+                        >
+                            <LikeIcon fontSize="medium" color="#FF1493"/>
+                        </motion.button>
+                        <motion.button
+                            onClick={ handlePostLike }
+                            className="icon absolute"
+                            initial={ { scale: 0 } }
+                            animate={ { scale: ! post.isViewerLiked ? 1 : 0 } }
+                            transition={ { duration: 0.1 } }
+                        >
+                            <OutlinedLikeIcon fontSize="medium"/>
+                        </motion.button>
+                        <motion.p
+                            key={ post.likesCount }
+                            initial={ { y: -10, opacity: 0 } }
+                            animate={ { y: 0, opacity: 1 } }
+                            transition={ { duration: 0.3 } }
+                            className="text-gray-600">
+                            { post.likesCount }
+                        </motion.p>
+                    </>
                 </AnimatePresence>
             </div>
             <div className="flex items-center">

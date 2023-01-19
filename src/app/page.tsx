@@ -11,7 +11,13 @@ import LoadingPosts from "@components/loading/LoadingPosts"
 
 export default function HomePage(){
     //hooks
-    const { isLoading, items: posts, hasMoreItem, loadMoreItem } = useGetInfiniteListQuery<Post>( useGetFeedPostsQuery )
+    const {
+              isLoading,
+              items: posts,
+              hasMoreItem,
+              loadMoreItem,
+              isUninitialized
+          } = useGetInfiniteListQuery<Post>( useGetFeedPostsQuery )
 
     const endMessage = posts?.length > 0 ? 'No more posts' : 'Your feed is empty.'
 
@@ -20,8 +26,7 @@ export default function HomePage(){
             <SidebarLayout>
                 <div className="pt-6 mb-6">
                     <CreatePostForm/>
-
-                    { ( ! posts && isLoading ) ? <LoadingPosts/> : null }
+                    { ( posts.length < 1 && isLoading ) ? <LoadingPosts/> : null }
 
                     <InfiniteScroll
                         next={ loadMoreItem }
@@ -30,7 +35,7 @@ export default function HomePage(){
                         dataLength={ posts?.length }
                         endMessage={ <p className="box text-center mt-5 py-10">{ endMessage }</p> }
                     >
-                        { posts.map( ( post: Post) => (
+                        { posts.map( ( post: Post ) => (
                             <PostCard post={ post } key={ post.id }/>
                         ) ) }
                     </InfiniteScroll>
