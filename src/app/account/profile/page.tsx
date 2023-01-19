@@ -32,7 +32,7 @@ export default function ProfileSettingsPage(){
 
     useEffect( () => {
         if( isSuccess ){
-            toast.success( 'Profile was updated.' )
+            toast.success( 'Profile updated.' )
             clearErrors()
         }
     }, [isLoading, isSuccess] )

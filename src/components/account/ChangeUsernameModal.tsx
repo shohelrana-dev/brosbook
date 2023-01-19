@@ -14,16 +14,20 @@ import useCurrentUser from "@hooks/useCurrentUser"
 export default function ChangeUsernameModal() {
     const {user} = useCurrentUser()
     const [changeUsername, { isLoading, isSuccess }] = useChangeUsernameMutation()
-    const {formData, onChange, onSubmit, errors} = useForm<ChangeUsernamePayload>(changeUsername, {username: user?.username!, password: ''})
+    const {formData, onChange, onSubmit, errors, reset} = useForm<ChangeUsernamePayload>(changeUsername, {username: user?.username!, password: ''})
 
     const [isModalOpen, setIsModalOpen] = useState(false)
 
     function handleModalOpen(){
+        reset()
         setIsModalOpen(!isModalOpen)
     }
 
     useEffect(()=> {
-        if(isSuccess) toast.success('Username changed.')
+        if(isSuccess) {
+            toast.success('Username changed.')
+            handleModalOpen()
+        }
     }, [isSuccess])
 
     return (

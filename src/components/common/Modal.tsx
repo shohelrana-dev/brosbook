@@ -15,8 +15,8 @@ export interface ModalProps {
 export default function Modal(props: ModalProps) {
     const {isOpen, onClose, children, iconAlignment='right', className} = props
 
-    const boxClassName = classNames('box relative rounded-xl max-w-[520px] w-[80%] p-6 lg:p-8 border border-solid border-gray-300', className)
-    const iconClassName = classNames('!absolute top-1', iconAlignment === 'right' ? 'right-1' : 'left-1')
+    const boxClassName = classNames('box relative rounded-xl max-w-[520px] w-[80%] p-4 lg:p-6 border border-solid border-gray-300', className)
+    const iconClassName = classNames('!absolute right-1 top-1', iconAlignment === 'right' ? 'right-1' : 'left-1')
 
     return (
         <AnimatePresence>
@@ -36,8 +36,8 @@ export default function Modal(props: ModalProps) {
                         transition={{duration: 0.3}}
                     >
                         <div className={iconClassName}>
-                            <IconButton onClick={onClose} className="p-5">
-                                <CancelIcon size="30"/>
+                            <IconButton onClick={onClose} className="p-4">
+                                <CancelIcon size="25"/>
                             </IconButton>
                         </div>
                         {children}

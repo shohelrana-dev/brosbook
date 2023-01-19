@@ -36,9 +36,24 @@ export function useForm<TPayload>( mutationFN: MutationTrigger<MutationDefinitio
         }
     }
 
+    function reset(){
+        clearErrors()
+        clearFormData()
+    }
+
     function clearErrors(){
+        if( Object.keys( errors ).length < 1 ){
+            return
+        }
         setErrors( {} as Errors<TPayload> )
     }
 
-    return { formData, onChange, onSubmit, errors, setFormData, clearErrors }
+    function clearFormData(){
+        if( Object.keys( formData ).length < 1 ){
+            return
+        }
+        setFormData( {} as TPayload )
+    }
+
+    return { formData, onChange, onSubmit, errors, setFormData, reset, clearErrors, clearFormData }
 }
