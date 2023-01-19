@@ -18,6 +18,7 @@ function CommentList( { postId }: CommentListPost ){
     const { user: currentUser } = useCurrentUser()
     const {
               isLoading,
+              isFetching,
               items: comments,
               hasMoreItem,
               loadMoreItem,
@@ -66,7 +67,7 @@ function CommentList( { postId }: CommentListPost ){
                 <p className="mt-3">No comments</p>
             ) : null }
 
-            { isLoading ? <Loading size={30}/> : null }
+            { isLoading || isFetching ? <Loading size={ 35 }/> : null }
 
             { hasMoreItem ? (
                 <ButtonGray isLoading={ isLoading } onClick={ () => loadMoreItem() }>
