@@ -15,7 +15,8 @@ export const postsApi = baseApi.injectEndpoints( {
             query: ( params ) => ( {
                 url: 'posts',
                 params
-            } )
+            } ),
+            providesTags: ['Post']
         } ),
 
         createPost: build.mutation<Post, FormData>( {
@@ -24,6 +25,7 @@ export const postsApi = baseApi.injectEndpoints( {
                 method: 'POST',
                 body: formData
             } ),
+            invalidatesTags: ['Post']
         } ),
 
         deletePost: build.mutation<Post, string>( {
@@ -31,6 +33,7 @@ export const postsApi = baseApi.injectEndpoints( {
                 url: `posts/${ id }`,
                 method: 'DELETE'
             } ),
+            invalidatesTags: ['Post']
         } ),
 
         postLike: build.mutation<Post, string>( {
@@ -38,6 +41,7 @@ export const postsApi = baseApi.injectEndpoints( {
                 url: `posts/${ postId }/like`,
                 method: 'POST'
             } ),
+            invalidatesTags: ['Post']
         } ),
 
         postUnlike: build.mutation<Post, string>( {
@@ -45,6 +49,7 @@ export const postsApi = baseApi.injectEndpoints( {
                 url: `posts/${ postId }/unlike`,
                 method: 'POST'
             } ),
+            invalidatesTags: ['Post']
         } ),
     } ),
 } )

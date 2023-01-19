@@ -13,9 +13,7 @@ export default function NotificationList(){
         useGetNotificationsQuery, {
             page: 1,
             limit: 20
-        },
-        // @ts-ignore
-        { refetchOnMountOrArgChange: true }
+        }
     )
 
     const endMessage = notifications?.length > 0 ? 'No more notifications' : 'No notifications.'

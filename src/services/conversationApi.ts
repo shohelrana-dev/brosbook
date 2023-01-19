@@ -8,7 +8,8 @@ export const conversationApi = baseApi.injectEndpoints( {
             query: ( params ) => ( {
                 url: `/conversations`,
                 params
-            } )
+            } ),
+            providesTags: ['Conversation']
         } ),
         getConversationById: build.query<Conversation, string>( {
             query: ( conversationId ) => ( {
@@ -26,14 +27,16 @@ export const conversationApi = baseApi.injectEndpoints( {
                 url: `/conversations`,
                 method: 'PUT',
                 body: { participantId }
-            } )
+            } ),
+            invalidatesTags: ['Conversation']
         } ),
 
         getMessages: build.query<ListResponse<Message>, { conversationId: string, page?: number, limit?: number }>( {
             query: ( { conversationId, ...params } ) => ( {
                 url: `/conversations/${ conversationId }/messages`,
                 params
-            } )
+            } ),
+            providesTags: ['Message']
         } ),
 
         sendMessage: build.mutation<Message, FormData>( {
@@ -41,7 +44,8 @@ export const conversationApi = baseApi.injectEndpoints( {
                 url: `/conversations/${ formData.get( 'conversationId' ) }/messages`,
                 method: "POST",
                 body: formData
-            } )
+            } ),
+            invalidatesTags: ['Message']
         } ),
 
         sendReaction: build.mutation<Message, { messageId: string, conversationId: string, name: string }>( {
@@ -49,14 +53,16 @@ export const conversationApi = baseApi.injectEndpoints( {
                 url: `/conversations/${ conversationId }/messages/${ messageId }/reactions`,
                 method: "POST",
                 body: params
-            } )
+            } ),
+            invalidatesTags: ['Message']
         } ),
 
         getConversationMediaList: build.query<ListResponse<Media>, { conversationId: string, page?: number, limit?: number }>( {
             query: ( { conversationId, ...params } ) => ( {
                 url: `/conversations/${ conversationId }/media`,
                 params
-            } )
+            } ),
+            providesTags: ['Message']
         } )
 
     } ),

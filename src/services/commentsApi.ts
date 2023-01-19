@@ -8,7 +8,8 @@ export const commentsApi = baseApi.injectEndpoints( {
             query: ( { postId, ...params } ) => ( {
                 url: `posts/${ postId }/comments`,
                 params
-            } )
+            } ),
+            providesTags: ['Comment']
         } ),
 
         createComment: build.mutation<Comment, { postId: string, body: string }>( {
@@ -17,6 +18,7 @@ export const commentsApi = baseApi.injectEndpoints( {
                 method: 'POST',
                 body: formData
             } ),
+            invalidatesTags: ['Comment']
         } ),
 
         likeComment: build.mutation<Comment, { postId: string, commentId: string }>( {
@@ -24,6 +26,7 @@ export const commentsApi = baseApi.injectEndpoints( {
                 url: `posts/${ postId }/comments/${ commentId }/like`,
                 method: 'POST'
             } ),
+            invalidatesTags: ['Comment']
         } ),
 
         unlikeComment: build.mutation<Comment, { postId: string, commentId: string }>( {
@@ -31,6 +34,7 @@ export const commentsApi = baseApi.injectEndpoints( {
                 url: `posts/${ postId }/comments/${ commentId }/unlike`,
                 method: 'POST'
             } ),
+            invalidatesTags: ['Comment']
         } ),
     } ),
 } )
