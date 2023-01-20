@@ -2,7 +2,7 @@
 import { useEffect} from 'react'
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { toast } from "react-toastify"
+import toast from "react-hot-toast"
 import {FiLock} from "react-icons/fi"
 
 import Button from "@components/common/Button"

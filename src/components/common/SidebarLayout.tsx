@@ -1,9 +1,8 @@
-"use client"
-import React, { PropsWithChildren } from 'react'
-import Sidebar                      from "@components/common/Sidebar"
+import React, { PropsWithChildren, Suspense } from 'react'
+import Loading from "@components/common/Loading"
+import Sidebar from "@components/sidebar/Sidebar"
 
 function SidebarLayout( { children }: PropsWithChildren ){
-
     return (
         <div className="bg-theme-gray">
             <main className="max-w-[920px] w-full mx-auto min-h-[93vh]">
@@ -12,7 +11,10 @@ function SidebarLayout( { children }: PropsWithChildren ){
                         { children }
                     </div>
                     <aside className="hidden lg:block w-4/12 mt-6">
-                        <Sidebar/>
+                        <Suspense fallback={ <Loading size={40}/>}>
+                            {/*@ts-ignore*/}
+                            <Sidebar/>
+                        </Suspense>
                     </aside>
                 </div>
             </main>

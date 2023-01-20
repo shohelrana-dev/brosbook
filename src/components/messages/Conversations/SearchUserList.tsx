@@ -1,45 +1,26 @@
 import React from 'react'
 import Loading from "@components/common/Loading"
 import { User } from "@interfaces/user.interfaces"
-import { useSearchUsersQuery } from "@services/usersApi"
 import Avatar from "@components/common/Avatar"
-import { useLazyGetConversationByParticipantIdQuery } from "@services/conversationApi"
-import { useRouter } from "next/navigation"
 
 interface Props {
-    query: string
-    isSearching: boolean
+    onUserClick: ( user: User ) => void
+    users: User[]
+    isLoading: boolean
 }
 
-function SearchUserList( { query, isSearching }: Props ){
-    const { data, isLoading }              = useSearchUsersQuery( { query, page: 1 } )
-    const [getConversationByParticipantId] = useLazyGetConversationByParticipantIdQuery()
-    const router                           = useRouter()
-
-    const users = data?.items || []
-
-    async function handleClick( user: User ){
-        try {
-            const conversation: any = await getConversationByParticipantId( user.id ).unwrap()
-            router.push( `/messages/${ conversation.id }` )
-        } catch ( e ) {
-            console.log( e )
-        }
-    }
-
-    if( ! isSearching ) return null
-
+function SearchUserList( { onUserClick, users, isLoading }: Props ){
     return (
         <div className="relative z-20">
             <div
-                className="box max-w-5xl p-3 absolute top-full left-0 w-full mt-3 bg-white drop-shadow-2xl">
+                className="box max-w-5xl p-3 absolute top-full left-0 w-full mt-1 bg-white drop-shadow-2xl">
                 { isLoading ? <Loading/> : null }
 
                 { ( users && users.length > 0 ) ? users.map( user => (
                     <button
                         key={ user.id }
-                        onClick={ () => handleClick( user ) }
-                        className="box p-3 mb-2 flex items-center bg-white w-full"
+                        onClick={ () => onUserClick( user ) }
+                        className="p-3 mb-2 flex items-center bg-white w-full"
                     >
                         <Avatar
                             src={ user.avatar.url }
@@ -55,7 +36,9 @@ function SearchUserList( { query, isSearching }: Props ){
                 ) ) : null }
 
                 { ( ! isLoading && users.length < 1 ) ? (
-                    < h2 className="text-xl text-gray-800">No result found</h2>
+                    <p className="text-gray-800 pb-4">
+                        Try searching for people, topics, or keywords
+                    </p>
                 ) : null }
             </div>
         </div>

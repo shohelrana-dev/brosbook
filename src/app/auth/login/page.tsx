@@ -2,7 +2,7 @@
 import { useEffect } from 'react'
 import Link from 'next/link'
 import { FiLock } from "react-icons/fi"
-import { toast } from "react-toastify"
+import toast from "react-hot-toast"
 
 import AnimatedInput from '@components/common/AnimatedInput'
 import GoogleLoginButton from '@components/common/GoogleLoginButton'
@@ -24,6 +24,7 @@ function LoginPage(){
     useEffect( () => {
         if( isSuccess ){
             if( data?.user?.hasEmailVerified ){
+                router.refresh()
                 router.push( params.get( 'redirect_path' ) ? params.get( 'redirect_path' )! : '/' )
                 toast.success( 'Logged in.' )
             } else{

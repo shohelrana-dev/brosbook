@@ -26,7 +26,7 @@ export const usersApi = baseApi.injectEndpoints( {
             } )
         } ),
 
-        searchUsers: build.query<ListResponse<User>, { query: string, page: number, limit?: number }>( {
+        searchUsers: build.query<ListResponse<User>, { key: string, page: number, limit?: number }>( {
             query: ( params ) => ( {
                 url: `/users/search`,
                 params

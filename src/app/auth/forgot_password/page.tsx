@@ -2,7 +2,7 @@
 import {useEffect} from 'react'
 import Link from "next/link"
 import {FiLock} from "react-icons/fi"
-import { toast } from "react-toastify"
+import toast from "react-hot-toast"
 
 import AnimatedInput from "@components/common/AnimatedInput"
 import Button from "@components/common/Button"

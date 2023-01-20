@@ -1,6 +1,6 @@
 import React from 'react'
 import { useRouter, useSearchParams } from "next/navigation"
-import { toast } from "react-toastify"
+import toast from "react-hot-toast"
 import { GoogleLogin, CredentialResponse, GoogleOAuthProvider } from '@react-oauth/google'
 
 import { useLoginWithGoogleMutation } from "@services/authApi"
@@ -15,6 +15,7 @@ function GoogleLoginButton(){
     async function responseGoogle( response: CredentialResponse ){
         try {
             await login( response.credential! ).unwrap()
+            router.refresh()
             router.push( params.get( 'redirect_path' ) ? params.get( 'redirect_path' )! : '/' )
             toast.success( 'Logged in.' )
         } catch ( err: any ) {

@@ -1,7 +1,7 @@
 "use client"
 import React, { ReactNode } from 'react'
 import { store }            from "../store"
-import { ToastContainer }   from "react-toastify"
+import { Toaster } from 'react-hot-toast'
 import { Provider }         from "react-redux"
 import { ConfirmProvider }  from "@hooks/useConfirm"
 
@@ -10,7 +10,7 @@ function Providers( { children }: { children: ReactNode } ){
         <Provider store={ store }>
             <ConfirmProvider>
                 { children }
-                <ToastContainer position="bottom-center"/>
+                <Toaster/>
             </ConfirmProvider>
         </Provider>
     )

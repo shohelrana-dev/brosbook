@@ -5,7 +5,7 @@ import Link from "next/link"
 import Button from "@components/common/Button"
 import { useChangePasswordMutation } from "@services/accountApi"
 import { ChangePasswordPayload } from "@interfaces/account.interfaces"
-import { toast } from "react-toastify"
+import toast from "react-hot-toast"
 import { useForm } from "@hooks/useForm"
 import Modal from "@components/common/Modal"
 

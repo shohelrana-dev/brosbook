@@ -9,28 +9,30 @@ import NotificationItem from "./NotificationItem"
 import Loading from "@components/common/Loading"
 
 export default function NotificationList(){
-    const { isLoading, items: notifications, loadMoreItem, hasMoreItem } = useGetInfiniteListQuery<Notification>(
+    const {
+              isLoading,
+              isFetching,
+              items: notifications,
+              loadMoreItem,
+              hasMoreItem
+          } = useGetInfiniteListQuery<Notification>(
         useGetNotificationsQuery, {
             page: 1,
             limit: 20
         }
     )
 
-    const endMessage = notifications?.length > 0 ? 'No more notifications' : 'No notifications.'
-
-    if( isLoading ){
-        return <Loading/>
-    }
+    const endMessage = ! isLoading && ! isFetching && notifications?.length > 0 ? 'No notifications' : null
 
     return (
         <AnimatePage>
             <div>
-                { ( ! notifications && isLoading ) ? <Loading size={ 20 }/> : null }
+                { ( ! notifications && isLoading ) ? <Loading size={ 40 }/> : null }
 
                 <InfiniteScroll
                     next={ loadMoreItem }
                     hasMore={ hasMoreItem }
-                    loader={ <Loading size={ 20 }/> }
+                    loader={ <Loading size={ 40 }/> }
                     dataLength={ notifications?.length }
                     endMessage={ <p className="box text-center mt-5 py-10">{ endMessage }</p> }
                 >

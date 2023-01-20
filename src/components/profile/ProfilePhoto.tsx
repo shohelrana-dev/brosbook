@@ -3,7 +3,7 @@ import React, {useState} from 'react'
 import IconButton from "@components/common/IconButton"
 import {TbCameraPlus} from "react-icons/tb"
 import {useChangeProfilePhotoMutation} from "@services/usersApi"
-import {toast} from "react-toastify"
+import toast from "react-hot-toast"
 import Button from "@components/common/Button"
 import ImageLightbox from "@components/common/ImageLightbox"
 import Image from "next/image"

@@ -4,6 +4,7 @@
 
 const nextConfig = {
     reactStrictMode: true,
+    swcMinify: true,
     images: {
         domains: [
             'localhost',
@@ -11,7 +12,6 @@ const nextConfig = {
             'lh3.googleusercontent.com'
         ]
     },
-    swcMinify: false,
     experimental: {
         appDir: true,
         fontLoaders: [

@@ -1,6 +1,6 @@
 "use client"
 import { useEffect }      from "react"
-import { toast }          from "react-toastify"
+import toast          from "react-hot-toast"
 import { useRouter }      from "next/navigation"
 import { useDispatch }    from "react-redux"
 import { logout }         from "@slices/authSlice"

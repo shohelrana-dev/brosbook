@@ -6,7 +6,7 @@ import { Post }                                                    from "@interf
 import { usePostLikeMutation, usePostUnlikeMutation }              from "@services/postsApi"
 import { motion, AnimatePresence }                                 from "framer-motion"
 import { CopyToClipboard }                                         from 'react-copy-to-clipboard'
-import { toast }                                                   from "react-toastify"
+import toast from "react-hot-toast"
 
 
 interface PostBarProps {

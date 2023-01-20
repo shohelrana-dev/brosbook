@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, useState } from "react"
 import { MutationTrigger } from "@reduxjs/toolkit/dist/query/react/buildHooks"
 import { MutationDefinition } from "@reduxjs/toolkit/query"
-import { toast } from "react-toastify"
+import toast from "react-hot-toast"
 
 export type Errors<TPayload> = {
     [Key in keyof TPayload]: string
@@ -32,7 +32,7 @@ export function useForm<TPayload>( mutationFN: MutationTrigger<MutationDefinitio
         } catch ( err: any ) {
             console.error( err )
             setErrors( err?.data?.errors || {} )
-            toast.error( err?.data?.message || 'Request was failed.' )
+            toast.error( err?.data?.message || 'Request failed.' )
         }
     }
 
@@ -49,6 +49,7 @@ export function useForm<TPayload>( mutationFN: MutationTrigger<MutationDefinitio
     }
 
     function clearFormData(){
+        // @ts-ignore
         if( Object.keys( formData ).length < 1 ){
             return
         }

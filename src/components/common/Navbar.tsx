@@ -107,7 +107,7 @@ function NavBar( { user }: Props ){
                                         </IconButton>
                                     </div>
                                 </PopoverHandler>
-                                <PopoverContent>
+                                <PopoverContent className="w-full max-w-[350px]">
                                     <div className="max-h-[500px] overflow-auto">
                                         <NotificationList/>
                                     </div>

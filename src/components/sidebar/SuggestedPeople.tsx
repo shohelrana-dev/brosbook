@@ -1,3 +1,4 @@
+"use client"
 import React from 'react'
 import { User } from "@interfaces/user.interfaces"
 import { useGetSuggestedUsersQuery } from "@services/usersApi"
@@ -15,7 +16,7 @@ function SuggestedPeople(){
           } = useGetInfiniteListQuery<User>( useGetSuggestedUsersQuery )
 
     return (
-        <>
+        <div className="box p-5">
             <h2 className="text-xl font-medium mb-5">Suggested People</h2>
 
             { isLoading ? <Loading size={ 30 }/> : null }
@@ -31,7 +32,7 @@ function SuggestedPeople(){
                     </ButtonGray>
                 </Link>
             ) : null }
-        </>
+        </div>
     )
 }
 

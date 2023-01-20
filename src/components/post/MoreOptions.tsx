@@ -4,7 +4,7 @@ import {BsThreeDots as ThreeDotsIcon} from "react-icons/bs"
 import {RiDeleteBin5Line as DeleteIcon, RiUserUnfollowLine as UnfollowIcon} from "react-icons/ri"
 import {AiOutlineUserAdd as FollowIcon} from "react-icons/ai"
 import {MdHideSource as HideIcon} from "react-icons/md"
-import {toast} from "react-toastify"
+import toast from "react-hot-toast"
 
 import ButtonGray from "@components/common/ButtonGray"
 import {useFollowMutation, useUnfollowMutation} from "@services/usersApi"

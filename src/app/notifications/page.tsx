@@ -11,10 +11,10 @@ export default function NotificationPage(){
     if( ! isAuthenticated ) return <Loading/>
 
     return (
-        <SidebarLayout>
+        <>
             <div className="box py-6 px-4">
                 <NotificationList/>
             </div>
-        </SidebarLayout>
+        </>
     )
 }

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import ConversationItem from "@components/messages/Conversations/ConversationItem"
-import { useGetConversationsQuery } from "@services/conversationApi"
+import { useGetConversationsQuery, useLazyGetConversationByParticipantIdQuery } from "@services/conversationApi"
 import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import Loading from "@components/common/Loading"
 import { Conversation } from "@interfaces/conversation.interfaces"
@@ -9,27 +9,44 @@ import BasicInput from "@components/common/BasicInput"
 import SearchUserList from "@components/messages/Conversations/SearchUserList"
 import { useSelector } from "react-redux"
 import { selectChatState } from "@slices/chatSlice"
+import { useSearchUsersQuery } from "@services/usersApi";
+import { useRouter } from "next/navigation";
+import { User } from "@interfaces/user.interfaces";
 
 function Conversations(){
     //hooks
-    const [query, setQuery]             = useState<string>( '' )
-    const { isLoading }                 = useGetInfiniteListQuery<Conversation>( useGetConversationsQuery, {} )
-    const { conversations }             = useSelector( selectChatState )
-    const [isSearching, setIsSearching] = useState<boolean>( false )
+    const [searchKey, setSearchKey]           = useState<string>( '' )
+    const { isLoading }                       = useGetInfiniteListQuery<Conversation>( useGetConversationsQuery, {} )
+    const { conversations }                   = useSelector( selectChatState )
+    const [isBlur, setIsBlur]                 = useState<boolean>( false )
+    const { data, isLoading: isUsersLoading } = useSearchUsersQuery( { key: searchKey, page: 1 } )
+    const [getConversationByParticipantId]    = useLazyGetConversationByParticipantIdQuery()
+    const router                              = useRouter()
 
     const onChange = useDebouncedCallback(
         ( value ) => {
-            setQuery( value )
+            setSearchKey( value )
         },
         500,
     )
 
     const onBlur = useDebouncedCallback(
         () => {
-            setIsSearching( false )
+            setIsBlur( false )
         },
         200,
     )
+
+    const users = data?.items || []
+
+    async function onUserClick( user: User ){
+        try {
+            const conversation: any = await getConversationByParticipantId( user.id ).unwrap()
+            router.push( `/messages/${ conversation.id }` )
+        } catch ( e ) {
+            console.log( e )
+        }
+    }
 
     return (
         <>
@@ -41,17 +58,18 @@ function Conversations(){
                     label="Search user"
                     labelHide={ true }
                     onBlur={ onBlur }
-                    onFocus={ () => setIsSearching( true ) }
+                    onFocus={ () => setIsBlur( true ) }
                     onChange={ ( e ) => {onChange( e.target.value )} }
                 />
-                <SearchUserList query={ query } isSearching={ isSearching }/>
+                { isBlur ?
+                    <SearchUserList isLoading={ isUsersLoading } onUserClick={ onUserClick } users={ users }/> : null }
             </div>
 
             {/*Conversations*/ }
-            { ! isSearching ? (
+            { ! isBlur ? (
                 <div>
                     <h2 className="text-lg font-medium mb-3">Recent chats</h2>
-                    { isLoading ? <Loading/> : null }
+                    { isLoading ? <Loading size={ 35 }/> : null }
 
                     { conversations && conversations.map( ( conversation: Conversation ) => (
                         <ConversationItem conversation={ conversation } key={ conversation.id }/>

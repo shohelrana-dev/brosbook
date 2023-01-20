@@ -48,7 +48,7 @@ export function ConfirmProvider({children}: PropsWithChildren) {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        transition={{duration: 0.3}}
+                        transition={{duration: 0.2}}
                         style={{zIndex: 2000}}
                         className="fixed flex items-center justify-center w-full h-full top-0 left-0 bg-[#00000066]"
                     >
@@ -57,7 +57,7 @@ export function ConfirmProvider({children}: PropsWithChildren) {
                             animate={{scale: 1}}
                             exit={{ opacity: 0, scale: 0.6 }}
                             style={{maxWidth: '350px'}}
-                            transition={{duration: 0.3}}
+                            transition={{duration: 0.2}}
                             className="box w-[80%] rounded-2xl p-6"
                         >
                             <div className="mb-6">

@@ -9,7 +9,7 @@ import { http } from "@boot/axios"
 import { cookies } from "next/headers"
 import { User } from "@interfaces/user.interfaces"
 import TabLinkList from "@components/common/TabLinkList"
-import authorizationConfig from "@utils/authorizationConfig"
+import getAuthorizationConfig from "@utils/getAuthorizationConfig"
 import ButtonOutline from "@components/common/ButtonOutline"
 import CoverPhoto from "@components/profile/CoverPhoto"
 import ProfilePhoto from "@components/profile/ProfilePhoto"
@@ -26,7 +26,7 @@ interface ProfileLayoutProps {
 export const revalidate = 0
 
 export default async function ProfileLayout( { children, params }: ProfileLayoutProps ){
-    const config     = authorizationConfig( cookies() )
+    const config     = getAuthorizationConfig( cookies() )
     const user: User = await http.get( `/users/by/username/${ params.username }`, config ).then( ( res ) => res.data ).catch( () => null )
 
     if( ! user ) return <NotFound/>

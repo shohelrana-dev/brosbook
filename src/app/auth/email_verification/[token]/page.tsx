@@ -1,6 +1,6 @@
 "use client"
 import { useRouter }                from "next/navigation"
-import { toast }                    from "react-toastify"
+import toast                    from "react-hot-toast"
 import useAsyncEffect             from "use-async-effect"
 import { useVerifyEmailMutation } from "@services/authApi"
 import Loading from "@components/common/Loading"

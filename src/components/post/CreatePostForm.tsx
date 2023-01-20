@@ -2,7 +2,7 @@ import React, {FormEvent, useState} from 'react'
 import {MdPublic} from "react-icons/md"
 import {HiPhotograph} from "react-icons/hi"
 import {ImCross} from 'react-icons/im'
-import {toast} from "react-toastify"
+import toast from "react-hot-toast"
 
 import Avatar from "@components/common/Avatar"
 import {useCreatePostMutation} from "@services/postsApi"

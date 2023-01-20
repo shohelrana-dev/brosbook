@@ -1,7 +1,7 @@
 "use client"
 import { useEffect, useState} from 'react'
 import Link from 'next/link'
-import { toast } from "react-toastify"
+import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
 import {Alert} from "@material-tailwind/react"
 import { passwordStrength } from 'check-password-strength'
