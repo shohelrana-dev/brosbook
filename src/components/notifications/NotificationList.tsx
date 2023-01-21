@@ -2,7 +2,7 @@
 import React from 'react'
 import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import { useGetNotificationsQuery } from "@services/notificationsApi"
-import AnimatePage from "@components/common/AnimatePage"
+import AnimatedComponent from "@components/common/AnimatedComponent"
 import InfiniteScroll from "react-infinite-scroll-component"
 import { Notification } from "@interfaces/index.interfaces"
 import NotificationItem from "./NotificationItem"
@@ -18,21 +18,21 @@ export default function NotificationList(){
           } = useGetInfiniteListQuery<Notification>(
         useGetNotificationsQuery, {
             page: 1,
-            limit: 20
+            limit: 10
         }
     )
 
-    const endMessage = ! isLoading && ! isFetching && notifications?.length > 0 ? 'No notifications' : null
+    const endMessage = ( ! isLoading && ! isFetching && notifications?.length < 1 ) ? 'No notifications' : null
 
     return (
-        <AnimatePage>
-            <div>
-                { ( ! notifications && isLoading ) ? <Loading size={ 40 }/> : null }
+        <div>
+            { ( ! notifications && isLoading ) ? <Loading size={ 35 }/> : null }
 
+            <AnimatedComponent>
                 <InfiniteScroll
                     next={ loadMoreItem }
                     hasMore={ hasMoreItem }
-                    loader={ <Loading size={ 40 }/> }
+                    loader={ <Loading size={ 35 }/> }
                     dataLength={ notifications?.length }
                     endMessage={ <p className="box text-center mt-5 py-10">{ endMessage }</p> }
                 >
@@ -40,7 +40,7 @@ export default function NotificationList(){
                         <NotificationItem key={ notification.id } notification={ notification }/>
                     ) ) }
                 </InfiniteScroll>
-            </div>
-        </AnimatePage>
+            </AnimatedComponent>
+        </div>
     )
 }

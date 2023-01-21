@@ -17,6 +17,7 @@ export default function ProfilePostsPage( { user, initialPosts }: ProfilePostsPa
     //hooks
     let {
             isLoading,
+            isFetching,
             items: posts,
             hasMoreItem,
             loadMoreItem
@@ -25,7 +26,8 @@ export default function ProfilePostsPage( { user, initialPosts }: ProfilePostsPa
     if( posts.length < 1 ){
         posts = initialPosts.items
     }
-    const endMessage = posts?.length > 0 ? 'No more posts' : 'User haven\'t any post.'
+    const endMessage = ( ! isLoading && ! isFetching && posts?.length < 1 ) ?
+        <p className="box text-center mt-5 py-10">User haven't any post.</p> : null
 
     return (
         <div className="pt-1">
@@ -36,7 +38,7 @@ export default function ProfilePostsPage( { user, initialPosts }: ProfilePostsPa
                 hasMore={ hasMoreItem }
                 loader={ <LoadingPosts/> }
                 dataLength={ posts?.length }
-                endMessage={ <p className="box text-center mt-5 py-10">{ endMessage }</p> }
+                endMessage={ endMessage }
             >
                 { posts.map( ( post: Post ) => (
                     <PostCard post={ post } key={ post.id }/>

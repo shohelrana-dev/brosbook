@@ -1,8 +1,8 @@
 "use client"
-import {useGetFollowersQuery, useGetUserByUsernameQuery} from "@services/usersApi"
-import {useGetInfiniteListQuery} from "@hooks/useGetInfiniteListQuery"
+import { useGetFollowersQuery, useGetUserByUsernameQuery } from "@services/usersApi"
+import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import Loading from "@components/common/Loading"
-import {User} from "@interfaces/user.interfaces"
+import { User } from "@interfaces/user.interfaces"
 import FollowUser from "@components/common/FollowUser"
 import InfiniteScroll from "react-infinite-scroll-component"
 
@@ -10,17 +10,19 @@ interface Props {
     params: { username: string }
 }
 
-export default function FollowersPage(props: Props) {
+export default function FollowersPage( props: Props ){
     //hooks
-    const {data: user} = useGetUserByUsernameQuery(props.params.username)
+    const { data: user } = useGetUserByUsernameQuery( props.params.username )
     const {
-        isLoading,
-        items: followers,
-        loadMoreItem,
-        hasMoreItem
-    } = useGetInfiniteListQuery<User>(useGetFollowersQuery, {userId: user?.id!})
+              isLoading,
+              isFetching,
+              items: followers,
+              loadMoreItem,
+              hasMoreItem
+          }              = useGetInfiniteListQuery<User>( useGetFollowersQuery, { userId: user?.id! } )
 
-    const endMessage = followers?.length > 0 ? 'No more followers' : 'User haven\'t follower.'
+    const endMessage = ( ! isFetching && ! isLoading && followers?.length < 1 ) ?
+        <p className="box text-center mt-5 py-10">User haven\'t follower.</p> : null
 
     return (
         <>
@@ -31,11 +33,11 @@ export default function FollowersPage(props: Props) {
                 hasMore={ hasMoreItem }
                 loader={ <Loading/> }
                 dataLength={ followers?.length }
-                endMessage={ <p className="box text-center mt-5 py-10">{ endMessage }</p> }
+                endMessage={ endMessage }
             >
-                { followers.map( ( user: User) => (
+                { followers.map( ( user: User ) => (
                     <div className="bg-white p-3 pb-1">
-                        <FollowUser user={user} key={user.id}/>
+                        <FollowUser user={ user } key={ user.id }/>
                     </div>
                 ) ) }
             </InfiniteScroll>

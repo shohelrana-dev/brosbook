@@ -1,9 +1,9 @@
 import Link       from 'next/link'
-import AnimatePage from "@components/common/AnimatePage"
+import AnimatedComponent from "@components/common/AnimatedComponent"
 
 export default function NotFound() {
     return (
-        <AnimatePage>
+        <AnimatedComponent>
             <div className="flex flex-col items-center">
                 <h1 className="mt-10 text-5xl text-blue-500">404</h1>
                 <h1 className=" mb-4 text-2xl text-gray-800">Page Not Found</h1>
@@ -11,6 +11,6 @@ export default function NotFound() {
                     Home
                 </Link>
             </div>
-        </AnimatePage>
+        </AnimatedComponent>
     )
 }

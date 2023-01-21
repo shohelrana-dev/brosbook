@@ -1,4 +1,3 @@
-import React from 'react'
 import Avatar from "@components/common/Avatar"
 import { useGetConversationByIdQuery, useGetConversationMediaListQuery } from "@services/conversationApi"
 import Loading from "@components/common/Loading"

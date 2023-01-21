@@ -5,18 +5,19 @@ import Loading from "@components/common/Loading"
 import { User } from "@interfaces/user.interfaces"
 import FollowUser from "@components/common/FollowUser"
 import InfiniteScroll from "react-infinite-scroll-component"
-import SidebarLayout from "@components/common/SidebarLayout"
 
 export default function Suggestions(){
     //hooks
     const {
               isLoading,
+              isFetching,
               items: users,
               loadMoreItem,
               hasMoreItem
           } = useGetInfiniteListQuery<User>( useGetSuggestedUsersQuery )
 
-    const endMessage = users?.length > 0 ? 'No more suggestions' : 'You have no suggestion.'
+    const endMessage = ( ! isLoading && ! isFetching && users?.length < 1 ) ?
+        <p className="box text-center mt-5 py-10">You have no suggestion.</p> : null
 
     return (
         <>
@@ -29,7 +30,7 @@ export default function Suggestions(){
                     hasMore={ hasMoreItem }
                     loader={ <Loading/> }
                     dataLength={ users?.length }
-                    endMessage={ <p className="box text-center mt-5 py-10">{ endMessage }</p> }
+                    endMessage={ endMessage }
                 >
                     { users.map( ( user: User ) => (
                         <div className="pb-1">

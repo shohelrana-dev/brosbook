@@ -44,7 +44,7 @@ function NavBar( { user }: Props ){
     }, [data] )
 
     useEffect( () => {
-        const socket = io( process.env.NEXT_PUBLIC_API_URL! )
+        const socket = io( process.env.NEXT_PUBLIC_SERVER_BASE_URL! )
 
         socket.on( `unread_notification_count_${ user?.id }`, ( count ) => {
             setUnreadNotificationsCount( count )

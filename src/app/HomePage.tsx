@@ -11,12 +11,14 @@ export default function HomePage(){
     //hooks
     const {
               isLoading,
+              isFetching,
               items: posts,
               hasMoreItem,
               loadMoreItem
           } = useGetInfiniteListQuery<Post>( useGetFeedPostsQuery )
 
-    const endMessage = !isLoading && posts?.length < 1 ? 'Your feed is empty.' : null
+    const endMessage = ( ! isLoading && ! isFetching && posts?.length < 1 ) ?
+        <p className="box text-center mt-5 py-10">Your feed is empty.</p> : null
 
     return (
         <div className="pt-6 mb-6">
@@ -28,7 +30,7 @@ export default function HomePage(){
                 hasMore={ hasMoreItem }
                 loader={ <LoadingPosts/> }
                 dataLength={ posts?.length }
-                endMessage={ <p className="box text-center mt-5 py-10">{ endMessage }</p> }
+                endMessage={ endMessage }
             >
                 { posts.map( ( post: Post ) => (
                     <PostCard post={ post } key={ post.id }/>

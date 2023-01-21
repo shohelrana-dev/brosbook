@@ -56,13 +56,13 @@ export function ConfirmProvider({children}: PropsWithChildren) {
                             initial={{scale: 0.9}}
                             animate={{scale: 1}}
                             exit={{ opacity: 0, scale: 0.6 }}
-                            style={{maxWidth: '350px'}}
+                            style={{maxWidth: '300px'}}
                             transition={{duration: 0.2}}
                             className="box w-[80%] rounded-2xl p-6"
                         >
                             <div className="mb-6">
-                                <h3 className="text-xl font-bold mb-2">{options.title}</h3>
-                                <p>{options.message}</p>
+                                <h3 className="text-lg font-bold mb-2">{options.title}</h3>
+                                <p className="text-gray-800">{options.message}</p>
                             </div>
                             <div className="basis-full">
                                 <Button fullWidth size="sm" className="mb-3" onClick={onConfirm}>

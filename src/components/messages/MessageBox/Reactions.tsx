@@ -45,7 +45,7 @@ function Reactions( { message }: ReactionsProps ){
                             <button className="m-1" onClick={ () => handleSubmitReaction( reaction ) } key={ reaction }>
                                 <img
                                     className="w-7"
-                                    src={ `${ process.env.NEXT_PUBLIC_API_URL! }/reactions/${ reaction }.png` }
+                                    src={ `${ process.env.NEXT_PUBLIC_SERVER_BASE_URL! }/reactions/${ reaction }.png` }
                                     alt="reaction"
                                 />
                             </button>

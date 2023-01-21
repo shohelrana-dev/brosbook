@@ -2,7 +2,7 @@
 import React, {PropsWithChildren} from 'react'
 import { motion, AnimatePresence } from "framer-motion"
 
-function AnimatePage({children}:PropsWithChildren) {
+function AnimatedComponent( {children}:PropsWithChildren) {
     return (
         <AnimatePresence>
             <motion.div
@@ -17,4 +17,4 @@ function AnimatePage({children}:PropsWithChildren) {
     )
 }
 
-export default AnimatePage
+export default AnimatedComponent

@@ -1,17 +1,15 @@
 "use client"
 import React from 'react'
-import Conversations from "@components/messages/Conversations"
-import ParticipantInfo from "@components/messages/ParticipantInfo"
-import useCurrentUser from "@hooks/useCurrentUser"
-import MediaQuery from 'react-responsive'
 import MessageBox from "@components/messages/MessageBox"
+import Conversations from "@components/messages/Conversations"
+import MediaQuery from "react-responsive"
+import ParticipantInfo from "@components/messages/ParticipantInfo"
 
 interface Props {
     params: { conversationId: string }
 }
 
 export default function ConversationPage( { params }: Props ){
-    const {} = useCurrentUser( { redirectTo: '/auth/login' } )
 
     return (
         <div className="h-screen grid grid-cols-12 md:px-10 sm:px-4 pt-16 -mt-16 bg-theme-gray">

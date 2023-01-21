@@ -26,12 +26,16 @@ function SearchUserList( { onUserClick, users, isLoading }: Props ){
                             src={ user.avatar.url }
                             online={ user.active === 1 }
                             alt={ user.fullName }
-                            size="small"
+                            size="medium"
 
                         />
-                        <p className="ml-3">
-                            { user.fullName }
-                        </p>
+                        <div>
+                            <h4 className="ml-3 text-base">
+                                { user.fullName }
+                            </h4>
+                            <p className="text-sm text-gray-700">@{ user.username }</p>
+                            <p className="text-gray-700">{ user.profile?.bio }</p>
+                        </div>
                     </button>
                 ) ) : null }
 

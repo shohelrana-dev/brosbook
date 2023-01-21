@@ -3,7 +3,7 @@ import { fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react"
 import Cookies from "js-cookie"
 import { RootState } from "../store"
 
-const BASE_URL = `${ process.env.NEXT_PUBLIC_API_URL }/v1`
+const BASE_URL = process.env.NEXT_PUBLIC_SERVER_API_URL
 
 export const baseApi = createApi( {
     reducerPath: 'baseApi',

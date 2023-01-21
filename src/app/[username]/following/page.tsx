@@ -15,12 +15,14 @@ export default function FollowingPage( props: Props ){
     const { data: user } = useGetUserByUsernameQuery( props.params.username )
     const {
               isLoading,
+              isFetching,
               items: followings,
               loadMoreItem,
               hasMoreItem
           }              = useGetInfiniteListQuery<User>( useGetFollowingsQuery, { userId: user?.id! } )
 
-    const endMessage = followings?.length > 0 ? 'No more following' : 'User haven\'t following.'
+    const endMessage = ( ! isFetching && ! isLoading && followings?.length < 1 ) ?
+        <p className="box text-center mt-5 py-10">User haven\'t following.</p> : null
 
     return (
         <>
@@ -31,7 +33,7 @@ export default function FollowingPage( props: Props ){
                 hasMore={ hasMoreItem }
                 loader={ <Loading/> }
                 dataLength={ followings?.length }
-                endMessage={ <p className="box text-center mt-5 py-10">{ endMessage }</p> }
+                endMessage={ endMessage }
             >
                 { followings.map( ( user: User ) => (
                     <div className="bg-white p-3 pb-1">

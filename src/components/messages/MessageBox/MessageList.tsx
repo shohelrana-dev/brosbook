@@ -19,7 +19,7 @@ function MessageList( { conversation }: Props ){
     )
 
     useEffect( () => {
-        const socket = io( process.env.NEXT_PUBLIC_API_URL! )
+        const socket = io( process.env.NEXT_PUBLIC_SERVER_BASE_URL! )
 
         if( conversation ){
             socket.on( `new_message_${ conversation.id }`, addMessage )
