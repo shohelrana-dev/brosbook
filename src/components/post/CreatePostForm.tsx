@@ -1,7 +1,7 @@
 import React, {FormEvent, useState} from 'react'
 import {MdPublic} from "react-icons/md"
 import {HiPhotograph} from "react-icons/hi"
-import {ImCross} from 'react-icons/im'
+import {RxCross2 as CancelIcon} from "react-icons/rx"
 import toast from "react-hot-toast"
 
 import Avatar from "@components/common/Avatar"
@@ -80,7 +80,7 @@ function CreatePostForm() {
                         className="relative max-w-sm m-auto relative border-3 border-solid border-gray-300 rounded-2xl">
                         <IconButton className="!absolute right-0 top-0 bg-white hover:bg-gray-300"
                                     onClick={removeSelectedFile}>
-                            <ImCross fontSize={15} color="#000"/>
+                            <CancelIcon fontSize={18} color="#000"/>
                         </IconButton>
                         <img className="rounded-2xl" src={URL.createObjectURL(selectedImage)} alt="post image"/>
                     </div>) : null}

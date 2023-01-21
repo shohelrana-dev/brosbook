@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, Suspense } from 'react'
 import Loading from "@components/common/Loading"
-import Sidebar from "@components/sidebar/Sidebar"
+import Sidebar from "@components/common/Sidebar"
 
 function SidebarLayout( { children }: PropsWithChildren ){
     return (

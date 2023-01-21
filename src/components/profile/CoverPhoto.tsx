@@ -1,5 +1,5 @@
 "use client"
-import React, {ChangeEvent, useRef, useState} from 'react'
+import React, {ChangeEvent, useState} from 'react'
 import IconButton from "@components/common/IconButton"
 import {TbCameraPlus} from "react-icons/tb"
 import {useChangeCoverPhotoMutation} from "@services/usersApi"
@@ -83,13 +83,10 @@ export default function CoverPhoto({user}: Props) {
                 <TbCameraPlus fontSize={25} color="#fff"/>
             </IconButton>
 
-            <Modal isOpen={isModalOpen} onClose={handleModalOpen} iconAlignment="left" className="max-w-[625px] !p-3">
+            <Modal isOpen={isModalOpen} onClose={handleModalOpen} className="max-w-[625px] !p-3">
                 <div>
                     <div className="flex justify-between p-2">
-                        <h3 className="text-lg ml-6">New cover photo</h3>
-                        <Button size="sm" isLoading={isLoading} className="mt-0" onClick={handleSubmit}>
-                            Save
-                        </Button>
+                        <h3 className="text-lg">New cover photo</h3>
                     </div>
                     <div className="p-4 bg-gray-100">
                         {selectedPhoto ? (
@@ -101,6 +98,11 @@ export default function CoverPhoto({user}: Props) {
                                 />
                             </div>
                         ) : null}
+                    </div>
+                    <div className="text-right mt-3">
+                        <Button size="sm" isLoading={isLoading} className="mt-0" onClick={handleSubmit}>
+                            Save
+                        </Button>
                     </div>
                 </div>
             </Modal>

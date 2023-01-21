@@ -1,20 +1,17 @@
-"use client"
 import React, { PropsWithChildren } from 'react'
-import useCurrentUser from "@hooks/useCurrentUser"
 import TabLinkList from "@components/common/TabLinkList"
 import Avatar from "@components/common/Avatar"
-import Loading from "@components/common/Loading"
 import SidebarLayout from "@components/common/SidebarLayout"
+import { getCurrentUser } from "@services/index"
+import { cookies } from "next/headers"
 
 const tabLinks = [
     { label: 'Account', pathname: '/account' },
     { label: 'Profile', pathname: '/account/profile' }
 ]
 
-export default function AccountLayout( { children }: PropsWithChildren ){
-    const { user, isAuthenticated } = useCurrentUser( { redirectTo: '/auth/login' } )
-
-    if( ! isAuthenticated ) return <Loading/>
+export default async function AccountLayout( { children }: PropsWithChildren ){
+    const user = await getCurrentUser( cookies() )
 
     return (
         <SidebarLayout>

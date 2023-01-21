@@ -77,13 +77,10 @@ export default function ProfilePhoto({user}: Props) {
                 <TbCameraPlus fontSize={20} color="#fff"/>
             </IconButton>
 
-            <Modal isOpen={isModalOpen} onClose={handleModalOpen} iconAlignment="left" className="max-w-[625px] !p-3">
+            <Modal isOpen={isModalOpen} onClose={handleModalOpen} className="max-w-[625px] !p-3">
                 <div>
-                    <div className="flex justify-between p-2">
-                        <h3 className="text-lg ml-6">New profile photo</h3>
-                        <Button size="sm" isLoading={isLoading} className="mt-0" onClick={handleSubmit}>
-                            Save
-                        </Button>
+                    <div className="p-2">
+                        <h3 className="text-lg">New profile photo</h3>
                     </div>
                     <div className="p-4 bg-gray-100">
                         {selectedPhoto ? (
@@ -95,6 +92,11 @@ export default function ProfilePhoto({user}: Props) {
                                 />
                             </div>
                         ) : null}
+                    </div>
+                    <div className="text-right mt-3">
+                        <Button size="sm" isLoading={isLoading} className="mt-0" onClick={handleSubmit}>
+                            Save
+                        </Button>
                     </div>
                 </div>
             </Modal>

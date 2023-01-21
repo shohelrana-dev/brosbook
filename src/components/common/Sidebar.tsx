@@ -1,7 +1,7 @@
-import SuggestedPeople from "@components/sidebar/SuggestedPeople"
-import SearchUser from "@components/sidebar/SearchUser"
+import SuggestedPeople from "@components/widgets/SuggestedPeople"
+import SearchUser from "@components/widgets/SearchUser"
 import { getCurrentUser } from "@services/index"
-import NewUserMessage from "@components/sidebar/NewUserMessage"
+import NewUserMessage from "@components/widgets/NewUserMessage"
 import { cookies } from "next/headers"
 
 export default async function Sidebar(){
