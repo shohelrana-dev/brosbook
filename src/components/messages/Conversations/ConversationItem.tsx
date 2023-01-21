@@ -2,10 +2,10 @@ import React from 'react'
 import classNames from "classnames"
 import Link from "next/link"
 import { Conversation } from "@interfaces/conversation.interfaces"
-import { shortText } from "@utils/shortText"
 import Avatar from "@components/common/Avatar"
 import useCurrentUser from "@hooks/useCurrentUser"
 import timeAgo from "@utils/timeAgo"
+import TextOverflow from 'react-text-overflow'
 
 interface SingleConversationProps {
     conversation: Conversation
@@ -32,7 +32,7 @@ function ConversationItem( { conversation }: SingleConversationProps ){
                     "font-bold text-gray-800": ! conversation?.lastMessage?.seenAt,
                     "text-gray-500": conversation?.lastMessage?.seenAt
                 } ) }>
-                    { shortText( conversation.lastMessage?.body!, 30 ) }
+                    <TextOverflow text={ conversation.lastMessage?.body! }/>
                     { conversation.lastMessage?.image ? 'Photo' : null }
                 </p>
             </div>
