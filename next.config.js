@@ -3,8 +3,8 @@
  */
 
 const nextConfig = {
-    reactStrictMode: false,
-    swcMinify: false,
+    reactStrictMode: true,
+    swcMinify: true,
     images: {
         domains: [
             'localhost',

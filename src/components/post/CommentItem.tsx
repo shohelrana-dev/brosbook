@@ -5,7 +5,7 @@ import { BsHeart as OutlinedLikeIcon } from "react-icons/bs"
 import ShowMoreText from "react-show-more-text"
 
 import Avatar from "@components/common/Avatar"
-import { Comment } from "@interfaces/posts.interfaces"
+import { Comment, Post } from "@interfaces/posts.interfaces"
 import { useLikeCommentMutation, useUnlikeCommentMutation } from "@services/commentsApi"
 import timeAgo from "@utils/timeAgo"
 import { motion } from "framer-motion"
@@ -13,6 +13,7 @@ import CommentOptions from "@components/post/CommentOptions"
 
 interface Props {
     comment: Comment
+    post: Post
 }
 
 function CommentItem( props: Props ){
@@ -74,7 +75,7 @@ function CommentItem( props: Props ){
                             </div>
                         </div>
                     </div>
-                    <CommentOptions comment={ comment } setComment={ setComment }/>
+                    <CommentOptions comment={ comment } setComment={ setComment } post={ props.post }/>
                 </div>
 
                 <div className="flex items-center text-pink-500 relative">

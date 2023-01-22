@@ -12,15 +12,16 @@ import { useDeleteCommentMutation } from "@services/commentsApi"
 import useCurrentUser from "@hooks/useCurrentUser"
 import useConfirm from "@hooks/useConfirm"
 import { User } from "@interfaces/user.interfaces"
-import { Comment } from "@interfaces/posts.interfaces"
+import { Comment, Post } from "@interfaces/posts.interfaces"
 import IconButton from "@components/common/IconButton"
 
 interface Props {
+    post: Post
     comment: Comment
     setComment: ( comment: Comment | null ) => void
 }
 
-export default function CommentOptions( { comment, setComment }: Props ){
+export default function CommentOptions( { post, comment, setComment }: Props ){
     const [follow]        = useFollowMutation()
     const [unfollow]      = useUnfollowMutation()
     const [deleteComment] = useDeleteCommentMutation()
@@ -29,7 +30,7 @@ export default function CommentOptions( { comment, setComment }: Props ){
     const confirm               = useConfirm()
     const [author, setAuthor]   = useState<User>( comment.author )
 
-    const isCurrentUserAuthor = author && author.id === currentUser?.id
+    const isCurrentUserAuthor = comment.author && ( comment.author.id === currentUser?.id || post.author.id === currentUser?.id )
 
     async function handleDeleteComment(){
         const isConfirm = await confirm( {
@@ -75,7 +76,7 @@ export default function CommentOptions( { comment, setComment }: Props ){
             <PopoverHandler>
                 <div>
                     <IconButton className="ml-2">
-                        <ThreeDotsIcon size="18" />
+                        <ThreeDotsIcon size="18"/>
                     </IconButton>
                 </div>
             </PopoverHandler>

@@ -1,5 +1,5 @@
-import { Post }         from "@interfaces/posts.interfaces"
-import { baseApi }      from "@services/baseApi";
+import { Post } from "@interfaces/posts.interfaces"
+import { baseApi } from "@services/baseApi";
 import { ListResponse } from "@interfaces/index.interfaces"
 
 export const postsApi = baseApi.injectEndpoints( {
@@ -15,6 +15,13 @@ export const postsApi = baseApi.injectEndpoints( {
             query: ( params ) => ( {
                 url: 'posts',
                 params
+            } ),
+            providesTags: ['Post']
+        } ),
+
+        getPostById: build.query<Post, string>( {
+            query: ( postId ) => ( {
+                url: `posts/${ postId }`
             } ),
             providesTags: ['Post']
         } ),
@@ -57,6 +64,7 @@ export const postsApi = baseApi.injectEndpoints( {
 export const {
                  useGetFeedPostsQuery,
                  useGetPostsQuery,
+                 useGetPostByIdQuery,
                  useCreatePostMutation,
                  useDeletePostMutation,
                  usePostLikeMutation,

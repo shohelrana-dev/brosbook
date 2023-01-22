@@ -23,7 +23,7 @@ function Avatar( { online, size, src, className }: AvatarProps ){
 
     return (
         <div className="relative flex-none" style={ { width, height } }>
-            { src ? <Image priority className={ className } src={ src } fill={ true } alt="Profile photo"/> : null }
+            { src ? <Image priority className={ className } src={ src } width={width} height={height} alt="Profile photo"/> : null }
             { online ? <div
                 className="bg-green-500 border-white w-3 h-3 absolute right-0 bottom-0 rounded-full border-2"/> : null }
         </div>

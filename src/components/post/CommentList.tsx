@@ -9,6 +9,7 @@ import BasicInput from "@components/common/BasicInput"
 import useCurrentUser from "@hooks/useCurrentUser"
 import ButtonGray from "@components/common/ButtonGray"
 import Loading from "@components/common/Loading"
+import { useGetPostByIdQuery } from "@services/postsApi"
 
 interface CommentListPost {
     postId: string
@@ -24,6 +25,7 @@ function CommentList( { postId }: CommentListPost ){
               loadMoreItem,
               setItems
           }                     = useGetInfiniteListQuery<Comment>( useGetCommentsQuery, { postId } )
+    const { data: post }        = useGetPostByIdQuery( postId )
     const [createComment]       = useCreateCommentMutation()
 
     const [commentBody, setCommentBody] = useState( '' )
@@ -62,14 +64,14 @@ function CommentList( { postId }: CommentListPost ){
             </form>
 
             { ! isLoading ? comments?.length > 0 ? comments.map( ( comment: Comment ) => (
-                <CommentItem comment={ comment } key={ comment.id }/>
+                <CommentItem comment={ comment } post={ post! } key={ comment.id }/>
             ) ) : (
                 <p className="mt-3">No comments</p>
             ) : null }
 
             { isLoading || isFetching ? <Loading size={ 35 }/> : null }
 
-            { hasMoreItem && (!isLoading && !isFetching) ? (
+            { hasMoreItem && ( ! isLoading && ! isFetching ) ? (
                 <ButtonGray isLoading={ isLoading } onClick={ () => loadMoreItem() }>
                     See more comments
                 </ButtonGray>
