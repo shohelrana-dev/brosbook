@@ -19,7 +19,7 @@ interface Props{
     setPost: (post: Post | null) => void
 }
 
-function MoreOptions({post, setPost}: Props) {
+function PostOptions( {post, setPost}: Props) {
     const [follow] = useFollowMutation()
     const [unfollow] = useUnfollowMutation()
     const [deletePost] = useDeletePostMutation()
@@ -114,4 +114,4 @@ function MoreOptions({post, setPost}: Props) {
     )
 }
 
-export default MoreOptions
+export default PostOptions

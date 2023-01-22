@@ -44,7 +44,7 @@ function LoginPage(){
                     </div>
                     <h1 className="text-xl text-center mb-4 font-medium">Log In
                         to { process.env.NEXT_PUBLIC_APP_NAME || 'Brosbook' }</h1>
-                    <form method="post" onSubmit={ onSubmit }>
+                    <form method="post" onSubmit={ onSubmit } className="mb-2">
                         <AnimatedInput
                             label="Username or email"
                             name="username"

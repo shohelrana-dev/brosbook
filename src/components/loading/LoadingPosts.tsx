@@ -9,6 +9,9 @@ export default function LoadingPosts(){
             <div className="box p-6 mt-6">
                 <Facebook/>
             </div>
+            <div className="box p-6 mt-6">
+                <Facebook/>
+            </div>
         </>
     )
 }

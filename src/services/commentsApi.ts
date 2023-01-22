@@ -1,6 +1,6 @@
 import { ListResponse } from "@interfaces/index.interfaces"
-import { Comment }      from "@interfaces/posts.interfaces"
-import { baseApi }      from "@services/baseApi"
+import { Comment } from "@interfaces/posts.interfaces"
+import { baseApi } from "@services/baseApi"
 
 export const commentsApi = baseApi.injectEndpoints( {
     endpoints: ( build ) => ( {
@@ -17,6 +17,14 @@ export const commentsApi = baseApi.injectEndpoints( {
                 url: `posts/${ postId }/comments`,
                 method: 'POST',
                 body: formData
+            } ),
+            invalidatesTags: ['Comment']
+        } ),
+
+        deleteComment: build.mutation<Comment, { postId: string, commentId: string }>( {
+            query: ( { postId, commentId } ) => ( {
+                url: `posts/${ postId }/comments/${ commentId }`,
+                method: 'DELETE'
             } ),
             invalidatesTags: ['Comment']
         } ),
@@ -42,6 +50,7 @@ export const commentsApi = baseApi.injectEndpoints( {
 export const {
                  useGetCommentsQuery,
                  useCreateCommentMutation,
+                 useDeleteCommentMutation,
                  useLikeCommentMutation,
                  useUnlikeCommentMutation
              } = commentsApi

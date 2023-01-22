@@ -34,7 +34,7 @@ export default function NotificationList(){
                     hasMore={ hasMoreItem }
                     loader={ <Loading size={ 35 }/> }
                     dataLength={ notifications?.length }
-                    endMessage={ <p className="box text-center mt-5 py-10">{ endMessage }</p> }
+                    endMessage={ endMessage }
                 >
                     { notifications.map( ( notification: Notification ) => (
                         <NotificationItem key={ notification.id } notification={ notification }/>

@@ -1,61 +1,63 @@
 import React, { useState } from 'react'
 import Link from "next/link"
-import {BsHeartFill as LikeIcon} from "react-icons/bs"
-import {BsHeart as OutlinedLikeIcon} from "react-icons/bs"
+import { BsHeartFill as LikeIcon } from "react-icons/bs"
+import { BsHeart as OutlinedLikeIcon } from "react-icons/bs"
 import ShowMoreText from "react-show-more-text"
 
 import Avatar from "@components/common/Avatar"
 import { Comment } from "@interfaces/posts.interfaces"
 import { useLikeCommentMutation, useUnlikeCommentMutation } from "@services/commentsApi"
 import timeAgo from "@utils/timeAgo"
-import {BsThreeDots as ThreeDotsIcon} from "react-icons/bs"
-import {motion} from "framer-motion"
-import IconButton from "@components/common/IconButton"
+import { motion } from "framer-motion"
+import CommentOptions from "@components/post/CommentOptions"
 
-interface CommentItemState {
+interface Props {
     comment: Comment
 }
 
-function CommentItem({ comment }: CommentItemState) {
+function CommentItem( props: Props ){
     //hooks
-    const [likeComment] = useLikeCommentMutation()
-    const [unlikeComment] = useUnlikeCommentMutation()
-    const [isViewerLiked, setIsViewerLiked] = useState<boolean>(comment.isViewerLiked)
-    const [likesCount, setLikeCount] = useState<number>(comment.likesCount || 0)
+    const [comment, setComment]             = useState<Comment | null>( props.comment )
+    const [likeComment]                     = useLikeCommentMutation()
+    const [unlikeComment]                   = useUnlikeCommentMutation()
+    const [isViewerLiked, setIsViewerLiked] = useState<boolean>( comment?.isViewerLiked! )
+    const [likesCount, setLikeCount]        = useState<number>( comment?.likesCount || 0 )
 
-    async function handleCommentLike() {
+    async function handleCommentLike(){
         try {
-            await likeComment({ postId: comment.postId, commentId: comment.id }).unwrap()
-            setIsViewerLiked(true)
-            setLikeCount(likesCount + 1)
-        } catch (err) {
-            console.error(err)
+            await likeComment( { postId: comment?.postId!, commentId: comment?.id! } ).unwrap()
+            setIsViewerLiked( true )
+            setLikeCount( likesCount + 1 )
+        } catch ( err ) {
+            console.error( err )
         }
     }
 
-    async function handleCommentUnlike() {
+    async function handleCommentUnlike(){
         try {
-            await unlikeComment({ postId: comment.postId, commentId: comment.id }).unwrap()
-            setIsViewerLiked(false)
-            setLikeCount(likesCount - 1)
-        } catch (err) {
-            console.error(err)
+            await unlikeComment( { postId: comment?.postId!, commentId: comment?.id! } ).unwrap()
+            setIsViewerLiked( false )
+            setLikeCount( likesCount - 1 )
+        } catch ( err ) {
+            console.error( err )
         }
     }
+
+    if( ! comment ) return null
 
     return (
         <div className="flex">
-            <Link href={`/${comment.author.username}`} className="mt-3">
-                <Avatar src={comment.author.avatar?.url} size="small" />
+            <Link href={ `/${ comment.author.username }` } className="mt-3">
+                <Avatar src={ comment.author.avatar?.url } size="small"/>
             </Link>
             <div>
                 <div className="flex items-center">
                     <div className="ml-2 mt-1 py-2 px-4 rounded-xl bg-theme-gray relative">
-                        <Link href={`/${comment.author.username}`} className="flex flex-wrap">
+                        <Link href={ `/${ comment.author.username }` } className="flex flex-wrap">
                             <h3 className="text-xs font-medium">
-                                {comment.author.fullName}
+                                { comment.author.fullName }
                             </h3>
-                            <p className="text-xs ml-1 text-gray-500">@{comment.author.username}</p>
+                            <p className="text-xs ml-1 text-gray-500">@{ comment.author.username }</p>
                         </Link>
 
                         <div>
@@ -72,33 +74,31 @@ function CommentItem({ comment }: CommentItemState) {
                             </div>
                         </div>
                     </div>
-                    <IconButton className="ml-2">
-                        <ThreeDotsIcon size="18" />
-                    </IconButton>
+                    <CommentOptions comment={ comment } setComment={ setComment }/>
                 </div>
 
                 <div className="flex items-center text-pink-500 relative">
                     <motion.button
-                        onClick={handleCommentUnlike}
+                        onClick={ handleCommentUnlike }
                         className="icon"
-                        initial={{scale: 0}}
-                        animate={{scale: isViewerLiked ? 1 : 0}}
-                        transition={{duration: 0.1}}
+                        initial={ { scale: 0 } }
+                        animate={ { scale: isViewerLiked ? 1 : 0 } }
+                        transition={ { duration: 0.1 } }
                     >
                         <LikeIcon fontSize="small" color="#FF1493"/>
                     </motion.button>
                     <motion.button
-                        onClick={handleCommentLike}
+                        onClick={ handleCommentLike }
                         className="icon absolute"
-                        initial={{scale: 0}}
-                        animate={{scale: !isViewerLiked ? 1 : 0}}
-                        transition={{duration: 0.1}}
+                        initial={ { scale: 0 } }
+                        animate={ { scale: ! isViewerLiked ? 1 : 0 } }
+                        transition={ { duration: 0.1 } }
                     >
                         <OutlinedLikeIcon fontSize="small"/>
                     </motion.button>
-                    <p>{likesCount}</p>
+                    <p>{ likesCount }</p>
                     <p className="text-xs ml-5">
-                        {timeAgo(comment.createdAt)}
+                        { timeAgo( comment.createdAt ) }
                     </p>
                 </div>
             </div>

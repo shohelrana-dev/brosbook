@@ -8,7 +8,7 @@ import CommentList from "@components/post/CommentList"
 import timeAgo from "@utils/timeAgo"
 import ImageLightbox from '@components/common/ImageLightbox'
 import PostBar from "@components/post/PostBar"
-import MoreOptions from "@components/post/MoreOptions"
+import PostOptions from "@components/post/PostOptions"
 
 
 interface PostCardProps {
@@ -37,7 +37,7 @@ const PostCard = ( props: PostCardProps ) => {
                                 <p className="ml-2 text-gray-600 text-xs lg:text-sm font-normal">@{ post.author.username }</p>
                             </h3>
                         </Link>
-                        <MoreOptions post={ post } setPost={ setPost }/>
+                        <PostOptions post={ post } setPost={ setPost }/>
                     </div>
 
                     <p className="text-gray-500 font-medium text-xs mt-[-8px]">
