@@ -14,7 +14,7 @@ export interface ModalProps {
 export default function Modal(props: ModalProps) {
     const {isOpen, onClose, children, className} = props
 
-    const boxClassName = classNames('box relative rounded-xl max-w-[520px] w-[80%] p-4 lg:p-6 border border-solid border-gray-300', className)
+    const boxClassName = classNames('box relative rounded-xl max-w-[520px] w-[80%] p-7 lg:p-8 border border-solid border-gray-300', className)
 
     return (
         <AnimatePresence>
@@ -33,7 +33,7 @@ export default function Modal(props: ModalProps) {
                         exit={{scale: 0.6, opacity: 0}}
                         transition={{duration: 0.2}}
                     >
-                        <div className="!absolute right-2 top-2">
+                        <div className="!absolute right-3 top-3">
                             <IconButton onClick={onClose} className="p-3">
                                 <CancelIcon size="18"/>
                             </IconButton>
