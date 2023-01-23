@@ -7,6 +7,7 @@ import { usePostLikeMutation, usePostUnlikeMutation }              from "@servic
 import { motion, AnimatePresence }                                 from "framer-motion"
 import { CopyToClipboard }                                         from 'react-copy-to-clipboard'
 import toast from "react-hot-toast"
+import IconButton from "@components/common/IconButton";
 
 
 interface PostBarProps {
@@ -78,18 +79,18 @@ function PostBar( { post, setPost, setIsCommentsShow, isCommentsShow }: PostBarP
                 </AnimatePresence>
             </div>
             <div className="flex items-center">
-                <button className="icon" onClick={ () => setIsCommentsShow( ! isCommentsShow ) }>
+                <IconButton onClick={ () => setIsCommentsShow( ! isCommentsShow ) }>
                     <CommentIcon size="18"/>
-                </button>
+                </IconButton>
                 <p className="text-gray-600">{ post.commentsCount }</p>
             </div>
             <div className="flex items-center text-gray-600">
                 <CopyToClipboard
                     text={ `${ process.env.NEXT_PUBLIC_APP_URL }/posts/${ post.id }` }
                     onCopy={ () => toast.success( 'Link copied.' ) }>
-                    <button className="icon">
+                    <IconButton>
                         <ShareIcon size="18"/>
-                    </button>
+                    </IconButton>
                 </CopyToClipboard>
             </div>
         </div>

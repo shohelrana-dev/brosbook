@@ -5,16 +5,15 @@ import { HiOutlineCake } from "react-icons/hi"
 import { MdOutlineSchedule } from "react-icons/md"
 
 import FollowButton from "@components/common/FollowButton"
-import { http } from "@boot/axios"
 import { cookies } from "next/headers"
-import { User } from "@interfaces/user.interfaces"
 import TabLinkList from "@components/common/TabLinkList"
-import getAuthorizationConfig from "@utils/getAuthorizationConfig"
 import ButtonOutline from "@components/common/ButtonOutline"
 import CoverPhoto from "@components/profile/CoverPhoto"
 import ProfilePhoto from "@components/profile/ProfilePhoto"
 import NotFound from "../not-found"
 import SidebarLayout from "@components/common/SidebarLayout"
+import ExtraOptions from "@components/profile/ExtraOptions"
+import { getCurrentUser, getFollowersCount, getFollowingsCount, getUserByUsername } from "@services/index"
 
 interface ProfileLayoutProps {
     children: ReactNode
@@ -26,14 +25,15 @@ interface ProfileLayoutProps {
 export const revalidate = 0
 
 export default async function ProfileLayout( { children, params }: ProfileLayoutProps ){
-    const config     = getAuthorizationConfig( cookies() )
-    const user: User = await http.get( `/users/by/username/${ params.username }`, config ).then( ( res ) => res.data ).catch( () => null )
+    const nextCookies = cookies()
+
+    const user = await getUserByUsername( params.username, nextCookies )
 
     if( ! user ) return <NotFound/>
 
-    const currentUser: User       = await http.get( `/users/me`, config ).then( ( res ) => res.data ).catch( () => null )
-    const followersCount: number  = await http.get( `/users/${ user?.id }/followers/count` ).then( ( res ) => res.data?.count ).catch( () => 0 )
-    const followingsCount: number = await http.get( `/users/${ user?.id }/followings/count` ).then( ( res ) => res.data?.count ).catch( () => 0 )
+    const currentUser     = await getCurrentUser( nextCookies )
+    const followersCount  = await getFollowersCount( user.id )
+    const followingsCount = await getFollowingsCount( user.id )
 
     const tabLinks = [
         { label: "Posts", pathname: `/${ user?.username }` },
@@ -51,22 +51,25 @@ export default async function ProfileLayout( { children, params }: ProfileLayout
                         <div className="p-4 flex justify-between relative z-10">
                             <ProfilePhoto user={ user }/>
 
-                            { currentUser && currentUser?.username !== user?.username ? (
-                                <div>
-                                    <FollowButton user={ user! }/>
-                                </div>
-                            ) : null }
-                            { currentUser && currentUser?.username === user?.username ? (
-                                <ButtonOutline className="flex h-[35px] items-center">
-                                    <Link href="/account/profile">
-                                        Edit Profile
-                                    </Link>
-                                </ButtonOutline>
-                            ) : null }
+                            <div className="flex items-center gap-2">
+                                <ExtraOptions user={ user }/>
+                                { currentUser && currentUser?.username !== user?.username ? (
+                                    <div>
+                                        <FollowButton user={ user! }/>
+                                    </div>
+                                ) : null }
+                                { currentUser && currentUser?.username === user?.username ? (
+                                    <ButtonOutline className="flex h-[35px] items-center">
+                                        <Link href="/account/profile">
+                                            Edit Profile
+                                        </Link>
+                                    </ButtonOutline>
+                                ) : null }
+                            </div>
                         </div>
                     </div>
 
-                    <div className="px-2 sm:px-6">
+                    <div className="px-3 sm:px-6">
                         <div>
                             <h2 className="text:lg md:text-xl font-bold">{ user?.fullName }</h2>
                             <p className="text-gray-600 mb-2">@{ user?.username }</p>
@@ -100,10 +103,14 @@ export default async function ProfileLayout( { children, params }: ProfileLayout
                         </ul>
                         <ul className="mt-4">
                             <li className="text-gray-600 inline-block mr-3">
-                                <strong>{ followingsCount }</strong> Following
+                                <strong className="text-gray-900">
+                                    { followingsCount?.count }
+                                </strong> Following
                             </li>
                             <li className="text-gray-600 inline-block mr-3">
-                                <strong>{ followersCount }</strong> Followers
+                                <strong className="text-gray-900">
+                                    { followersCount?.count }
+                                </strong> Followers
                             </li>
                         </ul>
                     </div>

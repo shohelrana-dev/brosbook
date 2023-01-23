@@ -1,7 +1,6 @@
 import ProfilePostsPage from "./ProfilePostsPage"
-import { http } from "@boot/axios"
-import getAuthorizationConfig from "@utils/getAuthorizationConfig"
 import { cookies } from "next/headers"
+import { getPostsByAuthorId, getUserByUsername } from "@services/index"
 
 
 interface Props {
@@ -9,9 +8,9 @@ interface Props {
 }
 
 export default async function Page( { params }: Props ){
-    const config = getAuthorizationConfig( cookies() )
-    const user   = await http.get( `/users/by/username/${ params.username }`, config ).then( ( res ) => res.data ).catch( () => null )
-    const posts  = await http.get( `/posts?userId=${ user?.id }`, config ).then( ( res ) => res.data ).catch( () => null )
+    const nextCookies = cookies()
+    const user        = await getUserByUsername( params.username, nextCookies )
+    const posts       = await getPostsByAuthorId( user?.id!, nextCookies )
 
-    return <ProfilePostsPage user={ user } initialPosts={ posts }/>
+    return <ProfilePostsPage user={ user! } initialPosts={ posts! }/>
 }

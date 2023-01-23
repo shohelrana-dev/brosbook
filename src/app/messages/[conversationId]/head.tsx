@@ -1,8 +1,6 @@
 import DefaultTags from "@components/common/DefaultTags"
-import getAuthorizationConfig from "../../../utils/getAuthorizationConfig"
 import { cookies } from "next/headers"
-import { http } from "@boot/axios"
-import { Conversation } from "@interfaces/conversation.interfaces"
+import { getConversationById } from "@services/index"
 
 interface Props {
     params: {
@@ -12,12 +10,12 @@ interface Props {
 
 
 export default async function Head( { params }: Props ){
-    const config                     = getAuthorizationConfig( cookies() )
-    const conversation: Conversation = await http.get( `/conversations/${ params.conversationId }`, config ).then( ( res ) => res.data ).catch( () => null )
+    const conversation = await getConversationById( params.conversationId, cookies() )
+
     return (
         <>
             <DefaultTags/>
-            <title>{ `${ conversation.participant.fullName } | ${ process.env.NEXT_PUBLIC_APP_NAME }` }</title>
+            <title>{ `${ conversation?.participant.fullName } | ${ process.env.NEXT_PUBLIC_APP_NAME }` }</title>
         </>
     )
 }

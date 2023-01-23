@@ -1,7 +1,8 @@
-import { http } from "@boot/axios"
 import PostCard from "@components/post/PostCard"
-import { Post } from "@interfaces/posts.interfaces"
 import SidebarLayout from "@components/common/SidebarLayout"
+import { getPostById } from "@services/index"
+import { cookies } from "next/headers"
+import NotFound from "../../not-found"
 
 interface Props {
     params: {
@@ -12,11 +13,13 @@ interface Props {
 export const revalidate = 0
 
 export default async function SinglePostPage( { params }: Props ){
-    const post = ( await http.get<Post>( `/posts/${ params.postId }` ) ).data
+    const post = await getPostById( params.postId, cookies() )
+
+    if( ! post ) return <NotFound/>
 
     return (
         <SidebarLayout>
-            <PostCard post={ post } isCommentsShow={ true }/>
+            <PostCard post={ post! } isCommentsShow={ true }/>
         </SidebarLayout>
     )
 }

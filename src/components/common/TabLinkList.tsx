@@ -11,7 +11,7 @@ interface TabLinkListProps{
 function TabLinkList(props: TabLinkListProps) {
     const pathname = usePathname()
 
-    const className = 'inline-block py-2 px-1 sm:px-4 text-gray-600 rounded mr-4 border-0 border-b-4 border-transparent hover:text-theme-blue'
+    const className = 'inline-block py-2 px-3 sm:px-4 text-gray-600 rounded mr-4 border-0 border-b-4 border-transparent hover:text-theme-blue'
 
     return (
         <div className="mt-5">

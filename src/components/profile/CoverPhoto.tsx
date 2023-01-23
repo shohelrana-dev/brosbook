@@ -51,16 +51,16 @@ export default function CoverPhoto({user}: Props) {
 
     if (user.id !== currentUser?.id) {
         return (
-            <div className="relative w-full h-[340px]">
+            <div className="relative w-full h-[300px]">
                 {coverPhoto ? (
                     <ImageLightbox
                         className="absolute w-full h-full"
                         src={coverPhoto}
                         width={600}
-                        height={340}
+                        height={300}
                         alt="cover photo"
                     />) : (
-                    <Image src={placeholderCoverPhoto} className="absolute w-full h-full" width={600} height={340} alt='cover photo'/>
+                    <Image src={placeholderCoverPhoto} className="absolute w-full h-full" width={600} height={300} alt='cover photo'/>
                 )}
             </div>
         )
@@ -70,16 +70,16 @@ export default function CoverPhoto({user}: Props) {
         <div className="relative">
             <input hidden name="photo" type="file" accept="image/*" onChange={fileInputChangeHandle}
                    ref={inputRef}/>
-            <div className="relative w-full h-[340px]">
+            <div className="relative w-full h-[300px]">
                 {coverPhoto ? (
                     <ImageLightbox
                         src={coverPhoto}
                         className="absolute w-full h-full"
                         width={600}
-                        height={340}
+                        height={300}
                         alt="cover photo"
                     />) : (
-                    <Image src={placeholderCoverPhoto} className="absolute w-full h-full" width={600} height={340} alt='cover photo'/>
+                    <Image src={placeholderCoverPhoto} className="absolute w-full h-full" width={600} height={300} alt='cover photo'/>
                 )}
             </div>
 
