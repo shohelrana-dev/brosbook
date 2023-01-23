@@ -3,15 +3,29 @@ import type { NextRequest } from 'next/server'
 import isAuthenticated from "@utils/isAuthenticated"
 
 export async function middleware( request: NextRequest ){
-    if( await isAuthenticated( request.cookies ) ){
-        if( request.nextUrl.pathname.startsWith( '/auth' ) && ( ( request.nextUrl.pathname !== '/auth/logout' ) && ( request.nextUrl.pathname !== '/auth/forgot_password' ) ) ){
-            return NextResponse.redirect( new URL( '/', request.url ) )
-        }
-        return NextResponse.next()
-    } else{
-        if( request.nextUrl.pathname.startsWith( '/account' ) || request.nextUrl.pathname === '/' ){
-            return NextResponse.redirect( new URL( `/auth/login?redirect_path=${ request.nextUrl.pathname }`, request.url ) )
-        }
+    const currentPathname  = request.nextUrl.pathname
+    const isUserAuthorized = await isAuthenticated( request.cookies )
+    const protectedPaths   = ['/messages', '/notifications', '/suggestions', '/account', '/account/profile']
+    const guestPaths       = ['/auth/login', '/auth/signup', '/auth/email_verification', '/auth/reset_password']
+
+    const isProtectedPath = Boolean( protectedPaths.find( path => currentPathname.startsWith( path ) )?.length )
+    const isGuestPath     = Boolean( guestPaths.find( path => currentPathname.startsWith( path ) )?.length )
+    const isHomePath      = currentPathname === '/'
+
+
+    if( ! isGuestPath && ! isProtectedPath && ! isHomePath ){
         return NextResponse.next()
     }
+
+    if( isUserAuthorized ){
+        if( isGuestPath ){
+            return NextResponse.redirect( new URL( '/', request.url ) )
+        }
+    } else{
+        if( isProtectedPath || isHomePath ){
+            return NextResponse.redirect( new URL( `/auth/login?redirect_path=${ currentPathname }`, request.url ) )
+        }
+    }
+
+    return NextResponse.next()
 }

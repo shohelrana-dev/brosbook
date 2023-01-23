@@ -14,7 +14,7 @@ export default function ExtraOptions( { user }: { user: User } ){
         <Popover placement="bottom-end">
             <PopoverHandler>
                 <div>
-                    <IconButton className="ml-2 border-2 border-gray-100 flex-wrap">
+                    <IconButton className="ml-2 border-2 border-gray-200 flex-wrap">
                         <ThreeDotsIcon size="18"/>
                     </IconButton>
                 </div>

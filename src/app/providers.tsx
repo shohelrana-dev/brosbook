@@ -1,9 +1,9 @@
 "use client"
 import React, { ReactNode } from 'react'
-import { store }            from "../store"
+import { store } from "../store"
 import { Toaster } from 'react-hot-toast'
-import { Provider }         from "react-redux"
-import { ConfirmProvider }  from "@hooks/useConfirm"
+import { Provider } from "react-redux"
+import { ConfirmProvider } from "@hooks/useConfirm"
 
 function Providers( { children }: { children: ReactNode } ){
     return (
