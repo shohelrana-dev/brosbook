@@ -14,7 +14,7 @@ export interface ModalProps {
 export default function Modal(props: ModalProps) {
     const {isOpen, onClose, children, className} = props
 
-    const boxClassName = classNames('box relative rounded-xl max-w-[520px] w-[80%] p-7 lg:p-8 border border-solid border-gray-300', className)
+    const boxClassName = classNames('box relative rounded-xl max-w-[520px] w-[90%] p-7 lg:p-8 border border-solid border-gray-300', className)
 
     return (
         <AnimatePresence>

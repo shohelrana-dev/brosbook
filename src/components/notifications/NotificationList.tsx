@@ -26,7 +26,7 @@ export default function NotificationList(){
 
     return (
         <div>
-            { ( ! notifications && isLoading ) ? <Loading size={ 35 }/> : null }
+            { isLoading ? <Loading size={ 35 }/> : null }
 
             <AnimatedComponent>
                 <InfiniteScroll
