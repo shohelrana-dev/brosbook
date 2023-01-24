@@ -28,7 +28,7 @@ export default function PostShare( { post }: { post: Post } ){
                     </IconButton>
                 </div>
             </PopoverHandler>
-            <PopoverContent className="p-0 py-2">
+            <PopoverContent className="p-0 rounded-2xl overflow-hidden">
                 <div className="w-[250px]">
                     <CopyToClipboard
                         text={ `${ process.env.NEXT_PUBLIC_APP_URL }/posts/${ post.id }` }

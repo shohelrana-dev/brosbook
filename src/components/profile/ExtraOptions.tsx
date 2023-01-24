@@ -19,13 +19,13 @@ export default function ExtraOptions( { user }: { user: User } ){
                     </IconButton>
                 </div>
             </PopoverHandler>
-            <PopoverContent className="p-0 py-2">
+            <PopoverContent className="p-0 rounded-2xl overflow-hidden">
                 <div className="w-[250px]">
                     <CopyToClipboard
                         text={ `${ process.env.NEXT_PUBLIC_APP_URL }/${ user.username }` }
                         onCopy={ () => toast.success( 'Link copied.' ) }>
                         <ButtonGray
-                            className="rounded-none w-full flex gap-3 items-center bg-transparent hover:bg-blue-100 mt-0">
+                            className="rounded-none w-full flex gap-3 items-center bg-transparent mt-0">
                             <LinkIcon size="18"/>
                             Copy link to profile
                         </ButtonGray>
