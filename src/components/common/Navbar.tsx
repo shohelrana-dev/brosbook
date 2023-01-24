@@ -126,14 +126,14 @@ function NavBar( { user }: Props ){
                                 </button>
                             </MenuHandler>
                             <MenuList>
-                                <MenuItem>
-                                    <Link href={ `/${ user?.username }` } className="block">
+                                <MenuItem className="py-0">
+                                    <Link href={ `/${ user?.username }` } className="block py-2">
                                         <ProfileIcon className="inline-block mr-2" size={ 20 }/>
                                         Profile
                                     </Link>
                                 </MenuItem>
-                                <MenuItem>
-                                    <Link href="/account" className="block">
+                                <MenuItem className="py-0">
+                                    <Link href="/account" className="block py-2">
                                         <SettingIcon className="inline-block mr-2" size={ 20 }/>
                                         Settings
                                     </Link>
