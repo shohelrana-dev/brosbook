@@ -11,7 +11,7 @@ import ButtonGray from "@components/common/ButtonGray"
 
 export default function ExtraOptions( { user }: { user: User } ){
     return (
-        <Popover placement="bottom-end">
+        <Popover placement="bottom">
             <PopoverHandler>
                 <div>
                     <IconButton className="ml-2 border-2 border-gray-200 flex-wrap">

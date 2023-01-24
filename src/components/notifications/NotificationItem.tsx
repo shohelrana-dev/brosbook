@@ -2,7 +2,6 @@ import React from 'react'
 import Avatar from "@components/common/Avatar"
 import Link from "next/link"
 import { Notification, NotificationTypes } from "@interfaces/index.interfaces"
-import useCurrentUser from "@hooks/useCurrentUser"
 import timeAgo from "@utils/timeAgo"
 
 interface Props {
@@ -10,8 +9,6 @@ interface Props {
 }
 
 function NotificationItem( { notification }: Props ){
-    const { user } = useCurrentUser()
-
     let title = null
     let url   = null
 
@@ -23,17 +20,17 @@ function NotificationItem( { notification }: Props ){
 
         case NotificationTypes.LIKED_POST:
             title = 'Liked your post.'
-            url   = `/${ user?.username }/posts/${ notification.post.id }`
+            url   = `/posts/${ notification.post.id }`
             break
 
         case NotificationTypes.COMMENTED_POST:
             title = 'Commented on your post.'
-            url   = `/${ user?.username }/posts/${ notification.post.id }`
+            url   = `/posts/${ notification.post.id }`
             break
 
         case NotificationTypes.LIKED_COMMENT:
             title = 'Liked your comment.'
-            url   = `/${ user?.username }/posts/${ notification.post.id }`
+            url   = `/posts/${ notification.post.id }`
             break
     }
 
