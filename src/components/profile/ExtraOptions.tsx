@@ -25,7 +25,7 @@ export default function ExtraOptions( { user }: { user: User } ){
                         text={ `${ process.env.NEXT_PUBLIC_APP_URL }/${ user.username }` }
                         onCopy={ () => toast.success( 'Link copied.' ) }>
                         <ButtonGray
-                            className="rounded-none w-full flex gap-3 items-center bg-transparent hover:bg-blue-50 mt-0">
+                            className="rounded-none w-full flex gap-3 items-center bg-transparent hover:bg-blue-100 mt-0">
                             <LinkIcon size="18"/>
                             Copy link to profile
                         </ButtonGray>

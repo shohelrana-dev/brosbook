@@ -8,6 +8,7 @@ import { motion, AnimatePresence }                                 from "framer-
 import { CopyToClipboard }                                         from 'react-copy-to-clipboard'
 import toast from "react-hot-toast"
 import IconButton from "@components/common/IconButton";
+import PostShare from "@components/post/PostShare";
 
 
 interface PostBarProps {
@@ -84,15 +85,8 @@ function PostBar( { post, setPost, setIsCommentsShow, isCommentsShow }: PostBarP
                 </IconButton>
                 <p className="text-gray-600">{ post.commentsCount }</p>
             </div>
-            <div className="flex items-center text-gray-600">
-                <CopyToClipboard
-                    text={ `${ process.env.NEXT_PUBLIC_APP_URL }/posts/${ post.id }` }
-                    onCopy={ () => toast.success( 'Link copied.' ) }>
-                    <IconButton>
-                        <ShareIcon size="18"/>
-                    </IconButton>
-                </CopyToClipboard>
-            </div>
+
+            <PostShare post={post}/>
         </div>
     )
 }

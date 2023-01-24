@@ -84,7 +84,7 @@ export default function CommentOptions( { post, comment, setComment }: Props ){
                 <div className="w-[250px]">
                     { isCurrentUserAuthor ? (
                         <ButtonGray
-                            className="rounded-none w-full flex gap-3 items-center bg-transparent hover:bg-blue-50 mt-0"
+                            className="rounded-none w-full flex gap-3 items-center bg-transparent hover:bg-blue-100 mt-0"
                             onClick={ handleDeleteComment }>
                             <DeleteIcon size="18"/>
                             Delete
@@ -92,14 +92,14 @@ export default function CommentOptions( { post, comment, setComment }: Props ){
                     ) : (
                         author.isViewerFollow ? (
                             <ButtonGray
-                                className="rounded-none w-full flex gap-3 items-center bg-transparent hover:bg-blue-50 mt-0"
+                                className="rounded-none w-full flex gap-3 items-center bg-transparent hover:bg-blue-100 mt-0"
                                 onClick={ handleUnfollowClick }>
                                 <UnfollowIcon size="18"/>
                                 Unfollow @{ author.username }
                             </ButtonGray>
                         ) : (
                             <ButtonGray
-                                className="rounded-none w-full flex gap-3 items-center bg-transparent hover:bg-blue-50 mt-0"
+                                className="rounded-none w-full flex gap-3 items-center bg-transparent hover:bg-blue-100 mt-0"
                                 onClick={ handleFollow }>
                                 <FollowIcon size="18"/>
                                 Follow @{ author.username }
@@ -107,7 +107,7 @@ export default function CommentOptions( { post, comment, setComment }: Props ){
                         )
                     ) }
                     <ButtonGray
-                        className="rounded-none w-full flex gap-3 items-center bg-transparent hover:bg-blue-50 mt-0"
+                        className="rounded-none w-full flex gap-3 items-center bg-transparent hover:bg-blue-100 mt-0"
                         onClick={ () => setComment( null ) }>
                         <HideIcon size="18"/>
                         Hide

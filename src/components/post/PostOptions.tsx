@@ -83,7 +83,7 @@ function PostOptions( { post, setPost }: Props ){
                 <div className="w-[250px]">
                     { isCurrentUserAuthor ? (
                         <ButtonGray
-                            className="rounded-none w-full flex gap-3 items-center bg-transparent hover:bg-blue-50 mt-0"
+                            className="rounded-none w-full flex gap-3 items-center bg-transparent hover:bg-blue-100 mt-0"
                             onClick={ handleDeletePostClick }>
                             <DeleteIcon size="18"/>
                             Delete
@@ -91,14 +91,14 @@ function PostOptions( { post, setPost }: Props ){
                     ) : (
                         author.isViewerFollow ? (
                             <ButtonGray
-                                className="rounded-none w-full flex gap-3 items-center bg-transparent hover:bg-blue-50 mt-0"
+                                className="rounded-none w-full flex gap-3 items-center bg-transparent hover:bg-blue-100 mt-0"
                                 onClick={ handleUnfollowClick }>
                                 <UnfollowIcon size="18"/>
                                 Unfollow @{ author.username }
                             </ButtonGray>
                         ) : (
                             <ButtonGray
-                                className="rounded-none w-full flex gap-3 items-center bg-transparent hover:bg-blue-50 mt-0"
+                                className="rounded-none w-full flex gap-3 items-center bg-transparent hover:bg-blue-100 mt-0"
                                 onClick={ handleFollowClick }>
                                 <FollowIcon size="18"/>
                                 Follow @{ author.username }
@@ -106,7 +106,7 @@ function PostOptions( { post, setPost }: Props ){
                         )
                     ) }
                     <ButtonGray
-                        className="rounded-none w-full flex gap-3 items-center bg-transparent hover:bg-blue-50 mt-0"
+                        className="rounded-none w-full flex gap-3 items-center bg-transparent hover:bg-blue-100 mt-0"
                         onClick={ () => setPost( null ) }>
                         <HideIcon size="18"/>
                         Hide
