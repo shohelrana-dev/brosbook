@@ -12,6 +12,7 @@ import { HiOutlineEmojiHappy as EmojiIcon } from "react-icons/hi"
 import { Popover, PopoverContent, PopoverHandler } from "@material-tailwind/react"
 //@ts-ignore
 import { isOneEmoji, isMultipleEmoji } from 'is-emojis'
+import Button from "@components/common/Button"
 
 interface Props {
     conversation: Conversation
@@ -19,7 +20,7 @@ interface Props {
 
 export default function CreateMessageForm( { conversation }: Props ){
     //hooks
-    const [sendMessage]                                                     = useSendMessageMutation()
+    const [sendMessage, { isLoading }]                                      = useSendMessageMutation()
     const { inputRef, onClick, onChange, removeSelectedFile, selectedFile } = useSelectFile()
     const [messageText, setMessageText]                                     = useState<string>( '' )
 
@@ -84,8 +85,12 @@ export default function CreateMessageForm( { conversation }: Props ){
                 <div className="flex items-center mb-2">
                     <input ref={ inputRef } onChange={ onChange } type="file" name="file" accept="image/*" hidden/>
                     <CameraIcon onClick={ onClick } className="mr-2 cursor-pointer text-gray-500" fontSize={ 22 }/>
+                </div>
+                <div className="w-full relative">
+                    <BasicInput label="Message" labelHide onChange={ ( e ) => setMessageText( e.target.value ) }
+                                value={ messageText }/>
                     { selectedFile && (
-                        <div className="max-w-[200px] flex justify-center mx-3">
+                        <div className="max-w-[200px] flex justify-center mx-3 absolute left-2 top-0">
                             <img src={ URL.createObjectURL( selectedFile ) } alt="Thumb"/>
                             <button onClick={ removeSelectedFile }
                                     className="cursor-pointer text-gray-500">
@@ -93,10 +98,6 @@ export default function CreateMessageForm( { conversation }: Props ){
                             </button>
                         </div>
                     ) }
-                </div>
-                <div className="w-full">
-                    <BasicInput label="Message" labelHide onChange={ ( e ) => setMessageText( e.target.value ) }
-                                value={ messageText }/>
                 </div>
                 <IconButton onClick={ clickLoveHandle }>
                     <LikeIcon fontSize="medium" color="#FF1493"/>
@@ -118,9 +119,10 @@ export default function CreateMessageForm( { conversation }: Props ){
                         />
                     </PopoverContent>
                 </Popover>
-                <button type="submit" className="rounded-full bg-theme-blue text-white p-2 ml-1">
+                <Button type="submit" isLoading={ isLoading }
+                        className="rounded-full p-2 inline-block m-0 ml-1 !min-w-[35px] !h-[35px]">
                     <SendIcon fontSize={ 20 }/>
-                </button>
+                </Button>
             </form>
         </div>
     )

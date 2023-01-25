@@ -3,7 +3,7 @@ import {Button as BaseButton, ButtonProps as BaseButtonProps} from '@material-ta
 import {PuffLoader} from "react-spinners"
 import classNames from "classnames"
 
-interface ButtonGrayProps extends BaseButtonProps {
+export interface ButtonGrayProps extends BaseButtonProps {
     isLoading?: boolean
 }
 

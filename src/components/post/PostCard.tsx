@@ -24,7 +24,7 @@ const PostCard = ( props: PostCardProps ) => {
     if( ! post ) return null
 
     return (
-        <div className="box p-6 mt-6">
+        <div className="box p-6 mb-4">
             <div className="flex">
                 <Link href={ `/${ post.author.username }` }>
                     <Avatar src={ post.author.avatar.url }/>

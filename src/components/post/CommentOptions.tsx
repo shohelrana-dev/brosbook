@@ -14,6 +14,7 @@ import useConfirm from "@hooks/useConfirm"
 import { User } from "@interfaces/user.interfaces"
 import { Comment, Post } from "@interfaces/posts.interfaces"
 import IconButton from "@components/common/IconButton"
+import OptionButton from "@components/common/OptionButton";
 
 interface Props {
     post: Post
@@ -83,32 +84,24 @@ export default function CommentOptions( { post, comment, setComment }: Props ){
             <PopoverContent className="p-0 rounded-2xl overflow-hidden">
                 <div className="w-[250px]">
                     { isCurrentUserAuthor ? (
-                        <ButtonGray
-                            className="rounded-none w-full flex gap-3 items-center bg-transparent mt-0"
-                            onClick={ handleDeleteComment }>
+                        <ButtonGray onClick={ handleDeleteComment }>
                             <DeleteIcon size="18"/>
                             Delete
                         </ButtonGray>
                     ) : (
                         author.isViewerFollow ? (
-                            <ButtonGray
-                                className="rounded-none w-full flex gap-3 items-center bg-transparent mt-0"
-                                onClick={ handleUnfollowClick }>
+                            <ButtonGray onClick={ handleUnfollowClick }>
                                 <UnfollowIcon size="18"/>
                                 Unfollow @{ author.username }
                             </ButtonGray>
                         ) : (
-                            <ButtonGray
-                                className="rounded-none w-full flex gap-3 items-center bg-transparent mt-0"
-                                onClick={ handleFollow }>
+                            <OptionButton onClick={ handleFollow }>
                                 <FollowIcon size="18"/>
                                 Follow @{ author.username }
-                            </ButtonGray>
+                            </OptionButton>
                         )
                     ) }
-                    <ButtonGray
-                        className="rounded-none w-full flex gap-3 items-center bg-transparent mt-0"
-                        onClick={ () => setComment( null ) }>
+                    <ButtonGray onClick={ () => setComment( null ) }>
                         <HideIcon size="18"/>
                         Hide
                     </ButtonGray>

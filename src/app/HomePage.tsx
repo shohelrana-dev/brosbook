@@ -21,7 +21,7 @@ export default function HomePage(){
         <p className="box text-center mt-5 py-10">Your feed is empty.</p> : null
 
     return (
-        <div className="pt-6 mb-6">
+        <div className="pt-6 mb-4">
             <CreatePostForm/>
             { ( posts.length < 1 && isLoading ) ? <LoadingPosts/> : null }
 

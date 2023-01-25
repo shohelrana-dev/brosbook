@@ -80,7 +80,7 @@ export default function ProfilePhoto({user}: Props) {
             <Modal isOpen={isModalOpen} onClose={handleModalOpen} className="max-w-[625px] !p-3">
                 <div>
                     <div className="p-2">
-                        <h3 className="text-lg">New profile photo</h3>
+                        <h3 className="text-xl mb-2">New profile photo</h3>
                     </div>
                     <div className="p-4 bg-gray-100">
                         {selectedPhoto ? (

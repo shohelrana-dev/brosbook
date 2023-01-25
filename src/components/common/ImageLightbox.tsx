@@ -1,21 +1,26 @@
 "use client"
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import Image, { ImageProps } from 'next/image'
-import Lightbox from 'react-18-image-lightbox'
 import classNames from "classnames"
-import 'react-18-image-lightbox/style.css'
+import LightGallery from 'lightgallery/react'
+import lgThumbnail from 'lightgallery/plugins/thumbnail'
+import lgZoom from 'lightgallery/plugins/zoom'
+
+//css
+import 'lightgallery/css/lightgallery.css'
+import 'lightgallery/css/lg-zoom.css'
+import 'lightgallery/css/lg-thumbnail.css'
 
 
-export default function ImageLightbox(props: ImageProps) {
-    const [ isOpen, setIsOpen] = useState<boolean>(false)
-
-    let { src, className, onClick, ...rest } = props
-    className = classNames('cursor-pointer', className)
+export default function ImageLightbox( props: ImageProps ){
+    let { src, className, ...rest } = props
+    className                       = classNames( 'cursor-pointer', className )
 
     return (
-        <>
-            <Image onClick={() => setIsOpen(!isOpen)} src={src} {...rest} className={className} />
-            {isOpen ? <Lightbox mainSrc={src as string} onCloseRequest={() => setIsOpen(false)}/> : null}
-        </>
+        <LightGallery speed={ 500 } plugins={ [lgThumbnail, lgZoom] } mode="lg-fade">
+            <a data-src={ `/_next/image?url=${ src }&w=640&q=75` } data-lg-size="1406-1390">
+                <Image src={ src } { ...rest } className={ className }/>
+            </a>
+        </LightGallery>
     )
 }

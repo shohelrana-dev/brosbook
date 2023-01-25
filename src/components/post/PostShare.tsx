@@ -5,7 +5,6 @@ import IconButton from "@components/common/IconButton"
 import { FaShareSquare as ShareIcon } from "react-icons/fa"
 import { Post } from "@interfaces/posts.interfaces"
 import { Popover, PopoverContent, PopoverHandler } from "@material-tailwind/react"
-import ButtonGray from "@components/common/ButtonGray"
 import { RiDeleteBin5Line as DeleteIcon } from "react-icons/ri"
 import {
     FacebookShareButton,
@@ -17,6 +16,7 @@ import {
     EmailShareButton,
     EmailIcon
 } from "react-share"
+import OptionButton from "@components/common/OptionButton";
 
 export default function PostShare( { post }: { post: Post } ){
     return (
@@ -29,24 +29,22 @@ export default function PostShare( { post }: { post: Post } ){
                 </div>
             </PopoverHandler>
             <PopoverContent className="p-0 rounded-2xl overflow-hidden">
-                <div className="w-[250px]">
+                <div>
                     <CopyToClipboard
                         text={ `${ process.env.NEXT_PUBLIC_APP_URL }/posts/${ post.id }` }
                         onCopy={ () => toast.success( 'Link copied.' ) }>
-                        <ButtonGray
-                            className="rounded-none w-full flex gap-3 items-center bg-transparent mt-0">
+                        <OptionButton>
                             <DeleteIcon size="18"/>
                             Copy link to post
-                        </ButtonGray>
+                        </OptionButton>
                     </CopyToClipboard>
                     <Popover placement="top">
                         <PopoverHandler>
                             <div>
-                                <ButtonGray
-                                    className="rounded-none w-full flex gap-3 items-center bg-transparent mt-0">
+                                <OptionButton>
                                     <ShareIcon size="18"/>
                                     Share to
-                                </ButtonGray>
+                                </OptionButton>
                             </div>
                         </PopoverHandler>
                         <PopoverContent className="p-2 flex gap-2">

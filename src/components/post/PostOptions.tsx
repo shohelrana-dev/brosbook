@@ -6,14 +6,14 @@ import { AiOutlineUserAdd as FollowIcon } from "react-icons/ai"
 import { MdHideSource as HideIcon } from "react-icons/md"
 import toast from "react-hot-toast"
 
-import ButtonGray from "@components/common/ButtonGray"
+import OptionButton from "@components/common/OptionButton"
 import { useFollowMutation, useUnfollowMutation } from "@services/usersApi"
 import { useDeletePostMutation } from "@services/postsApi"
 import useCurrentUser from "@hooks/useCurrentUser"
 import useConfirm from "@hooks/useConfirm"
 import { Post } from "@interfaces/posts.interfaces"
 import { User } from "@interfaces/user.interfaces"
-import IconButton from "@components/common/IconButton";
+import IconButton from "@components/common/IconButton"
 
 interface Props {
     post: Post
@@ -80,37 +80,29 @@ function PostOptions( { post, setPost }: Props ){
                 </div>
             </PopoverHandler>
             <PopoverContent className="p-0 rounded-2xl overflow-hidden">
-                <div className="w-[250px]">
+                <div className="min-w-[150px]">
                     { isCurrentUserAuthor ? (
-                        <ButtonGray
-                            className="rounded-none w-full flex gap-3 items-center bg-transparent mt-0"
-                            onClick={ handleDeletePostClick }>
+                        <OptionButton onClick={ handleDeletePostClick }>
                             <DeleteIcon size="18"/>
                             Delete
-                        </ButtonGray>
+                        </OptionButton>
                     ) : (
                         author.isViewerFollow ? (
-                            <ButtonGray
-                                className="rounded-none w-full flex gap-3 items-center bg-transparent mt-0"
-                                onClick={ handleUnfollowClick }>
+                            <OptionButton onClick={ handleUnfollowClick }>
                                 <UnfollowIcon size="18"/>
                                 Unfollow @{ author.username }
-                            </ButtonGray>
+                            </OptionButton>
                         ) : (
-                            <ButtonGray
-                                className="rounded-none w-full flex gap-3 items-center bg-transparent mt-0"
-                                onClick={ handleFollowClick }>
+                            <OptionButton onClick={ handleFollowClick }>
                                 <FollowIcon size="18"/>
                                 Follow @{ author.username }
-                            </ButtonGray>
+                            </OptionButton>
                         )
                     ) }
-                    <ButtonGray
-                        className="rounded-none w-full flex gap-3 items-center bg-transparent mt-0"
-                        onClick={ () => setPost( null ) }>
+                    <OptionButton onClick={ () => setPost( null ) }>
                         <HideIcon size="18"/>
                         Hide
-                    </ButtonGray>
+                    </OptionButton>
                 </div>
             </PopoverContent>
         </Popover>

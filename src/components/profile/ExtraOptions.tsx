@@ -7,7 +7,7 @@ import toast from "react-hot-toast"
 import { RiLink as LinkIcon } from "react-icons/ri"
 import { CopyToClipboard } from "react-copy-to-clipboard"
 import { User } from "@interfaces/user.interfaces"
-import ButtonGray from "@components/common/ButtonGray"
+import OptionButton from "@components/common/OptionButton"
 
 export default function ExtraOptions( { user }: { user: User } ){
     return (
@@ -20,16 +20,17 @@ export default function ExtraOptions( { user }: { user: User } ){
                 </div>
             </PopoverHandler>
             <PopoverContent className="p-0 rounded-2xl overflow-hidden">
-                <div className="w-[250px]">
-                    <CopyToClipboard
-                        text={ `${ process.env.NEXT_PUBLIC_APP_URL }/${ user.username }` }
-                        onCopy={ () => toast.success( 'Link copied.' ) }>
-                        <ButtonGray
-                            className="rounded-none w-full flex gap-3 items-center bg-transparent mt-0">
-                            <LinkIcon size="18"/>
-                            Copy link to profile
-                        </ButtonGray>
-                    </CopyToClipboard>
+                <div>
+                    <OptionButton>
+                        <CopyToClipboard
+                            text={ `${ process.env.NEXT_PUBLIC_APP_URL }/${ user.username }` }
+                            onCopy={ () => toast.success( 'Link copied.' ) }>
+                            <>
+                                <LinkIcon size="18"/>
+                                Copy link to profile
+                            </>
+                        </CopyToClipboard>
+                    </OptionButton>
                 </div>
             </PopoverContent>
         </Popover>
