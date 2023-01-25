@@ -1,11 +1,11 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect } from 'react'
 import SingleMessage from "@components/messages/MessageBox/SingleMessage"
 import { useGetMessagesQuery } from "@services/conversationApi"
 import Loading from "@components/common/Loading"
 import { Conversation, Message } from "@interfaces/conversation.interfaces"
 import { io } from "socket.io-client"
 import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
-import useCurrentUser from "@hooks/useCurrentUser";
+import useAuthState from "@hooks/useAuthState"
 
 interface Props {
     conversation: Conversation
@@ -13,7 +13,7 @@ interface Props {
 
 function MessageList( { conversation }: Props ){
     //hooks
-    const { user }                                              = useCurrentUser()
+    const { user }                                              = useAuthState()
     const { items: messages, isLoading, setItems: setMessages } = useGetInfiniteListQuery<Message>(
         useGetMessagesQuery, { conversationId: conversation?.id! }
     )

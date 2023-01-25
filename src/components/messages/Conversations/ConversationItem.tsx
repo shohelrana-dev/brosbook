@@ -3,7 +3,7 @@ import classNames from "classnames"
 import Link from "next/link"
 import { Conversation } from "@interfaces/conversation.interfaces"
 import Avatar from "@components/common/Avatar"
-import useCurrentUser from "@hooks/useCurrentUser"
+import useAuthState from "@hooks/useAuthState"
 import timeAgo from "@utils/timeAgo"
 import TextOverflow from 'react-text-overflow'
 
@@ -12,7 +12,7 @@ interface SingleConversationProps {
 }
 
 function ConversationItem( { conversation }: SingleConversationProps ){
-    const { user: currentUser } = useCurrentUser()
+    const { user: currentUser } = useAuthState()
     const participant           = conversation?.user1.id === currentUser?.id ? conversation?.user2 : conversation?.user1
 
     return (

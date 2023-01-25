@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useState } from 'react'
 import classNames from "classnames"
 import Image from "next/image"
 import { HiOutlineEmojiHappy as EmojiIcon } from "react-icons/hi"
@@ -13,7 +13,8 @@ type ReactionsProps = {
 
 function Reactions( { message }: ReactionsProps ){
     //hooks
-    const [sendReaction] = useSendReactionMutation()
+    const [isOpen, setIsOpen] = useState<boolean>( false )
+    const [sendReaction]      = useSendReactionMutation()
 
     //default message reactions
     const defaultReactions = ['love', 'smile', 'wow', 'sad', 'angry', 'like']
@@ -26,23 +27,30 @@ function Reactions( { message }: ReactionsProps ){
         }
     }
 
+    function toggleOpen(){
+        setIsOpen( ! isOpen )
+    }
+
     return (
         <Fragment>
-            <Popover>
+            <Popover open={ isOpen }>
                 <PopoverHandler>
                     <div className={ classNames( 'absolute top-[50%] translate-y-[-50%]', {
                         "-right-9": ! message.isMeSender,
                         "-left-9": message.isMeSender,
                     } ) }>
-                        <IconButton type="button">
+                        <IconButton type="button" onClick={toggleOpen}>
                             <EmojiIcon className="text-gray-400" fontSize={ 20 }/>
                         </IconButton>
                     </div>
                 </PopoverHandler>
-                <PopoverContent className="p-0 rounded-full z-20">
+                <PopoverContent onBlur={toggleOpen} className="p-0 rounded-full z-20">
                     <div className="py-1 px-3">
                         { defaultReactions.map( reaction => (
-                            <button className="m-1" onClick={ () => handleSubmitReaction( reaction ) } key={ reaction }>
+                            <button className="m-1" onClick={ () => {
+                                handleSubmitReaction( reaction )
+                                toggleOpen()
+                            } } key={ reaction }>
                                 <img
                                     className="w-7"
                                     src={ `${ process.env.NEXT_PUBLIC_SERVER_BASE_URL! }/reactions/${ reaction }.png` }

@@ -1,6 +1,6 @@
 "use client"
 import React from 'react'
-import useCurrentUser from "@hooks/useCurrentUser"
+import useAuthState from "@hooks/useAuthState"
 import Loading from "@components/common/Loading"
 import ButtonOutline from "@components/common/ButtonOutline"
 import ChangePasswordModal from "@components/account/ChangePasswordModal"
@@ -8,7 +8,7 @@ import ChangeUsernameModal from "@components/account/ChangeUsernameModal"
 import TextOverflow from 'react-text-overflow'
 
 export default function GeneralSettingsPage(){
-    const { user, isAuthenticated } = useCurrentUser( { redirectTo: '/auth/login' } )
+    const { user, isAuthenticated } = useAuthState( { redirectTo: '/auth/login' } )
 
     if( ! isAuthenticated ) return <Loading/>
 

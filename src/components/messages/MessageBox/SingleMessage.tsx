@@ -2,7 +2,7 @@ import React from 'react'
 import Avatar from "@components/common/Avatar"
 import { Message } from "@interfaces/conversation.interfaces"
 import MessageContent from "@components/messages/MessageBox/MessageContent"
-import useCurrentUser from "@hooks/useCurrentUser"
+import useAuthState from "@hooks/useAuthState"
 import timeAgo from "@utils/timeAgo"
 import moment from "moment/moment"
 
@@ -23,7 +23,7 @@ interface SingleMessageProps {
 }
 
 function SingleMessage( { message, prevMessage }: SingleMessageProps ){
-    const { user: currentUser } = useCurrentUser()
+    const { user: currentUser } = useAuthState()
 
     const avatarMarkup = (
         <Avatar

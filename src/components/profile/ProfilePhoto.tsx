@@ -8,14 +8,14 @@ import Button from "@components/common/Button"
 import ImageLightbox from "@components/common/ImageLightbox"
 import Image from "next/image"
 import {User} from "@interfaces/user.interfaces"
-import useCurrentUser from "@hooks/useCurrentUser"
+import useAuthState from "@hooks/useAuthState"
 import Modal from "@components/common/Modal"
 import useSelectFile from "@hooks/useSelectFile"
 
 type Props = { user: User }
 
 export default function ProfilePhoto({user}: Props) {
-    const {user: currentUser} = useCurrentUser()
+    const {user: currentUser} = useAuthState()
     const [changeProfilePhoto, {isLoading}] = useChangeProfilePhotoMutation()
     const [profilePhoto, setProfilePhoto] = useState<string>(user.avatar.url)
     const [isModalOpen, setIsModalOpen] = useState(false)

@@ -9,7 +9,7 @@ import toast from "react-hot-toast"
 import OptionButton from "@components/common/OptionButton"
 import { useFollowMutation, useUnfollowMutation } from "@services/usersApi"
 import { useDeletePostMutation } from "@services/postsApi"
-import useCurrentUser from "@hooks/useCurrentUser"
+import useAuthState from "@hooks/useAuthState"
 import useConfirm from "@hooks/useConfirm"
 import { Post } from "@interfaces/posts.interfaces"
 import { User } from "@interfaces/user.interfaces"
@@ -25,7 +25,7 @@ function PostOptions( { post, setPost }: Props ){
     const [unfollow]   = useUnfollowMutation()
     const [deletePost] = useDeletePostMutation()
 
-    const { user: currentUser } = useCurrentUser()
+    const { user: currentUser } = useAuthState()
     const confirm               = useConfirm()
     const [author, setAuthor]   = useState<User>( post.author )
 

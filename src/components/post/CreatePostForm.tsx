@@ -8,13 +8,13 @@ import Avatar from "@components/common/Avatar"
 import {useCreatePostMutation} from "@services/postsApi"
 import BasicInput from "@components/common/BasicInput"
 import Button from "@components/common/Button"
-import useCurrentUser from "@hooks/useCurrentUser"
+import useAuthState from "@hooks/useAuthState"
 import IconButton from "@components/common/IconButton"
 import useSelectFile from "@hooks/useSelectFile"
 
 function CreatePostForm() {
     //hooks
-    const {user} = useCurrentUser()
+    const {user} = useAuthState()
     const [createPost, {isLoading}] = useCreatePostMutation()
     const [body, setBody] = useState<string>('')
     const {inputRef, selectedFile: selectedImage, removeSelectedFile, onChange, onClick} = useSelectFile()
@@ -90,7 +90,7 @@ function CreatePostForm() {
                         <HiPhotograph fontSize={30}/>
                     </IconButton>
                     <div>
-                        <Button type="submit" isLoading={isLoading} size="md" disabled={isLoading || ( ! body && ! selectedImage)}>
+                        <Button type="submit" isLoading={isLoading} size="sm" disabled={isLoading || ( ! body && ! selectedImage)}>
                             Publish Post
                         </Button>
                     </div>

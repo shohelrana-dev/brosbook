@@ -9,7 +9,7 @@ import toast from "react-hot-toast"
 import ButtonGray from "@components/common/ButtonGray"
 import { useFollowMutation, useUnfollowMutation } from "@services/usersApi"
 import { useDeleteCommentMutation } from "@services/commentsApi"
-import useCurrentUser from "@hooks/useCurrentUser"
+import useAuthState from "@hooks/useAuthState"
 import useConfirm from "@hooks/useConfirm"
 import { User } from "@interfaces/user.interfaces"
 import { Comment, Post } from "@interfaces/posts.interfaces"
@@ -27,7 +27,7 @@ export default function CommentOptions( { post, comment, setComment }: Props ){
     const [unfollow]      = useUnfollowMutation()
     const [deleteComment] = useDeleteCommentMutation()
 
-    const { user: currentUser } = useCurrentUser()
+    const { user: currentUser } = useAuthState()
     const confirm               = useConfirm()
     const [author, setAuthor]   = useState<User>( comment.author )
 

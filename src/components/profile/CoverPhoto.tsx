@@ -9,14 +9,14 @@ import ImageLightbox from "@components/common/ImageLightbox"
 import Image from "next/image"
 import {User} from "@interfaces/user.interfaces"
 import placeholderCoverPhoto from "@images/placeholder-cover-photo.png"
-import useCurrentUser from "@hooks/useCurrentUser"
+import useAuthState from "@hooks/useAuthState"
 import Modal from "@components/common/Modal"
 import useSelectFile from "@hooks/useSelectFile"
 
 type Props = { user: User }
 
 export default function CoverPhoto({user}: Props) {
-    const {user: currentUser} = useCurrentUser()
+    const {user: currentUser} = useAuthState()
     const [changeCoverPhoto, {isLoading}] = useChangeCoverPhotoMutation()
     const [coverPhoto, setCoverPhoto] = useState<string>(user.profile?.coverPhoto?.url!)
     const {inputRef, selectedFile: selectedPhoto, removeSelectedFile, onClick, onChange} = useSelectFile()

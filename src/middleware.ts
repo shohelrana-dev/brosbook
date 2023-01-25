@@ -5,7 +5,7 @@ import isAuthenticated from "@utils/isAuthenticated"
 export async function middleware( request: NextRequest ){
     const currentPathname  = request.nextUrl.pathname
     const isUserAuthorized = await isAuthenticated( request.cookies )
-    const protectedPaths   = ['/messages', '/notifications', '/suggestions', '/account', '/account/profile']
+    const protectedPaths   = ['/messages', '/notifications', '/suggestions', '/account', '/account/profile', '/auth/logout']
     const guestPaths       = ['/auth/login', '/auth/signup', '/auth/email_verification', '/auth/reset_password']
 
     const isProtectedPath = Boolean( protectedPaths.find( path => currentPathname.startsWith( path ) )?.length )

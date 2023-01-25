@@ -9,10 +9,10 @@ import toast from "react-hot-toast"
 import {useForm} from "@hooks/useForm"
 import AnimatedInput from "@components/common/AnimatedInput"
 import Modal from "@components/common/Modal"
-import useCurrentUser from "@hooks/useCurrentUser"
+import useAuthState from "@hooks/useAuthState"
 
 export default function ChangeUsernameModal() {
-    const {user} = useCurrentUser()
+    const {user} = useAuthState()
     const [changeUsername, { isLoading, isSuccess }] = useChangeUsernameMutation()
     const {formData, onChange, onSubmit, errors, reset} = useForm<ChangeUsernamePayload>(changeUsername, {username: user?.username!, password: ''})
 

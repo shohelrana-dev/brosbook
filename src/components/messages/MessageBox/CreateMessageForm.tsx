@@ -81,7 +81,7 @@ export default function CreateMessageForm( { conversation }: Props ){
     return (
         <div className="relative mb-1 lg:mb-6">
             <form onSubmit={ submitForm }
-                  className="flex items-center w-full rounded-2xl broder-2 border-gray-100 bg-white px-2 py-2">
+                  className="flex items-center w-full rounded-2xl broder-2 border-gray-100 bg-white px-2">
                 { ! selectedFile ? (
                     <>
                         <IconButton className="px-2 text-theme-blue">
@@ -110,12 +110,14 @@ export default function CreateMessageForm( { conversation }: Props ){
                 ) : null }
                 <div className="w-full relative">
                     { selectedFile && (
-                        <div className="max-w-[200px] flex justify-center mx-3 mb-1 relative">
-                            <img src={ URL.createObjectURL( selectedFile ) } alt="Thumb"/>
-                            <IconButton onClick={ removeSelectedFile }
-                                        className="absolute right-1 top-1 bg-black text-white hover:bg-gray-900 hover:text-white z-50">
-                                <CancelIcon size={ 15 }/>
-                            </IconButton>
+                        <div className="max-w-[190px] flex justify-center mx-3 mb-1 relative rounded-2xl">
+                            <img src={ URL.createObjectURL( selectedFile ) } alt="Thumb" className="rounded-2xl"/>
+                            <div onClick={ removeSelectedFile } className="absolute right-1 top-1">
+                                <IconButton
+                                    className="bg-black text-white hover:bg-gray-900 hover:text-white z-50 rounded-full">
+                                    <CancelIcon size={ 15 }/>
+                                </IconButton>
+                            </div>
                         </div>
                     ) }
                     <input
@@ -126,12 +128,12 @@ export default function CreateMessageForm( { conversation }: Props ){
                         value={ messageText }
                     />
                 </div>
-                <IconButton onClick={ clickLoveHandle } className="px-3">
+                <IconButton onClick={ clickLoveHandle } className="px-3" disabled={ isLoading }>
                     <LikeIcon fontSize="medium" color="#FF1493" className="mt-[2px]"/>
                 </IconButton>
 
                 <IconButton type="submit" className="text-theme-blue bg-transparent px-4 disabled:text-blue-400"
-                            disabled={ isLoading || ! messageText }>
+                            disabled={ isLoading || ( ! messageText && ! selectedFile ) }>
                     <SendIcon fontSize={ 20 } className="ml-1"/>
                 </IconButton>
             </form>

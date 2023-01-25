@@ -2,7 +2,7 @@ import React from 'react'
 import Reactions from "@components/messages/MessageBox/Reactions"
 import { Message } from "@interfaces/conversation.interfaces"
 import ImageLightbox from "@components/common/ImageLightbox"
-import useCurrentUser from "@hooks/useCurrentUser"
+import useAuthState from "@hooks/useAuthState"
 
 const classes = {
     text: ( isOwn: boolean, hasReaction: boolean ) => (
