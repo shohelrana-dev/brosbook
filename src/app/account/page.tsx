@@ -8,7 +8,7 @@ import ChangeUsernameModal from "@components/account/ChangeUsernameModal"
 import TextOverflow from 'react-text-overflow'
 
 export default function GeneralSettingsPage(){
-    const { user, isAuthenticated } = useAuthState( { redirectTo: '/auth/login' } )
+    const { user, isAuthenticated } = useAuthState()
 
     if( ! isAuthenticated ) return <Loading/>
 
