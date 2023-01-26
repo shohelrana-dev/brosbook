@@ -30,7 +30,7 @@ function MessageList( { conversation }: Props ){
         if( socket ) return () => {
             socket.close()
         }
-    }, [conversation] )
+    }, [conversation, user] )
 
     function addMessage( message: Message ){
         message.isMeSender = user?.id === message.sender.id
