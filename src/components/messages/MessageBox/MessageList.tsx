@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import SingleMessage from "@components/messages/MessageBox/SingleMessage"
 import { useGetMessagesQuery } from "@services/conversationApi"
 import Loading from "@components/common/Loading"
@@ -11,9 +11,10 @@ interface Props {
     conversation: Conversation
 }
 
-function MessageList( { conversation }: Props ){
+export default function MessageList( { conversation }: Props ){
     //hooks
     const { user }                                              = useAuthState()
+    const messageListRef                                        = useRef<HTMLDivElement>( null )
     const { items: messages, isLoading, setItems: setMessages } = useGetInfiniteListQuery<Message>(
         useGetMessagesQuery, { conversationId: conversation?.id! }
     )
@@ -38,6 +39,7 @@ function MessageList( { conversation }: Props ){
         setMessages( ( prevMessages: Message[] ) => {
             return [message, ...prevMessages]
         } )
+        scrollToBottom()
     }
 
     function updateMessage( message: Message ){
@@ -52,9 +54,19 @@ function MessageList( { conversation }: Props ){
         } )
     }
 
-    return (
-        <div className="overflow-y-scroll h-full scrollbar-hide flex flex-col-reverse mb-3">
+    function scrollToBottom(){
+        if( messageListRef && messageListRef.current ){
+            const element = messageListRef.current
+            element.scroll( {
+                top: element.scrollHeight,
+                left: 0,
+                behavior: "smooth"
+            } )
+        }
+    }
 
+    return (
+        <div ref={ messageListRef } className="overflow-y-scroll h-full scrollbar-hide flex flex-col-reverse mb-3">
             { isLoading ? <Loading/> : null }
 
             { ( messages && messages.length > 0 ) ? messages.map( ( message: Message, index: number ) => (
@@ -70,5 +82,3 @@ function MessageList( { conversation }: Props ){
         </div>
     )
 }
-
-export default MessageList
