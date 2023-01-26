@@ -82,18 +82,18 @@ export default function CommentOptions( { post, comment, setComment }: Props ){
                 </div>
             </PopoverHandler>
             <PopoverContent className="p-0 rounded-2xl overflow-hidden">
-                <div className="w-[250px]">
+                <div className="min-w-[130px]">
                     { isCurrentUserAuthor ? (
-                        <ButtonGray onClick={ handleDeleteComment }>
+                        <OptionButton onClick={ handleDeleteComment }>
                             <DeleteIcon size="18"/>
                             Delete
-                        </ButtonGray>
+                        </OptionButton>
                     ) : (
                         author.isViewerFollow ? (
-                            <ButtonGray onClick={ handleUnfollowClick }>
+                            <OptionButton onClick={ handleUnfollowClick }>
                                 <UnfollowIcon size="18"/>
                                 Unfollow @{ author.username }
-                            </ButtonGray>
+                            </OptionButton>
                         ) : (
                             <OptionButton onClick={ handleFollow }>
                                 <FollowIcon size="18"/>
@@ -101,10 +101,10 @@ export default function CommentOptions( { post, comment, setComment }: Props ){
                             </OptionButton>
                         )
                     ) }
-                    <ButtonGray onClick={ () => setComment( null ) }>
+                    <OptionButton onClick={ () => setComment( null ) }>
                         <HideIcon size="18"/>
                         Hide
-                    </ButtonGray>
+                    </OptionButton>
                 </div>
             </PopoverContent>
         </Popover>

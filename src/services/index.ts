@@ -52,7 +52,7 @@ export async function getFollowingsCount( userId: string ){
 export async function getPostById( postId: string, cookies: RequestCookies | ReadonlyRequestCookies ){
     try {
         const config = getAuthorizationConfig( cookies )
-        const res    = await http.get<Post>( `/post/${ postId }`, config )
+        const res    = await http.get<Post>( `/posts/${ postId }`, config )
 
         return res.data
     } catch ( e ) {
