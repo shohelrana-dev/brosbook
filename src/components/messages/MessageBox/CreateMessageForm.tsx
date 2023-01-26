@@ -79,7 +79,7 @@ export default function CreateMessageForm( { conversation }: Props ){
     if( ! conversation ) return null
 
     return (
-        <div className="relative mb-1 lg:mb-6">
+        <div className="relative mb-1 lg:mb-2">
             <form onSubmit={ submitForm }
                   className="flex items-center w-full rounded-2xl broder-2 border-gray-100 bg-white px-2">
                 { ! selectedFile ? (

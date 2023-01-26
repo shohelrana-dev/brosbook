@@ -14,7 +14,7 @@ export default async function RootLayout( { children }: PropsWithChildren ){
     return (
         <html lang='eng' className={ font.className }>
         <head/>
-        <body>
+        <body className="bg-theme-gray">
         <Providers>
             <Navbar user={ currentUser! }/>
             { children }

@@ -80,7 +80,7 @@ export default function MessageList( { conversation }: Props ){
     } )
 
     return (
-        <div ref={ messageListRef } className="overflow-y-scroll h-full flex flex-col-reverse mb-3 scrollbar-hide">
+        <div ref={ messageListRef } className="overflow-y-scroll flex flex-col-reverse mb-3 scrollbar-hide">
             { isLoading || isFetching ? <Loading size={ 50 }/> : null }
 
             { ( messages && messages.length > 0 ) ? messages.map( ( message: Message, index: number ) => (

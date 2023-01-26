@@ -12,7 +12,7 @@ export default function ConversationPage( { params }: Props ){
     const isDesktopOrLaptop = useMediaQuery( '(min-width: 1024px)' )
 
     return (
-        <div className="h-screen grid grid-cols-12 md:px-10 sm:px-4 pt-16 -mt-16 bg-theme-gray">
+        <div className="h-[97vh] grid grid-cols-12 md:px-10 sm:px-4 pt-16 -mt-16 bg-theme-gray">
             { isDesktopOrLaptop ? (
                 <div className="col-span-12 lg:col-span-3 p-5 h-full lg:border-r-2 border-gray-20 none">
                     <Conversations/>
