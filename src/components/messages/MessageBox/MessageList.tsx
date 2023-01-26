@@ -6,6 +6,7 @@ import { Conversation, Message } from "@interfaces/conversation.interfaces"
 import { io } from "socket.io-client"
 import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import useAuthState from "@hooks/useAuthState"
+import useInfiniteScroll from "react-infinite-scroll-hook"
 
 interface Props {
     conversation: Conversation
@@ -13,10 +14,17 @@ interface Props {
 
 export default function MessageList( { conversation }: Props ){
     //hooks
-    const { user }                                              = useAuthState()
-    const messageListRef                                        = useRef<HTMLDivElement>( null )
-    const { items: messages, isLoading, setItems: setMessages } = useGetInfiniteListQuery<Message>(
-        useGetMessagesQuery, { conversationId: conversation?.id! }
+    const { user }       = useAuthState()
+    const messageListRef = useRef<HTMLDivElement>( null )
+    const {
+              items: messages,
+              isLoading,
+              setItems: setMessages,
+              hasMoreItem,
+              loadMoreItem,
+              isFetching
+          }              = useGetInfiniteListQuery<Message>(
+        useGetMessagesQuery, { conversationId: conversation?.id!, limit: 15 }
     )
 
     useEffect( () => {
@@ -65,18 +73,31 @@ export default function MessageList( { conversation }: Props ){
         }
     }
 
+    const [moreLoadRef] = useInfiniteScroll( {
+        loading: isLoading || isFetching,
+        hasNextPage: hasMoreItem,
+        onLoadMore: loadMoreItem,
+    } )
+
     return (
-        <div ref={ messageListRef } className="overflow-y-scroll h-full scrollbar-hide flex flex-col-reverse mb-3">
-            { isLoading ? <Loading/> : null }
+        <div ref={ messageListRef } className="overflow-y-scroll h-full flex flex-col-reverse mb-3 scrollbar-hide">
+            { isLoading || isFetching ? <Loading size={ 50 }/> : null }
 
             { ( messages && messages.length > 0 ) ? messages.map( ( message: Message, index: number ) => (
                 <SingleMessage key={ message.id } message={ message }
                                prevMessage={ index === 0 ? null : messages[index - 1] }/>
             ) ) : null }
 
-            { ! isLoading && messages.length < 1 ? (
+
+            { messages?.length < 1 && ( ! isLoading && ! isFetching ) ? (
                 <div className="h-full flex justify-center items-center">
                     <h4 className="text-gray-700 text-lg">No chatting yet</h4>
+                </div>
+            ) : null }
+
+            { hasMoreItem ? (
+                <div className="py-[70px]" ref={ moreLoadRef }>
+                    <Loading size={ 50 }/>
                 </div>
             ) : null }
         </div>
