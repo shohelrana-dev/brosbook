@@ -4,24 +4,36 @@ import { Conversation } from "@interfaces/conversation.interfaces"
 import ConversationItem from "@components/messages/Conversations/ConversationItem"
 import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import { useGetConversationsQuery } from "@services/conversationApi"
-import { useSelector } from "react-redux"
-import { selectChatState } from "@slices/chatSlice"
+import InfiniteScroll from 'react-infinite-scroller'
 
-export default function ConversationList(  ){
-    const { isLoading }                       = useGetInfiniteListQuery<Conversation>( useGetConversationsQuery, {} )
-    const { conversations }                   = useSelector( selectChatState )
+export default function ConversationList(){
+    const {
+              items: conversations,
+              isLoading,
+              isFetching,
+              hasMoreItem,
+              loadMoreItem
+          } = useGetInfiniteListQuery<Conversation>( useGetConversationsQuery, {} )
+
     return (
-        <div>
+        <div className="h-full">
             <h2 className="text-lg font-medium mb-3">Recent chats</h2>
-            { isLoading ? <Loading size={ 35 }/> : null }
+            { isLoading ? <Loading size={ 40 }/> : null }
 
-            { conversations && conversations.map( ( conversation: Conversation ) => (
-                <ConversationItem conversation={ conversation } key={ conversation.id }/>
-            ) ) }
+            <InfiniteScroll
+                loadMore={ loadMoreItem }
+                hasMore={ hasMoreItem }
+                loader={ <Loading size={ 40 }/> }
+                className="h-full overflow-y-auto scrollbar-hide"
+            >
+                { conversations.length > 1 ? conversations.map( ( conversation: Conversation ) => (
+                    <ConversationItem conversation={ conversation } key={ conversation.id }/>
+                ) ) : null }
+            </InfiniteScroll>
 
-            { ! isLoading && conversations.length < 1 && (
+            { ( ! isLoading && ! isFetching && conversations.length < 1 ) ? (
                 <p className="text-gray-700">You have no conversation</p>
-            ) }
+            ) : null }
         </div>
     )
 }

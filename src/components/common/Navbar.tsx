@@ -82,6 +82,7 @@ function NavBar( { user }: Props ){
             initial={ { opacity: 0 } }
             animate={ { opacity: 1 } }
             exit={ { opacity: 0 } }
+            id="appHeader"
         >
             <BaseNavbar fullWidth className="mx-auto px-4 lg:px-8 py-2 lg:py-4 z-20">
                 <div className="container mx-auto flex items-center justify-between text-blue-gray-900">

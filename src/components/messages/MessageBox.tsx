@@ -22,9 +22,9 @@ export default function MessageBox( { conversationId }: Props ){
     const participant = conversation?.participant
 
     return (
-        <>
+        <div className="flex flex-col relative h-full">
             {/*User top bar*/ }
-            <div className="box relative py-5 px-4 lg:px-8 flex justify-between">
+            <div className="box py-5 px-4 lg:px-8 flex justify-between">
                 <div className="flex">
                     <div className="mr-4">
                         <Avatar
@@ -57,6 +57,6 @@ export default function MessageBox( { conversationId }: Props ){
             {/*message form*/ }
             <CreateMessageForm conversation={ conversation! }/>
 
-        </>
+        </div>
     )
 }

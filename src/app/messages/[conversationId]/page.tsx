@@ -3,28 +3,35 @@ import MessageBox from "@components/messages/MessageBox"
 import Conversations from "@components/messages/Conversations"
 import ParticipantInfo from "@components/messages/ParticipantInfo"
 import useMediaQuery from "@hooks/useMediaQuery"
+import { useEffect, useState } from "react";
 
 interface Props {
     params: { conversationId: string }
 }
 
 export default function ConversationPage( { params }: Props ){
-    const isDesktopOrLaptop = useMediaQuery( '(min-width: 1024px)' )
+    const [headerHeight, setHeaderHeight] = useState<number>()
+    const isDesktopOrLaptop               = useMediaQuery( '(min-width: 1024px)' )
+
+    useEffect( () => {
+        setHeaderHeight( document.querySelector( '#appHeader' )?.clientHeight )
+    }, [] )
 
     return (
-        <div className="h-[97vh] grid grid-cols-12 md:px-10 sm:px-4 pt-16 -mt-16 bg-theme-gray">
+        <div className="h-screen flex overflow-hidden"
+             style={ { marginTop: `-${ headerHeight }px`, paddingTop: headerHeight } }>
             { isDesktopOrLaptop ? (
-                <div className="col-span-12 lg:col-span-3 p-5 h-full lg:border-r-2 border-gray-20 none">
+                <div className="hidden lg:block w-1/4 p-5 lg:border-r-2 border-gray-20 h-full">
                     <Conversations/>
                 </div>
             ) : null }
 
-            <div className="col-span-12 lg:col-span-6 p-5 relative overflow-hidden flex flex-col">
+            <div className="w-full lg:w-1/2 p-5 lg:border-r-2 border-gray-20 h-full">
                 <MessageBox conversationId={ params.conversationId }/>
             </div>
 
             { isDesktopOrLaptop ? (
-                <div className="col-span-3 p-5 border-l-2 border-gray-200">
+                <div className="hidden lg:block w-1/4 p-5 h-full">
                     <ParticipantInfo conversationId={ params.conversationId }/>
                 </div>
             ) : null }

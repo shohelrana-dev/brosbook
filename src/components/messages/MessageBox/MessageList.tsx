@@ -7,6 +7,7 @@ import { io } from "socket.io-client"
 import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import useAuthState from "@hooks/useAuthState"
 import useInfiniteScroll from "react-infinite-scroll-hook"
+import InfiniteScroll from 'react-infinite-scroller'
 
 interface Props {
     conversation: Conversation
@@ -80,7 +81,7 @@ export default function MessageList( { conversation }: Props ){
     } )
 
     return (
-        <div ref={ messageListRef } className="overflow-y-scroll flex flex-col-reverse mb-3 scrollbar-hide">
+        <div ref={ messageListRef } className="overflow-y-auto flex flex-col-reverse mb-[60px] scrollbar-hide">
             { isLoading || isFetching ? <Loading size={ 50 }/> : null }
 
             { ( messages && messages.length > 0 ) ? messages.map( ( message: Message, index: number ) => (
@@ -89,14 +90,14 @@ export default function MessageList( { conversation }: Props ){
             ) ) : null }
 
 
-            { messages?.length < 1 && ( ! isLoading && ! isFetching ) ? (
+            { messages?.length < 1 && ! isLoading && ! isFetching ? (
                 <div className="h-full flex justify-center items-center">
                     <h4 className="text-gray-700 text-lg">No chatting yet</h4>
                 </div>
             ) : null }
 
             { hasMoreItem ? (
-                <div className="py-[70px]" ref={ moreLoadRef }>
+                <div className="py-[60px]" ref={ moreLoadRef }>
                     <Loading size={ 50 }/>
                 </div>
             ) : null }

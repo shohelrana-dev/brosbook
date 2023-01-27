@@ -3,7 +3,7 @@ import ConversationList from "@components/messages/Conversations/ConversationLis
 
 function Conversations(){
     return (
-        <div>
+        <>
             <h2 className="text-2xl font-medium mb-2">Chats</h2>
 
             {/*Search user*/ }
@@ -11,7 +11,7 @@ function Conversations(){
 
             {/*Conversation List*/ }
             <ConversationList/>
-        </div>
+        </>
     )
 }
 
