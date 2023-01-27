@@ -4,20 +4,16 @@ import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import Loading from "@components/common/Loading"
 import { User } from "@interfaces/user.interfaces"
 import FollowUser from "@components/common/FollowUser"
-import InfiniteScroll from "react-infinite-scroll-component"
+import InfiniteScroll from "react-infinite-scroller"
 
 export default function Suggestions(){
     //hooks
     const {
               isLoading,
-              isFetching,
               items: users,
               loadMoreItem,
               hasMoreItem
           } = useGetInfiniteListQuery<User>( useGetSuggestedUsersQuery )
-
-    const endMessage = ( ! isLoading && ! isFetching && users?.length < 1 ) ?
-        <p className="box text-center mt-5 py-10">You have no suggestion.</p> : null
 
     return (
         <>
@@ -26,11 +22,9 @@ export default function Suggestions(){
                 { ( ! users && isLoading ) ? <Loading/> : null }
 
                 <InfiniteScroll
-                    next={ loadMoreItem }
+                    loadMore={ loadMoreItem }
                     hasMore={ hasMoreItem }
                     loader={ <Loading/> }
-                    dataLength={ users?.length }
-                    endMessage={ endMessage }
                 >
                     { users.map( ( user: User ) => (
                         <div className="pb-1">
@@ -38,6 +32,10 @@ export default function Suggestions(){
                         </div>
                     ) ) }
                 </InfiniteScroll>
+
+                { ( ! isLoading && users?.length < 1 ) ? (
+                    <p className="box text-center mt-5 py-10">You have no suggestion.</p>
+                ) : null }
             </div>
         </>
     )

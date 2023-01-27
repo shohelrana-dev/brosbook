@@ -18,12 +18,12 @@ export default function ConversationList(){
     return (
         <div className="h-full">
             <h2 className="text-lg font-medium mb-3">Recent chats</h2>
-            { isLoading ? <Loading size={ 40 }/> : null }
+            { isLoading ? <Loading size={ 50 }/> : null }
 
             <InfiniteScroll
                 loadMore={ loadMoreItem }
                 hasMore={ hasMoreItem }
-                loader={ <Loading size={ 40 }/> }
+                loader={ <Loading size={ 50 }/> }
                 className="h-full overflow-y-auto scrollbar-hide"
             >
                 { conversations.length > 1 ? conversations.map( ( conversation: Conversation ) => (

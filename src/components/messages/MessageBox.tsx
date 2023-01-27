@@ -24,7 +24,7 @@ export default function MessageBox( { conversationId }: Props ){
     return (
         <div className="flex flex-col relative h-full">
             {/*User top bar*/ }
-            <div className="box py-5 px-4 lg:px-8 flex justify-between">
+            <div className="box py-3 px-4 lg:px-6 flex justify-between">
                 <div className="flex">
                     <div className="mr-4">
                         <Avatar

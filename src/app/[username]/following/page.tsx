@@ -4,7 +4,7 @@ import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import Loading from "@components/common/Loading"
 import { User } from "@interfaces/user.interfaces"
 import FollowUser from "@components/common/FollowUser"
-import InfiniteScroll from "react-infinite-scroll-component"
+import InfiniteScroll from "react-infinite-scroller"
 
 interface Props {
     params: { username: string }
@@ -15,25 +15,19 @@ export default function FollowingPage( props: Props ){
     const { data: user } = useGetUserByUsernameQuery( props.params.username )
     const {
               isLoading,
-              isFetching,
               items: followings,
               loadMoreItem,
               hasMoreItem
           }              = useGetInfiniteListQuery<User>( useGetFollowingsQuery, { userId: user?.id! } )
-
-    const endMessage = ( ! isFetching && ! isLoading && followings?.length < 1 ) ?
-        <p className="box text-center mt-5 py-10">User haven\'t following.</p> : null
 
     return (
         <>
             { ( ! followings && isLoading ) ? <Loading/> : null }
 
             <InfiniteScroll
-                next={ loadMoreItem }
+                loadMore={ loadMoreItem }
                 hasMore={ hasMoreItem }
                 loader={ <Loading/> }
-                dataLength={ followings?.length }
-                endMessage={ endMessage }
             >
                 { followings.map( ( user: User ) => (
                     <div className="bg-white p-3 pb-1">
@@ -41,6 +35,10 @@ export default function FollowingPage( props: Props ){
                     </div>
                 ) ) }
             </InfiniteScroll>
+
+            { ( ! isLoading && followings?.length < 1 ) ? (
+                <p className="box text-center mt-5 py-10">{ user?.fullName }'s haven\'t following.</p>
+            ) : null }
         </>
     )
 }

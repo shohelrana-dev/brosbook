@@ -7,7 +7,6 @@ import { io } from "socket.io-client"
 import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import useAuthState from "@hooks/useAuthState"
 import useInfiniteScroll from "react-infinite-scroll-hook"
-import InfiniteScroll from 'react-infinite-scroller'
 
 interface Props {
     conversation: Conversation
@@ -22,8 +21,7 @@ export default function MessageList( { conversation }: Props ){
               isLoading,
               setItems: setMessages,
               hasMoreItem,
-              loadMoreItem,
-              isFetching
+              loadMoreItem
           }              = useGetInfiniteListQuery<Message>(
         useGetMessagesQuery, { conversationId: conversation?.id!, limit: 15 }
     )
@@ -75,14 +73,14 @@ export default function MessageList( { conversation }: Props ){
     }
 
     const [moreLoadRef] = useInfiniteScroll( {
-        loading: isLoading || isFetching,
+        loading: isLoading,
         hasNextPage: hasMoreItem,
         onLoadMore: loadMoreItem,
     } )
 
     return (
         <div ref={ messageListRef } className="overflow-y-auto flex flex-col-reverse mb-[60px] scrollbar-hide">
-            { isLoading || isFetching ? <Loading size={ 50 }/> : null }
+            { isLoading ? <Loading size={ 50 }/> : null }
 
             { ( messages && messages.length > 0 ) ? messages.map( ( message: Message, index: number ) => (
                 <SingleMessage key={ message.id } message={ message }
@@ -90,7 +88,7 @@ export default function MessageList( { conversation }: Props ){
             ) ) : null }
 
 
-            { messages?.length < 1 && ! isLoading && ! isFetching ? (
+            { messages?.length < 1 && ! isLoading ? (
                 <div className="h-full flex justify-center items-center">
                     <h4 className="text-gray-700 text-lg">No chatting yet</h4>
                 </div>
