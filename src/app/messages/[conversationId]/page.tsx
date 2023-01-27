@@ -3,7 +3,7 @@ import MessageBox from "@components/messages/MessageBox"
 import Conversations from "@components/messages/Conversations"
 import ParticipantInfo from "@components/messages/ParticipantInfo"
 import useMediaQuery from "@hooks/useMediaQuery"
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"
 
 interface Props {
     params: { conversationId: string }

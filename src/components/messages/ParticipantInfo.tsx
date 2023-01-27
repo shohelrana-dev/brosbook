@@ -2,7 +2,7 @@ import Avatar from "@components/common/Avatar"
 import { useGetConversationByIdQuery, useGetConversationMediaListQuery } from "@services/conversationApi"
 import Loading from "@components/common/Loading"
 import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
-import InfiniteScroll from "react-infinite-scroll-component"
+import InfiniteScroll from "react-infinite-scroller"
 import { Media } from "@interfaces/index.interfaces"
 import ImageLightbox from "@components/common/ImageLightbox"
 
@@ -21,9 +21,6 @@ function ParticipantInfo( { conversationId }: Props ){
     if( isLoading ) return <Loading/>
 
     if( ! participant ) return null
-
-    const endMessage = mediaList?.length > 0 ? 'No more media files' : 'No media files.'
-
     return (
         <>
             <div className="box p-6 text-center">
@@ -75,19 +72,21 @@ function ParticipantInfo( { conversationId }: Props ){
 
             <div className="box p-4 mt-3">
                 <h5 className="text-base font-medium mb-3">Shared Media</h5>
-                { ( ! mediaList && isMediaLoading ) ? <Loading size={ 20 }/> : null }
+                { ( ! mediaList && isMediaLoading ) ? <Loading size={ 40 }/> : null }
                 <div>
                     <InfiniteScroll
-                        next={ loadMoreItem }
+                        loadMore={ loadMoreItem }
                         hasMore={ hasMoreItem }
-                        loader={ <Loading size={ 20 }/> }
-                        dataLength={ mediaList.length }
-                        endMessage={ <p className="box text-center mt-5 py-10">{ endMessage }</p> }
+                        loader={ <Loading size={ 40 }/> }
                     >
                         { mediaList.map( ( media: Media ) => (
-                            <ImageLightbox className="inline-block mr-2 mb-2" key={media.id} src={ media.url } alt={ media.name } width={150} height={100}/>
+                            <ImageLightbox className="inline-block mr-2 mb-2" key={ media.id } src={ media.url }
+                                           alt={ media.name } width={ 150 } height={ 100 }/>
                         ) ) }
                     </InfiniteScroll>
+                    { ( ! isLoading && mediaList?.length < 1 ) ? (
+                        <p className="box text-center mt-5 py-10">No media files.</p>
+                    ) : null }
                 </div>
             </div>
 
