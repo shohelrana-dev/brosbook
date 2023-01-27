@@ -64,11 +64,7 @@ export default function MessageList( { conversation }: Props ){
     function scrollToBottom(){
         if( messageListRef && messageListRef.current ){
             const element = messageListRef.current
-            element.scroll( {
-                top: element.scrollHeight,
-                left: 0,
-                behavior: "smooth"
-            } )
+            element.scrollTop = element.scrollHeight
         }
     }
 
