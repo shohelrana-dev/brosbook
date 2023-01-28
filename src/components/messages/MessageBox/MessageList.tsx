@@ -46,7 +46,9 @@ export default function MessageList( { conversation }: Props ){
         setMessages( ( prevMessages: Message[] ) => {
             return [message, ...prevMessages]
         } )
-        scrollToBottom()
+        setInterval( () => {
+            scrollToBottom()
+        }, 500 )
     }
 
     function updateMessage( message: Message ){
@@ -63,7 +65,7 @@ export default function MessageList( { conversation }: Props ){
 
     function scrollToBottom(){
         if( messageListRef && messageListRef.current ){
-            const element = messageListRef.current
+            const element     = messageListRef.current
             element.scrollTop = element.scrollHeight
         }
     }
