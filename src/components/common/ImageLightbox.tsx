@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react'
+import React from 'react'
 import Image, { ImageProps } from 'next/image'
 import classNames from "classnames"
 import LightGallery from 'lightgallery/react'

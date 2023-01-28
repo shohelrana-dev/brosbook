@@ -13,7 +13,6 @@ import {
     MenuList,
     MenuItem
 } from "@material-tailwind/react"
-import { motion } from "framer-motion"
 import IconButton from "@components/common/IconButton"
 import { IoMdNotifications as NotificationIcon } from "react-icons/io"
 import { useGetUnreadNotificationsCountQuery, useUpdateAllNotificationMutation } from "@services/notificationsApi"
@@ -78,12 +77,7 @@ function NavBar( { user }: Props ){
     if( ! user ) return null
 
     return (
-        <motion.header
-            initial={ { opacity: 0 } }
-            animate={ { opacity: 1 } }
-            exit={ { opacity: 0 } }
-            id="appHeader"
-        >
+        <header id="appHeader">
             <BaseNavbar fullWidth className="mx-auto px-4 lg:px-8 py-2 lg:py-4 z-20">
                 <div className="container mx-auto flex items-center justify-between text-blue-gray-900">
                     <div>
@@ -109,7 +103,7 @@ function NavBar( { user }: Props ){
                                     </div>
                                 </PopoverHandler>
                                 <PopoverContent className="w-full max-w-[350px]">
-                                    <div className="max-h-[500px] overflow-auto">
+                                    <div className="max-h-[500px] overflow-y-auto">
                                         <NotificationList/>
                                     </div>
                                 </PopoverContent>
@@ -148,7 +142,7 @@ function NavBar( { user }: Props ){
                     </div>
                 </div>
             </BaseNavbar>
-        </motion.header>
+        </header>
     )
 }
 

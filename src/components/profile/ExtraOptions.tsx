@@ -2,34 +2,40 @@
 import { Popover, PopoverContent, PopoverHandler } from "@material-tailwind/react"
 import IconButton from "@components/common/IconButton"
 import { BsThreeDots as ThreeDotsIcon } from "react-icons/bs"
-import React from "react"
+import React, { useState } from "react"
 import toast from "react-hot-toast"
 import { RiLink as LinkIcon } from "react-icons/ri"
-import { CopyToClipboard } from "react-copy-to-clipboard"
 import { User } from "@interfaces/user.interfaces"
 import OptionButton from "@components/common/OptionButton"
 
 export default function ExtraOptions( { user }: { user: User } ){
+    const [isOpen, setIsOpen] = useState( false )
+
+    function toggleOpen(){
+        setIsOpen( ! isOpen )
+    }
+
+    function copyProfileLinkToClipboard(){
+        navigator.clipboard.writeText( `${ process.env.NEXT_PUBLIC_APP_URL }/${ user.username }` ).then( () => {
+            toast.success( 'Profile link copied.' )
+            toggleOpen()
+        } )
+    }
+
     return (
-        <Popover placement="bottom">
+        <Popover placement="bottom" open={ isOpen }>
             <PopoverHandler>
                 <div>
-                    <IconButton className="ml-2 border-2 border-gray-200 flex-wrap">
+                    <IconButton className="ml-2 border-2 border-gray-200 block" onClick={ toggleOpen }>
                         <ThreeDotsIcon size="18"/>
                     </IconButton>
                 </div>
             </PopoverHandler>
-            <PopoverContent className="p-0 rounded-2xl overflow-hidden">
+            <PopoverContent className="p-0 rounded-2xl block relative block" onBlur={ toggleOpen }>
                 <div>
-                    <OptionButton>
-                        <CopyToClipboard
-                            text={ `${ process.env.NEXT_PUBLIC_APP_URL }/${ user.username }` }
-                            onCopy={ () => toast.success( 'Link copied.' ) }>
-                            <>
-                                <LinkIcon size="18"/>
-                                Copy link to profile
-                            </>
-                        </CopyToClipboard>
+                    <OptionButton className="z-50" onClick={ copyProfileLinkToClipboard }>
+                        <LinkIcon size="18"/>
+                        Copy link to profile
                     </OptionButton>
                 </div>
             </PopoverContent>

@@ -6,7 +6,6 @@ import { AiOutlineUserAdd as FollowIcon } from "react-icons/ai"
 import { MdHideSource as HideIcon } from "react-icons/md"
 import toast from "react-hot-toast"
 
-import ButtonGray from "@components/common/ButtonGray"
 import { useFollowMutation, useUnfollowMutation } from "@services/usersApi"
 import { useDeleteCommentMutation } from "@services/commentsApi"
 import useAuthState from "@hooks/useAuthState"
@@ -23,15 +22,20 @@ interface Props {
 }
 
 export default function CommentOptions( { post, comment, setComment }: Props ){
-    const [follow]        = useFollowMutation()
-    const [unfollow]      = useUnfollowMutation()
-    const [deleteComment] = useDeleteCommentMutation()
+    const [follow]            = useFollowMutation()
+    const [unfollow]          = useUnfollowMutation()
+    const [deleteComment]     = useDeleteCommentMutation()
+    const [isOpen, setIsOpen] = useState( false )
 
     const { user: currentUser } = useAuthState()
     const confirm               = useConfirm()
     const [author, setAuthor]   = useState<User>( comment.author )
 
     const isCurrentUserAuthor = comment.author && ( comment.author.id === currentUser?.id || post.author.id === currentUser?.id )
+
+    function toggleOpen(){
+        setIsOpen( ! isOpen )
+    }
 
     async function handleDeleteComment(){
         const isConfirm = await confirm( {
@@ -45,6 +49,7 @@ export default function CommentOptions( { post, comment, setComment }: Props ){
             await deleteComment( { postId: comment.postId, commentId: comment.id } ).unwrap()
             setComment( null )
             toast.success( 'Comment deleted.' )
+            toggleOpen()
         } catch ( err: any ) {
             toast.error( err?.data?.message || 'Comment deletion was failed.' )
         }
@@ -56,6 +61,7 @@ export default function CommentOptions( { post, comment, setComment }: Props ){
 
             setAuthor( user )
             toast.success( `You followed @${ author.username }` )
+            toggleOpen()
         } catch ( err: any ) {
             console.error( err )
         }
@@ -67,21 +73,22 @@ export default function CommentOptions( { post, comment, setComment }: Props ){
 
             setAuthor( user )
             toast.success( `You unfollowed @${ author.username }` )
+            toggleOpen()
         } catch ( err ) {
             console.error( err )
         }
     }
 
     return (
-        <Popover placement="bottom-end">
+        <Popover placement="bottom-end" open={ isOpen }>
             <PopoverHandler>
                 <div>
-                    <IconButton className="ml-2">
+                    <IconButton className="ml-2" onClick={ toggleOpen }>
                         <ThreeDotsIcon size="18"/>
                     </IconButton>
                 </div>
             </PopoverHandler>
-            <PopoverContent className="p-0 rounded-2xl overflow-hidden">
+            <PopoverContent className="p-0 rounded-2xl overflow-hidden" onBlur={ toggleOpen }>
                 <div className="min-w-[130px]">
                     { isCurrentUserAuthor ? (
                         <OptionButton onClick={ handleDeleteComment }>
@@ -101,7 +108,10 @@ export default function CommentOptions( { post, comment, setComment }: Props ){
                             </OptionButton>
                         )
                     ) }
-                    <OptionButton onClick={ () => setComment( null ) }>
+                    <OptionButton onClick={ () => {
+                        setComment( null )
+                        toggleOpen()
+                    } }>
                         <HideIcon size="18"/>
                         Hide
                     </OptionButton>

@@ -37,7 +37,7 @@ export default function FollowingPage( props: Props ){
             </InfiniteScroll>
 
             { ( ! isLoading && followings?.length < 1 ) ? (
-                <p className="box text-center mt-5 py-10">{ user?.fullName }'s haven\'t following.</p>
+                <p className="box text-center mt-5 py-10">{ user?.fullName }'s haven't following.</p>
             ) : null }
         </>
     )

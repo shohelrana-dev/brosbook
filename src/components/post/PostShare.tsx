@@ -1,5 +1,4 @@
-import React from 'react'
-import { CopyToClipboard } from "react-copy-to-clipboard"
+import React, { useState } from 'react'
 import toast from "react-hot-toast"
 import IconButton from "@components/common/IconButton"
 import { FaShareSquare as ShareIcon } from "react-icons/fa"
@@ -16,28 +15,37 @@ import {
     EmailShareButton,
     EmailIcon
 } from "react-share"
-import OptionButton from "@components/common/OptionButton";
+import OptionButton from "@components/common/OptionButton"
 
 export default function PostShare( { post }: { post: Post } ){
+    const [isOpen, setIsOpen] = useState( false )
+
+    function toggleOpen(){
+        setIsOpen( ! isOpen )
+    }
+
+    function copyPostLinkToClipboard(){
+        navigator.clipboard.writeText( `${ process.env.NEXT_PUBLIC_APP_URL }/posts/${ post.id }` ).then( () => {
+            toast.success( 'Post link copied.' )
+            toggleOpen()
+        } )
+    }
+
     return (
-        <Popover placement="bottom-end">
+        <Popover placement="bottom-end" open={ isOpen }>
             <PopoverHandler>
                 <div className="flex items-center text-gray-600">
-                    <IconButton>
+                    <IconButton onClick={ toggleOpen }>
                         <ShareIcon size="18"/>
                     </IconButton>
                 </div>
             </PopoverHandler>
-            <PopoverContent className="p-0 rounded-2xl overflow-hidden">
+            <PopoverContent className="p-0 rounded-2xl overflow-hidden" onBlur={ toggleOpen }>
                 <div>
-                    <CopyToClipboard
-                        text={ `${ process.env.NEXT_PUBLIC_APP_URL }/posts/${ post.id }` }
-                        onCopy={ () => toast.success( 'Link copied.' ) }>
-                        <OptionButton>
-                            <DeleteIcon size="18"/>
-                            Copy link to post
-                        </OptionButton>
-                    </CopyToClipboard>
+                    <OptionButton onClick={ copyPostLinkToClipboard }>
+                        <DeleteIcon size="18"/>
+                        Copy link to post
+                    </OptionButton>
                     <Popover placement="top">
                         <PopoverHandler>
                             <div>

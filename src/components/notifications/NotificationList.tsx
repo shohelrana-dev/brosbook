@@ -11,7 +11,6 @@ import Loading from "@components/common/Loading"
 export default function NotificationList(){
     const {
               isLoading,
-              isFetching,
               items: notifications,
               loadMoreItem,
               hasMoreItem
@@ -21,8 +20,6 @@ export default function NotificationList(){
             limit: 10
         }
     )
-
-    const endMessage = ( ! isLoading && ! isFetching && notifications?.length < 1 ) ? 'No notifications' : null
 
     return (
         <div>
@@ -38,6 +35,8 @@ export default function NotificationList(){
                         <NotificationItem key={ notification.id } notification={ notification }/>
                     ) ) }
                 </InfiniteScroll>
+
+                { ( ! isLoading && notifications?.length < 1 ) ? <p>No notifications</p> : null }
             </AnimatedComponent>
         </div>
     )
