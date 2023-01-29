@@ -28,8 +28,13 @@ function PostOptions( { post, setPost }: Props ){
     const { user: currentUser } = useAuthState()
     const confirm               = useConfirm()
     const [author, setAuthor]   = useState<User>( post.author )
+    const [isOpen, setIsOpen]   = useState( false )
 
     const isCurrentUserAuthor = author && author.id === currentUser?.id
+
+    function toggleOpen(){
+        setIsOpen( ! isOpen )
+    }
 
     async function handleDeletePostClick(){
         const isConfirm = await confirm( {
@@ -43,6 +48,7 @@ function PostOptions( { post, setPost }: Props ){
             await deletePost( post.id ).unwrap()
             setPost( null )
             toast.success( 'Post deleted.' )
+            toggleOpen()
         } catch ( err: any ) {
             toast.error( err?.data?.message || 'Post deletion was failed.' )
         }
@@ -54,6 +60,7 @@ function PostOptions( { post, setPost }: Props ){
 
             setAuthor( user )
             toast.success( `You followed @${ author.username }` )
+            toggleOpen()
         } catch ( err: any ) {
             console.error( err )
         }
@@ -65,21 +72,22 @@ function PostOptions( { post, setPost }: Props ){
 
             setAuthor( user )
             toast.success( `You unfollowed @${ author.username }` )
+            toggleOpen()
         } catch ( err ) {
             console.error( err )
         }
     }
 
     return (
-        <Popover placement="bottom-end">
+        <Popover placement="bottom-end" open={ isOpen }>
             <PopoverHandler>
                 <div>
-                    <IconButton>
+                    <IconButton onClick={toggleOpen}>
                         <ThreeDotsIcon size="18"/>
                     </IconButton>
                 </div>
             </PopoverHandler>
-            <PopoverContent className="p-0 rounded-2xl overflow-hidden">
+            <PopoverContent className="p-0 rounded-2xl overflow-hidden" onBlur={toggleOpen}>
                 <div className="min-w-[150px]">
                     { isCurrentUserAuthor ? (
                         <OptionButton onClick={ handleDeletePostClick }>
@@ -99,7 +107,10 @@ function PostOptions( { post, setPost }: Props ){
                             </OptionButton>
                         )
                     ) }
-                    <OptionButton onClick={ () => setPost( null ) }>
+                    <OptionButton onClick={ () => {
+                        setPost( null )
+                        toggleOpen()
+                    } }>
                         <HideIcon size="18"/>
                         Hide
                     </OptionButton>

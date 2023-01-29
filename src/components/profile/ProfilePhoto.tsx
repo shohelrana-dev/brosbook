@@ -84,11 +84,12 @@ export default function ProfilePhoto({user}: Props) {
                     </div>
                     <div className="p-4 bg-gray-100">
                         {selectedPhoto ? (
-                            <div className="relative w-full h-[450px]">
+                            <div>
                                 <Image
                                     src={URL.createObjectURL(selectedPhoto)}
                                     alt="User profile photo"
-                                    fill={true}
+                                    width={570}
+                                    height={400}
                                 />
                             </div>
                         ) : null}

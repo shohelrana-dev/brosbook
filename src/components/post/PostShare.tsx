@@ -18,29 +18,23 @@ import {
 import OptionButton from "@components/common/OptionButton"
 
 export default function PostShare( { post }: { post: Post } ){
-    const [isOpen, setIsOpen] = useState( false )
-
-    function toggleOpen(){
-        setIsOpen( ! isOpen )
-    }
 
     function copyPostLinkToClipboard(){
         navigator.clipboard.writeText( `${ process.env.NEXT_PUBLIC_APP_URL }/posts/${ post.id }` ).then( () => {
             toast.success( 'Post link copied.' )
-            toggleOpen()
         } )
     }
 
     return (
-        <Popover placement="bottom-end" open={ isOpen }>
+        <Popover placement="bottom-end">
             <PopoverHandler>
                 <div className="flex items-center text-gray-600">
-                    <IconButton onClick={ toggleOpen }>
+                    <IconButton>
                         <ShareIcon size="18"/>
                     </IconButton>
                 </div>
             </PopoverHandler>
-            <PopoverContent className="p-0 rounded-2xl overflow-hidden" onBlur={ toggleOpen }>
+            <PopoverContent className="p-0 rounded-2xl overflow-hidden">
                 <div>
                     <OptionButton onClick={ copyPostLinkToClipboard }>
                         <DeleteIcon size="18"/>

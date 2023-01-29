@@ -94,11 +94,12 @@ export default function CoverPhoto({user}: Props) {
                     </div>
                     <div className="p-4 bg-gray-100">
                         {selectedPhoto ? (
-                            <div className="relative w-full h-[400px]">
+                            <div>
                                 <Image
                                     src={URL.createObjectURL(selectedPhoto)}
                                     alt="Cover photo"
-                                    fill={true}
+                                    width={570}
+                                    height={400}
                                 />
                             </div>
                         ) : null}
