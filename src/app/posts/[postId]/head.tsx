@@ -21,13 +21,19 @@ export default async function Head( { params }: Props ){
     return (
         <>
             <DefaultTags/>
-            <meta content="article" property="og:type"/>
-            <meta content={ url } property="og:url"/>
-            <meta content={ title } property="og:title"/>
-            <meta content={ description } property="og:description"/>
-            <meta content={ image } property="og:image"/>
-            {/*@ts-ignore*/}
-            <meta description={ description } name="description"/>
+
+            <meta property="og:type" content="article"/>
+            <meta property="og:url" content={ url }/>
+            <meta property="og:title" content={ title }/>
+            <meta property="og:description" content={ description }/>
+            <meta property="og:image" content={ image }/>
+
+            <meta property="twitter:title" content={ title }/>
+            <meta property="twitter:image" content={ image }/>
+            <meta property="twitter:description" content={ description }/>
+
+            {/*@ts-ignore*/ }
+            <meta name="description" content={ description }/>
             <title>{ `${ title }: ${ post?.body || 'Image' }` }</title>
         </>
     )
