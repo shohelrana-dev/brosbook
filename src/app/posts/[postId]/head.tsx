@@ -13,15 +13,22 @@ interface Props {
 export default async function Head( { params }: Props ){
     const post = await getPostById( params.postId, cookies() )
 
+    const title       = `${ post?.author.fullName } on ${ process.env.NEXT_PUBLIC_APP_NAME }`
+    const description = post?.body
+    const image       = post?.image.url
+    const url         = `${ process.env.NEXT_PUBLIC_APP_URL }/posts/${ post?.id }`
+
     return (
         <>
             <DefaultTags/>
-            <meta content={ post?.body } property="og:description"/>
+            <meta content="article" property="og:type"/>
+            <meta content={ url } property="og:url"/>
+            <meta content={ title } property="og:title"/>
+            <meta content={ description } property="og:description"/>
+            <meta content={ image } property="og:image"/>
             {/*@ts-ignore*/ }
-            <meta description={ post.body } name="description"/>
-            { post?.image ? <meta content={ post.image.url } property="og:image"/> : null }
-            <meta content={ post?.body } property="og:title"/>
-            <title>{ `${ post?.body || 'Post image' } | ${ process.env.NEXT_PUBLIC_APP_NAME }` }</title>
+            <meta description={ description } name="description"/>
+            <title>{ `${ title }: ${post?.body || 'Image'}` }</title>
         </>
     )
 }
