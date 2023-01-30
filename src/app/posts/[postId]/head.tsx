@@ -26,7 +26,8 @@ export default async function Head( { params }: Props ){
             <meta content={ title } property="og:title"/>
             <meta content={ description } property="og:description"/>
             <meta content={ image } property="og:image"/>
-            <meta content={ description } name="description"/>
+            {/*@ts-ignore*/}
+            <meta description={ description } name="description"/>
             <title>{ `${ title }: ${ post?.body || 'Image' }` }</title>
         </>
     )
