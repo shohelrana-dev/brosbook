@@ -21,8 +21,7 @@ export default async function Head( { params }: Props ){
             <DefaultTags/>
             <meta content="profile" property="og:type"/>
             <meta content={ description } property="og:description"/>
-            {/*@ts-ignore*/ }
-            <meta description={ description } name="description"/>
+            <meta content={ description } name="description"/>
             <meta content={ user?.avatar.url } property="og:image"/>
             <meta content={ title } property="og:title"/>
             <title>{ title }</title>
