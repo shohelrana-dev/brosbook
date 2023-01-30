@@ -22,6 +22,9 @@ export default async function Head( { params }: Props ){
         <>
             <DefaultTags/>
 
+            <meta name="description" content={ description }/>
+            <title>{ title }</title>
+
             <meta property="og:type" content="profile"/>
             <meta property="og:url" content={ url }/>
             <meta property="og:title" content={ title }/>
@@ -31,10 +34,6 @@ export default async function Head( { params }: Props ){
             <meta property="twitter:title" content={ title }/>
             <meta property="twitter:image" content={ image }/>
             <meta property="twitter:description" content={ description }/>
-
-            {/*@ts-ignore*/ }
-            <meta name="description" content={ description }/>
-            <title>{ title }</title>
         </>
     )
 }
