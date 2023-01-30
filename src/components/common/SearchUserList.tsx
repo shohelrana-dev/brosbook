@@ -17,10 +17,10 @@ function SearchUserList( { onUserClick, users, isLoading }: Props ){
                 { isLoading ? <Loading/> : null }
 
                 { ( users && users.length > 0 ) ? users.map( user => (
-                    <button
+                    <div
                         key={ user.id }
                         onClick={ () => onUserClick( user ) }
-                        className="p-3 mb-2 flex items-center bg-white w-full"
+                        className="p-3 mb-2 flex bg-white w-full cursor-pointer gap-3"
                     >
                         <Avatar
                             src={ user.avatar.url }
@@ -29,14 +29,14 @@ function SearchUserList( { onUserClick, users, isLoading }: Props ){
                             size="medium"
 
                         />
-                        <div>
-                            <h4 className="ml-3 text-base">
+                        <div className="block">
+                            <h4 className="text-base">
                                 { user.fullName }
                             </h4>
-                            <p className="text-sm text-gray-700">@{ user.username }</p>
-                            <p className="text-gray-700">{ user.profile?.bio }</p>
+                            <div className="text-sm text-gray-700">{ `@${user.username}` }</div>
+                            <div className="text-gray-700">{ user.profile?.bio }</div>
                         </div>
-                    </button>
+                    </div>
                 ) ) : null }
 
                 { ( ! isLoading && users.length < 1 ) ? (
