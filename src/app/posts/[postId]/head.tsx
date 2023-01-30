@@ -30,10 +30,6 @@ export default async function Head( { params }: Props ){
             <meta property="og:title" content={ title }/>
             <meta property="og:description" content={ description }/>
             <meta property="og:image" content={ image }/>
-
-            <meta property="twitter:title" content={ title }/>
-            <meta property="twitter:image" content={ image }/>
-            <meta property="twitter:description" content={ description }/>
         </>
     )
 }
