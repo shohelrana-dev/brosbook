@@ -15,7 +15,7 @@ export default async function Head( { params }: Props ){
 
     const title       = `${ post?.author.fullName } on ${ process.env.NEXT_PUBLIC_APP_NAME }`
     const description = post?.body
-    const image       = post?.image.url
+    const image       = post?.image?.url
     const url         = `${ process.env.NEXT_PUBLIC_APP_URL }/posts/${ post?.id }`
 
     return (
