@@ -85,7 +85,7 @@ function ParticipantInfo( { conversationId }: Props ){
                         ) ) }
                     </InfiniteScroll>
                     { ( ! isLoading && mediaList?.length < 1 ) ? (
-                        <p className="box text-center mt-5 py-10">No media files.</p>
+                        <p className="text-center py-6">No media files.</p>
                     ) : null }
                 </div>
             </div>

@@ -34,7 +34,7 @@ export default function Suggestions(){
                 </InfiniteScroll>
 
                 { ( ! isLoading && users?.length < 1 ) ? (
-                    <p className="box text-center mt-5 py-10">You have no suggestion.</p>
+                    <p className="box text-center py-6">You have no suggestion.</p>
                 ) : null }
             </div>
         </>

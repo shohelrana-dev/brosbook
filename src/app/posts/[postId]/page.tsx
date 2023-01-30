@@ -19,7 +19,9 @@ export default async function SinglePostPage( { params }: Props ){
 
     return (
         <SidebarLayout>
-            <PostCard post={ post! } isCommentsShow={ true }/>
+            <div className="mt-5">
+                <PostCard post={ post! } isCommentsShow={ true }/>
+            </div>
         </SidebarLayout>
     )
 }

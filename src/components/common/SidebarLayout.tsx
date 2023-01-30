@@ -9,7 +9,7 @@ function SidebarLayout( { children }: PropsWithChildren ){
                 <div className="md:mx-5 w-full lg:w-8/12">
                     { children }
                 </div>
-                <aside className="hidden lg:block w-4/12 mt-6">
+                <aside className="hidden lg:block w-4/12 mt-4">
                     <Suspense fallback={ <Loading size={ 40 }/> }>
                         {/*@ts-ignore*/ }
                         <Sidebar/>

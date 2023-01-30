@@ -41,7 +41,7 @@ export default function ProfilePostsPage( { user, initialPosts }: ProfilePostsPa
             </InfiniteScroll>
 
             { ( ! isLoading && posts?.length < 1 ) ? (
-                <p className="box text-center mt-5 py-10">{ user?.fullName }'s haven't any post.</p>
+                <p className="box text-center py-6">{ user?.fullName }'s haven't any post.</p>
             ) : null }
         </div>
     )

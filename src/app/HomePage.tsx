@@ -17,7 +17,7 @@ export default function HomePage(){
           } = useGetInfiniteListQuery<Post>( useGetFeedPostsQuery )
 
     return (
-        <div className="pt-6 mb-4">
+        <div className="mt-5 mb-4">
             <CreatePostForm/>
             { ( posts.length < 1 && isLoading ) ? <LoadingPosts/> : null }
 
@@ -32,7 +32,7 @@ export default function HomePage(){
             </InfiniteScroll>
 
             { ( ! isLoading && posts?.length < 1 ) ? (
-                <p className="box text-center mt-5 py-10">Your feed is empty.</p>
+                <p className="box text-center py-6">Your feed is empty.</p>
             ) : null }
         </div>
     )
