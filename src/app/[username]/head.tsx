@@ -13,6 +13,10 @@ interface Props {
 export default async function Head( { params }: Props ){
     const user = await getUserByUsername( params.username, cookies() )
 
+    if( ! user ){
+        return null
+    }
+
     const title       = `${ user?.fullName } (@${ user?.username }) | ${ process.env.NEXT_PUBLIC_APP_NAME }`
     const description = user?.profile?.bio
     const image       = user?.avatar.url

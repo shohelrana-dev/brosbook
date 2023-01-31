@@ -9,8 +9,7 @@ const nextConfig = {
         domains: [
             'localhost',
             'brosbook-api.up.railway.app',
-            'res.cloudinary.com',
-            'lh3.googleusercontent.com'
+            'res.cloudinary.com'
         ]
     },
     experimental: {
