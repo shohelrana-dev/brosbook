@@ -12,13 +12,14 @@ import placeholderCoverPhoto from "@images/placeholder-cover-photo.png"
 import useAuthState from "@hooks/useAuthState"
 import Modal from "@components/common/Modal"
 import useSelectFile from "@hooks/useSelectFile"
+import { Media } from "@interfaces/index.interfaces"
 
 type Props = { user: User }
 
 export default function CoverPhoto({user}: Props) {
     const {user: currentUser} = useAuthState()
     const [changeCoverPhoto, {isLoading}] = useChangeCoverPhotoMutation()
-    const [coverPhoto, setCoverPhoto] = useState<string>(user.profile?.coverPhoto?.url!)
+    const [coverPhoto, setCoverPhoto] = useState<Media | undefined>(user.profile?.coverPhoto)
     const {inputRef, selectedFile: selectedPhoto, removeSelectedFile, onClick, onChange} = useSelectFile()
 
     const [isModalOpen, setIsModalOpen] = useState(false)
@@ -36,7 +37,7 @@ export default function CoverPhoto({user}: Props) {
             const data = await changeCoverPhoto(formData).unwrap()
             setIsModalOpen(false)
             removeSelectedFile()
-            setCoverPhoto(data.profile?.coverPhoto?.url!)
+            setCoverPhoto(data.profile?.coverPhoto)
             toast.success('Cover photo saved.')
         } catch (err: any) {
             console.error(err)
@@ -55,7 +56,7 @@ export default function CoverPhoto({user}: Props) {
                 {coverPhoto ? (
                     <ImageLightbox
                         className="absolute w-full h-full"
-                        src={coverPhoto}
+                        image={coverPhoto}
                         width={600}
                         height={300}
                         alt="cover photo"
@@ -73,7 +74,7 @@ export default function CoverPhoto({user}: Props) {
             <div className="relative w-full h-[300px]">
                 {coverPhoto ? (
                     <ImageLightbox
-                        src={coverPhoto}
+                        image={coverPhoto}
                         className="absolute w-full h-full"
                         width={600}
                         height={300}

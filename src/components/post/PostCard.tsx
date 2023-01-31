@@ -62,7 +62,7 @@ const PostCard = ( props: PostCardProps ) => {
                 ) : null }
                 { post.image ? (
                     <div className="my-3">
-                        <ImageLightbox src={ post.image.url } width={ 550 } height={ 340 } alt="Post image"/>
+                        <ImageLightbox image={ post.image } width={ 550 } height={ 340 } alt="Post image"/>
                     </div>
                 ) : null }
 

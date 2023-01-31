@@ -80,7 +80,7 @@ function ParticipantInfo( { conversationId }: Props ){
                         loader={ <Loading size={ 40 }/> }
                     >
                         { mediaList.map( ( media: Media ) => (
-                            <ImageLightbox className="inline-block mr-2 mb-2" key={ media.id } src={ media.url }
+                            <ImageLightbox className="inline-block mr-2 mb-2" key={ media.id } image={ media }
                                            alt={ media.name } width={ 150 } height={ 100 }/>
                         ) ) }
                     </InfiniteScroll>

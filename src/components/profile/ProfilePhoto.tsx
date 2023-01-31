@@ -11,13 +11,14 @@ import {User} from "@interfaces/user.interfaces"
 import useAuthState from "@hooks/useAuthState"
 import Modal from "@components/common/Modal"
 import useSelectFile from "@hooks/useSelectFile"
+import { Media } from "@interfaces/index.interfaces"
 
 type Props = { user: User }
 
 export default function ProfilePhoto({user}: Props) {
     const {user: currentUser} = useAuthState()
     const [changeProfilePhoto, {isLoading}] = useChangeProfilePhotoMutation()
-    const [profilePhoto, setProfilePhoto] = useState<string>(user.avatar.url)
+    const [avatar, setAvatar] = useState<Media  | undefined>(user.avatar)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const {onChange, onClick, inputRef, selectedFile: selectedPhoto, removeSelectedFile} = useSelectFile()
 
@@ -38,7 +39,7 @@ export default function ProfilePhoto({user}: Props) {
 
             setIsModalOpen(false)
             removeSelectedFile()
-            setProfilePhoto(data.avatar.url)
+            setAvatar(data.avatar)
             toast.success('Profile photo saved.')
         } catch (err: any) {
             console.error(err)
@@ -49,7 +50,7 @@ export default function ProfilePhoto({user}: Props) {
     if (user.id !== currentUser?.id) {
         return (
             <ImageLightbox
-                src={profilePhoto}
+                image={avatar}
                 className="rounded-full w-[130px] h-[130px] mt-[-80px] border-4 border-white"
                 alt="User profile photo"
                 width={130}
@@ -66,7 +67,7 @@ export default function ProfilePhoto({user}: Props) {
             }}
                    ref={inputRef}/>
             <ImageLightbox
-                src={profilePhoto}
+                image={avatar}
                 className="rounded-full w-[130px] h-[130px] mt-[-80px] border-4 border-white"
                 alt="User profile photo"
                 width={130}

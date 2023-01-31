@@ -2,7 +2,6 @@ import React from 'react'
 import Reactions from "@components/messages/MessageBox/Reactions"
 import { Message } from "@interfaces/conversation.interfaces"
 import ImageLightbox from "@components/common/ImageLightbox"
-import useAuthState from "@hooks/useAuthState"
 
 const classes = {
     text: ( isOwn: boolean, hasReaction: boolean ) => (
@@ -42,7 +41,7 @@ function MessageContent( { message }: Props ){
             return (
                 <div className={ classes.image }>
                     <Reactions message={ message }/>
-                    <ImageLightbox src={ message.image?.url! } alt="message image" width={ 400 } height={ 400 }/>
+                    <ImageLightbox image={ message.image } alt="message image" width={ 400 } height={ 400 }/>
                 </div>
             )
 

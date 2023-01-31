@@ -15,8 +15,10 @@ export interface Media {
     source: string
     name: string
     originalName: string
-    mimetype: string
+    format: string
     url: string
+    height: number
+    width: number
     size: number
 }
 

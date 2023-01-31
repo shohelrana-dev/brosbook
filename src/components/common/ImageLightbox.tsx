@@ -10,16 +10,21 @@ import lgZoom from 'lightgallery/plugins/zoom'
 import 'lightgallery/css/lightgallery.css'
 import 'lightgallery/css/lg-zoom.css'
 import 'lightgallery/css/lg-thumbnail.css'
+import { Media } from "@interfaces/index.interfaces"
 
+interface Props extends Omit<ImageProps, "src"> {
+    image?: Media
+}
 
-export default function ImageLightbox( props: ImageProps ){
-    let { src, className, ...rest } = props
-    className                       = classNames( 'cursor-pointer', className )
+export default function ImageLightbox( { image, className, ...rest }: Props ){
+    className = classNames( 'cursor-pointer', className )
+
+    if(!image || !image.url) return null
 
     return (
         <LightGallery speed={ 500 } plugins={ [lgThumbnail, lgZoom] } mode="lg-fade">
-            <a data-src={ `/_next/image?url=${ src }&w=640&q=75` } data-lg-size="1406-1390">
-                <Image src={ src } { ...rest } className={ className }/>
+            <a data-src={ image.url } data-lg-size={ `${ image.width }-${ image.height }` }>
+                <Image src={ image.url } className={ className } { ...rest }/>
             </a>
         </LightGallery>
     )
