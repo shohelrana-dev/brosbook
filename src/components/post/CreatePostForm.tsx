@@ -45,6 +45,8 @@ function CreatePostForm(){
         }
     }
 
+    console.log(body)
+
     if( ! isAuthenticated ) return null
 
     return (

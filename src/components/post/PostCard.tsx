@@ -9,6 +9,7 @@ import timeAgo from "@utils/timeAgo"
 import ImageLightbox from '@components/common/ImageLightbox'
 import PostBar from "@components/post/PostBar"
 import PostOptions from "@components/post/PostOptions"
+import nl2br from 'react-nl2br'
 
 
 interface PostCardProps {
@@ -18,11 +19,11 @@ interface PostCardProps {
 
 const PostCard = ( props: PostCardProps ) => {
     //hooks
-    const [post, setPost]                       = useState<Post | null>( props.post )
+    const [post, setPost]                     = useState<Post | null>( props.post )
     const [isCommentsShow, setIsCommentsShow] = useState<boolean>( Boolean( props.isCommentsShow ) )
 
     if( ! post ) return null
-
+    console.log( post )
     return (
         <div className="box p-6 mb-4">
             <div className="flex">
@@ -50,13 +51,13 @@ const PostCard = ( props: PostCardProps ) => {
                 { post.body ? (
                     <div className="mb-1 mt-2">
                         <ShowMoreText
-                            lines={ 3 }
+                            lines={ 5 }
                             more={ <span className="text-blue-600">See more</span> }
                             less={ <span className="text-blue-600">See less</span> }
                             expanded={ false }
                             truncatedEndingComponent={ "... " }
                         >
-                            { post.body }
+                            { nl2br(post.body) }
                         </ShowMoreText>
                     </div>
                 ) : null }
