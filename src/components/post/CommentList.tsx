@@ -16,7 +16,7 @@ interface CommentListPost {
 }
 
 function CommentList( { postId }: CommentListPost ){
-    const { user: currentUser } = useAuthState()
+    const { user: currentUser, isAuthenticated } = useAuthState()
     const {
               isLoading,
               isFetching,
@@ -24,9 +24,9 @@ function CommentList( { postId }: CommentListPost ){
               hasMoreItem,
               loadMoreItem,
               setItems
-          }                     = useGetInfiniteListQuery<Comment>( useGetCommentsQuery, { postId } )
-    const { data: post }        = useGetPostByIdQuery( postId )
-    const [createComment]       = useCreateCommentMutation()
+          }                                      = useGetInfiniteListQuery<Comment>( useGetCommentsQuery, { postId } )
+    const { data: post }                         = useGetPostByIdQuery( postId )
+    const [createComment]                        = useCreateCommentMutation()
 
     const [commentBody, setCommentBody] = useState( '' )
 
@@ -47,21 +47,23 @@ function CommentList( { postId }: CommentListPost ){
 
     return (
         <div className="mt-2">
-            <form onSubmit={ handleSaveComment } className="mb-2 flex items-center">
-                <div className="mt-[-4px]">
-                    <Avatar src={ currentUser?.avatar?.url } online size="small"/>
-                </div>
-                <div className="ml-2 w-full">
-                    <BasicInput
-                        label="Write a comment..."
-                        labelHide
-                        type="text"
-                        value={ commentBody }
-                        className="!rounded-full"
-                        onChange={ ( e ) => setCommentBody( e.target.value ) }
-                    />
-                </div>
-            </form>
+            { isAuthenticated ? (
+                <form onSubmit={ handleSaveComment } className="mb-2 flex items-center">
+                    <div className="mt-[-4px]">
+                        <Avatar src={ currentUser?.avatar?.url } online size="small"/>
+                    </div>
+                    <div className="ml-2 w-full">
+                        <BasicInput
+                            label="Write a comment..."
+                            labelHide
+                            type="text"
+                            value={ commentBody }
+                            className="!rounded-full"
+                            onChange={ ( e ) => setCommentBody( e.target.value ) }
+                        />
+                    </div>
+                </form>
+            ) : null }
 
             { ! isLoading ? comments?.length > 0 ? comments.map( ( comment: Comment ) => (
                 <CommentItem comment={ comment } post={ post! } key={ comment.id }/>
