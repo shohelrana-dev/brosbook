@@ -10,7 +10,6 @@ export default function ConversationList(){
     const {
               items: conversations,
               isLoading,
-              isFetching,
               hasMoreItem,
               loadMoreItem
           } = useGetInfiniteListQuery<Conversation>( useGetConversationsQuery )
@@ -31,7 +30,7 @@ export default function ConversationList(){
                 ) ) : null }
             </InfiniteScroll>
 
-            { ( ! isLoading && ! isFetching && conversations.length < 1 ) ? (
+            { ( ! isLoading && conversations?.length < 1 ) ? (
                 <p className="text-gray-700">You have no conversation</p>
             ) : null }
         </div>
