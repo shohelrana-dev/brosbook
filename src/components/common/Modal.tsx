@@ -33,7 +33,7 @@ export default function Modal(props: ModalProps) {
                         exit={{scale: 0.6, opacity: 0}}
                         transition={{duration: 0.2}}
                     >
-                        <div className="!absolute right-3 top-3">
+                        <div className="!absolute right-2 top-2">
                             <IconButton onClick={onClose} className="p-3">
                                 <CancelIcon size="18"/>
                             </IconButton>

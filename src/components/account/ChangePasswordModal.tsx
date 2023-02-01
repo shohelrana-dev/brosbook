@@ -61,9 +61,11 @@ export default function ChangePasswordModal(){
                         onChange={ onChange }
                     />
 
-                    <Button type="submit" isLoading={ isLoading } className="!mt-5">
-                        Update
-                    </Button>
+                    <div className="text-right">
+                        <Button type="submit" isLoading={ isLoading } className="!mt-5">
+                            Update
+                        </Button>
+                    </div>
                 </form>
             </Modal>
         </>
