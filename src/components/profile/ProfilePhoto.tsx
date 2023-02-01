@@ -83,7 +83,7 @@ export default function ProfilePhoto({user}: Props) {
                     <div className="p-2">
                         <h3 className="text-xl mb-2">New profile photo</h3>
                     </div>
-                    <div className="p-4 bg-gray-100">
+                    <div className="p-4 bg-gray-100 max-h-[75vh] overflow-hidden">
                         {selectedPhoto ? (
                             <div>
                                 <Image
