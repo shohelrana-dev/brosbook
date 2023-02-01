@@ -77,7 +77,7 @@ export default function MessageList( { conversation }: Props ){
     } )
 
     return (
-        <div ref={ messageListRef } className="overflow-y-auto flex flex-col-reverse mb-[60px] scrollbar-hide">
+        <div ref={ messageListRef } className="h-full overflow-y-auto flex flex-col-reverse mb-[60px] scrollbar-hide">
             { isLoading ? <Loading size={ 50 }/> : null }
 
             { ( messages && messages.length > 0 ) ? messages.map( ( message: Message, index: number ) => (
@@ -88,7 +88,7 @@ export default function MessageList( { conversation }: Props ){
 
             { messages?.length < 1 && ! isLoading ? (
                 <div className="h-full flex justify-center items-center">
-                    <h4 className="text-gray-700 text-lg">No chatting yet</h4>
+                    <h4 className="text-gray-700 text-lg">There was no chat</h4>
                 </div>
             ) : null }
 

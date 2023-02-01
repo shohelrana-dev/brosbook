@@ -13,7 +13,7 @@ export default function ConversationList(){
               isFetching,
               hasMoreItem,
               loadMoreItem
-          } = useGetInfiniteListQuery<Conversation>( useGetConversationsQuery, {} )
+          } = useGetInfiniteListQuery<Conversation>( useGetConversationsQuery )
 
     return (
         <div className="h-full">
@@ -26,7 +26,7 @@ export default function ConversationList(){
                 loader={ <Loading size={ 50 }/> }
                 className="h-full overflow-y-auto scrollbar-hide"
             >
-                { conversations.length > 1 ? conversations.map( ( conversation: Conversation ) => (
+                { conversations?.length > 0 ? conversations.map( ( conversation: Conversation ) => (
                     <ConversationItem conversation={ conversation } key={ conversation.id }/>
                 ) ) : null }
             </InfiniteScroll>
