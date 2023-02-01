@@ -15,7 +15,7 @@ import {
 } from "@material-tailwind/react"
 import IconButton from "@components/common/IconButton"
 import { IoMdNotifications as NotificationIcon } from "react-icons/io"
-import { useGetUnreadNotificationsCountQuery, useUpdateAllNotificationMutation } from "@services/notificationsApi"
+import { useGetUnreadNotificationsCountQuery, useReadAllNotificationMutation } from "@services/notificationsApi"
 import { io } from "socket.io-client"
 import {
     Popover,
@@ -32,7 +32,7 @@ interface Props {
 }
 
 function NavBar( { user }: Props ){
-    const [UpdateAllNotification]                                 = useUpdateAllNotificationMutation()
+    const [readAllNotification]                                 = useReadAllNotificationMutation()
     const { data }                                                = useGetUnreadNotificationsCountQuery()
     const [unreadNotificationsCount, setUnreadNotificationsCount] = useState<number>( data?.count || 0 )
     const confirm                                                 = useConfirm()
@@ -55,7 +55,7 @@ function NavBar( { user }: Props ){
     }, [user] )
 
     function onNotificationsCLick(){
-        UpdateAllNotification()
+        readAllNotification()
     }
 
     function onMessagesCLick(){

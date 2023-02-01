@@ -20,17 +20,9 @@ export const notificationsApi = baseApi.injectEndpoints( {
             keepUnusedDataFor: 0.0001
         } ),
 
-        updateNotification: build.mutation<Notification, string>( {
-            query: ( notificationId ) => ( {
-                url: `/notifications/${ notificationId }`,
-                method: 'PUT'
-            } ),
-            invalidatesTags: ['Notification']
-        } ),
-
-        updateAllNotification: build.mutation<Notification[], void>( {
+        readAllNotification: build.mutation<Notification[], void>( {
             query: () => ( {
-                url: `/notifications`,
+                url: `/notifications/read_all`,
                 method: 'PUT'
             } ),
             invalidatesTags: ['Notification']
@@ -42,6 +34,5 @@ export const notificationsApi = baseApi.injectEndpoints( {
 export const {
                  useGetNotificationsQuery,
                  useGetUnreadNotificationsCountQuery,
-                 useUpdateNotificationMutation,
-                 useUpdateAllNotificationMutation
+                 useReadAllNotificationMutation
              } = notificationsApi
