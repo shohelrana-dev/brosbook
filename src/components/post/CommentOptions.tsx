@@ -27,11 +27,11 @@ export default function CommentOptions( { post, comment, setComment }: Props ){
     const [deleteComment]     = useDeleteCommentMutation()
     const [isOpen, setIsOpen] = useState( false )
 
-    const { user: currentUser } = useAuthState()
+    const { user: currentUser, isAuthenticated } = useAuthState()
     const confirm               = useConfirm()
     const [author, setAuthor]   = useState<User>( comment.author )
 
-    const isCurrentUserAuthor = comment.author && ( comment.author.id === currentUser?.id || post.author.id === currentUser?.id )
+    const isCurrentUserAuthor = isAuthenticated && comment.author && ( comment.author.id === currentUser?.id || post.author.id === currentUser?.id )
 
     function toggleOpen(){
         setIsOpen( ! isOpen )

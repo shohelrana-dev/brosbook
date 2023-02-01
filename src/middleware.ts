@@ -13,7 +13,7 @@ export async function middleware( request: NextRequest ){
     const isHomePath      = currentPathname === '/'
 
 
-    if( ! isGuestPath && ! isProtectedPath && ! isHomePath ){
+    if( ! isGuestPath && ! isProtectedPath && isHomePath ){
         return NextResponse.next()
     }
 
@@ -22,7 +22,7 @@ export async function middleware( request: NextRequest ){
             return NextResponse.redirect( new URL( '/', request.url ) )
         }
     } else{
-        if( isProtectedPath || isHomePath ){
+        if( isProtectedPath ){
             return NextResponse.redirect( new URL( `/auth/login?redirect_path=${ currentPathname }`, request.url ) )
         }
     }

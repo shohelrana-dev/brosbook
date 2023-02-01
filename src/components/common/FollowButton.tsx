@@ -6,6 +6,8 @@ import Button from "@components/common/Button"
 import ButtonOutline from "@components/common/ButtonOutline"
 import useConfirm from "@hooks/useConfirm"
 import toast from "react-hot-toast"
+import useUnauthorizedPopup from "@hooks/useUnauthorzedPopup";
+import useAuthState from "@hooks/useAuthState";
 
 
 interface FollowButtonProps {
@@ -14,12 +16,22 @@ interface FollowButtonProps {
 
 function FollowButton( props: FollowButtonProps ){
     //hooks
-    const [user, setUser] = useState<User>( props.user )
-    const [follow]        = useFollowMutation()
-    const [unfollow]      = useUnfollowMutation()
-    const confirm         = useConfirm()
+    const [user, setUser]     = useState<User>( props.user )
+    const [follow]            = useFollowMutation()
+    const [unfollow]          = useUnfollowMutation()
+    const { isAuthenticated } = useAuthState()
+    const confirm             = useConfirm()
+    const unauthorizedPopup   = useUnauthorizedPopup()
 
     async function handleFollowClick(){
+        if( ! isAuthenticated ){
+            unauthorizedPopup( {
+                title: `Follow ${ user.fullName } to see what they share on ${ process.env.NEXT_PUBLIC_APP_NAME }.`,
+                message: `Sign up so you never miss their Posts.`
+            } )
+            return
+        }
+
         try {
             await follow( user.id ).unwrap()
 

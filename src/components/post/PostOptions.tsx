@@ -14,6 +14,7 @@ import useConfirm from "@hooks/useConfirm"
 import { Post } from "@interfaces/posts.interfaces"
 import { User } from "@interfaces/user.interfaces"
 import IconButton from "@components/common/IconButton"
+import useUnauthorizedPopup from "@hooks/useUnauthorzedPopup"
 
 interface Props {
     post: Post
@@ -25,12 +26,13 @@ function PostOptions( { post, setPost }: Props ){
     const [unfollow]   = useUnfollowMutation()
     const [deletePost] = useDeletePostMutation()
 
-    const { user: currentUser } = useAuthState()
-    const confirm               = useConfirm()
-    const [author, setAuthor]   = useState<User>( post.author )
-    const [isOpen, setIsOpen]   = useState( false )
+    const { user: currentUser, isAuthenticated } = useAuthState()
+    const confirm                                = useConfirm()
+    const [author, setAuthor]                    = useState<User>( post.author )
+    const [isOpen, setIsOpen]                    = useState( false )
+    const unauthorizedPopup                      = useUnauthorizedPopup()
 
-    const isCurrentUserAuthor = author && author.id === currentUser?.id
+    const isCurrentUserAuthor = isAuthenticated && author && author.id === currentUser?.id
 
     function toggleOpen(){
         setIsOpen( ! isOpen )
@@ -55,6 +57,14 @@ function PostOptions( { post, setPost }: Props ){
     }
 
     async function handleFollowClick(){
+        if( ! isAuthenticated ){
+            unauthorizedPopup( {
+                title: `Follow ${ author.fullName } to see what they share on ${process.env.NEXT_PUBLIC_APP_NAME}.`,
+                message: `Sign up so you never miss their Posts.`
+            } )
+            return
+        }
+
         try {
             const user = await follow( author.id ).unwrap()
 
@@ -82,12 +92,12 @@ function PostOptions( { post, setPost }: Props ){
         <Popover placement="bottom-end" open={ isOpen }>
             <PopoverHandler>
                 <div>
-                    <IconButton onClick={toggleOpen}>
+                    <IconButton onClick={ toggleOpen }>
                         <ThreeDotsIcon size="18"/>
                     </IconButton>
                 </div>
             </PopoverHandler>
-            <PopoverContent className="p-0 rounded-2xl overflow-hidden" onBlur={toggleOpen}>
+            <PopoverContent className="p-0 rounded-2xl overflow-hidden" onBlur={ toggleOpen }>
                 <div className="min-w-[150px]">
                     { isCurrentUserAuthor ? (
                         <OptionButton onClick={ handleDeletePostClick }>
