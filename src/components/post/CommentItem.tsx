@@ -10,10 +10,11 @@ import { useLikeCommentMutation, useUnlikeCommentMutation } from "@services/comm
 import timeAgo from "@utils/timeAgo"
 import { motion } from "framer-motion"
 import CommentOptions from "@components/post/CommentOptions"
-import Button from "@components/common/Button";
-import ButtonOutline from "@components/common/ButtonOutline";
-import Modal from "@components/common/Modal";
-import useAuthState from "@hooks/useAuthState";
+import Button from "@components/common/Button"
+import ButtonOutline from "@components/common/ButtonOutline"
+import Modal from "@components/common/Modal"
+import useAuthState from "@hooks/useAuthState"
+import { usePathname } from "next/navigation"
 
 interface Props {
     comment: Comment
@@ -29,6 +30,7 @@ function CommentItem( props: Props ){
     const [likesCount, setLikeCount]                                    = useState<number>( comment?.likesCount || 0 )
     const { isAuthenticated }                                           = useAuthState()
     const [isUnauthorizedUserClickLike, setIsUnauthorizedUserClickLike] = useState<boolean>( false )
+    const pathname                                                      = usePathname()
 
     async function handleCommentLike(){
         if( ! isAuthenticated ){
@@ -67,10 +69,11 @@ function CommentItem( props: Props ){
                     <div className="mb-4">
                         <h3 className="text-xl md:text-2xl mb-2">Like a Comment to share the love.</h3>
                         <p className="text-gray-700">
-                            Join { process.env.NEXT_PUBLIC_APP_NAME } now to let { comment.author.fullName } know you like their Post and Comment.
+                            Join { process.env.NEXT_PUBLIC_APP_NAME } now to let { comment.author.fullName } know you
+                            like their Post and Comment.
                         </p>
                     </div>
-                    <Link href="/auth/login" className="mb-3 w-full">
+                    <Link href={ `/auth/login?redirect_path=${ pathname }` } className="mb-3 w-full">
                         <Button size="lg" className="w-full">Log in</Button>
                     </Link>
                     <Link href="/auth/signup" className="w-full">

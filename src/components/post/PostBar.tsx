@@ -9,9 +9,10 @@ import IconButton from "@components/common/IconButton"
 import PostShare from "@components/post/PostShare"
 import useAuthState from "@hooks/useAuthState"
 import Modal from "@components/common/Modal"
-import Button from "@components/common/Button";
-import Link from "next/link";
-import ButtonOutline from "@components/common/ButtonOutline";
+import Button from "@components/common/Button"
+import Link from "next/link"
+import ButtonOutline from "@components/common/ButtonOutline"
+import { usePathname } from "next/navigation"
 
 
 interface PostBarProps {
@@ -27,6 +28,7 @@ function PostBar( { post, setPost, setIsCommentsShow, isCommentsShow }: PostBarP
     const [postUnlike]                                                  = usePostUnlikeMutation()
     const { isAuthenticated }                                           = useAuthState()
     const [isUnauthorizedUserClickLike, setIsUnauthorizedUserClickLike] = useState<boolean>( false )
+    const pathname                                                      = usePathname()
 
     async function handlePostLike( event: MouseEvent<HTMLButtonElement> ){
         event.currentTarget.disabled = true
@@ -64,11 +66,12 @@ function PostBar( { post, setPost, setIsCommentsShow, isCommentsShow }: PostBarP
                     </div>
                     <div className="mb-4">
                         <h3 className="text-xl md:text-2xl mb-2">Like a Post to share the love.</h3>
-                        <p className="text-gray-700">Join { process.env.NEXT_PUBLIC_APP_NAME } now to let { post.author.fullName } know you like
+                        <p className="text-gray-700">Join { process.env.NEXT_PUBLIC_APP_NAME } now to
+                            let { post.author.fullName } know you like
                             their
                             Post.</p>
                     </div>
-                    <Link href="/auth/login" className="mb-3 w-full">
+                    <Link href={ `/auth/login?redirect_path=${ pathname }` } className="mb-3 w-full">
                         <Button size="lg" className="w-full">Log in</Button>
                     </Link>
                     <Link href="/auth/signup" className="w-full">
