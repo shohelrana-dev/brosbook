@@ -4,12 +4,15 @@ import Avatar from "@components/common/Avatar"
 import { User } from "@interfaces/user.interfaces"
 import FollowButton from "@components/common/FollowButton"
 import TextOverflow from 'react-text-overflow'
+import useAuthState from "@hooks/useAuthState";
 
 interface FollowUserProps {
     user: User
 }
 
 function FollowUser( { user }: FollowUserProps ){
+    const { user: currentUser } = useAuthState()
+    const isCurrentUser         = user.id === currentUser.id
     return (
         <div className="flex mb-2 w-full">
             <div className="flex w-full">
@@ -29,10 +32,10 @@ function FollowUser( { user }: FollowUserProps ){
                             </Link>
                         </div>
                         <div>
-                            <FollowButton user={ user }/>
+                            { ! isCurrentUser ? <FollowButton user={ user }/> : null }
                         </div>
                     </div>
-                    { user.profile?.bio ? <div className="mt-2 text-gray-800">{ user.profile?.bio }</div> : null }
+                    { user.profile?.bio ? <div className="mt-1 text-gray-800">{ user.profile?.bio }</div> : null }
                 </div>
             </div>
         </div>

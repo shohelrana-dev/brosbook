@@ -11,15 +11,21 @@ export const conversationApi = baseApi.injectEndpoints( {
             } ),
             providesTags: ['Conversation']
         } ),
+
         getConversationById: build.query<Conversation, string>( {
             query: ( conversationId ) => ( {
                 url: `/conversations/${ conversationId }`,
             } )
         } ),
+
         getConversationByParticipantId: build.query<Conversation, string>( {
             query: ( participantId ) => ( {
                 url: `/conversations/by/participant_id/${ participantId }`
             } )
+        } ),
+
+        getUnreadConversationsCount: build.query<{ count: number }, void>( {
+            query: () => ( `/conversations/unread_count` )
         } ),
 
         createConversation: build.mutation<Conversation, string>( {
@@ -74,6 +80,7 @@ export const {
                  useGetConversationByParticipantIdQuery,
                  useLazyGetConversationByParticipantIdQuery,
                  useGetConversationByIdQuery,
+                 useGetUnreadConversationsCountQuery,
                  useGetMessagesQuery,
                  useSendMessageMutation,
                  useSendReactionMutation,

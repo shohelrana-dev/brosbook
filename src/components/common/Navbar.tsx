@@ -26,27 +26,38 @@ import NotificationList from "@components/notifications/NotificationList"
 import { User } from "@interfaces/user.interfaces"
 import useConfirm from "@hooks/useConfirm"
 import { useRouter } from "next/navigation"
+import { useGetUnreadConversationsCountQuery } from "@services/conversationApi";
 
 interface Props {
     user: User
 }
 
 function NavBar( { user }: Props ){
-    const [readAllNotification]                                 = useReadAllNotificationMutation()
-    const { data }                                                = useGetUnreadNotificationsCountQuery()
-    const [unreadNotificationsCount, setUnreadNotificationsCount] = useState<number>( data?.count || 0 )
+    const [readAllNotification]                                   = useReadAllNotificationMutation()
+    const { data: unreadNotifications }                           = useGetUnreadNotificationsCountQuery()
+    const { data: unreadConversations }                           = useGetUnreadConversationsCountQuery()
+    const [unreadNotificationsCount, setUnreadNotificationsCount] = useState<number>( unreadNotifications?.count || 0 )
+    const [unreadConversationsCount, setUnreadConversationsCount] = useState<number>( unreadConversations?.count || 0 )
     const confirm                                                 = useConfirm()
     const router                                                  = useRouter()
 
     useEffect( () => {
-        setUnreadNotificationsCount( data?.count! )
-    }, [data] )
+        setUnreadNotificationsCount( unreadNotifications?.count! )
+    }, [unreadNotifications] )
+
+    useEffect( () => {
+        setUnreadConversationsCount( unreadConversations?.count! )
+    }, [unreadConversations] )
 
     useEffect( () => {
         const socket = io( process.env.NEXT_PUBLIC_SERVER_BASE_URL! )
 
         socket.on( `unread_notification_count_${ user?.id }`, ( count ) => {
             setUnreadNotificationsCount( count )
+        } )
+
+        socket.on( `unread_conversation_count_${ user?.id }`, ( count ) => {
+            setUnreadConversationsCount( count )
         } )
 
         if( socket ) return () => {
@@ -56,10 +67,6 @@ function NavBar( { user }: Props ){
 
     function onNotificationsCLick(){
         readAllNotification()
-    }
-
-    function onMessagesCLick(){
-
     }
 
     async function onLogoutCLick(){
@@ -108,8 +115,14 @@ function NavBar( { user }: Props ){
                                     </div>
                                 </PopoverContent>
                             </Popover>
-                            <Link href="/messages" className="block" onClick={ onMessagesCLick }>
+                            <Link href="/messages" className="block">
                                 <IconButton className="p-6">
+                                    { unreadConversationsCount ? (
+                                        <div
+                                            className="absolute top-[-5px] right-[-5px] bg-red-500 text-white rounded-full font-bold p-[2px] h-[18px] w-[18px]">
+                                            { unreadConversationsCount }
+                                        </div>
+                                    ) : null }
                                     <MessageIcon size={ 30 }/>
                                 </IconButton>
                             </Link>
