@@ -4,7 +4,7 @@ import { User } from "@interfaces/user.interfaces"
 import { useFollowMutation, useUnfollowMutation } from "@services/usersApi"
 import Button from "@components/common/Button"
 import ButtonOutline from "@components/common/ButtonOutline"
-import useConfirm from "@hooks/useConfirm"
+import useConfirmAlert from "@hooks/useConfirmAlert"
 import toast from "react-hot-toast"
 import useUnauthorizedPopup from "@hooks/useUnauthorzedPopup";
 import useAuthState from "@hooks/useAuthState";
@@ -20,7 +20,7 @@ function FollowButton( props: FollowButtonProps ){
     const [follow]            = useFollowMutation()
     const [unfollow]          = useUnfollowMutation()
     const { isAuthenticated } = useAuthState()
-    const confirm             = useConfirm()
+    const confirmAlert             = useConfirmAlert()
     const unauthorizedPopup   = useUnauthorizedPopup()
 
     async function handleFollowClick(){
@@ -44,7 +44,7 @@ function FollowButton( props: FollowButtonProps ){
     }
 
     async function handleUnfollowClick(){
-        const isConfirm = await confirm( {
+        const isConfirm = await confirmAlert( {
             title: `Unfollow ${ user.username }?`,
             message: 'Their Posts will no longer show up in your home timeline. You can still view their profile.',
             confirmButtonLabel: 'Unfollow'

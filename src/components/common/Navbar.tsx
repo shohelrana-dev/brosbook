@@ -24,7 +24,7 @@ import {
 } from "@material-tailwind/react"
 import NotificationList from "@components/notifications/NotificationList"
 import { User } from "@interfaces/user.interfaces"
-import useConfirm from "@hooks/useConfirm"
+import useConfirmAlert from "@hooks/useConfirmAlert"
 import { useRouter } from "next/navigation"
 import { useGetUnreadConversationsCountQuery } from "@services/conversationApi";
 
@@ -38,7 +38,7 @@ function NavBar( { user }: Props ){
     const { data: unreadConversations }                           = useGetUnreadConversationsCountQuery()
     const [unreadNotificationsCount, setUnreadNotificationsCount] = useState<number>( unreadNotifications?.count || 0 )
     const [unreadConversationsCount, setUnreadConversationsCount] = useState<number>( unreadConversations?.count || 0 )
-    const confirm                                                 = useConfirm()
+    const confirmAlert                                                 = useConfirmAlert()
     const router                                                  = useRouter()
 
     useEffect( () => {
@@ -70,7 +70,7 @@ function NavBar( { user }: Props ){
     }
 
     async function onLogoutCLick(){
-        const isOk = await confirm( {
+        const isOk = await confirmAlert( {
             title: `Log out of ${ process.env.NEXT_PUBLIC_APP_NAME }?`,
             message: 'You can always log back in at any time.',
             confirmButtonLabel: 'Log out',

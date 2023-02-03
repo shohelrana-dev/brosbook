@@ -10,7 +10,7 @@ import OptionButton from "@components/common/OptionButton"
 import { useFollowMutation, useUnfollowMutation } from "@services/usersApi"
 import { useDeletePostMutation } from "@services/postsApi"
 import useAuthState from "@hooks/useAuthState"
-import useConfirm from "@hooks/useConfirm"
+import useConfirmAlert from "@hooks/useConfirmAlert"
 import { Post } from "@interfaces/posts.interfaces"
 import { User } from "@interfaces/user.interfaces"
 import IconButton from "@components/common/IconButton"
@@ -27,7 +27,7 @@ function PostOptions( { post, setPost }: Props ){
     const [deletePost] = useDeletePostMutation()
 
     const { user: currentUser, isAuthenticated } = useAuthState()
-    const confirm                                = useConfirm()
+    const confirmAlert                                = useConfirmAlert()
     const [author, setAuthor]                    = useState<User>( post.author )
     const [isOpen, setIsOpen]                    = useState( false )
     const unauthorizedPopup                      = useUnauthorizedPopup()
@@ -39,7 +39,7 @@ function PostOptions( { post, setPost }: Props ){
     }
 
     async function handleDeletePostClick(){
-        const isConfirm = await confirm( {
+        const isConfirm = await confirmAlert( {
             title: 'Delete Post?',
             message: 'This can’t be undone and it will be removed from your profile',
             confirmButtonLabel: 'Delete'

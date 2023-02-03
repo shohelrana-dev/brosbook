@@ -9,7 +9,7 @@ import toast from "react-hot-toast"
 import { useFollowMutation, useUnfollowMutation } from "@services/usersApi"
 import { useDeleteCommentMutation } from "@services/commentsApi"
 import useAuthState from "@hooks/useAuthState"
-import useConfirm from "@hooks/useConfirm"
+import useConfirmAlert from "@hooks/useConfirmAlert"
 import { User } from "@interfaces/user.interfaces"
 import { Comment, Post } from "@interfaces/posts.interfaces"
 import IconButton from "@components/common/IconButton"
@@ -29,7 +29,7 @@ export default function CommentOptions( { post, comment, setComment }: Props ){
     const [isOpen, setIsOpen] = useState( false )
 
     const { user: currentUser, isAuthenticated } = useAuthState()
-    const confirm                                = useConfirm()
+    const confirmAlert                                = useConfirmAlert()
     const [author, setAuthor]                    = useState<User>( comment.author )
     const unauthorizedPopup                      = useUnauthorizedPopup()
 
@@ -40,7 +40,7 @@ export default function CommentOptions( { post, comment, setComment }: Props ){
     }
 
     async function handleDeleteComment(){
-        const isConfirm = await confirm( {
+        const isConfirm = await confirmAlert( {
             title: 'Delete Comment?',
             message: 'This can’t be undone and it will be removed permanently.',
             confirmButtonLabel: 'Delete'

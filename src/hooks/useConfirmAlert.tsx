@@ -11,9 +11,9 @@ export interface Options {
 }
 
 // @ts-ignore
-const ConfirmContext = createContext<(options: Options) => Promise<boolean>>(null)
+const ConfirmAlertContext = createContext<(options: Options) => Promise<boolean>>(null)
 
-export function ConfirmProvider({children}: PropsWithChildren) {
+export function ConfirmAlertProvider({children}: PropsWithChildren) {
     const [options, setOptions] = useState<Options>({
         title: '', confirmButtonLabel: 'Yes', cancelButtonLabel: 'Cancel'
     })
@@ -21,7 +21,7 @@ export function ConfirmProvider({children}: PropsWithChildren) {
     // @ts-ignore
     const [resolver, setResolver ] = useState<{resolve: (value: boolean) => void}>({resolve: null})
 
-    function confirm(options: Options): Promise<boolean> {
+    function confirmAlert(options: Options): Promise<boolean> {
         setOptions((prevState) => ({...prevState, ...options}))
         setIsOpen(true)
         return new Promise<boolean>((resolve, reject) => {
@@ -40,7 +40,7 @@ export function ConfirmProvider({children}: PropsWithChildren) {
     }
 
     return (
-        <ConfirmContext.Provider value={confirm}>
+        <ConfirmAlertContext.Provider value={confirmAlert}>
             {children}
             <AnimatePresence>
                 {isOpen ? (
@@ -53,12 +53,12 @@ export function ConfirmProvider({children}: PropsWithChildren) {
                         className="fixed flex items-center justify-center w-full h-full top-0 left-0 bg-[#00000066]"
                     >
                         <motion.div
-                            initial={{scale: 0.9}}
-                            animate={{scale: 1}}
-                            exit={{ opacity: 0, scale: 0.6 }}
-                            style={{maxWidth: '300px'}}
-                            transition={{duration: 0.2}}
-                            className="box w-[80%] rounded-2xl p-6"
+                            initial={{opacity: 0, y: -10}}
+                            animate={{opacity: 1, y: 0}}
+                            exit={{opacity: 0, y: 10}}
+                            transition={{duration: 0.3}}
+                            style={{maxWidth: '330px'}}
+                            className="box w-[90%] rounded-2xl p-6"
                         >
                             <div className="mb-6">
                                 <h3 className="text-lg font-bold mb-2">{options.title}</h3>
@@ -76,10 +76,10 @@ export function ConfirmProvider({children}: PropsWithChildren) {
                     </motion.div>
                 ) : null}
             </AnimatePresence>
-        </ConfirmContext.Provider>
+        </ConfirmAlertContext.Provider>
     )
 }
 
-export default function useConfirm() {
-    return useContext(ConfirmContext)
+export default function useConfirmAlert() {
+    return useContext(ConfirmAlertContext)
 }
