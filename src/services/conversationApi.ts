@@ -25,7 +25,8 @@ export const conversationApi = baseApi.injectEndpoints( {
         } ),
 
         getUnreadConversationsCount: build.query<{ count: number }, void>( {
-            query: () => ( `/conversations/unread_count` )
+            query: () => ( `/conversations/unread_count` ),
+            providesTags: ['Conversation']
         } ),
 
         createConversation: build.mutation<Conversation, string>( {
@@ -63,6 +64,14 @@ export const conversationApi = baseApi.injectEndpoints( {
             invalidatesTags: ['Message']
         } ),
 
+        seenAllMessages: build.mutation<Message, string>( {
+            query: ( conversationId ) => ( {
+                url: `/conversations/${ conversationId }/messages/seen_all`,
+                method: "POST"
+            } ),
+            invalidatesTags: ['Message', 'Conversation']
+        } ),
+
         getConversationMediaList: build.query<ListResponse<Media>, { conversationId: string, page?: number, limit?: number }>( {
             query: ( { conversationId, ...params } ) => ( {
                 url: `/conversations/${ conversationId }/media`,
@@ -84,5 +93,6 @@ export const {
                  useGetMessagesQuery,
                  useSendMessageMutation,
                  useSendReactionMutation,
+                 useSeenAllMessagesMutation,
                  useGetConversationMediaListQuery
              } = conversationApi

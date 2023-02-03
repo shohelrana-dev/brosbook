@@ -6,6 +6,7 @@ import Avatar from "@components/common/Avatar"
 import useAuthState from "@hooks/useAuthState"
 import timeAgo from "@utils/timeAgo"
 import TextOverflow from 'react-text-overflow'
+import { useSeenAllMessagesMutation } from "@services/conversationApi"
 
 interface SingleConversationProps {
     conversation: Conversation
@@ -13,10 +14,14 @@ interface SingleConversationProps {
 
 function ConversationItem( { conversation }: SingleConversationProps ){
     const { user: currentUser } = useAuthState()
-    const participant           = conversation?.user1.id === currentUser?.id ? conversation?.user2 : conversation?.user1
+    const [seenAllMessages]     = useSeenAllMessagesMutation()
+
+
+    const participant = conversation?.user1.id === currentUser?.id ? conversation?.user2 : conversation?.user1
 
     return (
-        <Link href={ `/messages/${ conversation.id }` } className="box block cursor-pointer py-2 px-3 flex mb-3">
+        <Link href={ `/messages/${ conversation.id }` } onClick={ () => seenAllMessages( conversation.id ) }
+              className="box block cursor-pointer py-2 px-3 flex mb-3">
             <div className="mr-3">
                 <Avatar
                     online={ participant.active === 1 }
