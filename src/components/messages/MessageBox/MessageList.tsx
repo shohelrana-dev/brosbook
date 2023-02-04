@@ -1,6 +1,10 @@
 import React, { useEffect, useRef } from 'react'
 import SingleMessage from "@components/messages/MessageBox/SingleMessage"
-import { useGetMessagesQuery } from "@services/conversationApi"
+import {
+    useGetConversationsQuery,
+    useGetMessagesQuery,
+    useGetUnreadConversationsCountQuery, useSeenAllMessagesMutation
+} from "@services/conversationApi"
 import Loading from "@components/common/Loading"
 import { Conversation, Message } from "@interfaces/conversation.interfaces"
 import { io } from "socket.io-client"
@@ -14,17 +18,19 @@ interface Props {
 
 export default function MessageList( { conversation }: Props ){
     //hooks
-    const { user }       = useAuthState()
-    const messageListRef = useRef<HTMLDivElement>( null )
+    const { user }                          = useAuthState()
+    const messageListRef                    = useRef<HTMLDivElement>( null )
     const {
               items: messages,
               isLoading,
               setItems: setMessages,
               hasMoreItem,
               loadMoreItem
-          }              = useGetInfiniteListQuery<Message>(
+          }                                 = useGetInfiniteListQuery<Message>(
         useGetMessagesQuery, { conversationId: conversation?.id!, limit: 15 }
     )
+    const { refetch: refetchConversations } = useGetConversationsQuery( { page: 1 } )
+    const [seenAllMessages]                 = useSeenAllMessagesMutation()
 
     useEffect( () => {
         const socket = io( process.env.NEXT_PUBLIC_SERVER_BASE_URL! )
@@ -39,6 +45,11 @@ export default function MessageList( { conversation }: Props ){
             socket.close()
         }
     }, [conversation, user] )
+
+    useEffect( () => {
+        refetchConversations()
+        seenAllMessages( conversation.id )
+    }, [messages] )
 
     function addMessage( message: Message ){
         message.isMeSender = user?.id === message.sender.id

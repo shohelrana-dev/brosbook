@@ -17,7 +17,18 @@ function ConversationItem( { conversation }: SingleConversationProps ){
     const [seenAllMessages]     = useSeenAllMessagesMutation()
 
 
-    const participant = conversation?.user1.id === currentUser?.id ? conversation?.user2 : conversation?.user1
+    const participant           = conversation?.user1.id === currentUser?.id ? conversation?.user2 : conversation?.user1
+    const lastMessage           = conversation.lastMessage
+    const isLastMessageSenderMe = lastMessage && lastMessage.sender.id === currentUser.id
+    let messageBody
+    if( lastMessage?.body ){
+        messageBody = lastMessage.body
+    } else if( lastMessage?.image ){
+        messageBody = 'Sent photo'
+    }
+    if( messageBody ){
+        messageBody = isLastMessageSenderMe ? `You: ${ messageBody }` : messageBody
+    }
 
     return (
         <Link href={ `/messages/${ conversation.id }` } onClick={ () => seenAllMessages( conversation.id ) }
@@ -30,15 +41,13 @@ function ConversationItem( { conversation }: SingleConversationProps ){
                 />
             </div>
             <div className="mr-3">
-                <h5 className="font-medium text-gray-800">
+                <h5 className="font-medium text-gray-900">
                     { participant.fullName }
                 </h5>
-                <p className={ classNames( 'text-sm', {
-                    "font-bold text-gray-800": ! conversation?.lastMessage?.seenAt,
-                    "text-gray-500": conversation?.lastMessage?.seenAt
+                <p className={ classNames( 'text-sm text-gray-700', {
+                    "!font-bold !text-gray-900": (! isLastMessageSenderMe && ! conversation?.lastMessage?.seenAt) ?? false
                 } ) }>
-                    <TextOverflow text={ conversation.lastMessage?.body! }/>
-                    { conversation.lastMessage?.image ? 'Photo' : null }
+                    { messageBody ? <TextOverflow text={ messageBody }/> : null }
                 </p>
             </div>
             <div>

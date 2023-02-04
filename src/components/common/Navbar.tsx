@@ -26,7 +26,7 @@ import NotificationList from "@components/notifications/NotificationList"
 import { User } from "@interfaces/user.interfaces"
 import useConfirmAlert from "@hooks/useConfirmAlert"
 import { useRouter } from "next/navigation"
-import { useGetUnreadConversationsCountQuery } from "@services/conversationApi";
+import { useGetUnreadConversationsCountQuery } from "@services/conversationApi"
 
 interface Props {
     user: User
@@ -38,7 +38,7 @@ function NavBar( { user }: Props ){
     const { data: unreadConversations }                           = useGetUnreadConversationsCountQuery()
     const [unreadNotificationsCount, setUnreadNotificationsCount] = useState<number>( unreadNotifications?.count || 0 )
     const [unreadConversationsCount, setUnreadConversationsCount] = useState<number>( unreadConversations?.count || 0 )
-    const confirmAlert                                                 = useConfirmAlert()
+    const confirmAlert                                            = useConfirmAlert()
     const router                                                  = useRouter()
 
     useEffect( () => {
