@@ -2,8 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import SingleMessage from "@components/messages/MessageBox/SingleMessage"
 import {
     useGetConversationsQuery,
-    useGetMessagesQuery,
-    useGetUnreadConversationsCountQuery, useSeenAllMessagesMutation
+    useGetMessagesQuery, useSeenAllMessagesMutation
 } from "@services/conversationApi"
 import Loading from "@components/common/Loading"
 import { Conversation, Message } from "@interfaces/conversation.interfaces"
