@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import IconButton from "@components/common/IconButton"
 import PostShare from "@components/post/PostShare"
 import useAuthState from "@hooks/useAuthState"
-import useUnauthorizedPopup from "@hooks/useUnauthorzedPopup"
+import useUnauthorizedAlert from "@hooks/useUnauthorzedAlert"
 
 
 interface PostBarProps {
@@ -23,13 +23,13 @@ function PostBar( { post, setPost, setIsCommentsShow, isCommentsShow }: PostBarP
     const [postLike]          = usePostLikeMutation()
     const [postUnlike]        = usePostUnlikeMutation()
     const { isAuthenticated } = useAuthState()
-    const unauthorizedPopup   = useUnauthorizedPopup()
+    const unauthorizedAlert   = useUnauthorizedAlert()
 
     async function handlePostLike( event: MouseEvent<HTMLButtonElement> ){
         event.currentTarget.disabled = true
 
         if( ! isAuthenticated ){
-            unauthorizedPopup( {
+            unauthorizedAlert( {
                 title: 'Like a Post to share the love.',
                 message: `Join ${ process.env.NEXT_PUBLIC_APP_NAME } now to let ${ post.author.fullName } know you like their Post.`
             } )

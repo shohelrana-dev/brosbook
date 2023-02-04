@@ -4,6 +4,7 @@ import { BsThreeDots as ThreeDotsIcon } from "react-icons/bs"
 import { RiDeleteBin5Line as DeleteIcon, RiUserUnfollowLine as UnfollowIcon } from "react-icons/ri"
 import { AiOutlineUserAdd as FollowIcon } from "react-icons/ai"
 import { MdHideSource as HideIcon } from "react-icons/md"
+import { AiOutlineEye as EyeIcon } from "react-icons/ai"
 import toast from "react-hot-toast"
 
 import OptionButton from "@components/common/OptionButton"
@@ -14,7 +15,8 @@ import useConfirmAlert from "@hooks/useConfirmAlert"
 import { Post } from "@interfaces/posts.interfaces"
 import { User } from "@interfaces/user.interfaces"
 import IconButton from "@components/common/IconButton"
-import useUnauthorizedPopup from "@hooks/useUnauthorzedPopup"
+import useUnauthorizedAlert from "@hooks/useUnauthorzedAlert"
+import Link from "next/link";
 
 interface Props {
     post: Post
@@ -27,10 +29,10 @@ function PostOptions( { post, setPost }: Props ){
     const [deletePost] = useDeletePostMutation()
 
     const { user: currentUser, isAuthenticated } = useAuthState()
-    const confirmAlert                                = useConfirmAlert()
     const [author, setAuthor]                    = useState<User>( post.author )
     const [isOpen, setIsOpen]                    = useState( false )
-    const unauthorizedPopup                      = useUnauthorizedPopup()
+    const confirmAlert                           = useConfirmAlert()
+    const unauthorizedAlert                      = useUnauthorizedAlert()
 
     const isCurrentUserAuthor = isAuthenticated && author && author.id === currentUser?.id
 
@@ -58,8 +60,8 @@ function PostOptions( { post, setPost }: Props ){
 
     async function handleFollowClick(){
         if( ! isAuthenticated ){
-            unauthorizedPopup( {
-                title: `Follow ${ author.fullName } to see what they share on ${process.env.NEXT_PUBLIC_APP_NAME}.`,
+            unauthorizedAlert( {
+                title: `Follow ${ author.fullName } to see what they share on ${ process.env.NEXT_PUBLIC_APP_NAME }.`,
                 message: `Sign up so you never miss their Posts.`
             } )
             return
@@ -99,6 +101,12 @@ function PostOptions( { post, setPost }: Props ){
             </PopoverHandler>
             <PopoverContent className="p-0 rounded-2xl overflow-hidden" onBlur={ toggleOpen }>
                 <div className="min-w-[150px]">
+                    <Link href={ `/posts/${ post.id }` }>
+                        <OptionButton>
+                            <EyeIcon size="18"/>
+                            go to the post page
+                        </OptionButton>
+                    </Link>
                     { isCurrentUserAuthor ? (
                         <OptionButton onClick={ handleDeletePostClick }>
                             <DeleteIcon size="18"/>

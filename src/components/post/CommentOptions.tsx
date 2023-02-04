@@ -14,7 +14,7 @@ import { User } from "@interfaces/user.interfaces"
 import { Comment, Post } from "@interfaces/posts.interfaces"
 import IconButton from "@components/common/IconButton"
 import OptionButton from "@components/common/OptionButton"
-import useUnauthorizedPopup from "@hooks/useUnauthorzedPopup"
+import useUnauthorizedAlert from "@hooks/useUnauthorzedAlert"
 
 interface Props {
     post: Post
@@ -31,7 +31,7 @@ export default function CommentOptions( { post, comment, setComment }: Props ){
     const { user: currentUser, isAuthenticated } = useAuthState()
     const confirmAlert                                = useConfirmAlert()
     const [author, setAuthor]                    = useState<User>( comment.author )
-    const unauthorizedPopup                      = useUnauthorizedPopup()
+    const unauthorizedAlert                      = useUnauthorizedAlert()
 
     const isCurrentUserAuthor = isAuthenticated && comment.author && ( comment.author.id === currentUser?.id || post.author.id === currentUser?.id )
 
@@ -59,7 +59,7 @@ export default function CommentOptions( { post, comment, setComment }: Props ){
 
     async function handleFollow(){
         if( ! isAuthenticated ){
-            unauthorizedPopup( {
+            unauthorizedAlert( {
                 title: `Follow ${ author.fullName } to see what they share on ${ process.env.NEXT_PUBLIC_APP_NAME }.`,
                 message: `Sign up so you never miss their Posts.`
             } )

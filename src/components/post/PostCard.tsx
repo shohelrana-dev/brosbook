@@ -23,7 +23,7 @@ const PostCard = ( props: PostCardProps ) => {
     const [isCommentsShow, setIsCommentsShow] = useState<boolean>( Boolean( props.isCommentsShow ) )
 
     if( ! post ) return null
-    console.log( post )
+
     return (
         <div className="box p-6 mb-4">
             <div className="flex">

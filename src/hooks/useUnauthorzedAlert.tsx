@@ -19,7 +19,7 @@ export function UnauthorizedPopupProvider( { children }: PropsWithChildren ){
     const [isOpen, setIsOpen]   = useState<boolean>( false )
     const pathname              = usePathname()
 
-    function unauthorizedPopup( options: Options ): void{
+    function unauthorizedAlert( options: Options ): void{
         setOptions( ( prevState ) => options )
         setIsOpen( true )
     }
@@ -29,7 +29,7 @@ export function UnauthorizedPopupProvider( { children }: PropsWithChildren ){
     }
 
     return (
-        <UnauthorizedPopupContext.Provider value={ unauthorizedPopup }>
+        <UnauthorizedPopupContext.Provider value={ unauthorizedAlert }>
             { children }
             <Modal isOpen={ isOpen } onClose={ toggleOpen }>
                 <div className="h-full flex flex-col justify-center items-center text-center">
@@ -56,6 +56,6 @@ export function UnauthorizedPopupProvider( { children }: PropsWithChildren ){
     )
 }
 
-export default function useUnauthorizedPopup(){
+export default function useUnauthorizedAlert(){
     return useContext( UnauthorizedPopupContext )
 }

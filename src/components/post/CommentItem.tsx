@@ -11,7 +11,7 @@ import timeAgo from "@utils/timeAgo"
 import { motion } from "framer-motion"
 import CommentOptions from "@components/post/CommentOptions"
 import useAuthState from "@hooks/useAuthState"
-import useUnauthorizedPopup from "@hooks/useUnauthorzedPopup"
+import useUnauthorizedAlert from "@hooks/useUnauthorzedAlert"
 
 interface Props {
     comment: Comment
@@ -26,11 +26,11 @@ function CommentItem( props: Props ){
     const [isViewerLiked, setIsViewerLiked] = useState<boolean>( comment?.isViewerLiked! )
     const [likesCount, setLikeCount]        = useState<number>( comment?.likesCount || 0 )
     const { isAuthenticated }               = useAuthState()
-    const unauthorizedPopup                 = useUnauthorizedPopup()
+    const unauthorizedAlert                 = useUnauthorizedAlert()
 
     async function handleCommentLike(){
         if( ! isAuthenticated ){
-            unauthorizedPopup( {
+            unauthorizedAlert( {
                 title: 'Like a Comment to share the love.',
                 message: `Join ${ process.env.NEXT_PUBLIC_APP_NAME } now to let ${ comment?.author.fullName } know you like their Post and Comment.`
             } )
