@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import SingleMessage from "@components/messages/MessageBox/SingleMessage"
 import {
     useGetConversationsQuery,
-    useGetMessagesQuery, useSeenAllMessagesMutation
+    useGetMessagesQuery, useGetUnreadConversationsCountQuery, useSeenAllMessagesMutation
 } from "@services/conversationApi"
 import Loading from "@components/common/Loading"
 import { Conversation, Message } from "@interfaces/conversation.interfaces"
@@ -17,19 +17,20 @@ interface Props {
 
 export default function MessageList( { conversation }: Props ){
     //hooks
-    const { user }                          = useAuthState()
-    const messageListRef                    = useRef<HTMLDivElement>( null )
+    const { user }                               = useAuthState()
+    const messageListRef                         = useRef<HTMLDivElement>( null )
     const {
               items: messages,
               isLoading,
               setItems: setMessages,
               hasMoreItem,
               loadMoreItem
-          }                                 = useGetInfiniteListQuery<Message>(
+          }                                      = useGetInfiniteListQuery<Message>(
         useGetMessagesQuery, { conversationId: conversation?.id!, limit: 15 }
     )
-    const { refetch: refetchConversations } = useGetConversationsQuery( { page: 1 } )
-    const [seenAllMessages]                 = useSeenAllMessagesMutation()
+    const { refetch: refetchConversations }      = useGetConversationsQuery( { page: 1 } )
+    const { refetch: refetchConversationsCount } = useGetUnreadConversationsCountQuery()
+    const [seenAllMessages]                      = useSeenAllMessagesMutation()
 
     useEffect( () => {
         const socket = io( process.env.NEXT_PUBLIC_SERVER_BASE_URL! )
@@ -48,6 +49,7 @@ export default function MessageList( { conversation }: Props ){
     useEffect( () => {
         refetchConversations()
         seenAllMessages( conversation.id )
+        refetchConversationsCount()
     }, [messages] )
 
     function addMessage( message: Message ){

@@ -26,7 +26,7 @@ export const conversationApi = baseApi.injectEndpoints( {
 
         getUnreadConversationsCount: build.query<{ count: number }, void>( {
             query: () => ( `/conversations/unread_count` ),
-            providesTags: ['Conversation']
+            providesTags: ['Conversation', 'Message']
         } ),
 
         createConversation: build.mutation<Conversation, string>( {
