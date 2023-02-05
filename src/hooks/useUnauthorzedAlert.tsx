@@ -44,7 +44,7 @@ export function UnauthorizedPopupProvider( { children }: PropsWithChildren ){
                             { options?.message }
                         </p>
                     </div>
-                    <Link onClick={toggleOpen} href={ `/auth/login?redirect_path=${ pathname }` } className="mb-3 w-full">
+                    <Link onClick={toggleOpen} href={ `/auth/login?redirect=${ pathname }` } className="mb-3 w-full">
                         <Button size="lg" className="w-full">Log in</Button>
                     </Link>
                     <Link onClick={toggleOpen} href="/auth/signup" className="w-full">

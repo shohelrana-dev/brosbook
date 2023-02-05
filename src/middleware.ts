@@ -23,7 +23,7 @@ export async function middleware( request: NextRequest ){
         }
     } else{
         if( isProtectedPath ){
-            return NextResponse.redirect( new URL( `/auth/login?redirect_path=${ currentPathname }`, request.url ) )
+            return NextResponse.redirect( new URL( `/auth/login?redirect=${ currentPathname }`, request.url ) )
         }
     }
 

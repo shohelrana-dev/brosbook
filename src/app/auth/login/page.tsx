@@ -25,7 +25,7 @@ function LoginPage(){
         if( isSuccess ){
             if( data?.user?.hasEmailVerified ){
                 router.refresh()
-                router.push( params.get( 'redirect_path' ) ? params.get( 'redirect_path' )! : '/' )
+                router.push( params.get( 'redirect' ) ? params.get( 'redirect' )! : '/' )
                 toast.success( 'Logged in.' )
             } else{
                 localStorage.setItem( 'email', data?.user?.email! || '' )
