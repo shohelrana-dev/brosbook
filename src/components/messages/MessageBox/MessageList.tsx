@@ -2,7 +2,8 @@ import React, { useEffect, useRef } from 'react'
 import SingleMessage from "@components/messages/MessageBox/SingleMessage"
 import {
     useGetConversationsQuery,
-    useGetMessagesQuery, useGetUnreadConversationsCountQuery, useSeenAllMessagesMutation
+    useGetMessagesQuery,
+    useSeenAllMessagesMutation
 } from "@services/conversationApi"
 import Loading from "@components/common/Loading"
 import { Conversation, Message } from "@interfaces/conversation.interfaces"
@@ -29,7 +30,6 @@ export default function MessageList( { conversation }: Props ){
         useGetMessagesQuery, { conversationId: conversation?.id!, limit: 15 }
     )
     const { refetch: refetchConversations }      = useGetConversationsQuery( { page: 1 } )
-    const { refetch: refetchConversationsCount } = useGetUnreadConversationsCountQuery()
     const [seenAllMessages]                      = useSeenAllMessagesMutation()
 
     useEffect( () => {
@@ -49,7 +49,6 @@ export default function MessageList( { conversation }: Props ){
     useEffect( () => {
         refetchConversations()
         seenAllMessages( conversation.id )
-        refetchConversationsCount()
     }, [messages] )
 
     function addMessage( message: Message ){
