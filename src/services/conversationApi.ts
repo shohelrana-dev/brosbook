@@ -9,7 +9,8 @@ export const conversationApi = baseApi.injectEndpoints( {
                 url: `/conversations`,
                 params
             } ),
-            providesTags: ['Conversation']
+            providesTags: ['Conversation'],
+            keepUnusedDataFor: 0.0001
         } ),
 
         getConversationById: build.query<Conversation, string>( {
