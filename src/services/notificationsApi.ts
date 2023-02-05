@@ -16,7 +16,6 @@ export const notificationsApi = baseApi.injectEndpoints( {
             query: () => ( {
                 url: `/notifications/unread_count`
             } ),
-            providesTags: ['Notification'],
             keepUnusedDataFor: 0.0001
         } ),
 
