@@ -53,7 +53,7 @@ export const conversationApi = baseApi.injectEndpoints( {
                 method: "POST",
                 body: formData
             } ),
-            invalidatesTags: ['Message']
+            invalidatesTags: ['Message', "Conversation"]
         } ),
 
         sendReaction: build.mutation<Message, { messageId: string, conversationId: string, name: string }>( {
