@@ -4,7 +4,7 @@ import { BsThreeDots as ThreeDotsIcon } from "react-icons/bs"
 import { RiDeleteBin5Line as DeleteIcon, RiUserUnfollowLine as UnfollowIcon } from "react-icons/ri"
 import { AiOutlineUserAdd as FollowIcon } from "react-icons/ai"
 import { MdHideSource as HideIcon } from "react-icons/md"
-import { AiOutlineEye as EyeIcon } from "react-icons/ai"
+import { AiOutlineCopy as CopyIcon } from "react-icons/ai"
 import toast from "react-hot-toast"
 
 import OptionButton from "@components/common/OptionButton"
@@ -16,7 +16,6 @@ import { Post } from "@interfaces/posts.interfaces"
 import { User } from "@interfaces/user.interfaces"
 import IconButton from "@components/common/IconButton"
 import useUnauthorizedAlert from "@hooks/useUnauthorzedAlert"
-import Link from "next/link";
 
 interface Props {
     post: Post
@@ -90,6 +89,12 @@ function PostOptions( { post, setPost }: Props ){
         }
     }
 
+    function copyPostLinkToClipboard(){
+        navigator.clipboard.writeText( `${ process.env.NEXT_PUBLIC_APP_URL }/posts/${ post.id }` ).then( () => {
+            toast.success( 'Post link copied.' )
+        } )
+    }
+
     return (
         <Popover placement="bottom-end" open={ isOpen }>
             <PopoverHandler>
@@ -101,12 +106,6 @@ function PostOptions( { post, setPost }: Props ){
             </PopoverHandler>
             <PopoverContent className="p-0 rounded-2xl overflow-hidden" onBlur={ toggleOpen }>
                 <div className="min-w-[150px]">
-                    <Link href={ `/posts/${ post.id }` }>
-                        <OptionButton>
-                            <EyeIcon size="18"/>
-                            go to the post page
-                        </OptionButton>
-                    </Link>
                     { isCurrentUserAuthor ? (
                         <OptionButton onClick={ handleDeletePostClick }>
                             <DeleteIcon size="18"/>
@@ -125,6 +124,10 @@ function PostOptions( { post, setPost }: Props ){
                             </OptionButton>
                         )
                     ) }
+                    <OptionButton onClick={ copyPostLinkToClipboard }>
+                        <CopyIcon size="18"/>
+                        Copy link to post
+                    </OptionButton>
                     <OptionButton onClick={ () => {
                         setPost( null )
                         toggleOpen()
