@@ -2,11 +2,11 @@
 import React from 'react'
 import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import { useGetNotificationsQuery } from "@services/notificationsApi"
-import AnimatedComponent from "@components/common/AnimatedComponent"
-import InfiniteScroll from "react-infinite-scroller"
 import { Notification } from "@interfaces/index.interfaces"
 import NotificationItem from "./NotificationItem"
 import Loading from "@components/common/Loading"
+import useInfiniteScroll from "react-infinite-scroll-hook"
+import AnimatedComponent from "@components/common/AnimatedComponent"
 
 export default function NotificationList(){
     const {
@@ -21,23 +21,29 @@ export default function NotificationList(){
         }
     )
 
+    const [moreLoadRef] = useInfiniteScroll( {
+        loading: isLoading,
+        hasNextPage: hasMoreItem,
+        onLoadMore: loadMoreItem,
+    } )
+
     return (
-        <div>
+        <AnimatedComponent>
             { isLoading ? <Loading size={ 40 }/> : null }
 
-            <AnimatedComponent>
-                <InfiniteScroll
-                    loadMore={ loadMoreItem }
-                    hasMore={ hasMoreItem }
-                    loader={ <Loading size={ 40 }/> }
-                >
-                    { notifications.map( ( notification: Notification ) => (
+                <div>
+                    { notifications && notifications.map( ( notification: Notification ) => (
                         <NotificationItem key={ notification.id } notification={ notification }/>
                     ) ) }
-                </InfiniteScroll>
+                </div>
 
-                { ( ! isLoading && notifications?.length < 1 ) ? <p>No notifications</p> : null }
-            </AnimatedComponent>
-        </div>
+                { hasMoreItem ? (
+                    <div className="py-[40px]" ref={ moreLoadRef }>
+                        <Loading size={ 40 }/>
+                    </div>
+                ) : null }
+
+            { ( ! isLoading && notifications?.length < 1 ) ? <p>No notifications</p> : null }
+        </AnimatedComponent>
     )
 }

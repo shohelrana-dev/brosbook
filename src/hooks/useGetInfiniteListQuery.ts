@@ -2,9 +2,9 @@ import { useEffect, useState } from "react"
 import { UseQuery, UseQueryStateOptions } from "@reduxjs/toolkit/dist/query/react/buildHooks"
 import { QueryDefinition } from "@reduxjs/toolkit/query"
 
-export function useGetInfiniteListQuery<T>( useQueryHook: UseQuery<QueryDefinition<any, any, any, any>>, queryParams = {}, options?: UseQueryStateOptions<any, any> ){
-    const [page, setPage]   = useState<number>( 1 )
-    let { data, ...rest }   = useQueryHook( { page, ...queryParams }, options )
+export function useGetInfiniteListQuery<T>( useQueryHook: UseQuery<QueryDefinition<any, any, any, any>>, queryParams: any = {}, options?: UseQueryStateOptions<any, any> ){
+    const [page, setPage]   = useState<number>( queryParams?.page ?? 1 )
+    let { data, ...rest }   = useQueryHook( { ...queryParams, page }, options )
     const [items, setItems] = useState<T[]>( [] )
 
     const hasMoreItem = !! data?.nextPage
@@ -26,5 +26,5 @@ export function useGetInfiniteListQuery<T>( useQueryHook: UseQuery<QueryDefiniti
         }
     }, [data?.items] )
 
-    return { hasMoreItem, items, loadMoreItem, setItems, ...rest }
+    return { hasMoreItem, items, loadMoreItem, setItems, data, ...rest }
 }
