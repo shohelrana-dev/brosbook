@@ -35,8 +35,8 @@ export default function ProfilePostsPage( { user, initialPosts }: ProfilePostsPa
                 hasMore={ hasMoreItem }
                 loader={ <LoadingPosts/> }
             >
-                { posts.map( ( post: Post ) => (
-                    <PostCard post={ post } key={ post.id }/>
+                { posts.map( ( post: Post , index:number) => (
+                    <PostCard post={ post } key={ index }/>
                 ) ) }
             </InfiniteScroll>
 
