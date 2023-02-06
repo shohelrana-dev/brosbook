@@ -72,7 +72,7 @@ function NavBar( { user }: Props ){
     async function onLogoutCLick(){
         const isOk = await confirmAlert( {
             title: `Log out of ${ process.env.NEXT_PUBLIC_APP_NAME }?`,
-            message: 'You can always log back in at any time.',
+            message: 'You can always log back in at any time. And you can switch another account.',
             confirmButtonLabel: 'Log out',
         } )
 

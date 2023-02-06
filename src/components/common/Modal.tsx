@@ -6,7 +6,7 @@ import classNames from "classnames"
 
 export interface ModalProps {
     isOpen: boolean
-    onClose: () => void
+    onClose?: () => void
     children: ReactNode
     className?: string
     style?: CSSProperties
