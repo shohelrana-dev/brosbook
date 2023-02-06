@@ -13,6 +13,8 @@ import PasswordInput from "@components/common/PasswordInput"
 import { CredentialPayload } from "@interfaces/auth.interfaces"
 import Divider from "@components/common/Divider"
 import { useForm } from "@hooks/useForm"
+import { useDispatch } from "react-redux"
+import { baseApi } from "@services/baseApi"
 
 function LoginPage(){
     //hooks
@@ -20,17 +22,18 @@ function LoginPage(){
     const params                                   = useSearchParams()
     const [login, { isLoading, isSuccess, data }]  = useLoginMutation()
     const { formData, onChange, onSubmit, errors } = useForm<CredentialPayload>( login )
+    const dispatch                                 = useDispatch()
 
     useEffect( () => {
         if( isSuccess ){
             if( data?.user?.hasEmailVerified ){
-                router.refresh()
+                dispatch( baseApi.util.resetApiState() )
                 router.push( params.get( 'redirect' ) ? params.get( 'redirect' )! : '/' )
                 toast.success( 'Logged in.' )
             } else{
                 localStorage.setItem( 'email', data?.user?.email! || '' )
                 router.push( '/auth/email_verification/required' )
-                toast.error( 'Your email was not verified yet.' )
+                toast.error( 'Your email not verified yet.' )
             }
         }
     }, [isSuccess] )

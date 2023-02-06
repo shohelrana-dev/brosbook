@@ -5,17 +5,20 @@ import { GoogleLogin, CredentialResponse, GoogleOAuthProvider } from '@react-oau
 
 import { useLoginWithGoogleMutation } from "@services/authApi"
 import Loading from "@components/common/Loading"
+import { baseApi } from "@services/baseApi"
+import { useDispatch } from "react-redux"
 
 function GoogleLoginButton(){
     //hooks
     const router                            = useRouter()
     const params                            = useSearchParams()
     const [login, { isLoading, isSuccess }] = useLoginWithGoogleMutation()
+    const dispatch                          = useDispatch()
 
     async function responseGoogle( response: CredentialResponse ){
         try {
             await login( response.credential! ).unwrap()
-            router.refresh()
+            dispatch( baseApi.util.resetApiState() )
             router.push( params.get( 'redirect' ) ? params.get( 'redirect' )! : '/' )
             toast.success( 'Logged in.' )
         } catch ( err: any ) {
