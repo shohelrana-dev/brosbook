@@ -1,7 +1,10 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": ["dom","dom.iterable","esnext"
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
     ],
     "experimentalDecorators": true,
     "allowJs": true,
@@ -18,20 +21,48 @@
     "incremental": true,
     "baseUrl": "./src",
     "paths": {
-      "@/": ["*"],
-      "@boot/*": ["boot/*"],
-      "@components/*": ["components/*"],
-      "@ui/*": ["ui/*"],
-      "@images/*": ["images/*"],
-      "@hooks/*": ["hooks/*"],
-      "@store/*": ["store/*"],
-      "@slices/*": ["slices/*"],
-      "@services/*": ["services/*"],
-      "@styles/*": ["styles/*"],
-      "@interfaces/*": ["interfaces/*"],
-      "@utils/*": ["utils/*"]
+      "@/": [
+        "*"
+      ],
+      "@boot/*": [
+        "boot/*"
+      ],
+      "@components/*": [
+        "components/*"
+      ],
+      "@ui/*": [
+        "ui/*"
+      ],
+      "@images/*": [
+        "images/*"
+      ],
+      "@hooks/*": [
+        "hooks/*"
+      ],
+      "@store/*": [
+        "store/*"
+      ],
+      "@slices/*": [
+        "slices/*"
+      ],
+      "@services/*": [
+        "services/*"
+      ],
+      "@styles/*": [
+        "styles/*"
+      ],
+      "@interfaces/*": [
+        "interfaces/*"
+      ],
+      "@utils/*": [
+        "utils/*"
+      ],
+      "photoswipe/lightbox": ["./node_modules/photoswipe/dist/types/photoswipe.d.ts"]
     },
-    "plugins": [{"name": "next"}
+    "plugins": [
+      {
+        "name": "next"
+      }
     ]
   },
   "include": [
