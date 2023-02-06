@@ -23,14 +23,16 @@ export const usersApi = baseApi.injectEndpoints( {
             query: ( params ) => ( {
                 url: `/users/suggestions`,
                 params
-            } )
+            } ),
+            providesTags: ['User']
         } ),
 
         searchUsers: build.query<ListResponse<User>, { key: string, page: number, limit?: number }>( {
             query: ( params ) => ( {
                 url: `/users/search`,
                 params
-            } )
+            } ),
+            providesTags: ['User']
         } ),
 
         changeProfilePhoto: build.mutation<User, FormData>( {
@@ -56,7 +58,7 @@ export const usersApi = baseApi.injectEndpoints( {
                 url: `/users/follow/${ targetUserId }`,
                 method: 'POST',
             } ),
-            invalidatesTags: ['Following']
+            invalidatesTags: ['User']
         } ),
 
         unfollow: build.mutation<User, string>( {
@@ -64,7 +66,7 @@ export const usersApi = baseApi.injectEndpoints( {
                 url: `/users/unfollow/${ targetUserId }`,
                 method: 'POST',
             } ),
-            invalidatesTags: ['Following']
+            invalidatesTags: ['User']
         } ),
 
         getFollowers: build.query<ListResponse<User>, { userId: string, page: number, limit?: number }>( {
@@ -72,14 +74,14 @@ export const usersApi = baseApi.injectEndpoints( {
                 url: `/users/${ userId }/followers`,
                 params
             } ),
-            providesTags: ['Following']
+            providesTags: ['User']
         } ),
 
         getFollowersCount: build.query<{ count: number }, string>( {
             query: ( userId ) => ( {
                 url: `/users/${ userId }/followers/count`
             } ),
-            providesTags: ['Following']
+            providesTags: ['User']
         } ),
 
         getFollowings: build.query<ListResponse<User>, { userId: string, page: number, limit?: number }>( {
@@ -87,14 +89,14 @@ export const usersApi = baseApi.injectEndpoints( {
                 url: `/users/${ userId }/followings`,
                 params
             } ),
-            providesTags: ['Following']
+            providesTags: ['User']
         } ),
 
         getFollowingsCount: build.query<{ count: number }, string>( {
             query: ( userId ) => ( {
                 url: `/users/${ userId }/followers/count`
             } ),
-            providesTags: ['Following']
+            providesTags: ['User']
         } ),
     } ),
 } )
@@ -109,7 +111,5 @@ export const {
                  useUnfollowMutation,
                  useGetFollowersQuery,
                  useGetFollowingsQuery,
-                 useGetFollowersCountQuery,
-                 useGetFollowingsCountQuery,
                  useSearchUsersQuery
              } = usersApi
