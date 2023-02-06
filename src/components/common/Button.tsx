@@ -10,7 +10,7 @@ interface ButtonProps extends BaseButtonProps {
 export default function Button( props: ButtonProps ){
     let { children, isLoading = false, variant, className, disabled, size = 'md', ...rest } = props
 
-    className = classNames( 'mt-3 rounded-full capitalize', size === 'sm' ? 'min-w-[90px]' : 'min-w-[130px]', className )
+    className = classNames( 'mt-3 rounded-full capitalize', size === 'sm' ? 'min-w-[90px]' : 'min-w-[140px] text-sm', className )
 
     return (
         //@ts-ignore
