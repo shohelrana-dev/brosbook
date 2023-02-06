@@ -31,7 +31,7 @@ export function UnauthorizedPopupProvider( { children }: PropsWithChildren ){
     return (
         <UnauthorizedPopupContext.Provider value={ unauthorizedAlert }>
             { children }
-            <Modal isOpen={ isOpen } onClose={ toggleOpen }>
+            <Modal isOpen={ isOpen } onClose={ toggleOpen } style={{padding: 30}}>
                 <div className="h-full flex flex-col justify-center items-center text-center">
                     <div className="mb-4">
                         <LoginIcon fontSize="50" color="#FF1493"/>

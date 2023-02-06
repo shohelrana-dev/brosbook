@@ -37,7 +37,7 @@ export default function Modal( props: ModalProps ){
                         transition={ { duration: 0.3 } }
                         style={ style }
                     >
-                        { title || isShowCancelIcon ? (
+                        { title && isShowCancelIcon ? (
                             <div className="flex justify-between items-center mb-5 pb-1 border-gray-50 border-b-[1px]">
                                 <h3 className="text-xl font-bold text-gray-900">{ title }</h3>
                                 { isShowCancelIcon ? (
@@ -47,6 +47,12 @@ export default function Modal( props: ModalProps ){
                                         </IconButton>
                                     </div>
                                 ) : null }
+                            </div>
+                        ) : isShowCancelIcon ? (
+                            <div className="absolute right-2 top-2">
+                                <IconButton onClick={ onClose } className="p-3">
+                                    <CancelIcon size="20"/>
+                                </IconButton>
                             </div>
                         ) : null }
 
