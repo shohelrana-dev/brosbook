@@ -38,7 +38,7 @@ export default function NotificationList(){
                 </div>
 
                 { hasMoreItem ? (
-                    <div className="py-[40px]" ref={ moreLoadRef }>
+                    <div ref={ moreLoadRef }>
                         <Loading size={ 40 }/>
                     </div>
                 ) : null }
