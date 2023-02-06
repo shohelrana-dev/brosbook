@@ -45,9 +45,12 @@ export default function ChangeUsernameModal(){
                 Change
             </ButtonOutline>
 
-            <Modal isOpen={ isModalOpen } onClose={ handleModalOpen }>
+            <Modal
+                isOpen={ isModalOpen }
+                onClose={ handleModalOpen }
+                title="Update username"
+            >
                 <form onSubmit={ onSubmit }>
-                    <h3 className="text-lg mb-3">Update username</h3>
                     <PasswordInput
                         label="Password"
                         name="password"

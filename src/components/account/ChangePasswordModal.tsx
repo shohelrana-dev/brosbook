@@ -33,9 +33,8 @@ export default function ChangePasswordModal(){
                 Change
             </ButtonOutline>
 
-            <Modal isOpen={ isModalOpen } onClose={ handleModalOpen }>
+            <Modal isOpen={ isModalOpen } onClose={ handleModalOpen } title="Update your password">
                 <form onSubmit={ onSubmit }>
-                    <h3 className="text-lg mb-3">Update your password</h3>
                     <PasswordInput
                         label="Current Password"
                         name="currentPassword"

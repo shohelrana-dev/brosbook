@@ -78,11 +78,13 @@ export default function ProfilePhoto({user}: Props) {
                 <TbCameraPlus fontSize={20} color="#fff"/>
             </IconButton>
 
-            <Modal isOpen={isModalOpen} onClose={handleModalOpen} className="max-w-[625px] !p-3">
-                <div>
-                    <div className="p-2">
-                        <h3 className="text-xl mb-2">New profile photo</h3>
-                    </div>
+            <Modal
+                isOpen={isModalOpen}
+                title="New profile photo"
+                onClose={handleModalOpen}
+                className="max-w-[625px] !p-3"
+            >
+                <>
                     <div className="p-4 bg-gray-100 max-h-[75vh] overflow-hidden">
                         {selectedPhoto ? (
                             <div>
@@ -96,11 +98,11 @@ export default function ProfilePhoto({user}: Props) {
                         ) : null}
                     </div>
                     <div className="text-right mt-3">
-                        <Button size="sm" isLoading={isLoading} className="mt-0" onClick={handleSubmit}>
+                        <Button size="md" isLoading={isLoading} className="mt-0" onClick={handleSubmit}>
                             Save
                         </Button>
                     </div>
-                </div>
+                </>
             </Modal>
         </div>
     )

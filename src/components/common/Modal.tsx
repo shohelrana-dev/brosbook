@@ -6,6 +6,7 @@ import classNames from "classnames"
 
 export interface ModalProps {
     isOpen: boolean
+    title?: string
     onClose?: () => void
     children: ReactNode
     className?: string
@@ -14,9 +15,9 @@ export interface ModalProps {
 }
 
 export default function Modal( props: ModalProps ){
-    const { isOpen, onClose, children, className, style, isShowCancelIcon = true } = props
+    const { isOpen, title, onClose, children, className, style, isShowCancelIcon = true } = props
 
-    const boxClassName = classNames( 'box relative rounded-xl max-w-[600px] w-[90%] p-7 lg:p-8 border border-solid border-gray-300', className )
+    const boxClassName = classNames( 'box relative rounded-xl max-w-[530px] w-[90%] py-4 px-6 border border-solid border-gray-300', className )
 
     return (
         <AnimatePresence>
@@ -36,13 +37,19 @@ export default function Modal( props: ModalProps ){
                         transition={ { duration: 0.3 } }
                         style={ style }
                     >
-                        { isShowCancelIcon ? (
-                            <div className="!absolute right-2 top-2">
-                                <IconButton onClick={ onClose } className="p-3">
-                                    <CancelIcon size="18"/>
-                                </IconButton>
+                        { title || isShowCancelIcon ? (
+                            <div className="flex justify-between items-center mb-5 pb-1 border-gray-50 border-b-[1px]">
+                                <h3 className="text-xl font-bold text-gray-900">{ title }</h3>
+                                { isShowCancelIcon ? (
+                                    <div>
+                                        <IconButton onClick={ onClose } className="p-3">
+                                            <CancelIcon size="20"/>
+                                        </IconButton>
+                                    </div>
+                                ) : null }
                             </div>
                         ) : null }
+
                         { children }
                     </motion.div>
                 </motion.div>
