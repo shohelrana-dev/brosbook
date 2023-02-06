@@ -39,7 +39,6 @@ export function ConfirmAlertProvider( { children }: PropsWithChildren ){
         resolver.resolve( false )
     }
 
-    console.log(isOpen)
     return (
         <ConfirmAlertContext.Provider value={ confirmAlert }>
             { children }
