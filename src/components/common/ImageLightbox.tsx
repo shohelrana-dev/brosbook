@@ -19,10 +19,14 @@ interface Props extends Omit<ImageProps, "src"> {
 export default function ImageLightbox( { image, className, ...rest }: Props ){
     className = classNames( 'cursor-pointer', className )
 
-    if(!image || !image.url) return null
+    if( ! image || ! image.url ) return null
 
     return (
-        <LightGallery speed={ 500 } mode="lg-fade">
+        <LightGallery
+            speed={ 500 }
+            plugins={ [lgZoom, lgThumbnail] }
+            mobileSettings={{closable: true, showCloseIcon: true, download: true}}
+        >
             <a data-src={ image.url } data-lg-size={ `${ image.width }-${ image.height }` }>
                 <Image src={ image.url } className={ className } { ...rest }/>
             </a>
