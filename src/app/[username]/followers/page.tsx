@@ -20,10 +20,12 @@ export default function FollowersPage( props: Props ){
               hasMoreItem
           }              = useGetInfiniteListQuery<User>( useGetFollowersQuery, { userId: user?.id! } )
 
+    if( isLoading && followers?.length < 1 ){
+        return <Loading/>
+    }
+
     return (
         <>
-            { ( ! followers && isLoading ) ? <Loading/> : null }
-
             <InfiniteScroll
                 loadMore={ loadMoreItem }
                 hasMore={ hasMoreItem }
