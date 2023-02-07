@@ -81,3 +81,14 @@ export async function getConversationById( conversationId: string, cookies: Requ
         return null
     }
 }
+
+export async function getConversations( cookies: RequestCookies | ReadonlyRequestCookies ){
+    try {
+        const config = getAuthorizationConfig( cookies )
+        const res    = await http.get<ListResponse<Conversation>>( `/conversations `, config )
+
+        return res.data
+    } catch ( e ) {
+        return null
+    }
+}

@@ -103,17 +103,21 @@ export default async function ProfileLayout( { children, params }: ProfileLayout
                         </ul>
                         <ul className="mt-4">
                             <li className="text-gray-600 inline-block mr-3">
-                                <Link href={ `/${ user.username }/following` }>
-                                    <strong className="text-gray-900">
-                                        { followingsCount?.count }
-                                    </strong> Following
+                                <Link legacyBehavior={ true } href={ `/${ user.username }/following` }>
+                                    <a>
+                                        <strong className="text-gray-900">
+                                            { followingsCount?.count }
+                                        </strong> Following
+                                    </a>
                                 </Link>
                             </li>
                             <li className="text-gray-600 inline-block mr-3">
-                                <Link href={ `/${ user.username }/followers` }>
-                                    <strong className="text-gray-900">
-                                        { followersCount?.count }
-                                    </strong> Followers
+                                <Link legacyBehavior={ true } href={ `/${ user.username }/followers` }>
+                                    <a>
+                                        <strong className="text-gray-900">
+                                            { followersCount?.count }
+                                        </strong> Followers
+                                    </a>
                                 </Link>
                             </li>
                         </ul>

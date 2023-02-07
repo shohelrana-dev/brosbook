@@ -2,7 +2,6 @@ import ProfilePostsPage from "./ProfilePostsPage"
 import { cookies } from "next/headers"
 import { getPostsByAuthorId, getUserByUsername } from "@services/index"
 
-
 interface Props {
     params: { username: string }
 }

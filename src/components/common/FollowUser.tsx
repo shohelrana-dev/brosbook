@@ -16,19 +16,23 @@ function FollowUser( { user }: FollowUserProps ){
     return (
         <div className="flex mb-2 w-full">
             <div className="flex w-full">
-                <Link href={ `/${ user.username }` } className="inline-block min-w-[40px] mr-3">
-                    <Avatar src={ user.avatar.url }/>
+                <Link legacyBehavior={ true } href={ `/${ user.username }` }>
+                    <a className="inline-block min-w-[40px] mr-3">
+                        <Avatar src={ user.avatar.url }/>
+                    </a>
                 </Link>
                 <div className="w-full">
                     <div className="flex justify-between w-full">
                         <div className="flex items-center">
-                            <Link href={ `/${ user.username }` } className="block">
+                            <Link legacyBehavior={ true } href={ `/${ user.username }` }>
+                                <a className="block">
                                 <h3 className="text-sm font-medium">
                                     <TextOverflow text={ user.fullName }/>
                                 </h3>
                                 <h4 className="text-xs text-gray-700">
                                     <TextOverflow text={ `@${ user.username }` }/>
                                 </h4>
+                                </a>
                             </Link>
                         </div>
                         <div>

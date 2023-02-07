@@ -56,8 +56,7 @@
       ],
       "@utils/*": [
         "utils/*"
-      ],
-      "photoswipe/lightbox": ["./node_modules/photoswipe/dist/types/photoswipe.d.ts"]
+      ]
     },
     "plugins": [
       {
