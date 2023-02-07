@@ -18,6 +18,7 @@ export default function ProfilePostsPage( { user, initialPosts }: ProfilePostsPa
     //hooks
     let {
             isLoading,
+            isFetching,
             items: posts,
             hasMoreItem,
             loadMoreItem
@@ -38,12 +39,12 @@ export default function ProfilePostsPage( { user, initialPosts }: ProfilePostsPa
                 hasMore={ hasMoreItem }
                 loader={ <LoadingPosts/> }
             >
-                { posts.map( ( post: Post , index:number) => (
+                { posts.map( ( post: Post, index: number ) => (
                     <PostCard post={ post } key={ index }/>
                 ) ) }
             </InfiniteScroll>
 
-            { ( ! isLoading && posts?.length < 1 ) ? (
+            { ( ! isLoading && ! isFetching && posts?.length < 1 ) ? (
                 <p className="box text-center py-6">{ user?.fullName }'s haven't any post.</p>
             ) : null }
         </div>

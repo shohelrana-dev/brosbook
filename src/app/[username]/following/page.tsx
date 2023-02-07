@@ -15,6 +15,7 @@ export default function FollowingPage( props: Props ){
     const { data: user } = useGetUserByUsernameQuery( props.params.username )
     const {
               isLoading,
+              isFetching,
               items: followings,
               loadMoreItem,
               hasMoreItem
@@ -38,7 +39,7 @@ export default function FollowingPage( props: Props ){
                 ) ) }
             </InfiniteScroll>
 
-            { ( ! isLoading && followings?.length < 1 ) ? (
+            { ( ! isLoading && !isFetching && followings?.length < 1 ) ? (
                 <p className="box text-center py-6">{ user?.fullName }'s haven't following.</p>
             ) : null }
         </>
