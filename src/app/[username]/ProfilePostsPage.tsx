@@ -7,6 +7,7 @@ import { ListResponse } from "@interfaces/index.interfaces"
 import { User } from "@interfaces/user.interfaces"
 import InfiniteScroll from "react-infinite-scroller"
 import LoadingPosts from "@components/loading/LoadingPosts"
+import Loading from "@components/common/Loading";
 
 interface ProfilePostsPageProps {
     user: User
@@ -26,10 +27,12 @@ export default function ProfilePostsPage( { user, initialPosts }: ProfilePostsPa
         posts = initialPosts.items
     }
 
+    if( isLoading && posts?.length < 1 ){
+        return <Loading/>
+    }
+
     return (
         <div className="pt-1">
-            { ( ! posts && isLoading ) ? <LoadingPosts/> : null }
-
             <InfiniteScroll
                 loadMore={ loadMoreItem }
                 hasMore={ hasMoreItem }
