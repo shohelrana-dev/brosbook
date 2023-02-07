@@ -20,7 +20,8 @@ function ParticipantInfo( { conversationId }: Props ){
 
     if( isLoading ) return <Loading/>
 
-    if( ! participant ) return null
+    if( ! participant) return null
+
     return (
         <>
             <div className="box p-6 text-center">
