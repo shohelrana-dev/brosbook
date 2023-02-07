@@ -43,6 +43,7 @@ const PostCard = ( props: PostCardProps ) => {
 
                     <p className="text-gray-500 font-medium text-xs mt-[-8px]">
                         { timeAgo( post.createdAt ) }
+                        <Link href={`/p/${post.id}`}>Go</Link>
                     </p>
 
                 </div>

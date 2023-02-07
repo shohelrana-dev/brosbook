@@ -1,7 +1,7 @@
 import React from 'react'
 import DefaultTags from "@components/common/DefaultTags"
 import { cookies } from "next/headers"
-import { getUserByUsername } from "../../services"
+import { getUserByUsername } from "@services/index"
 
 interface Props {
     params: {
@@ -14,7 +14,7 @@ export default async function Head( { params }: Props ){
     const user = await getUserByUsername( params.username, cookies() )
 
     if( ! user ){
-        return null
+        return <DefaultTags/>
     }
 
     const title       = `${ user?.fullName } (@${ user?.username }) | ${ process.env.NEXT_PUBLIC_APP_NAME }`
