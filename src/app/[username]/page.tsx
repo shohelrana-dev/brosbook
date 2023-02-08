@@ -12,7 +12,7 @@ interface Props {
     params: { username: string }
 }
 
-export default function ProfilePostsPage( { params }: Props ){
+export default function UserPostsPage( { params }: Props ){
     //hooks
     const { data: user } = useGetUserByUsernameQuery( params.username )
     const {
@@ -38,8 +38,8 @@ export default function ProfilePostsPage( { params }: Props ){
                 hasMore={ hasMoreItem }
                 loader={ <LoadingPosts/> }
             >
-                { posts.map( ( post: Post, index: number ) => (
-                    <PostCard post={ post } key={ index }/>
+                { posts && posts.map( ( post: Post ) => (
+                    <PostCard post={ post } key={ post.id }/>
                 ) ) }
             </InfiniteScroll>
 

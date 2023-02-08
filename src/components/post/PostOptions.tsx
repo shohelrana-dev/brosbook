@@ -49,11 +49,9 @@ function PostOptions( { post, setPost }: Props ){
 
         try {
             await deletePost( post.id ).unwrap()
-            setPost( null )
             toast.success( 'Post deleted.' )
-            toggleOpen()
         } catch ( err: any ) {
-            toast.error( err?.data?.message || 'Post deletion was failed.' )
+            toast.error( err?.data?.message || 'Post deleting failed.' )
         }
     }
 

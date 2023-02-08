@@ -17,10 +17,13 @@ export function useGetInfiniteListQuery<T>( useQueryHook: UseQuery<QueryDefiniti
 
 
     useEffect( () => {
-        if( ! data?.items || data.items.length < 1 ) return
+        if( ! data?.items || data.items.length < 1 ){
+            setItems( () => [] )
+            return
+        }
 
         if( page === 1 ){
-            setItems( data.items )
+            setItems( () => [...data.items] )
         } else if( page === data.currentPage ){
             setItems( prevItems => [...prevItems, ...data.items] )
         }

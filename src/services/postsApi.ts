@@ -8,7 +8,8 @@ export const postsApi = baseApi.injectEndpoints( {
             query: ( params ) => ( {
                 url: 'posts/feed',
                 params
-            } )
+            } ),
+            providesTags: ['Post']
         } ),
 
         getPosts: build.query<ListResponse<Post>, { userId?: string, page?: number, limit?: number }>( {
