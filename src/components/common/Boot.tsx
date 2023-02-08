@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch } from "react-redux"
 import { useGetCurrentUserQuery } from "@services/usersApi"
 import { setAuth } from "@slices/authSlice"
-import { io } from "socket.io-client";
+import { io } from "socket.io-client"
 
 export default function Boot(){
     const dispatch       = useDispatch()

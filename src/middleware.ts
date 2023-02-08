@@ -22,7 +22,10 @@ export async function middleware( request: NextRequest ){
             return NextResponse.redirect( new URL( '/', request.url ) )
         }
     } else{
-        if( isProtectedPath ){
+        if( isProtectedPath && request.cookies.has( 'access_token' ) ){
+            const response = NextResponse.redirect( new URL( `/auth/login?redirect=${ currentPathname }`, request.url ) )
+            response.cookies.delete( 'access_token' )
+        } else if( isProtectedPath ){
             return NextResponse.redirect( new URL( `/auth/login?redirect=${ currentPathname }`, request.url ) )
         }
     }

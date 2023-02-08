@@ -23,16 +23,20 @@ import {
     PopoverContent,
 } from "@material-tailwind/react"
 import NotificationList from "@components/notifications/NotificationList"
-import { User } from "@interfaces/user.interfaces"
 import useConfirmAlert from "@hooks/useConfirmAlert"
 import { useRouter } from "next/navigation"
 import { useGetUnreadConversationsCountQuery } from "@services/conversationApi"
+import Cookies from "js-cookie"
+import { useSelector } from "react-redux"
+import { selectAuthState } from "@slices/authSlice"
 
 interface Props {
-    user: User
+    hasAccessToken: boolean
 }
 
-function NavBar( { user }: Props ){
+function NavBar( props: Props ){
+    const [hasAccessToken, setHasAccessToken]                     = useState<boolean>( props.hasAccessToken )
+    const { user }                                                = useSelector( selectAuthState )
     const [readAllNotification]                                   = useReadAllNotificationMutation()
     const { data: unreadNotifications }                           = useGetUnreadNotificationsCountQuery()
     const { data: unreadConversations }                           = useGetUnreadConversationsCountQuery()
@@ -40,6 +44,10 @@ function NavBar( { user }: Props ){
     const [unreadConversationsCount, setUnreadConversationsCount] = useState<number>( unreadConversations?.count || 0 )
     const confirmAlert                                            = useConfirmAlert()
     const router                                                  = useRouter()
+
+    useEffect( () => {
+        setHasAccessToken( !! Cookies.get( 'access_token' ) )
+    }, [Cookies, user] )
 
     useEffect( () => {
         setUnreadNotificationsCount( unreadNotifications?.count! )
@@ -81,7 +89,7 @@ function NavBar( { user }: Props ){
         }
     }
 
-    if( ! user ) return null
+    if( ! hasAccessToken ) return null
 
     return (
         <header id="appHeader">
@@ -130,7 +138,7 @@ function NavBar( { user }: Props ){
                         <Menu>
                             <MenuHandler>
                                 <button className="rounded-full">
-                                    <Avatar src={ user?.avatar.url }/>
+                                    <Avatar src={ user?.avatar?.url }/>
                                 </button>
                             </MenuHandler>
                             <MenuList>

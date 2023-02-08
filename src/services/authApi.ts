@@ -24,7 +24,8 @@ export const authApi = baseApi.injectEndpoints( {
                 url: `/auth/login`,
                 method: 'POST',
                 body: credentials
-            } )
+            } ),
+            invalidatesTags: ["User"]
         } ),
 
         loginWithGoogle: build.mutation<LoginResponse, string>( {
@@ -32,7 +33,8 @@ export const authApi = baseApi.injectEndpoints( {
                 url: `/auth/google`,
                 method: 'POST',
                 body: { token },
-            } )
+            } ),
+            invalidatesTags: ["User"]
         } ),
 
         forgotPassword: build.mutation<{ message: string }, { email: string }>( {

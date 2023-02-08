@@ -1,20 +1,20 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { RootState }                  from "../store"
-import { User }                       from "@interfaces/user.interfaces"
-import { authApi, LoginResponse }     from "@services/authApi"
-import Cookies                        from "js-cookie"
-import { accountApi }                 from "@services/accountApi"
+import { RootState } from "../store"
+import { User } from "@interfaces/user.interfaces"
+import { authApi, LoginResponse } from "@services/authApi"
+import Cookies from "js-cookie"
+import { accountApi } from "@services/accountApi"
 
 interface AuthState {
     isLoading: boolean
     isAuthenticated: boolean
-    user: User
+    user: User | null
 }
 
 const initialState: AuthState = {
-    isLoading: true,
+    isLoading: false,
     isAuthenticated: false,
-    user: {} as User
+    user: null
 }
 
 export const authSlice = createSlice( {
@@ -22,11 +22,13 @@ export const authSlice = createSlice( {
     initialState,
     reducers: {
         logout: ( state ) => {
+            state.isLoading       = false
             state.isAuthenticated = false
-            state.user            = {} as User
+            state.user            = null
             Cookies.remove( 'access_token' )
         },
         setAuth: ( state, { payload }: PayloadAction<User> ) => {
+            state.isLoading       = false
             state.isAuthenticated = true
             state.user            = payload
         }
@@ -50,10 +52,6 @@ export const authSlice = createSlice( {
 
         builder.addMatcher( accountApi.endpoints.updateProfile.matchFulfilled, ( state, { payload }: PayloadAction<User> ) => {
             state.user = payload
-        } )
-
-        builder.addMatcher( accountApi.endpoints.changeUsername.matchFulfilled, ( state, { payload }: PayloadAction<User> ) => {
-            state.user.username = payload.username
         } )
     }
 } )
