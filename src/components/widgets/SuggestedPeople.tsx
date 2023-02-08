@@ -15,6 +15,10 @@ function SuggestedPeople(){
               hasMoreItem
           } = useGetInfiniteListQuery<User>( useGetSuggestedUsersQuery )
 
+    if( !isLoading && users?.length < 1 ){
+        return null
+    }
+
     return (
         <div className="box p-5">
             <h2 className="text-xl font-medium mb-5">Suggested People</h2>
@@ -22,7 +26,7 @@ function SuggestedPeople(){
             { isLoading ? <Loading size={ 30 }/> : null }
 
             { users.length > 0 ? users.map( ( user: User ) => (
-                <UserList user={ user } key={user.id}/>
+                <UserList user={ user } key={ user.id }/>
             ) ) : null }
 
             { hasMoreItem ? (
