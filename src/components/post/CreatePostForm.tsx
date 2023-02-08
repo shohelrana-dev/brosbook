@@ -80,10 +80,12 @@ function CreatePostForm(){
                 { selectedImage ? (
                     <div
                         className="relative max-w-sm m-auto relative border-3 border-solid border-gray-300 rounded-2xl">
-                        <IconButton className="!absolute right-0 top-0 bg-white hover:bg-gray-300"
-                                    onClick={ removeSelectedFile }>
-                            <CancelIcon fontSize={ 18 } color="#000"/>
-                        </IconButton>
+                        <div onClick={ removeSelectedFile } className="absolute right-1 top-1">
+                            <IconButton
+                                className="bg-black text-white hover:bg-gray-900 hover:text-white z-50 rounded-full">
+                                <CancelIcon size={ 15 }/>
+                            </IconButton>
+                        </div>
                         <img className="rounded-2xl" src={ URL.createObjectURL( selectedImage ) } alt="post image"/>
                     </div> ) : null }
 
