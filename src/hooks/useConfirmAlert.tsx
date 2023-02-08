@@ -52,10 +52,10 @@ export function ConfirmAlertProvider( { children }: PropsWithChildren ){
                     <p className="text-gray-800">{ options.message }</p>
                 </div>
                 <div className="basis-full mb-2">
-                    <Button fullWidth size="md" className="mb-3" onClick={ onConfirm }>
+                    <Button fullWidth size="sm" className="mb-3" onClick={ onConfirm }>
                         { options.confirmButtonLabel }
                     </Button>
-                    <ButtonOutline size="md" fullWidth onClick={ onCancel }>
+                    <ButtonOutline size="sm" fullWidth onClick={ onCancel }>
                         { options.cancelButtonLabel }
                     </ButtonOutline>
                 </div>

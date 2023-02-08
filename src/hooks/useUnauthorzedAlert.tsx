@@ -20,7 +20,7 @@ export function UnauthorizedPopupProvider( { children }: PropsWithChildren ){
     const pathname              = usePathname()
 
     function unauthorizedAlert( options: Options ): void{
-        setOptions( ( prevState ) => options )
+        setOptions( () => options )
         setIsOpen( true )
     }
 
@@ -31,24 +31,24 @@ export function UnauthorizedPopupProvider( { children }: PropsWithChildren ){
     return (
         <UnauthorizedPopupContext.Provider value={ unauthorizedAlert }>
             { children }
-            <Modal isOpen={ isOpen } onClose={ toggleOpen } style={{padding: 30}}>
+            <Modal isOpen={ isOpen } onClose={ toggleOpen } style={ { padding: 30 } }>
                 <div className="h-full flex flex-col justify-center items-center text-center">
                     <div className="mb-4">
                         <LoginIcon fontSize="50" color="#FF1493"/>
                     </div>
                     <div className="mb-4">
                         <h3 className="text-xl md:text-2xl mb-2">
-                            {options?.title}
+                            { options?.title }
                         </h3>
                         <p className="text-gray-700">
                             { options?.message }
                         </p>
                     </div>
-                    <Link onClick={toggleOpen} href={ `/auth/login?redirect=${ pathname }` } className="mb-3 w-full">
-                        <Button size="lg" className="w-full">Log in</Button>
+                    <Link onClick={ toggleOpen } href={ `/auth/login?redirect=${ pathname }` } className="mb-3 w-full">
+                        <Button size="md" className="w-full">Log in</Button>
                     </Link>
-                    <Link onClick={toggleOpen} href="/auth/signup" className="w-full">
-                        <ButtonOutline size="lg" className="w-full">Sign up</ButtonOutline>
+                    <Link onClick={ toggleOpen } href="/auth/signup" className="w-full">
+                        <ButtonOutline size="md" className="w-full">Sign up</ButtonOutline>
                     </Link>
                 </div>
             </Modal>
