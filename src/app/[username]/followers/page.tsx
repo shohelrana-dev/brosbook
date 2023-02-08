@@ -22,7 +22,11 @@ export default function FollowersPage( props: Props ){
           }              = useGetInfiniteListQuery<User>( useGetFollowersQuery, { userId: user?.id! } )
 
     if( isLoading && followers?.length < 1 ){
-        return <Loading/>
+        return (
+            <div className="box text-center py-3">
+                <Loading size={ 45 }/>
+            </div>
+        )
     }
 
     return (
