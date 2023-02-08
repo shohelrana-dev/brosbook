@@ -4,7 +4,7 @@ import { User } from "@interfaces/user.interfaces"
 import { useGetSuggestedUsersQuery } from "@services/usersApi"
 import Loading from "@components/common/Loading"
 import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
-import FollowUser from "@components/common/FollowUser"
+import UserList from "@components/common/UserList"
 import Link from "next/link"
 import ButtonGray from "@components/common/ButtonGray"
 
@@ -22,7 +22,7 @@ function SuggestedPeople(){
             { isLoading ? <Loading size={ 30 }/> : null }
 
             { users.length > 0 ? users.map( ( user: User ) => (
-                <FollowUser user={ user } key={user.id}/>
+                <UserList user={ user } key={user.id}/>
             ) ) : null }
 
             { hasMoreItem ? (

@@ -4,35 +4,32 @@ import Avatar from "@components/common/Avatar"
 import { User } from "@interfaces/user.interfaces"
 import FollowButton from "@components/common/FollowButton"
 import TextOverflow from 'react-text-overflow'
-import useAuthState from "@hooks/useAuthState";
+import useAuthState from "@hooks/useAuthState"
 
-interface FollowUserProps {
+interface Props {
     user: User
 }
 
-function FollowUser( { user }: FollowUserProps ){
+export default function UserList( { user }: Props ){
     const { user: currentUser } = useAuthState()
     const isCurrentUser         = user.id === currentUser.id
+
     return (
         <div className="flex mb-2 w-full">
             <div className="flex w-full">
-                <Link legacyBehavior={ true } href={ `/${ user.username }` }>
-                    <a className="inline-block min-w-[40px] mr-3">
-                        <Avatar src={ user.avatar.url }/>
-                    </a>
+                <Link href={ `/${ user.username }` } className="inline-block min-w-[40px] mr-3">
+                    <Avatar src={ user.avatar.url }/>
                 </Link>
                 <div className="w-full">
                     <div className="flex justify-between w-full">
                         <div className="flex items-center">
-                            <Link legacyBehavior={ true } href={ `/${ user.username }` }>
-                                <a className="block">
+                            <Link href={ `/${ user.username }` } className="block">
                                 <h3 className="text-sm font-medium">
                                     <TextOverflow text={ user.fullName }/>
                                 </h3>
                                 <h4 className="text-xs text-gray-700">
                                     <TextOverflow text={ `@${ user.username }` }/>
                                 </h4>
-                                </a>
                             </Link>
                         </div>
                         <div>
@@ -45,11 +42,3 @@ function FollowUser( { user }: FollowUserProps ){
         </div>
     )
 }
-
-export default FollowUser
-
-
-/*
- <div>
- { user.profile?.bio ? <div className="mt-2">{ user.profile?.bio }</div> : null }
- </div>*/

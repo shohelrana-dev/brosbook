@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, Suspense } from 'react'
 import Link from "next/link"
 import { GoLocation } from "react-icons/go"
 import { HiOutlineCake } from "react-icons/hi"
@@ -14,6 +14,7 @@ import NotFound from "../not-found"
 import SidebarLayout from "@components/common/SidebarLayout"
 import ExtraOptions from "@components/profile/ExtraOptions"
 import { getCurrentUser, getFollowersCount, getFollowingsCount, getUserByUsername } from "@services/index"
+import Loading from "@components/common/Loading"
 
 interface ProfileLayoutProps {
     children: ReactNode
@@ -103,21 +104,17 @@ export default async function ProfileLayout( { children, params }: ProfileLayout
                         </ul>
                         <ul className="mt-4">
                             <li className="text-gray-600 inline-block mr-3">
-                                <Link legacyBehavior={ true } href={ `/${ user.username }/following` }>
-                                    <a>
-                                        <strong className="text-gray-900">
-                                            { followingsCount?.count }
-                                        </strong> Following
-                                    </a>
+                                <Link href={ `/${ user.username }/following` }>
+                                    <strong className="text-gray-900">
+                                        { followingsCount?.count }
+                                    </strong> Following
                                 </Link>
                             </li>
                             <li className="text-gray-600 inline-block mr-3">
-                                <Link legacyBehavior={ true } href={ `/${ user.username }/followers` }>
-                                    <a>
-                                        <strong className="text-gray-900">
-                                            { followersCount?.count }
-                                        </strong> Followers
-                                    </a>
+                                <Link href={ `/${ user.username }/followers` }>
+                                    <strong className="text-gray-900">
+                                        { followersCount?.count }
+                                    </strong> Followers
                                 </Link>
                             </li>
                         </ul>
@@ -127,7 +124,9 @@ export default async function ProfileLayout( { children, params }: ProfileLayout
                     <TabLinkList links={ tabLinks }/>
                 </div>
 
-                { children }
+                <Suspense fallback={ <Loading/> }>
+                    { children }
+                </Suspense>
 
             </div>
         </SidebarLayout>
