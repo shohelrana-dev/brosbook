@@ -15,7 +15,7 @@ export default function UserList( { user }: Props ){
     const isCurrentUser         = user.id === currentUser.id
 
     return (
-        <div className="flex mb-2 w-full">
+        <div className="flex mb-4 w-full">
             <div className="flex w-full">
                 <Link href={ `/${ user.username }` } className="inline-block min-w-[40px] mr-3">
                     <Avatar src={ user.avatar.url }/>
