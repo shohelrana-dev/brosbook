@@ -5,6 +5,7 @@ import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import InfiniteScroll from "react-infinite-scroller"
 import { Media } from "@interfaces/index.interfaces"
 import ImageLightbox from "@components/common/ImageLightbox"
+import { useEffect, useRef } from "react"
 
 interface Props {
     conversationId: string
@@ -15,15 +16,22 @@ function ParticipantInfo( { conversationId }: Props ){
     const { items: mediaList, isLoading: isMediaLoading, loadMoreItem, hasMoreItem } = useGetInfiniteListQuery<Media>(
         useGetConversationMediaListQuery, { conversationId }
     )
+    const containerRef                                                               = useRef<HTMLDivElement>( null )
+
+    useEffect( () => {
+        if( containerRef.current && containerRef.current.parentElement ){
+            containerRef.current.style.height = `${ containerRef?.current?.parentElement?.offsetHeight }px`
+        }
+    }, [] )
 
     const participant = conversation?.participant
 
     if( isLoading ) return <Loading/>
 
-    if( ! participant) return null
+    if( ! participant ) return null
 
     return (
-        <>
+        <div className="h-full overflow-y-auto scrollbar-hide" ref={ containerRef }>
             <div className="box p-6 text-center">
                 <div className="flex justify-center mb-3">
                     <Avatar
@@ -91,7 +99,7 @@ function ParticipantInfo( { conversationId }: Props ){
                 </div>
             </div>
 
-        </>
+        </div>
     )
 }
 

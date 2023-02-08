@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Link from "next/link"
 import Avatar from "@components/common/Avatar"
 import MessageList from "@components/messages/MessageBox/MessageList"
@@ -8,6 +8,8 @@ import Loading from "@components/common/Loading"
 import { useGetConversationByIdQuery } from "@services/conversationApi"
 import IconButton from "@components/common/IconButton"
 import { BiInfoCircle as InfoIcon } from "react-icons/bi"
+import Modal from "@components/common/Modal";
+import ParticipantInfo from "@components/messages/ParticipantInfo";
 
 interface Props {
     conversationId: string
@@ -15,6 +17,7 @@ interface Props {
 
 export default function MessageBox( { conversationId }: Props ){
     //hooks
+    const [isOpenModal, setIsOpenModal]     = useState<boolean>( false )
     const { data: conversation, isLoading } = useGetConversationByIdQuery( conversationId )
 
     if( isLoading ) return <Loading/>
@@ -23,6 +26,11 @@ export default function MessageBox( { conversationId }: Props ){
 
     return (
         <div className="flex flex-col relative h-full">
+            <Modal isOpen={ isOpenModal } onClose={ () => setIsOpenModal( false ) }
+                   className="max-h-[80vh] bg-theme-gray overflow-hidden">
+                <ParticipantInfo conversationId={ conversationId }/>
+            </Modal>
+
             {/*User top bar*/ }
             <div className="box py-3 px-4 lg:px-6 flex justify-between">
                 <div className="flex">
@@ -44,11 +52,11 @@ export default function MessageBox( { conversationId }: Props ){
                         </p>
                     </div>
                 </div>
-                <Link href={ `/messages/${ conversationId }/info` } className="self-center">
+                <div className="self-center" onClick={ () => setIsOpenModal( true ) }>
                     <IconButton>
                         <InfoIcon size={ 25 }/>
                     </IconButton>
-                </Link>
+                </div>
             </div>
 
             {/*Messages*/ }
