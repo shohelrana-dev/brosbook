@@ -27,7 +27,7 @@ export default function MessageBox( { conversationId }: Props ){
     return (
         <div className="flex flex-col relative h-full">
             <Modal isOpen={ isOpenModal } onClose={ () => setIsOpenModal( false ) }
-                   className="max-h-[80vh] bg-theme-gray overflow-hidden">
+                   className="max-h-[80vh] bg-theme-gray overflow-hidden !p-0">
                 <ParticipantInfo conversationId={ conversationId }/>
             </Modal>
 

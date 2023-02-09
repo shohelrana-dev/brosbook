@@ -4,6 +4,7 @@ import { baseApi } from "@services/baseApi"
 import { setAuth } from "@slices/authSlice"
 import { setCookie } from "tiny-cookie"
 
+
 export type LoginResponse = {
     access_token: string
     expires_in: string
@@ -28,11 +29,12 @@ export const authApi = baseApi.injectEndpoints( {
                 body: credentials
             } ),
             invalidatesTags: ["User"],
-            onQueryStarted: async( arg, { dispatch, queryFulfilled } ) => {
+            onQueryStarted: async( _, { dispatch, queryFulfilled } ) => {
                 try {
                     const { data }                           = await queryFulfilled
                     const { user, expires_in, access_token } = data
 
+                    dispatch( baseApi.util.resetApiState() )
                     dispatch( setAuth( user ) )
 
                     setCookie( 'access_token', access_token, {
@@ -57,6 +59,7 @@ export const authApi = baseApi.injectEndpoints( {
                     const { data }                           = await queryFulfilled
                     const { user, expires_in, access_token } = data
 
+                    dispatch( baseApi.util.resetApiState() )
                     dispatch( setAuth( user ) )
 
                     setCookie( 'access_token', access_token, {
