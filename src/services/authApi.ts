@@ -6,7 +6,7 @@ import { setCookie } from "tiny-cookie"
 
 export type LoginResponse = {
     access_token: string
-    expires_in: string | number
+    expires_in: string
     token_type: string
     user: User
 }
@@ -30,10 +30,13 @@ export const authApi = baseApi.injectEndpoints( {
             invalidatesTags: ["User"],
             onQueryStarted: async( arg, { dispatch, queryFulfilled } ) => {
                 try {
-                    const { data } = await queryFulfilled
-                    dispatch( setAuth( data.user ) )
-                    setCookie( 'access_token', data.access_token, {
-                        expires: data.expires_in,
+                    const { data }                           = await queryFulfilled
+                    const { user, expires_in, access_token } = data
+
+                    dispatch( setAuth( user ) )
+
+                    setCookie( 'access_token', access_token, {
+                        expires: expires_in.endsWith( 'd' ) ? expires_in.toUpperCase() : expires_in,
                         path: '/'
                     } )
                 } catch ( e ) {
@@ -51,10 +54,13 @@ export const authApi = baseApi.injectEndpoints( {
             invalidatesTags: ["User"],
             onQueryStarted: async( arg, { dispatch, queryFulfilled } ) => {
                 try {
-                    const { data } = await queryFulfilled
-                    dispatch( setAuth( data.user ) )
-                    setCookie( 'access_token', data.access_token, {
-                        expires: data.expires_in,
+                    const { data }                           = await queryFulfilled
+                    const { user, expires_in, access_token } = data
+
+                    dispatch( setAuth( user ) )
+
+                    setCookie( 'access_token', access_token, {
+                        expires: expires_in.endsWith( 'd' ) ? expires_in.toUpperCase() : expires_in,
                         path: '/'
                     } )
                 } catch ( e ) {
