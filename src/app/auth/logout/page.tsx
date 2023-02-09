@@ -5,8 +5,8 @@ import { useRouter } from "next/navigation"
 import { useDispatch } from "react-redux"
 import { logout } from "@slices/authSlice"
 import Loading from "@components/common/Loading"
-import Cookies from "js-cookie"
 import { baseApi } from "@services/baseApi"
+import { removeCookie } from "tiny-cookie"
 
 
 function LogoutPage(){
@@ -15,7 +15,7 @@ function LogoutPage(){
     const dispatch = useDispatch()
 
     useEffect( () => {
-        Cookies.remove( 'access_token' )
+        removeCookie( 'access_token' )
         dispatch( logout() )
         toast.success( 'Logged out.' )
 

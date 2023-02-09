@@ -2,11 +2,11 @@ import { CredentialPayload, ResetPassPayload, SignupPayload } from "@interfaces/
 import { User } from "@interfaces/user.interfaces"
 import { baseApi } from "@services/baseApi"
 import { setAuth } from "@slices/authSlice"
-import Cookies from "js-cookie"
+import { setCookie } from "tiny-cookie"
 
 export type LoginResponse = {
     access_token: string
-    expires_in: number
+    expires_in: string | number
     token_type: string
     user: User
 }
@@ -32,8 +32,8 @@ export const authApi = baseApi.injectEndpoints( {
                 try {
                     const { data } = await queryFulfilled
                     dispatch( setAuth( data.user ) )
-                    Cookies.set( 'access_token', data.access_token, {
-                        expires: 1,
+                    setCookie( 'access_token', data.access_token, {
+                        expires: data.expires_in,
                         path: '/'
                     } )
                 } catch ( e ) {
@@ -53,8 +53,8 @@ export const authApi = baseApi.injectEndpoints( {
                 try {
                     const { data } = await queryFulfilled
                     dispatch( setAuth( data.user ) )
-                    Cookies.set( 'access_token', data.access_token, {
-                        expires: 1,
+                    setCookie( 'access_token', data.access_token, {
+                        expires: data.expires_in,
                         path: '/'
                     } )
                 } catch ( e ) {
