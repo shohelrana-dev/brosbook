@@ -34,8 +34,8 @@ export const authApi = baseApi.injectEndpoints( {
                     dispatch( setAuth( data.user ) )
                     Cookies.set( 'access_token', data.access_token, {
                         expires: data.expires_in,
-                        secure: true,
-                        sameSite: "strict"
+                        secure: false,
+                        sameSite: "none"
                     } )
                 } catch ( e ) {
                     console.log( e )
@@ -56,8 +56,8 @@ export const authApi = baseApi.injectEndpoints( {
                     dispatch( setAuth( data.user ) )
                     Cookies.set( 'access_token', data.access_token, {
                         expires: data.expires_in,
-                        secure: true,
-                        sameSite: "strict"
+                        secure: false,
+                        sameSite: "none"
                     } )
                 } catch ( e ) {
                     console.log( e )
