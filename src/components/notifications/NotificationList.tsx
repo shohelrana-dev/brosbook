@@ -29,13 +29,11 @@ export default function NotificationList(){
 
     return (
         <AnimatedComponent>
-            { isLoading ? <Loading size={ 40 }/> : null }
-
-                <div>
-                    { notifications && notifications.map( ( notification: Notification ) => (
-                        <NotificationItem key={ notification.id } notification={ notification }/>
-                    ) ) }
-                </div>
+            <div>
+                { isLoading ? <Loading size={ 40 }/> : null }
+                { notifications && notifications.map( ( notification: Notification ) => (
+                    <NotificationItem key={ notification.id } notification={ notification }/>
+                ) ) }
 
                 { hasMoreItem ? (
                     <div ref={ moreLoadRef }>
@@ -43,7 +41,8 @@ export default function NotificationList(){
                     </div>
                 ) : null }
 
-            { ( ! isLoading && notifications?.length < 1 ) ? <p>No notifications</p> : null }
+                { ( ! isLoading && notifications?.length < 1 ) ? <p>No notifications</p> : null }
+            </div>
         </AnimatedComponent>
     )
 }
