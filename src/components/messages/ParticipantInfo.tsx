@@ -6,6 +6,7 @@ import InfiniteScroll from "react-infinite-scroller"
 import { Media } from "@interfaces/index.interfaces"
 import ImageLightbox from "@components/common/ImageLightbox"
 import { useEffect, useRef } from "react"
+import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 
 interface Props {
     conversationId: string
@@ -88,10 +89,16 @@ function ParticipantInfo( { conversationId }: Props ){
                         hasMore={ hasMoreItem }
                         loader={ <Loading size={ 40 }/> }
                     >
-                        { mediaList.map( ( media: Media ) => (
-                            <ImageLightbox className="inline-block mr-2 mb-2" key={ media.id } image={ media }
-                                           alt={ media.name } width={ 150 } height={ 100 }/>
-                        ) ) }
+                        <ResponsiveMasonry
+                            columnsCountBreakPoints={ { 350: 1, 750: 2, 900: 3 } }
+                        >
+                            <Masonry>
+                                { mediaList.map( ( media: Media ) => (
+                                    <ImageLightbox className="inline-block mr-2 mb-2" key={ media.id } image={ media }
+                                                   alt={ media.name } width={ 150 } height={ 100 }/>
+                                ) ) }
+                            </Masonry>
+                        </ResponsiveMasonry>
                     </InfiniteScroll>
                     { ( ! isLoading && mediaList?.length < 1 ) ? (
                         <p className="text-center py-6">No media files.</p>
