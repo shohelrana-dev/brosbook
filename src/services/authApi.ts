@@ -32,7 +32,11 @@ export const authApi = baseApi.injectEndpoints( {
                 try {
                     const { data } = await queryFulfilled
                     dispatch( setAuth( data.user ) )
-                    Cookies.set( 'access_token', data.access_token, { expires: data.expires_in } )
+                    Cookies.set( 'access_token', data.access_token, {
+                        expires: data.expires_in,
+                        secure: true,
+                        sameSite: "strict"
+                    } )
                 } catch ( e ) {
                     console.log( e )
                 }
@@ -50,7 +54,11 @@ export const authApi = baseApi.injectEndpoints( {
                 try {
                     const { data } = await queryFulfilled
                     dispatch( setAuth( data.user ) )
-                    Cookies.set( 'access_token', data.access_token, { expires: data.expires_in } )
+                    Cookies.set( 'access_token', data.access_token, {
+                        expires: data.expires_in,
+                        secure: true,
+                        sameSite: "strict"
+                    } )
                 } catch ( e ) {
                     console.log( e )
                 }
