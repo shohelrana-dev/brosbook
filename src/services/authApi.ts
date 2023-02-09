@@ -34,6 +34,7 @@ export const authApi = baseApi.injectEndpoints( {
                     dispatch( setAuth( data.user ) )
                     Cookies.set( 'access_token', data.access_token, {
                         expires: 1,
+                        path: '/'
                     } )
                 } catch ( e ) {
                     console.log( e )
@@ -53,7 +54,8 @@ export const authApi = baseApi.injectEndpoints( {
                     const { data } = await queryFulfilled
                     dispatch( setAuth( data.user ) )
                     Cookies.set( 'access_token', data.access_token, {
-                        expires: 1
+                        expires: 1,
+                        path: '/'
                     } )
                 } catch ( e ) {
                     console.log( e )
