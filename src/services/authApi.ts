@@ -1,10 +1,12 @@
 import { CredentialPayload, ResetPassPayload, SignupPayload } from "@interfaces/auth.interfaces"
-import { User }                                               from "@interfaces/user.interfaces"
-import { baseApi }                                            from "@services/baseApi"
+import { User } from "@interfaces/user.interfaces"
+import { baseApi } from "@services/baseApi"
+import { setAuth } from "@slices/authSlice"
+import Cookies from "js-cookie"
 
 export type LoginResponse = {
     access_token: string
-    expires_in: string | number
+    expires_in: number
     token_type: string
     user: User
 }
@@ -25,7 +27,16 @@ export const authApi = baseApi.injectEndpoints( {
                 method: 'POST',
                 body: credentials
             } ),
-            invalidatesTags: ["User"]
+            invalidatesTags: ["User"],
+            onQueryStarted: async( arg, { dispatch, queryFulfilled } ) => {
+                try {
+                    const { data } = await queryFulfilled
+                    dispatch( setAuth( data.user ) )
+                    Cookies.set( 'access_token', data.access_token, { expires: data.expires_in } )
+                } catch ( e ) {
+                    console.log( e )
+                }
+            }
         } ),
 
         loginWithGoogle: build.mutation<LoginResponse, string>( {
@@ -34,7 +45,16 @@ export const authApi = baseApi.injectEndpoints( {
                 method: 'POST',
                 body: { token },
             } ),
-            invalidatesTags: ["User"]
+            invalidatesTags: ["User"],
+            onQueryStarted: async( arg, { dispatch, queryFulfilled } ) => {
+                try {
+                    const { data } = await queryFulfilled
+                    dispatch( setAuth( data.user ) )
+                    Cookies.set( 'access_token', data.access_token, { expires: data.expires_in } )
+                } catch ( e ) {
+                    console.log( e )
+                }
+            }
         } ),
 
         forgotPassword: build.mutation<{ message: string }, { email: string }>( {
@@ -46,15 +66,15 @@ export const authApi = baseApi.injectEndpoints( {
         } ),
 
         resetPassword: build.mutation<{ message: string }, ResetPassPayload>( {
-            query: ({token, ...payload} ) => ( {
-                url: `/auth/reset_password/${token}`,
+            query: ( { token, ...payload } ) => ( {
+                url: `/auth/reset_password/${ token }`,
                 method: 'POST',
                 body: payload
             } )
         } ),
 
         verifyEmail: build.mutation<User, string>( {
-            query: ( token ) => (  `/auth/email_verification/${token}`  )
+            query: ( token ) => ( `/auth/email_verification/${ token }` )
         } ),
 
         resendVerificationLink: build.mutation<void, string>( {

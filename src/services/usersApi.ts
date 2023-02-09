@@ -1,12 +1,21 @@
 import { User } from "@interfaces/user.interfaces"
 import { baseApi } from "./baseApi"
 import { ListResponse } from "@interfaces/index.interfaces"
+import { setAuth } from "@slices/authSlice"
 
 export const usersApi = baseApi.injectEndpoints( {
     endpoints: ( build ) => ( {
         getCurrentUser: build.query<User, void>( {
             query: () => `/users/me`,
-            providesTags: ['User']
+            providesTags: ['User'],
+            onQueryStarted: async( arg, { dispatch, queryFulfilled } ) => {
+                try {
+                    const { data } = await queryFulfilled
+                    dispatch( setAuth( data ) )
+                } catch ( e ) {
+                    console.log( e )
+                }
+            }
         } ),
 
         getUserById: build.query<User, string>( {

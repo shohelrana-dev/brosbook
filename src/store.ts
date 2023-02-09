@@ -1,13 +1,11 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { authSlice } from "@slices/authSlice"
 import { baseApi } from "@services/baseApi"
-import { chatSlice } from "@slices/chatSlice";
 
 export const store = configureStore( {
     reducer: combineReducers( {
-        [authSlice.name]: authSlice.reducer,
-        [chatSlice.name]: chatSlice.reducer,
-        [baseApi.reducerPath]: baseApi.reducer
+        [baseApi.reducerPath]: baseApi.reducer,
+        [authSlice.name]: authSlice.reducer
     } ),
     devTools: process.env.NODE_ENV !== 'production',
     middleware: ( getDefaultMiddleware ) => getDefaultMiddleware( {} ).concat( [baseApi.middleware] ),
