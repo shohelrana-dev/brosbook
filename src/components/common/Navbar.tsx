@@ -142,10 +142,13 @@ function NavBar( props: Props ){
                                 </button>
                             </MenuHandler>
                             <MenuList>
-                                <MenuItem className="py-0">
-                                    <Link href={ `/${ user?.username }` } className="block py-2">
-                                        <ProfileIcon className="inline-block mr-2" size={ 20 }/>
-                                        Profile
+                                <MenuItem className="py-0 mb-2">
+                                    <Link href={ `/${ user?.username }` } className="flex py-2 gap-2 border-b-2 border-gray-50">
+                                        <Avatar src={user?.avatar?.url} size="small"/>
+                                        <div>
+                                            <p>{user?.fullName}</p>
+                                            <p className="text-xs">Your profile</p>
+                                        </div>
                                     </Link>
                                 </MenuItem>
                                 <MenuItem className="py-0">
