@@ -1,8 +1,7 @@
 "use client"
 import React, { useEffect, useState } from 'react'
 import Link from "next/link"
-import { CgProfile as ProfileIcon } from "react-icons/cg"
-import { HiMail as MessageIcon } from "react-icons/hi"
+import { AiOutlineMail as MessageIcon } from "react-icons/ai"
 import { RiUserSettingsFill as SettingIcon } from "react-icons/ri"
 import { FaSignOutAlt as LogoutIcon } from "react-icons/fa"
 import Avatar from "@components/common/Avatar"
@@ -14,7 +13,7 @@ import {
     MenuItem
 } from "@material-tailwind/react"
 import IconButton from "@components/common/IconButton"
-import { IoMdNotifications as NotificationIcon } from "react-icons/io"
+import { IoIosNotificationsOutline as NotificationIcon } from "react-icons/io"
 import { useGetUnreadNotificationsCountQuery, useReadAllNotificationMutation } from "@services/notificationsApi"
 import { io } from "socket.io-client"
 import {
@@ -131,7 +130,7 @@ function NavBar( props: Props ){
                                             { unreadConversationsCount }
                                         </div>
                                     ) : null }
-                                    <MessageIcon size={ 30 }/>
+                                    <MessageIcon size={ 27 }/>
                                 </IconButton>
                             </Link>
                         </div>
