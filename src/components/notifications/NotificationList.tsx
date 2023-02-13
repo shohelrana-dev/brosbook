@@ -4,9 +4,9 @@ import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import { useGetNotificationsQuery } from "@services/notificationsApi"
 import { Notification } from "@interfaces/index.interfaces"
 import NotificationItem from "./NotificationItem"
-import Loading from "@components/common/Loading"
+import Loading from "@components/global/Loading"
 import useInfiniteScroll from "react-infinite-scroll-hook"
-import AnimatedComponent from "@components/common/AnimatedComponent"
+import AnimatedComponent from "@components/global/AnimatedComponent"
 
 export default function NotificationList(){
     const {
@@ -30,7 +30,10 @@ export default function NotificationList(){
     return (
         <AnimatedComponent>
             <div>
+                <h3 className="text-xl font-medium text-gray-900 ml-2 mb-1">Notifications</h3>
+
                 { isLoading ? <Loading size={ 40 }/> : null }
+
                 { notifications && notifications.map( ( notification: Notification ) => (
                     <NotificationItem key={ notification.id } notification={ notification }/>
                 ) ) }

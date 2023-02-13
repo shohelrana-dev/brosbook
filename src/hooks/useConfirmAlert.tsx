@@ -1,7 +1,7 @@
-import ButtonOutline from "@components/common/ButtonOutline"
-import Button from "@components/common/Button"
+import ButtonOutline from "@components/global/ButtonOutline"
+import Button from "@components/global/Button"
 import { createContext, PropsWithChildren, useContext, useState } from "react"
-import Modal from "@components/common/Modal"
+import Modal from "@components/global/Modal"
 
 export interface Options {
     title: string

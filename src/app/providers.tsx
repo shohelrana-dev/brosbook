@@ -5,7 +5,7 @@ import { Toaster } from 'react-hot-toast'
 import { Provider } from "react-redux"
 import { ConfirmAlertProvider } from "@hooks/useConfirmAlert"
 import { UnauthorizedPopupProvider } from "@hooks/useUnauthorzedAlert"
-import Boot from "@components/common/Boot"
+import Boot from "@components/global/Boot"
 
 function Providers( { children }: { children: ReactNode } ){
 

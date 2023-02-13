@@ -1,20 +1,19 @@
-import React, { ReactNode, Suspense } from 'react'
+import React, { ReactNode } from 'react'
 import Link from "next/link"
 import { GoLocation } from "react-icons/go"
 import { HiOutlineCake } from "react-icons/hi"
 import { MdOutlineSchedule } from "react-icons/md"
 
-import FollowButton from "@components/common/FollowButton"
+import FollowButton from "@components/global/FollowButton"
 import { cookies } from "next/headers"
-import TabLinkList from "@components/common/TabLinkList"
-import ButtonOutline from "@components/common/ButtonOutline"
+import TabLinkList from "@components/global/TabLinkList"
+import ButtonOutline from "@components/global/ButtonOutline"
 import CoverPhoto from "@components/profile/CoverPhoto"
 import ProfilePhoto from "@components/profile/ProfilePhoto"
 import NotFound from "../not-found"
-import SidebarLayout from "@components/common/SidebarLayout"
+import SidebarLayout from "@components/global/SidebarLayout"
 import ExtraOptions from "@components/profile/ExtraOptions"
 import { getCurrentUser, getFollowersCount, getFollowingsCount, getUserByUsername } from "@services/index"
-import Loading from "@components/common/Loading"
 
 interface ProfileLayoutProps {
     children: ReactNode
@@ -124,9 +123,7 @@ export default async function ProfileLayout( { children, params }: ProfileLayout
                     <TabLinkList links={ tabLinks }/>
                 </div>
 
-                <Suspense fallback={ <Loading/> }>
-                    { children }
-                </Suspense>
+                { children }
 
             </div>
         </SidebarLayout>

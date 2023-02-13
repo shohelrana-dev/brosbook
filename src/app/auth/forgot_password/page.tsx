@@ -4,11 +4,11 @@ import Link from "next/link"
 import {FiLock} from "react-icons/fi"
 import toast from "react-hot-toast"
 
-import AnimatedInput from "@components/common/AnimatedInput"
-import Button from "@components/common/Button"
+import AnimatedInput from "@components/global/AnimatedInput"
+import Button from "@components/global/Button"
 import { useForgotPasswordMutation } from "@services/authApi"
 import {useForm} from "@hooks/useForm"
-import ButtonOutline from "@components/common/ButtonOutline"
+import ButtonOutline from "@components/global/ButtonOutline"
 
 export default function ForgotPasswordPage() {
     //hooks

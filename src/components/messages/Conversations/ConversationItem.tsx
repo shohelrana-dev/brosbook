@@ -2,7 +2,7 @@ import React from 'react'
 import classNames from "classnames"
 import Link from "next/link"
 import { Conversation } from "@interfaces/conversation.interfaces"
-import Avatar from "@components/common/Avatar"
+import Avatar from "@components/global/Avatar"
 import useAuthState from "@hooks/useAuthState"
 import timeAgo from "@utils/timeAgo"
 import TextOverflow from 'react-text-overflow'

@@ -4,7 +4,7 @@ import Link from "next/link"
 import { IoMailOutline as MessageIcon } from "react-icons/io5"
 import { RiUserSettingsFill as SettingIcon } from "react-icons/ri"
 import { FaSignOutAlt as LogoutIcon } from "react-icons/fa"
-import Avatar from "@components/common/Avatar"
+import Avatar from "@components/global/Avatar"
 import {
     Navbar as BaseNavbar,
     Menu,
@@ -12,7 +12,7 @@ import {
     MenuList,
     MenuItem
 } from "@material-tailwind/react"
-import IconButton from "@components/common/IconButton"
+import IconButton from "@components/global/IconButton"
 import { IoNotificationsOutline as NotificationIcon } from "react-icons/io5"
 import { useGetUnreadNotificationsCountQuery, useReadAllNotificationMutation } from "@services/notificationsApi"
 import { io } from "socket.io-client"

@@ -1,6 +1,6 @@
 import { User } from "@interfaces/user.interfaces"
 import { baseApi } from "./baseApi"
-import { ListResponse } from "@interfaces/index.interfaces"
+import { ListResponse, Media } from "@interfaces/index.interfaces"
 import { setAuth } from "@slices/authSlice"
 
 export const usersApi = baseApi.injectEndpoints( {
@@ -28,7 +28,7 @@ export const usersApi = baseApi.injectEndpoints( {
             providesTags: ['User']
         } ),
 
-        getSuggestedUsers: build.query<ListResponse<User>, { page: number, limit?: number }>( {
+        getSuggestedUsers: build.query<ListResponse<User>, { page?: number, limit?: number }>( {
             query: ( params ) => ( {
                 url: `/users/suggestions`,
                 params
@@ -36,7 +36,7 @@ export const usersApi = baseApi.injectEndpoints( {
             providesTags: ['User']
         } ),
 
-        searchUsers: build.query<ListResponse<User>, { key: string, page: number, limit?: number }>( {
+        searchUsers: build.query<ListResponse<User>, { key: string, page?: number, limit?: number }>( {
             query: ( params ) => ( {
                 url: `/users/search`,
                 params
@@ -78,7 +78,7 @@ export const usersApi = baseApi.injectEndpoints( {
             invalidatesTags: ['User']
         } ),
 
-        getFollowers: build.query<ListResponse<User>, { userId: string, page: number, limit?: number }>( {
+        getFollowers: build.query<ListResponse<User>, { userId: string, page?: number, limit?: number }>( {
             query: ( { userId, ...params } ) => ( {
                 url: `/users/${ userId }/followers`,
                 params
@@ -93,7 +93,7 @@ export const usersApi = baseApi.injectEndpoints( {
             providesTags: ['User']
         } ),
 
-        getFollowings: build.query<ListResponse<User>, { userId: string, page: number, limit?: number }>( {
+        getFollowings: build.query<ListResponse<User>, { userId: string, page?: number, limit?: number }>( {
             query: ( { userId, ...params } ) => ( {
                 url: `/users/${ userId }/followings`,
                 params
@@ -104,6 +104,14 @@ export const usersApi = baseApi.injectEndpoints( {
         getFollowingsCount: build.query<{ count: number }, string>( {
             query: ( userId ) => ( {
                 url: `/users/${ userId }/followers/count`
+            } ),
+            providesTags: ['User']
+        } ),
+
+        getMediaList: build.query<ListResponse<User>, { userId: string, page?: number, limit?: number }>( {
+            query: ( { userId, ...params } ) => ( {
+                url: `/users/${ userId }/media`,
+                params
             } ),
             providesTags: ['User']
         } ),
@@ -120,5 +128,6 @@ export const {
                  useUnfollowMutation,
                  useGetFollowersQuery,
                  useGetFollowingsQuery,
-                 useSearchUsersQuery
+                 useSearchUsersQuery,
+                 useGetMediaListQuery
              } = usersApi

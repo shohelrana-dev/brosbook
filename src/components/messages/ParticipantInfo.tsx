@@ -1,12 +1,11 @@
-import Avatar from "@components/common/Avatar"
+import Avatar from "@components/global/Avatar"
 import { useGetConversationByIdQuery, useGetConversationMediaListQuery } from "@services/conversationApi"
-import Loading from "@components/common/Loading"
+import Loading from "@components/global/Loading"
 import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import InfiniteScroll from "react-infinite-scroller"
 import { Media } from "@interfaces/index.interfaces"
-import ImageLightbox from "@components/common/ImageLightbox"
+import ImageLightbox from "@components/global/ImageLightbox"
 import { useEffect, useRef } from "react"
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 
 interface Props {
     conversationId: string
@@ -89,16 +88,7 @@ function ParticipantInfo( { conversationId }: Props ){
                         hasMore={ hasMoreItem }
                         loader={ <Loading size={ 40 }/> }
                     >
-                        <ResponsiveMasonry
-                            columnsCountBreakPoints={ { 350: 1, 750: 2, 900: 3 } }
-                        >
-                            <Masonry>
-                                { mediaList.map( ( media: Media ) => (
-                                    <ImageLightbox className="inline-block mr-2 mb-2" key={ media.id } image={ media }
-                                                   alt={ media.name } width={ 150 } height={ 100 }/>
-                                ) ) }
-                            </Masonry>
-                        </ResponsiveMasonry>
+                        <ImageLightbox imageList={ mediaList } alt="Chat photo"/>
                     </InfiniteScroll>
                     { ( ! isLoading && mediaList?.length < 1 ) ? (
                         <p className="text-center py-6">No media files.</p>

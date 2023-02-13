@@ -1,7 +1,7 @@
 "use client"
 import React from 'react'
 import Link from "next/link"
-import ButtonGray from "@components/common/ButtonGray"
+import ButtonGray from "@components/global/ButtonGray"
 
 function NewUserMessage(  ){
     return (

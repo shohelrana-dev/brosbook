@@ -1,12 +1,12 @@
 "use client"
 import { Popover, PopoverContent, PopoverHandler } from "@material-tailwind/react"
-import IconButton from "@components/common/IconButton"
+import IconButton from "@components/global/IconButton"
 import { BsThreeDots as ThreeDotsIcon } from "react-icons/bs"
 import React, { useState } from "react"
 import toast from "react-hot-toast"
 import { RiLink as LinkIcon } from "react-icons/ri"
 import { User } from "@interfaces/user.interfaces"
-import OptionButton from "@components/common/OptionButton"
+import OptionButton from "@components/global/OptionButton"
 
 export default function ExtraOptions( { user }: { user: User } ){
     const [isOpen, setIsOpen] = useState( false )

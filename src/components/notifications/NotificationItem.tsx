@@ -1,5 +1,5 @@
 import React from 'react'
-import Avatar from "@components/common/Avatar"
+import Avatar from "@components/global/Avatar"
 import Link from "next/link"
 import { Notification, NotificationTypes } from "@interfaces/index.interfaces"
 import timeAgo from "@utils/timeAgo"

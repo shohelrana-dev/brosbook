@@ -1,5 +1,5 @@
 import React  from 'react'
-import IconButton from "@components/common/IconButton"
+import IconButton from "@components/global/IconButton"
 import { FaShareSquare as ShareIcon } from "react-icons/fa"
 import { Post } from "@interfaces/posts.interfaces"
 import { Popover, PopoverContent, PopoverHandler } from "@material-tailwind/react"

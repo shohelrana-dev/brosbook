@@ -1,14 +1,14 @@
 import React, { FormEvent, useState } from 'react'
 
-import Avatar from "@components/common/Avatar"
+import Avatar from "@components/global/Avatar"
 import CommentItem from "@components/post/CommentItem"
 import { useCreateCommentMutation, useGetCommentsQuery } from "@services/commentsApi"
 import { Comment } from "@interfaces/posts.interfaces"
 import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
-import BasicInput from "@components/common/BasicInput"
+import BasicInput from "@components/global/BasicInput"
 import useAuthState from "@hooks/useAuthState"
-import ButtonGray from "@components/common/ButtonGray"
-import Loading from "@components/common/Loading"
+import ButtonGray from "@components/global/ButtonGray"
+import Loading from "@components/global/Loading"
 import { useGetPostByIdQuery } from "@services/postsApi"
 
 interface CommentListPost {

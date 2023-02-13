@@ -4,7 +4,7 @@ import { BsHeartFill as LikeIcon } from "react-icons/bs"
 import { BsHeart as OutlinedLikeIcon } from "react-icons/bs"
 import ShowMoreText from "react-show-more-text"
 
-import Avatar from "@components/common/Avatar"
+import Avatar from "@components/global/Avatar"
 import { Comment, Post } from "@interfaces/posts.interfaces"
 import { useLikeCommentMutation, useUnlikeCommentMutation } from "@services/commentsApi"
 import timeAgo from "@utils/timeAgo"

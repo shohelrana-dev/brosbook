@@ -1,4 +1,4 @@
-import DefaultTags from "@components/common/DefaultTags"
+import DefaultTags from "@components/global/DefaultTags"
 import { cookies } from "next/headers"
 import { getConversationById } from "@services/index"
 

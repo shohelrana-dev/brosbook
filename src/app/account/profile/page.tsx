@@ -2,12 +2,12 @@
 import { useEffect } from "react"
 import DatePicker from 'react-date-picker'
 import { ProfilePayload } from "@interfaces/account.interfaces"
-import Button from '@components/common/Button'
+import Button from '@components/global/Button'
 import { useUpdateProfileMutation } from '@services/accountApi'
-import BasicInput from "@components/common/BasicInput"
+import BasicInput from "@components/global/BasicInput"
 import { Radio } from "@material-tailwind/react"
 import useAuthState from "@hooks/useAuthState"
-import Loading from "@components/common/Loading"
+import Loading from "@components/global/Loading"
 import { useForm } from "@hooks/useForm"
 import toast from "react-hot-toast"
 

@@ -2,11 +2,11 @@
 import React from 'react'
 import { User } from "@interfaces/user.interfaces"
 import { useGetSuggestedUsersQuery } from "@services/usersApi"
-import Loading from "@components/common/Loading"
+import Loading from "@components/global/Loading"
 import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
-import UserList from "@components/common/UserList"
+import UserList from "@components/global/UserList"
 import Link from "next/link"
-import ButtonGray from "@components/common/ButtonGray"
+import ButtonGray from "@components/global/ButtonGray"
 
 function SuggestedPeople(){
     const {

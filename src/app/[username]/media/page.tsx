@@ -1,7 +1,50 @@
-import React         from 'react'
+"use client"
+import React from 'react'
+import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
+import { useGetMediaListQuery, useGetUserByUsernameQuery } from "@services/usersApi"
+import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
+import Loading from "@components/global/Loading"
+import ImageLightbox from "@components/global/ImageLightbox"
+import InfiniteScroll from "react-infinite-scroller"
 
-export default function MediaPage() {
+interface Props {
+    params: { username: string }
+}
+
+export default function MediaPage( { params }: Props ){
+    const { data: user } = useGetUserByUsernameQuery( params.username )
+    const {
+              isLoading,
+              items: mediaList,
+              loadMoreItem,
+              hasMoreItem
+          }              = useGetInfiniteListQuery( useGetMediaListQuery, { userId: user?.id } )
+
+    if( isLoading && mediaList?.length < 1 ){
+        return (
+            <div className="box py-3">
+                <Loading size={ 45 }/>
+            </div>
+        )
+    }
+
+    if( ! isLoading && mediaList?.length < 1 ){
+        return (
+            <div className="box">
+                { user?.fullName } haven't media.
+            </div>
+        )
+    }
+
     return (
-            <h2>Media</h2>
+        <div className="box">
+            <InfiniteScroll
+                loadMore={ loadMoreItem }
+                hasMore={ hasMoreItem }
+                loader={ <Loading size={ 40 }/> }
+            >
+                <ImageLightbox imageList={ mediaList } width={ 200 } height={ 200 } alt="Media"/>
+            </InfiniteScroll>
+        </div>
     )
 }

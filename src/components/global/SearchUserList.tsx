@@ -1,7 +1,7 @@
 import React from 'react'
-import Loading from "@components/common/Loading"
+import Loading from "@components/global/Loading"
 import { User } from "@interfaces/user.interfaces"
-import Avatar from "@components/common/Avatar"
+import Avatar from "@components/global/Avatar"
 
 interface Props {
     onUserClick: ( user: User ) => void

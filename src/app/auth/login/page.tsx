@@ -4,14 +4,14 @@ import Link from 'next/link'
 import { FiLock } from "react-icons/fi"
 import toast from "react-hot-toast"
 
-import AnimatedInput from '@components/common/AnimatedInput'
-import GoogleLoginButton from '@components/common/GoogleLoginButton'
-import Button from "@components/common/Button"
+import AnimatedInput from '@components/global/AnimatedInput'
+import GoogleLoginButton from '@components/global/GoogleLoginButton'
+import Button from "@components/global/Button"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useLoginMutation } from "@services/authApi"
-import PasswordInput from "@components/common/PasswordInput"
+import PasswordInput from "@components/global/PasswordInput"
 import { CredentialPayload } from "@interfaces/auth.interfaces"
-import Divider from "@components/common/Divider"
+import Divider from "@components/global/Divider"
 import { useForm } from "@hooks/useForm"
 
 function LoginPage(){

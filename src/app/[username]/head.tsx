@@ -1,5 +1,5 @@
 import React from 'react'
-import DefaultTags from "@components/common/DefaultTags"
+import DefaultTags from "@components/global/DefaultTags"
 import { cookies } from "next/headers"
 import { getUserByUsername } from "@services/index"
 

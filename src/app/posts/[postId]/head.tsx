@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import DefaultTags from "@components/common/DefaultTags"
+import DefaultTags from "@components/global/DefaultTags"
 import { getPostById } from "@services/index"
 import { cookies } from "next/headers"
 

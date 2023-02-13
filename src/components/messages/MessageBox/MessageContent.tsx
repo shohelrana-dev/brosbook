@@ -1,7 +1,7 @@
 import React from 'react'
 import Reactions from "@components/messages/MessageBox/Reactions"
 import { Message } from "@interfaces/conversation.interfaces"
-import ImageLightbox from "@components/common/ImageLightbox"
+import ImageLightbox from "@components/global/ImageLightbox"
 
 const classes = {
     text: ( isOwn: boolean, hasReaction: boolean ) => (

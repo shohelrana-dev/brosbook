@@ -1,6 +1,6 @@
 import React from 'react'
 import NotificationList from "@components/notifications/NotificationList"
-import SidebarLayout from "@components/common/SidebarLayout"
+import SidebarLayout from "@components/global/SidebarLayout"
 
 export default function NotificationPage(){
     return (

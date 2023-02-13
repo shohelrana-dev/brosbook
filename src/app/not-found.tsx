@@ -1,5 +1,5 @@
 import Link       from 'next/link'
-import AnimatedComponent from "@components/common/AnimatedComponent"
+import AnimatedComponent from "@components/global/AnimatedComponent"
 
 export default function NotFound() {
     return (

@@ -1,9 +1,9 @@
-import ButtonOutline from "@components/common/ButtonOutline"
-import Button from "@components/common/Button"
+import ButtonOutline from "@components/global/ButtonOutline"
+import Button from "@components/global/Button"
 import React, { createContext, PropsWithChildren, useContext, useState } from "react"
 import { BiLogInCircle as LoginIcon } from "react-icons/bi"
 import Link from "next/link"
-import Modal from "@components/common/Modal"
+import Modal from "@components/global/Modal"
 import { usePathname } from "next/navigation"
 
 export interface Options {

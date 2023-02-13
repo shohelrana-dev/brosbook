@@ -2,8 +2,8 @@
 import React, { useState } from 'react'
 import { User } from "@interfaces/user.interfaces"
 import { useFollowMutation, useUnfollowMutation } from "@services/usersApi"
-import Button from "@components/common/Button"
-import ButtonOutline from "@components/common/ButtonOutline"
+import Button from "@components/global/Button"
+import ButtonOutline from "@components/global/ButtonOutline"
 import useConfirmAlert from "@hooks/useConfirmAlert"
 import toast from "react-hot-toast"
 import useUnauthorizedAlert from "@hooks/useUnauthorzedAlert";

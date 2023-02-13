@@ -1,5 +1,5 @@
 import React from 'react'
-import Avatar from "@components/common/Avatar"
+import Avatar from "@components/global/Avatar"
 import { Message } from "@interfaces/conversation.interfaces"
 import MessageContent from "@components/messages/MessageBox/MessageContent"
 import useAuthState from "@hooks/useAuthState"

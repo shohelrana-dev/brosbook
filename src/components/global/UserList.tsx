@@ -1,8 +1,8 @@
 import React from 'react'
 import Link from "next/link"
-import Avatar from "@components/common/Avatar"
+import Avatar from "@components/global/Avatar"
 import { User } from "@interfaces/user.interfaces"
-import FollowButton from "@components/common/FollowButton"
+import FollowButton from "@components/global/FollowButton"
 import TextOverflow from 'react-text-overflow'
 import useAuthState from "@hooks/useAuthState"
 

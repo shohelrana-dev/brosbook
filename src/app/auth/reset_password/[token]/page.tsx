@@ -5,9 +5,9 @@ import Link from "next/link"
 import toast from "react-hot-toast"
 import {FiLock} from "react-icons/fi"
 
-import Button from "@components/common/Button"
+import Button from "@components/global/Button"
 import { useResetPasswordMutation } from "@services/authApi"
-import PasswordInput from "@components/common/PasswordInput"
+import PasswordInput from "@components/global/PasswordInput"
 import {ResetPassPayload} from "@interfaces/auth.interfaces"
 import {useForm} from "@hooks/useForm"
 

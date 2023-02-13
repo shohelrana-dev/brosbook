@@ -1,7 +1,7 @@
 import React, { PropsWithChildren } from 'react'
-import TabLinkList from "@components/common/TabLinkList"
-import Avatar from "@components/common/Avatar"
-import SidebarLayout from "@components/common/SidebarLayout"
+import TabLinkList from "@components/global/TabLinkList"
+import Avatar from "@components/global/Avatar"
+import SidebarLayout from "@components/global/SidebarLayout"
 import { getCurrentUser } from "@services/index"
 import { cookies } from "next/headers"
 

@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import ButtonOutline from "@components/common/ButtonOutline"
-import PasswordInput from "@components/common/PasswordInput"
+import ButtonOutline from "@components/global/ButtonOutline"
+import PasswordInput from "@components/global/PasswordInput"
 import Link from "next/link"
-import Button from "@components/common/Button"
+import Button from "@components/global/Button"
 import { useChangeUsernameMutation } from "@services/accountApi"
 import { ChangeUsernamePayload } from "@interfaces/account.interfaces"
 import toast from "react-hot-toast"
 import { useForm } from "@hooks/useForm"
-import AnimatedInput from "@components/common/AnimatedInput"
-import Modal from "@components/common/Modal"
+import AnimatedInput from "@components/global/AnimatedInput"
+import Modal from "@components/global/Modal"
 import useAuthState from "@hooks/useAuthState"
 
 export default function ChangeUsernameModal(){

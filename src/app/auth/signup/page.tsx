@@ -6,13 +6,13 @@ import { useRouter } from "next/navigation"
 import {Alert} from "@material-tailwind/react"
 import { passwordStrength } from 'check-password-strength'
 
-import AnimatedInput from '@components/common/AnimatedInput'
-import GoogleLoginButton from "@components/common/GoogleLoginButton"
-import Button from "@components/common/Button"
+import AnimatedInput from '@components/global/AnimatedInput'
+import GoogleLoginButton from "@components/global/GoogleLoginButton"
+import Button from "@components/global/Button"
 import { useSignupMutation } from "@services/authApi"
-import PasswordInput from "@components/common/PasswordInput"
+import PasswordInput from "@components/global/PasswordInput"
 import {SignupPayload} from "@interfaces/auth.interfaces"
-import Divider from "@components/common/Divider"
+import Divider from "@components/global/Divider"
 import {useForm} from "@hooks/useForm"
 
 export default function SignupPage() {

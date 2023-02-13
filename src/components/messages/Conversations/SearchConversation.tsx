@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import BasicInput from "@components/common/BasicInput"
-import SearchUserList from "@components/common/SearchUserList"
+import BasicInput from "@components/global/BasicInput"
+import SearchUserList from "@components/global/SearchUserList"
 import { User } from "@interfaces/user.interfaces"
 import { useSearchUsersQuery } from "@services/usersApi"
 import { useLazyGetConversationByParticipantIdQuery } from "@services/conversationApi"

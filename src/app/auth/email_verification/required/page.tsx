@@ -8,8 +8,8 @@ import toast from "react-hot-toast"
 
 import mailImage from "@images/mail-with-value.png"
 import { useResendVerificationLinkMutation } from "@services/authApi"
-import Button from "@components/common/Button"
-import Loading from "@components/common/Loading"
+import Button from "@components/global/Button"
+import Loading from "@components/global/Loading"
 
 export default function RequiredPage(){
     const router                            = useRouter()

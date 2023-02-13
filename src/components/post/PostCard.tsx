@@ -2,11 +2,11 @@
 import React, { useState } from 'react'
 import Link from "next/link"
 import ShowMoreText from "react-show-more-text"
-import Avatar from "@components/common/Avatar"
+import Avatar from "@components/global/Avatar"
 import { Post } from "@interfaces/posts.interfaces"
 import CommentList from "@components/post/CommentList"
 import timeAgo from "@utils/timeAgo"
-import ImageLightbox from '@components/common/ImageLightbox'
+import ImageLightbox from '@components/global/ImageLightbox'
 import PostBar from "@components/post/PostBar"
 import PostOptions from "@components/post/PostOptions"
 import nl2br from 'react-nl2br'

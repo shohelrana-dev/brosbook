@@ -1,5 +1,5 @@
 import React from 'react'
-import Loading from "@components/common/Loading"
+import Loading from "@components/global/Loading"
 import { Conversation } from "@interfaces/conversation.interfaces"
 import ConversationItem from "@components/messages/Conversations/ConversationItem"
 import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"

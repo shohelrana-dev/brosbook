@@ -12,8 +12,8 @@ import useAuthState from "@hooks/useAuthState"
 import useConfirmAlert from "@hooks/useConfirmAlert"
 import { User } from "@interfaces/user.interfaces"
 import { Comment, Post } from "@interfaces/posts.interfaces"
-import IconButton from "@components/common/IconButton"
-import OptionButton from "@components/common/OptionButton"
+import IconButton from "@components/global/IconButton"
+import OptionButton from "@components/global/OptionButton"
 import useUnauthorizedAlert from "@hooks/useUnauthorzedAlert"
 
 interface Props {

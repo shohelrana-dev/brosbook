@@ -1,9 +1,9 @@
 "use client"
 import { useGetSuggestedUsersQuery } from "@services/usersApi"
 import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
-import Loading from "@components/common/Loading"
+import Loading from "@components/global/Loading"
 import { User } from "@interfaces/user.interfaces"
-import UserList from "../../components/common/UserList"
+import UserList from "../../components/global/UserList"
 import InfiniteScroll from "react-infinite-scroller"
 
 export default function Suggestions(){

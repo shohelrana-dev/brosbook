@@ -1,18 +1,18 @@
 "use client"
 import { useGetFollowersQuery, useGetUserByUsernameQuery } from "@services/usersApi"
 import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
-import Loading from "@components/common/Loading"
+import Loading from "@components/global/Loading"
 import { User } from "@interfaces/user.interfaces"
-import UserList from "@components/common/UserList"
+import UserList from "@components/global/UserList"
 import InfiniteScroll from "react-infinite-scroller"
 
 interface Props {
     params: { username: string }
 }
 
-export default function FollowersPage( props: Props ){
+export default function FollowersPage( { params }: Props ){
     //hooks
-    const { data: user } = useGetUserByUsernameQuery( props.params.username )
+    const { data: user } = useGetUserByUsernameQuery( params.username )
     const {
               isLoading,
               isFetching,

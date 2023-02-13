@@ -1,8 +1,8 @@
 "use client"
 import React from 'react'
 import useAuthState from "@hooks/useAuthState"
-import Loading from "@components/common/Loading"
-import ButtonOutline from "@components/common/ButtonOutline"
+import Loading from "@components/global/Loading"
+import ButtonOutline from "@components/global/ButtonOutline"
 import ChangePasswordModal from "@components/account/ChangePasswordModal"
 import ChangeUsernameModal from "@components/account/ChangeUsernameModal"
 import TextOverflow from 'react-text-overflow'

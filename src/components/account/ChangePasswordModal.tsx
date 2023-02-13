@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import ButtonOutline from "@components/common/ButtonOutline"
-import PasswordInput from "@components/common/PasswordInput"
+import ButtonOutline from "@components/global/ButtonOutline"
+import PasswordInput from "@components/global/PasswordInput"
 import Link from "next/link"
-import Button from "@components/common/Button"
+import Button from "@components/global/Button"
 import { useChangePasswordMutation } from "@services/accountApi"
 import { ChangePasswordPayload } from "@interfaces/account.interfaces"
 import toast from "react-hot-toast"
 import { useForm } from "@hooks/useForm"
-import Modal from "@components/common/Modal"
+import Modal from "@components/global/Modal"
 
 export default function ChangePasswordModal(){
     const [changePassword, { isLoading, isSuccess }]      = useChangePasswordMutation()

@@ -1,6 +1,6 @@
 import React  from 'react'
 import HomePage from "./HomePage"
-import SidebarLayout from "@components/common/SidebarLayout"
+import SidebarLayout from "@components/global/SidebarLayout"
 
 function Page(){
     return (

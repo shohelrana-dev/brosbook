@@ -1,5 +1,5 @@
 import PostCard from "@components/post/PostCard"
-import SidebarLayout from "@components/common/SidebarLayout"
+import SidebarLayout from "@components/global/SidebarLayout"
 import { getPostById } from "@services/index"
 import { cookies } from "next/headers"
 import NotFound from "../../not-found"

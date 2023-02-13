@@ -1,7 +1,7 @@
 import React, { CSSProperties, ReactNode } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { RxCross2 as CancelIcon } from "react-icons/rx"
-import IconButton from "@components/common/IconButton"
+import IconButton from "@components/global/IconButton"
 import classNames from "classnames"
 
 export interface ModalProps {

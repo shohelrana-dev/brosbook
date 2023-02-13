@@ -4,7 +4,7 @@ import toast from "react-hot-toast"
 import { GoogleLogin, CredentialResponse, GoogleOAuthProvider } from '@react-oauth/google'
 
 import { useLoginWithGoogleMutation } from "@services/authApi"
-import Loading from "@components/common/Loading"
+import Loading from "@components/global/Loading"
 
 function GoogleLoginButton(){
     //hooks

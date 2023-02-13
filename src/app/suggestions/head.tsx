@@ -1,4 +1,4 @@
-import DefaultTags from "@components/common/DefaultTags"
+import DefaultTags from "@components/global/DefaultTags"
 
 export default function Head(){
     return (

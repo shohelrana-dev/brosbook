@@ -1,8 +1,8 @@
 "use client"
 import React, { useState } from 'react'
-import BasicInput from "@components/common/BasicInput"
+import BasicInput from "@components/global/BasicInput"
 import { useDebouncedCallback } from "use-debounce"
-import SearchUserList from "@components/common/SearchUserList"
+import SearchUserList from "@components/global/SearchUserList"
 import { useRouter } from "next/navigation"
 import { User } from "@interfaces/user.interfaces"
 import { useSearchUsersQuery } from "@services/usersApi"

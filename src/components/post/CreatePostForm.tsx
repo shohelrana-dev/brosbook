@@ -4,12 +4,12 @@ import { HiPhotograph } from "react-icons/hi"
 import { RxCross2 as CancelIcon } from "react-icons/rx"
 import toast from "react-hot-toast"
 
-import Avatar from "@components/common/Avatar"
+import Avatar from "@components/global/Avatar"
 import { useCreatePostMutation } from "@services/postsApi"
-import BasicInput from "@components/common/BasicInput"
-import Button from "@components/common/Button"
+import BasicInput from "@components/global/BasicInput"
+import Button from "@components/global/Button"
 import useAuthState from "@hooks/useAuthState"
-import IconButton from "@components/common/IconButton"
+import IconButton from "@components/global/IconButton"
 import useSelectFile from "@hooks/useSelectFile"
 
 function CreatePostForm(){

@@ -5,7 +5,7 @@ import { useGetPostsQuery } from "@services/postsApi"
 import { Post } from "@interfaces/posts.interfaces"
 import InfiniteScroll from "react-infinite-scroller"
 import LoadingPosts from "@components/loading/LoadingPosts"
-import Loading from "@components/common/Loading"
+import Loading from "@components/global/Loading"
 import { useGetUserByUsernameQuery } from "@services/usersApi"
 
 interface Props {

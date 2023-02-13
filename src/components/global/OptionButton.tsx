@@ -1,5 +1,5 @@
 import React from 'react'
-import ButtonGray, { ButtonGrayProps } from "@components/common/ButtonGray"
+import ButtonGray, { ButtonGrayProps } from "@components/global/ButtonGray"
 import classNames from "classnames"
 
 export default function OptionButton( { children, className = '', size = "md", ...rest }: ButtonGrayProps ){

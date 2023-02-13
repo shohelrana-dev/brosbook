@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 import Link from "next/link"
-import Avatar from "@components/common/Avatar"
+import Avatar from "@components/global/Avatar"
 import MessageList from "@components/messages/MessageBox/MessageList"
 import CreateMessageForm from "@components/messages/MessageBox/CreateMessageForm"
 import timeAgo from "@utils/timeAgo"
-import Loading from "@components/common/Loading"
+import Loading from "@components/global/Loading"
 import { useGetConversationByIdQuery } from "@services/conversationApi"
-import IconButton from "@components/common/IconButton"
+import IconButton from "@components/global/IconButton"
 import { BiInfoCircle as InfoIcon } from "react-icons/bi"
-import Modal from "@components/common/Modal";
+import Modal from "@components/global/Modal";
 import ParticipantInfo from "@components/messages/ParticipantInfo";
 
 interface Props {

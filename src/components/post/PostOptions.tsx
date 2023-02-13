@@ -7,14 +7,14 @@ import { MdHideSource as HideIcon } from "react-icons/md"
 import { AiOutlineCopy as CopyIcon } from "react-icons/ai"
 import toast from "react-hot-toast"
 
-import OptionButton from "@components/common/OptionButton"
+import OptionButton from "@components/global/OptionButton"
 import { useFollowMutation, useUnfollowMutation } from "@services/usersApi"
 import { useDeletePostMutation } from "@services/postsApi"
 import useAuthState from "@hooks/useAuthState"
 import useConfirmAlert from "@hooks/useConfirmAlert"
 import { Post } from "@interfaces/posts.interfaces"
 import { User } from "@interfaces/user.interfaces"
-import IconButton from "@components/common/IconButton"
+import IconButton from "@components/global/IconButton"
 import useUnauthorizedAlert from "@hooks/useUnauthorzedAlert"
 
 interface Props {
