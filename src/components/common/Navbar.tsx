@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useState } from 'react'
 import Link from "next/link"
-import { AiOutlineMail as MessageIcon } from "react-icons/ai"
+import { IoMailOutline as MessageIcon } from "react-icons/io5"
 import { RiUserSettingsFill as SettingIcon } from "react-icons/ri"
 import { FaSignOutAlt as LogoutIcon } from "react-icons/fa"
 import Avatar from "@components/common/Avatar"
@@ -13,7 +13,7 @@ import {
     MenuItem
 } from "@material-tailwind/react"
 import IconButton from "@components/common/IconButton"
-import { IoIosNotificationsOutline as NotificationIcon } from "react-icons/io"
+import { IoNotificationsOutline as NotificationIcon } from "react-icons/io5"
 import { useGetUnreadNotificationsCountQuery, useReadAllNotificationMutation } from "@services/notificationsApi"
 import { io } from "socket.io-client"
 import {
@@ -105,14 +105,14 @@ function NavBar( props: Props ){
                             <Popover>
                                 <PopoverHandler>
                                     <div>
-                                        <IconButton className="p-6 block relative" onClick={ onNotificationsCLick }>
+                                        <IconButton className="p-5 block relative" onClick={ onNotificationsCLick }>
                                             { unreadNotificationsCount ? (
                                                 <div
                                                     className="absolute top-[-5px] right-0 bg-red-500 text-white rounded-full font-bold p-[2px] h-[18px] w-[18px]">
                                                     { unreadNotificationsCount }
                                                 </div>
                                             ) : null }
-                                            <NotificationIcon size={ 30 }/>
+                                            <NotificationIcon size={ 25 } className="text-gray-700"/>
                                         </IconButton>
                                     </div>
                                 </PopoverHandler>
@@ -123,14 +123,14 @@ function NavBar( props: Props ){
                                 </PopoverContent>
                             </Popover>
                             <Link href="/messages" className="block">
-                                <IconButton className="p-6">
+                                <IconButton className="p-5">
                                     { unreadConversationsCount ? (
                                         <div
                                             className="absolute top-[-5px] right-[-5px] bg-red-500 text-white rounded-full font-bold p-[2px] h-[18px] w-[18px]">
                                             { unreadConversationsCount }
                                         </div>
                                     ) : null }
-                                    <MessageIcon size={ 27 }/>
+                                    <MessageIcon size={ 25 } className="text-gray-700"/>
                                 </IconButton>
                             </Link>
                         </div>
