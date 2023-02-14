@@ -6,18 +6,21 @@ import { Provider } from "react-redux"
 import { ConfirmAlertProvider } from "@hooks/useConfirmAlert"
 import { UnauthorizedPopupProvider } from "@hooks/useUnauthorzedAlert"
 import Boot from "@components/global/Boot"
+import { ThemeProvider } from "@material-tailwind/react"
 
 function Providers( { children }: { children: ReactNode } ){
 
     return (
         <Provider store={ store }>
-            <UnauthorizedPopupProvider>
-                <ConfirmAlertProvider>
-                    <Boot/>
-                    { children }
-                    <Toaster/>
-                </ConfirmAlertProvider>
-            </UnauthorizedPopupProvider>
+            <ThemeProvider>
+                <UnauthorizedPopupProvider>
+                    <ConfirmAlertProvider>
+                        <Boot/>
+                        { children }
+                        <Toaster/>
+                    </ConfirmAlertProvider>
+                </UnauthorizedPopupProvider>
+            </ThemeProvider>
         </Provider>
     )
 }

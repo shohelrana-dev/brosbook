@@ -4,8 +4,9 @@ const withMT = require("@material-tailwind/react/utils/withMT")
 module.exports = withMT({
   mode: 'jit',
   content: [
-    './src/app/**/*.{js,ts,jsx,tsx}',
-    './src/components/**/*.{js,ts,jsx,tsx}'
+      "./src/app/**/*.{js,jsx,ts,tsx}",
+      "./src/components/**/*.{js,jsx,ts,tsx}",
+      "./src/hooks/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
     colors: {
