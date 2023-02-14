@@ -11,9 +11,9 @@ function Providers( { children }: { children: ReactNode } ){
 
     return (
         <Provider store={ store }>
-            <Boot/>
             <UnauthorizedPopupProvider>
                 <ConfirmAlertProvider>
+                    <Boot/>
                     { children }
                     <Toaster/>
                 </ConfirmAlertProvider>

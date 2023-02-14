@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react'
 import { useGetCurrentUserQuery } from "@services/usersApi"
 import { io } from "socket.io-client"
+import useUnauthorizedAlert from "@hooks/useUnauthorzedAlert"
 
 export default function Boot(){
-    const { data: user } = useGetCurrentUserQuery()
+    const { data: user, isError } = useGetCurrentUserQuery()
+    const unauthorizedAlert                  = useUnauthorizedAlert()
 
     useEffect( () => {
         if( ! user || Object.keys( user ).length < 1 ) return
@@ -20,6 +22,17 @@ export default function Boot(){
             socket.close()
         }
     }, [user] )
+
+    useEffect( () => {
+        if( isError && ( ! user || Object.keys( user ).length < 1 ) ){
+            setTimeout( () => {
+                unauthorizedAlert( {
+                    title: `New to ${ process.env.NEXT_PUBLIC_APP_NAME }?`,
+                    message: 'Sign up now to get your own personalized timeline!'
+                } )
+            }, 2000 )
+        }
+    }, [user, isError] )
 
     return null
 }
