@@ -20,7 +20,7 @@ interface Props extends Omit<ImageProps, "src"> {
 export default function ImageLightbox( { image, imageList, className, ...rest }: Props ){
     className = classNames( 'cursor-pointer', className )
 
-    if( ! image && ! imageList ) return null
+    if( ! image && ( ! imageList || imageList.length < 1 ) ) return null
 
     const imageElements = imageList?.map( img => (
         <a data-src={ img.url } data-lg-size={ `${ img.width }-${ img.height }` } key={ img.id }>

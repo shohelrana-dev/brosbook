@@ -93,7 +93,7 @@ export default function MessageList( { conversation }: Props ){
 
             { messages?.length < 1 && ! isLoading ? (
                 <div className="h-full flex justify-center items-center">
-                    <h4 className="text-gray-700 text-lg">There was no chat</h4>
+                    <h4 className="text-gray-700 text-lg">No chat</h4>
                 </div>
             ) : null }
 
