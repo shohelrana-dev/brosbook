@@ -15,7 +15,7 @@ function GoogleLoginButton(){
     async function responseGoogle( response: CredentialResponse ){
         try {
             await login( response.credential! ).unwrap()
-            router.push( params.get( 'redirect' ) ? params.get( 'redirect' )! : '/' )
+            router.push( params.get( 'redirect_to' ) ? params.get( 'redirect_to' )! : '/' )
             toast.success( 'Logged in.' )
         } catch ( err: any ) {
             console.error( err )

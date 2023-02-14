@@ -24,7 +24,7 @@ function LoginPage(){
     useEffect( () => {
         if( isSuccess ){
             if( data?.user?.hasEmailVerified ){
-                router.push( params.get( 'redirect' ) ? params.get( 'redirect' )! : '/' )
+                router.push( params.get( 'redirect_to' ) ? params.get( 'redirect_to' )! : '/' )
                 toast.success( 'Logged in.' )
             } else{
                 localStorage.setItem( 'email', data?.user?.email! || '' )
