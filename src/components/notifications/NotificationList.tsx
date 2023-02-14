@@ -30,7 +30,7 @@ export default function NotificationList(){
     return (
         <AnimatedComponent>
             <div>
-                <h3 className="text-xl font-medium text-gray-900 ml-2 mb-1">Notifications</h3>
+                <h3 className="text-xl font-bold text-gray-900 ml-2 mb-1">Notifications</h3>
 
                 { isLoading ? <Loading size={ 40 }/> : null }
 
