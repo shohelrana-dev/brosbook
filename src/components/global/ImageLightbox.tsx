@@ -35,12 +35,14 @@ export default function ImageLightbox( { image, imageList, className, ...rest }:
         </a>
     )
 
+    const wrapperClassName = classNames( { "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-1": imageList && imageList.length > 0 } )
+
     return (
         <LightGallery
             speed={ 500 }
             plugins={ [lgZoom, lgThumbnail] }
             mobileSettings={ { closable: true, showCloseIcon: true, download: true } }
-            elementClassNames="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-1"
+            elementClassNames={ wrapperClassName }
         >
             { imageList && imageList.length > 0 ? ( imageElements ) : imageElement }
         </LightGallery>
