@@ -1,42 +1,10 @@
-"use client"
-import { useGetSuggestedUsersQuery } from "@services/usersApi"
-import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
-import Loading from "@components/global/Loading"
-import { User } from "@interfaces/user.interfaces"
-import UserList from "../../components/global/UserList"
-import InfiniteScroll from "react-infinite-scroller"
+import SidebarLayout from "@components/global/SidebarLayout"
+import SuggestionsPage from "./SuggestionsPage"
 
-export default function Suggestions(){
-    //hooks
-    const {
-              isLoading,
-              items: users,
-              loadMoreItem,
-              hasMoreItem
-          } = useGetInfiniteListQuery<User>( useGetSuggestedUsersQuery )
-
+export default function Page(){
     return (
-        <>
-            <div className="bg-white p-3 pt-4">
-                <h2 className="text-lg md:text-xl font-bold mb-4">Suggested for you</h2>
-                { ( ! users && isLoading ) ? <Loading/> : null }
-
-                <InfiniteScroll
-                    loadMore={ loadMoreItem }
-                    hasMore={ hasMoreItem }
-                    loader={ <Loading/> }
-                >
-                    { users.map( ( user: User ) => (
-                        <div className="pb-1">
-                            <UserList user={ user } key={ user.id }/>
-                        </div>
-                    ) ) }
-                </InfiniteScroll>
-
-                { ( ! isLoading && users?.length < 1 ) ? (
-                    <p className="box text-center py-6">You have no suggestion.</p>
-                ) : null }
-            </div>
-        </>
+        <SidebarLayout>
+            <SuggestionsPage/>
+        </SidebarLayout>
     )
 }
