@@ -14,18 +14,19 @@ interface Props {
 
 export default function MessageList( { conversation }: Props ){
     //hooks
-    const { user }                               = useAuthState()
-    const messageListRef                         = useRef<HTMLDivElement>( null )
+    const { user }          = useAuthState()
+    const messageListRef    = useRef<HTMLDivElement>( null )
     const {
               items: messages,
               isLoading,
               setItems: setMessages,
               hasMoreItem,
-              loadMoreItem
-          }                                      = useGetInfiniteListQuery<Message>(
+              loadMoreItem,
+              isSuccess
+          }                 = useGetInfiniteListQuery<Message>(
         useGetMessagesQuery, { conversationId: conversation?.id!, limit: 15 }
     )
-    const [seenAllMessages]                      = useSeenAllMessagesMutation()
+    const [seenAllMessages] = useSeenAllMessagesMutation()
 
     useEffect( () => {
         const socket = io( process.env.NEXT_PUBLIC_SERVER_BASE_URL! )
@@ -91,7 +92,7 @@ export default function MessageList( { conversation }: Props ){
             ) ) : null }
 
 
-            { messages?.length < 1 && ! isLoading ? (
+            { (isSuccess && messages?.length < 1) ? (
                 <div className="h-full flex justify-center items-center">
                     <h4 className="text-gray-700 text-lg">No chat</h4>
                 </div>
