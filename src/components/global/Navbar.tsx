@@ -25,9 +25,8 @@ import NotificationList from "@components/notifications/NotificationList"
 import useConfirmAlert from "@hooks/useConfirmAlert"
 import { useRouter } from "next/navigation"
 import { useGetUnreadConversationsCountQuery } from "@services/conversationApi"
-import Cookies from "js-cookie"
-import { useSelector } from "react-redux"
-import { selectAuthState } from "@slices/authSlice"
+import useAuthState from "@hooks/useAuthState"
+import { getCookie } from "tiny-cookie"
 
 interface Props {
     hasAccessToken: boolean
@@ -35,7 +34,7 @@ interface Props {
 
 function NavBar( props: Props ){
     const [hasAccessToken, setHasAccessToken]                     = useState<boolean>( props.hasAccessToken )
-    const { user }                                                = useSelector( selectAuthState )
+    const { user }                                                = useAuthState()
     const [readAllNotification]                                   = useReadAllNotificationMutation()
     const { data: unreadNotifications }                           = useGetUnreadNotificationsCountQuery()
     const { data: unreadConversations }                           = useGetUnreadConversationsCountQuery()
@@ -45,8 +44,8 @@ function NavBar( props: Props ){
     const router                                                  = useRouter()
 
     useEffect( () => {
-        setHasAccessToken( !! Cookies.get( 'access_token' ) )
-    }, [Cookies, user] )
+        setHasAccessToken( !! getCookie( 'access_token' ) )
+    }, [user] )
 
     useEffect( () => {
         setUnreadNotificationsCount( unreadNotifications?.count! )
@@ -137,15 +136,16 @@ function NavBar( props: Props ){
                         <Menu>
                             <MenuHandler>
                                 <button className="rounded-full">
-                                    <Avatar src={ user?.avatar?.url }/>
+                                    <Avatar src={ user?.avatar?.url } size="small"/>
                                 </button>
                             </MenuHandler>
                             <MenuList>
                                 <MenuItem className="py-0 mb-2">
-                                    <Link href={ `/${ user?.username }` } className="flex py-2 gap-2 border-b-2 border-gray-50">
-                                        <Avatar src={user?.avatar?.url} size="small"/>
+                                    <Link href={ `/${ user?.username }` }
+                                          className="flex py-2 gap-2 border-b-2 border-gray-50">
+                                        <Avatar src={ user?.avatar?.url } size="small"/>
                                         <div>
-                                            <p>{user?.fullName}</p>
+                                            <p>{ user?.fullName }</p>
                                             <p className="text-xs">Your profile</p>
                                         </div>
                                     </Link>
