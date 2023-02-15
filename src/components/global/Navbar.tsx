@@ -27,6 +27,7 @@ import { useRouter } from "next/navigation"
 import { useGetUnreadConversationsCountQuery } from "@services/conversationApi"
 import useAuthState from "@hooks/useAuthState"
 import { getCookie } from "tiny-cookie"
+import ExpandableSearch from "@components/global/ExpandableSearch";
 
 interface Props {
     hasAccessToken: boolean
@@ -101,6 +102,7 @@ function NavBar( props: Props ){
 
                     <div className="flex">
                         <div className="mr-3 flex">
+                            <ExpandableSearch/>
                             <Popover>
                                 <PopoverHandler>
                                     <div>
