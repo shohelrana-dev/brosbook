@@ -50,7 +50,7 @@ function CreatePostForm(){
     return (
         <div className="relative box p-6 mb-4">
             <h1 className="text-center text-lg lg:text-xl font-bold border-b border-gray-100 mb-4 pb-2">Create post</h1>
-            <div className="flex items-center">
+            <div className="flex items-center mb-3">
                 <Avatar src={ user?.avatar?.url }/>
                 <div className="ml-4">
                     <h3 className="text-base lg:text-lg font-medium">
