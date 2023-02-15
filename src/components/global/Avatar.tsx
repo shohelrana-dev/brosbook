@@ -19,17 +19,17 @@ function Avatar( { online, size, src, className }: AvatarProps ){
         height = 60
     }
 
-    className = classNames( `rounded-full absolute left-0 top-0`, className )
+    className = classNames( `rounded-full object-cover`, className )
 
     return (
-        <div className="relative flex-none rounded-full" style={ { width, height } }>
+        <div className="flex-none rounded-full" style={ { width, height } }>
             { src ? <Image
                 priority
                 className={ className }
                 src={ src }
                 width={ width }
                 height={ height }
-                style={{width: `${width}px`, height: `${height}px`}}
+                style={ { height: `${ height }px` } }
                 alt="User profile photo"
             /> : null }
             { online ? <div

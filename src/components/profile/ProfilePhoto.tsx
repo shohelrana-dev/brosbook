@@ -51,7 +51,7 @@ export default function ProfilePhoto({user}: Props) {
         return (
             <ImageLightbox
                 image={avatar}
-                className="rounded-full w-[130px] h-[130px] mt-[-80px] border-4 border-white"
+                className="rounded-full w-[130px] h-[130px] mt-[-80px] border-4 border-white object-cover"
                 alt="User profile photo"
                 width={130}
                 height={130}
@@ -68,7 +68,7 @@ export default function ProfilePhoto({user}: Props) {
                    ref={inputRef}/>
             <ImageLightbox
                 image={avatar}
-                className="rounded-full w-[130px] h-[130px] mt-[-80px] border-4 border-white"
+                className="rounded-full w-[130px] h-[130px] mt-[-80px] border-4 border-white object-cover"
                 alt="User profile photo"
                 width={130}
                 height={130}

@@ -52,16 +52,16 @@ export default function CoverPhoto( { user }: Props ){
 
     if( user.id !== currentUser?.id ){
         return (
-            <div className="relative w-full h-[300px]">
+            <div className="flex-none">
                 { coverPhoto ? (
                     <ImageLightbox
-                        className="absolute w-full h-full"
+                        className="object-cover h-[300px]"
                         image={ coverPhoto }
                         width={ 600 }
                         height={ 300 }
                         alt="cover photo"
                     /> ) : (
-                    <Image src={ placeholderCoverPhoto } className="absolute w-full h-full" width={ 600 } height={ 300 }
+                    <Image src={ placeholderCoverPhoto } className="object-cover" width={ 600 } height={ 300 }
                            alt='cover photo'/>
                 ) }
             </div>
@@ -69,19 +69,19 @@ export default function CoverPhoto( { user }: Props ){
     }
 
     return (
-        <div className="relative">
+        <div className="flex-none relative">
             <input hidden name="photo" type="file" accept="image/*" onChange={ fileInputChangeHandle }
                    ref={ inputRef }/>
-            <div className="relative w-full h-[300px]">
+            <div>
                 { coverPhoto ? (
                     <ImageLightbox
                         image={ coverPhoto }
-                        className="absolute w-full h-full"
                         width={ 600 }
                         height={ 300 }
+                        className="object-cover h-[300px]"
                         alt="cover photo"
                     /> ) : (
-                    <Image src={ placeholderCoverPhoto } className="absolute w-full h-full" width={ 600 } height={ 300 }
+                    <Image src={ placeholderCoverPhoto } className="object-cover h-[300px]" width={ 600 } height={ 300 }
                            alt='cover photo'/>
                 ) }
             </div>

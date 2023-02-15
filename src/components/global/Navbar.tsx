@@ -4,6 +4,7 @@ import Link from "next/link"
 import { IoMailOutline as MessageIcon } from "react-icons/io5"
 import { RiUserSettingsFill as SettingIcon } from "react-icons/ri"
 import { FaSignOutAlt as LogoutIcon } from "react-icons/fa"
+import { AiOutlineHome as HomeIcon } from "react-icons/ai"
 import Avatar from "@components/global/Avatar"
 import {
     Navbar as BaseNavbar,
@@ -27,7 +28,7 @@ import { useRouter } from "next/navigation"
 import { useGetUnreadConversationsCountQuery } from "@services/conversationApi"
 import useAuthState from "@hooks/useAuthState"
 import { getCookie } from "tiny-cookie"
-import ExpandableSearch from "@components/global/ExpandableSearch";
+import ExpandableSearch from "@components/global/ExpandableSearch"
 
 interface Props {
     hasAccessToken: boolean
@@ -94,14 +95,16 @@ function NavBar( props: Props ){
         <header id="appHeader">
             <BaseNavbar fullWidth className="mx-auto px-4 lg:px-8 py-2 lg:py-4 z-20">
                 <div className="container mx-auto flex items-center justify-between text-blue-gray-900">
-                    <div>
+                    <div className="mr-1">
                         <Link href="/">
-                            <h3 className="font-bold text-lg">{ process.env.NEXT_PUBLIC_APP_NAME || 'Brosbook' }</h3>
+                            <IconButton className="p-5">
+                                <HomeIcon size={ 27 }/>
+                            </IconButton>
                         </Link>
                     </div>
 
                     <div className="flex">
-                        <div className="mr-3 flex">
+                        <div className="mr-2 flex">
                             <ExpandableSearch/>
                             <Popover>
                                 <PopoverHandler>

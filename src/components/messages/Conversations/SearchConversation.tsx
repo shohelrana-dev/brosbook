@@ -2,25 +2,21 @@ import React, { useState } from 'react'
 import BasicInput from "@components/global/BasicInput"
 import SearchUserList from "@components/global/SearchUserList"
 import { User } from "@interfaces/user.interfaces"
-import { useSearchUsersQuery } from "@services/usersApi"
 import { useLazyGetConversationByParticipantIdQuery } from "@services/conversationApi"
 import { useRouter } from "next/navigation"
 import { useDebouncedCallback } from "use-debounce"
 
-export default function SearchConversation(  ){
-    const [searchKey, setSearchKey]           = useState<string>( '' )
-    const { data, isLoading: isUsersLoading } = useSearchUsersQuery( { key: searchKey, page: 1 } )
-    const [getConversationByParticipantId]    = useLazyGetConversationByParticipantIdQuery()
-    const router                              = useRouter()
-    const [isBlur, setIsBlur]                 = useState<boolean>( false )
-
-    const users = data?.items || []
+export default function SearchConversation(){
+    const [searchKey, setSearchKey]        = useState<string>( '' )
+    const [getConversationByParticipantId] = useLazyGetConversationByParticipantIdQuery()
+    const router                           = useRouter()
+    const [isBlur, setIsBlur]              = useState<boolean>( false )
 
     const onBlur = useDebouncedCallback(
         () => {
             setIsBlur( false )
         },
-        200,
+        500,
     )
 
     async function onUserClick( user: User ){
@@ -36,11 +32,11 @@ export default function SearchConversation(  ){
         ( value ) => {
             setSearchKey( value )
         },
-        500,
+        200,
     )
 
     return (
-        <div className="mb-3">
+        <div className="mb-3 relative">
             <BasicInput
                 label="Search user"
                 labelHide={ true }
@@ -48,8 +44,7 @@ export default function SearchConversation(  ){
                 onFocus={ () => setIsBlur( true ) }
                 onChange={ ( e ) => {onChange( e.target.value )} }
             />
-            { isBlur ?
-                <SearchUserList isLoading={ isUsersLoading } onUserClick={ onUserClick } users={ users }/> : null }
+            { isBlur ? <SearchUserList onUserClick={ onUserClick } searchKey={ searchKey }/> : null }
         </div>
     )
 }

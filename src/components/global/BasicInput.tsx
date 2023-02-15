@@ -1,4 +1,4 @@
-import React, { InputHTMLAttributes } from 'react'
+import React, { InputHTMLAttributes, LegacyRef } from 'react'
 import classNames from "classnames"
 
 interface BasicInputProps extends InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement> {
@@ -11,16 +11,18 @@ interface BasicInputProps extends InputHTMLAttributes<HTMLInputElement | HTMLTex
 }
 
 export default function BasicInput( props: BasicInputProps ){
-    let { label, name, textarea, className = '', type = 'text', error, helpText, labelHide = false, ...rest } = props
+    let { label, name, textarea, className, type = 'text', error, helpText, labelHide = false, wrapperClassname, ...rest } = props
+
     if( className ){
-        className = 'block w-full outline-none py-2 px-3 rounded-lg border-2 border-blue-50 focus:border-blue-300 ' + className
+        className = classNames( 'block w-full outline-none py-2 px-3 rounded-lg border-2 border-blue-50 focus:border-blue-300', className )
     } else{
         className = 'block w-full outline-none py-2 px-3 rounded-lg border-2 border-blue-50 focus:border-blue-300'
     }
+
     const id = name ? name : label.replace( ' ', '' )
 
     return (
-        <div className={ classNames( "mb-2 md:mb-4", props.wrapperClassname ) }>
+        <div className={ classNames( "mb-2 md:mb-4", wrapperClassname ) }>
             { ! labelHide || helpText ? (
                 <div className="mb-2">
                     { ! labelHide ? <label htmlFor={ id } className="font-medium text-gray-800 cursor-pointer block">
