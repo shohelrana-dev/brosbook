@@ -3,7 +3,7 @@ import { useGetFollowingsQuery, useGetUserByUsernameQuery } from "@services/user
 import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import Loading from "@components/global/Loading"
 import { User } from "@interfaces/user.interfaces"
-import UserList from "@components/global/UserList"
+import UserItem from "@components/global/UserItem"
 import InfiniteScroll from "react-infinite-scroller"
 
 interface Props {
@@ -38,7 +38,7 @@ export default function FollowingPage( { params }: Props ){
             >
                 { followings.map( ( user: User ) => (
                     <div className="bg-white p-3 pb-1">
-                        <UserList user={ user } key={ user.id }/>
+                        <UserItem user={ user } key={ user.id }/>
                     </div>
                 ) ) }
             </InfiniteScroll>

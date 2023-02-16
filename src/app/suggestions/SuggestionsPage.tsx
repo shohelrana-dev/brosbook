@@ -3,7 +3,7 @@ import { useGetSuggestedUsersQuery } from "@services/usersApi"
 import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import Loading from "@components/global/Loading"
 import { User } from "@interfaces/user.interfaces"
-import UserList from "@components/global/UserList"
+import UserItem from "@components/global/UserItem"
 import InfiniteScroll from "react-infinite-scroller"
 
 export default function SuggestionsPage(){
@@ -28,7 +28,7 @@ export default function SuggestionsPage(){
             >
                 { users.map( ( user: User ) => (
                     <div className="pb-1">
-                        <UserList user={ user } key={ user.id }/>
+                        <UserItem user={ user } key={ user.id }/>
                     </div>
                 ) ) }
             </InfiniteScroll>

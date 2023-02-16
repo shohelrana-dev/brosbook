@@ -10,11 +10,12 @@ export default function SearchConversation(){
     const [searchKey, setSearchKey]        = useState<string>( '' )
     const [getConversationByParticipantId] = useLazyGetConversationByParticipantIdQuery()
     const router                           = useRouter()
-    const [isBlur, setIsBlur]              = useState<boolean>( false )
+    const [isFocus, setIsFocus]            = useState<boolean>( false )
 
     const onBlur = useDebouncedCallback(
         () => {
-            setIsBlur( false )
+            setIsFocus( false )
+            setSearchKey( '' )
         },
         500,
     )
@@ -41,10 +42,10 @@ export default function SearchConversation(){
                 label="Search user"
                 labelHide={ true }
                 onBlur={ onBlur }
-                onFocus={ () => setIsBlur( true ) }
+                onFocus={ () => setIsFocus( true ) }
                 onChange={ ( e ) => {onChange( e.target.value )} }
             />
-            { isBlur ? <SearchUserList onUserClick={ onUserClick } searchKey={ searchKey }/> : null }
+            { isFocus ? <SearchUserList onUserClick={ onUserClick } searchKey={ searchKey }/> : null }
         </div>
     )
 }

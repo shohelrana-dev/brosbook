@@ -22,7 +22,7 @@ export default function ExpandableSearch(){
         setTimeout( () => {
             setExpanded( false )
             setSearchKey( '' )
-        }, 500 )
+        }, 200 )
     }
 
     async function onUserClick( user: User ){

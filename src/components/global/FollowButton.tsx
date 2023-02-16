@@ -6,8 +6,8 @@ import Button from "@components/global/Button"
 import ButtonOutline from "@components/global/ButtonOutline"
 import useConfirmAlert from "@hooks/useConfirmAlert"
 import toast from "react-hot-toast"
-import useUnauthorizedAlert from "@hooks/useUnauthorzedAlert";
-import useAuthState from "@hooks/useAuthState";
+import useUnauthorizedAlert from "@hooks/useUnauthorzedAlert"
+import useAuthState from "@hooks/useAuthState"
 
 
 interface FollowButtonProps {

@@ -92,7 +92,7 @@ function NavBar( props: Props ){
     if( ! hasAccessToken ) return null
 
     return (
-        <header id="appHeader">
+        <header id="appHeader" className="relative z-10">
             <BaseNavbar fullWidth className="mx-auto px-4 lg:px-8 py-2 lg:py-4 z-20">
                 <div className="container mx-auto flex items-center justify-between text-blue-gray-900">
                     <div className="mr-1">

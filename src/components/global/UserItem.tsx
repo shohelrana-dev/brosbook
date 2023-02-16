@@ -5,17 +5,20 @@ import { User } from "@interfaces/user.interfaces"
 import FollowButton from "@components/global/FollowButton"
 import TextOverflow from 'react-text-overflow'
 import useAuthState from "@hooks/useAuthState"
+import classNames from "classnames"
 
 interface Props {
     user: User
+    hideFollowButton?: boolean
+    className?: string
 }
 
-export default function UserList( { user }: Props ){
+export default function UserItem( { user, hideFollowButton = false, className }: Props ){
     const { user: currentUser } = useAuthState()
     const isCurrentUser         = user.id === currentUser.id
 
     return (
-        <div className="flex mb-4 w-full">
+        <div className={ classNames( 'flex mb-4 w-full', className ) }>
             <div className="flex w-full">
                 <Link href={ `/${ user.username }` } className="inline-block min-w-[40px] mr-3">
                     <Avatar src={ user.avatar.url }/>
@@ -32,9 +35,11 @@ export default function UserList( { user }: Props ){
                                 </h4>
                             </Link>
                         </div>
-                        <div>
-                            { ! isCurrentUser ? <FollowButton user={ user }/> : null }
-                        </div>
+                        { ! isCurrentUser && ! hideFollowButton ? (
+                            <div>
+                                <FollowButton user={ user }/>
+                            </div>
+                        ) : null }
                     </div>
                     { user.profile?.bio ? <div className="mt-1 text-gray-800">{ user.profile?.bio }</div> : null }
                 </div>
