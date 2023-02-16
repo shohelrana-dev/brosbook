@@ -49,7 +49,7 @@ function SingleMessage( { message, prevMessage, isLastMessage }: SingleMessagePr
                     <div className={ classes.ownMessageWrap }>
                         <div className="flex">
                             <MessageContent message={ message }/>
-                            <div className="min-w-[35px] self-end ml-2">
+                            <div className="min-w-[35px] self-end ml-1">
                                 { isLastMessage ? (
                                     message.seenAt ? (
                                         <Image
@@ -60,7 +60,7 @@ function SingleMessage( { message, prevMessage, isLastMessage }: SingleMessagePr
                                             className="h-[18px] object-cover rounded-full"
                                         />
                                     ) : (
-                                        <div className="relative text-gray-700">
+                                        <div className="relative text-gray-600">
                                             <TickIcon size={ 18 }/>
                                             <TickIcon size={ 18 } className="absolute left-[5px] top-0"/>
                                         </div>

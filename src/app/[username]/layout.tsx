@@ -48,7 +48,7 @@ export default async function ProfileLayout( { children, params }: ProfileLayout
                 <div className="bg-white pb-5 mb-3">
                     <div>
                         <CoverPhoto user={ user }/>
-                        <div className="p-4 flex justify-between relative z-10">
+                        <div className="p-4 flex justify-between relative">
                             <ProfilePhoto user={ user }/>
 
                             <div className="flex items-center gap-2">
