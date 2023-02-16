@@ -51,13 +51,13 @@ function SingleMessage( { message, prevMessage, isLastMessage }: SingleMessagePr
                             <MessageContent message={ message }/>
                             <div className="min-w-[35px] self-end ml-2">
                                 { isLastMessage ? (
-                                    ! message.seenAt ? (
+                                    message.seenAt ? (
                                         <Image
                                             src={ currentUser?.avatar.url }
                                             alt={ "User photo" }
-                                            width={ 20 }
-                                            height={ 20 }
-                                            className="h-[20px] object-cover rounded-full"
+                                            width={ 18 }
+                                            height={ 18 }
+                                            className="h-[18px] object-cover rounded-full"
                                         />
                                     ) : (
                                         <div className="relative text-gray-700">
