@@ -55,9 +55,9 @@ function SingleMessage( { message, prevMessage, isLastMessage }: SingleMessagePr
                                         <Image
                                             src={ currentUser?.avatar.url }
                                             alt={ "User photo" }
-                                            width={ 18 }
-                                            height={ 18 }
-                                            className="h-[18px] object-cover rounded-full"
+                                            width={ 16 }
+                                            height={ 16 }
+                                            className="h-[16px] object-cover rounded-full"
                                         />
                                     ) : (
                                         <p className="text-gray-600">
