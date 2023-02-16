@@ -19,7 +19,7 @@ export default function SearchUserList( { onUserClick, searchKey, wrapperClassna
     return (
         <div
             className={ classNames( "box bg-white max-w-5xl p-3 absolute top-full left-0 w-max h-fit overflow-y-auto mt-1 bg-white drop-shadow-2xl max-h-[80vh] overflow-y-auto min-w-[250px]", wrapperClassname ) }>
-            { isLoading ? <Loading/> : null }
+            { isLoading ? <Loading size={40}/> : null }
 
             { ( users && users.length > 0 ) ? users.map( user => (
                 <div key={ user.id } onClick={ () => onUserClick( user ) } className="cursor-pointer">

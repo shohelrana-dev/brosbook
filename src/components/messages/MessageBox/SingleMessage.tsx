@@ -5,6 +5,7 @@ import MessageContent from "@components/messages/MessageBox/MessageContent"
 import useAuthState from "@hooks/useAuthState"
 import timeAgo from "@utils/timeAgo"
 import moment from "moment/moment"
+import { TiTickOutline as TickIcon } from "react-icons/ti"
 
 //the component classes
 const classes = {
@@ -20,9 +21,10 @@ const classes = {
 interface SingleMessageProps {
     message: Message
     prevMessage: Message | null
+    isLastMessage: boolean
 }
 
-function SingleMessage( { message, prevMessage }: SingleMessageProps ){
+function SingleMessage( { message, prevMessage, isLastMessage }: SingleMessageProps ){
     const { user: currentUser } = useAuthState()
 
     const avatarMarkup = (
@@ -45,11 +47,17 @@ function SingleMessage( { message, prevMessage }: SingleMessageProps ){
                 <div className={ classes.ownRow }>
                     <div className={ classes.ownMessageWrap }>
                         <MessageContent message={ message }/>
-                        { ! isSameUserAndTimeLessThanFiveMin ? (
-                            <time className={ classes.time }>
-                                { timeAgo( message.createdAt ) }
-                            </time>
-                        ) : null }
+                        <div className="flex justify-between">
+                            { ! isSameUserAndTimeLessThanFiveMin ? (
+                                <time className={ classes.time }>
+                                    { timeAgo( message.createdAt ) }
+                                </time>
+                            ) : null }
+                            { isLastMessage ? (
+                                <p className="text-gray-500 text-xs">{ message.seenAt ? 'Seen' :
+                                    <TickIcon size={ 20 }/> }</p>
+                            ) : null }
+                        </div>
                     </div>
                     <div className="min-w-[35px]">
                         { ! isSameUser ? avatarMarkup : null }

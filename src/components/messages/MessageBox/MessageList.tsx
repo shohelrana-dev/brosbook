@@ -87,12 +87,18 @@ export default function MessageList( { conversation }: Props ){
             { isLoading ? <Loading size={ 50 }/> : null }
 
             { ( messages && messages.length > 0 ) ? messages.map( ( message: Message, index: number ) => (
-                <SingleMessage key={ message.id } message={ message }
-                               prevMessage={ index === 0 ? null : messages[index - 1] }/>
+                <>
+                    <SingleMessage
+                        key={ message.id }
+                        message={ message }
+                        prevMessage={ index === 0 ? null : messages[index - 1] }
+                        isLastMessage={ 0 === index }
+                    />
+                </>
             ) ) : null }
 
 
-            { (isSuccess && messages?.length < 1) ? (
+            { ( isSuccess && messages?.length < 1 ) ? (
                 <div className="h-full flex justify-center items-center">
                     <h4 className="text-gray-700 text-lg">No chat</h4>
                 </div>
