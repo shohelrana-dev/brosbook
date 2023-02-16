@@ -49,7 +49,7 @@ function SingleMessage( { message, prevMessage, isLastMessage }: SingleMessagePr
                     <div className={ classes.ownMessageWrap }>
                         <div className="flex">
                             <MessageContent message={ message }/>
-                            <div className="min-w-[35px] self-end ml-1">
+                            <div className="min-w-[20px] self-end ml-1">
                                 { isLastMessage ? (
                                     message.seenAt ? (
                                         <Image
