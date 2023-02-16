@@ -8,15 +8,14 @@ export const notificationsApi = baseApi.injectEndpoints( {
                 url: `/notifications`,
                 params
             } ),
-            providesTags: ['Notification'],
-            keepUnusedDataFor: 0.0001
+            providesTags: ['Notification']
         } ),
 
         getUnreadNotificationsCount: build.query<{ count: number }, void>( {
             query: () => ( {
                 url: `/notifications/unread_count`
             } ),
-            keepUnusedDataFor: 0.0001
+            providesTags: ['Notification']
         } ),
 
         readAllNotification: build.mutation<Notification[], void>( {

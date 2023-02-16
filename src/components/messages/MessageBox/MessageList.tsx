@@ -37,12 +37,14 @@ export default function MessageList( { conversation }: Props ){
             socket.on( `new_message_${ conversation.id }`, addMessage )
 
             socket.on( `new_reaction_${ conversation.id }`, updateMessage )
+
+            socket.on( `seen_message_${ conversation.id }_${ user.id }`, updateMessage )
         }
 
         if( socket ) return () => {
             socket.close()
         }
-    }, [conversation, user] )
+    }, [conversation, user, participant] )
 
     useEffect( () => {
         seenAllMessages( conversation.id )
@@ -93,7 +95,7 @@ export default function MessageList( { conversation }: Props ){
                     <SingleMessage
                         key={ message.id }
                         message={ message }
-                        participant={participant}
+                        participant={ participant }
                         prevMessage={ index === 0 ? null : messages[index - 1] }
                         isLastMessage={ 0 === index }
                     />

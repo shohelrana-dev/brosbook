@@ -29,6 +29,8 @@ import { useGetUnreadConversationsCountQuery } from "@services/conversationApi"
 import useAuthState from "@hooks/useAuthState"
 import { getCookie } from "tiny-cookie"
 import ExpandableSearch from "@components/global/ExpandableSearch"
+import { useDispatch } from "react-redux";
+import { baseApi } from "@services/baseApi";
 
 interface Props {
     hasAccessToken: boolean
@@ -44,6 +46,7 @@ function NavBar( props: Props ){
     const [unreadConversationsCount, setUnreadConversationsCount] = useState<number>( unreadConversations?.count || 0 )
     const confirmAlert                                            = useConfirmAlert()
     const router                                                  = useRouter()
+    const dispatch                                                = useDispatch()
 
     useEffect( () => {
         setHasAccessToken( !! getCookie( 'access_token' ) )
@@ -62,10 +65,12 @@ function NavBar( props: Props ){
 
         socket.on( `unread_notification_count_${ user?.id }`, ( count ) => {
             setUnreadNotificationsCount( count )
+            dispatch( baseApi.util.invalidateTags( ['Notification'] ) )
         } )
 
         socket.on( `unread_conversation_count_${ user?.id }`, ( count ) => {
             setUnreadConversationsCount( count )
+            dispatch( baseApi.util.invalidateTags( ['Conversation'] ) )
         } )
 
         if( socket ) return () => {

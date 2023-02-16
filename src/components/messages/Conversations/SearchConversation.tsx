@@ -37,7 +37,7 @@ export default function SearchConversation(){
     )
 
     return (
-        <div className="mb-3 relative">
+        <div className="mb-3 relative z-10">
             <BasicInput
                 label="Search user"
                 labelHide={ true }
