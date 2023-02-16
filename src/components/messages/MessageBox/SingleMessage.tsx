@@ -5,7 +5,8 @@ import MessageContent from "@components/messages/MessageBox/MessageContent"
 import useAuthState from "@hooks/useAuthState"
 import timeAgo from "@utils/timeAgo"
 import moment from "moment/moment"
-import { TiTickOutline as TickIcon } from "react-icons/ti"
+import { TiTick as TickIcon } from "react-icons/ti"
+import Image from "next/image";
 
 //the component classes
 const classes = {
@@ -46,21 +47,34 @@ function SingleMessage( { message, prevMessage, isLastMessage }: SingleMessagePr
             { message.isMeSender ? (
                 <div className={ classes.ownRow }>
                     <div className={ classes.ownMessageWrap }>
-                        <MessageContent message={ message }/>
+                        <div className="flex">
+                            <MessageContent message={ message }/>
+                            <div className="min-w-[35px] self-end ml-2">
+                                { isLastMessage ? (
+                                    ! message.seenAt ? (
+                                        <Image
+                                            src={ currentUser?.avatar.url }
+                                            alt={ "User photo" }
+                                            width={ 20 }
+                                            height={ 20 }
+                                            className="h-[20px] object-cover rounded-full"
+                                        />
+                                    ) : (
+                                        <div className="relative text-gray-700">
+                                            <TickIcon size={ 18 }/>
+                                            <TickIcon size={ 18 } className="absolute left-[5px] top-0"/>
+                                        </div>
+                                    )
+                                ) : null }
+                            </div>
+                        </div>
                         <div className="flex justify-between">
                             { ! isSameUserAndTimeLessThanFiveMin ? (
                                 <time className={ classes.time }>
                                     { timeAgo( message.createdAt ) }
                                 </time>
                             ) : null }
-                            { isLastMessage ? (
-                                <p className="text-gray-500 text-xs">{ message.seenAt ? 'Seen' :
-                                    <TickIcon size={ 20 }/> }</p>
-                            ) : null }
                         </div>
-                    </div>
-                    <div className="min-w-[35px]">
-                        { ! isSameUser ? avatarMarkup : null }
                     </div>
                 </div>
             ) : null }
