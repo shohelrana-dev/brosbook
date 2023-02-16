@@ -82,7 +82,7 @@ function SingleMessage( { message, prevMessage, isLastMessage, participant }: Si
 
             { ! message.isMeSender ? (
                 <div className={ classes.partnerRow }>
-                    <div className="min-w-[35px]">
+                    <div className="min-w-[35px] mr-3">
                         { ! isSameUserAndTimeLessThanFiveMin ? avatarMarkup : null }
                     </div>
                     <div className={ classes.partnerMessageWrap }>
