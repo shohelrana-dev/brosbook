@@ -5,8 +5,8 @@ import MessageContent from "@components/messages/MessageBox/MessageContent"
 import useAuthState from "@hooks/useAuthState"
 import timeAgo from "@utils/timeAgo"
 import moment from "moment/moment"
-import { TiTick as TickIcon } from "react-icons/ti"
-import Image from "next/image";
+import { IoCheckmarkCircleOutline as TickIcon } from "react-icons/io5"
+import Image from "next/image"
 
 //the component classes
 const classes = {
@@ -60,10 +60,9 @@ function SingleMessage( { message, prevMessage, isLastMessage }: SingleMessagePr
                                             className="h-[18px] object-cover rounded-full"
                                         />
                                     ) : (
-                                        <div className="relative text-gray-600">
+                                        <p className="text-gray-600">
                                             <TickIcon size={ 18 }/>
-                                            <TickIcon size={ 18 } className="absolute left-[5px] top-0"/>
-                                        </div>
+                                        </p>
                                     )
                                 ) : null }
                             </div>
