@@ -13,8 +13,8 @@ import { User } from "@interfaces/user.interfaces"
 const classes = {
     ownRow: 'flex items-end float-right mb-2 max-w-[70%]',
     partnerRow: 'flex items-end float-left mb-1 max-w-[70%]',
-    ownMessageWrap: 'w-full mr-4',
-    partnerMessageWrap: 'w-full ml-4',
+    ownMessageWrap: 'w-full',
+    partnerMessageWrap: 'w-full',
     date: 'text-gray-500 text-center text-sm',
     time: 'text-gray-500 text-xs'
 }
