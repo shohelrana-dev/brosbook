@@ -28,6 +28,8 @@ export default function MessageList( { conversation }: Props ){
     )
     const [seenAllMessages] = useSeenAllMessagesMutation()
 
+    const participant = conversation.user1.id === user?.id ? conversation.user2 : conversation.user1
+
     useEffect( () => {
         const socket = io( process.env.NEXT_PUBLIC_SERVER_BASE_URL! )
 
@@ -91,6 +93,7 @@ export default function MessageList( { conversation }: Props ){
                     <SingleMessage
                         key={ message.id }
                         message={ message }
+                        participant={participant}
                         prevMessage={ index === 0 ? null : messages[index - 1] }
                         isLastMessage={ 0 === index }
                     />

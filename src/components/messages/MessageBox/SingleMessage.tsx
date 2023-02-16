@@ -7,6 +7,7 @@ import timeAgo from "@utils/timeAgo"
 import moment from "moment/moment"
 import { IoCheckmarkCircleOutline as TickIcon } from "react-icons/io5"
 import Image from "next/image"
+import { User } from "@interfaces/user.interfaces"
 
 //the component classes
 const classes = {
@@ -23,10 +24,13 @@ interface SingleMessageProps {
     message: Message
     prevMessage: Message | null
     isLastMessage: boolean
+    participant: User
 }
 
-function SingleMessage( { message, prevMessage, isLastMessage }: SingleMessageProps ){
-    const { user: currentUser } = useAuthState()
+function SingleMessage( { message, prevMessage, isLastMessage, participant }: SingleMessageProps ){
+    const timeDiff                         = moment( prevMessage?.createdAt ).diff( message.createdAt, "minutes" )
+    const isSameUser                       = prevMessage && ( message.sender.id === prevMessage?.sender.id )
+    const isSameUserAndTimeLessThanFiveMin = isSameUser && ( timeDiff <= 5 )
 
     const avatarMarkup = (
         <Avatar
@@ -36,10 +40,6 @@ function SingleMessage( { message, prevMessage, isLastMessage }: SingleMessagePr
             size="small"
         />
     )
-
-    const timeDiff                         = moment( prevMessage?.createdAt ).diff( message.createdAt, "minutes" )
-    const isSameUser                       = prevMessage && ( message.sender.id === prevMessage?.sender.id )
-    const isSameUserAndTimeLessThanFiveMin = isSameUser && ( timeDiff <= 5 )
 
     return (
         <div>
@@ -53,7 +53,7 @@ function SingleMessage( { message, prevMessage, isLastMessage }: SingleMessagePr
                                 { isLastMessage ? (
                                     message.seenAt ? (
                                         <Image
-                                            src={ currentUser?.avatar.url }
+                                            src={ participant?.avatar.url }
                                             alt={ "User photo" }
                                             width={ 16 }
                                             height={ 16 }
