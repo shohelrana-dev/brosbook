@@ -29,8 +29,8 @@ import { useGetUnreadConversationsCountQuery } from "@services/conversationApi"
 import useAuthState from "@hooks/useAuthState"
 import { getCookie } from "tiny-cookie"
 import ExpandableSearch from "@components/global/ExpandableSearch"
-import { useDispatch } from "react-redux";
-import { baseApi } from "@services/baseApi";
+import { useDispatch } from "react-redux"
+import { baseApi } from "@services/baseApi"
 
 interface Props {
     hasAccessToken: boolean

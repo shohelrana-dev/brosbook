@@ -19,7 +19,8 @@ export const authApi = baseApi.injectEndpoints( {
                 url: `/auth/signup`,
                 method: 'POST',
                 body: payload
-            } )
+            } ),
+            invalidatesTags: ["User"]
         } ),
 
         login: build.mutation<LoginResponse, CredentialPayload>( {
