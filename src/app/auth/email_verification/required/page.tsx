@@ -3,15 +3,12 @@ import { useEffect, useState } from 'react'
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import useAsyncEffect from "use-async-effect"
 import toast from "react-hot-toast"
 
 import mailImage from "@images/mail-with-value.png"
 import { useResendVerificationLinkMutation } from "@services/authApi"
-import Button from "@components/global/Button"
 import Loading from "@components/global/Loading"
-import ButtonOutline from "@components/global/ButtonOutline";
-import ButtonGray from "@components/global/ButtonGray";
+import ButtonGray from "@components/global/ButtonGray"
 
 export default function RequiredPage(){
     const router                                                            = useRouter()
@@ -57,11 +54,12 @@ export default function RequiredPage(){
 
                     <p className="text-sm text-gray-500 mt-8">
                         { ! isResendEmail ? (
+                            <span>Email resent. Please check your inbox.</span>
+                        ) : (
                             <span>Didn&apos;t receive the link email?&nbsp;
                                 <ButtonGray onClick={ resendEmail }
                                             isLoading={ isLoading }>Resend email</ButtonGray>
-                            </span> ) : (
-                            <span>Email resent. Please check your inbox.</span>
+                            </span>
                         ) }
                     </p>
                 </div>

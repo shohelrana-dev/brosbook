@@ -74,13 +74,13 @@ export default function EmailVerifyPage( { params }: Props ){
                 </p>
             </div>
             <p className="text-sm text-gray-500 mt-8">
-                { ! isResendEmail ? (
+                { isResendEmail ? (
+                    <span>Email resent. Please check your inbox.</span>
+                ) : (
                     <ButtonGray onClick={ resendEmail }
-                                isLoading={ resendEmailLoading }>
+                                isLoading={ resendEmailLoading } disabled={ ! email }>
                         Resend email
                     </ButtonGray>
-                ) : (
-                    <span>Email resent. Please check your inbox.</span>
                 ) }
             </p>
         </>
