@@ -51,6 +51,13 @@ export default function ChangeUsernameModal(){
                 title="Update username"
             >
                 <form onSubmit={ onSubmit }>
+                    <AnimatedInput
+                        label="Username"
+                        name="username"
+                        value={ formData.username }
+                        error={ errors.username }
+                        onChange={ onChange }
+                    />
                     <PasswordInput
                         label="Password"
                         name="password"
@@ -61,16 +68,9 @@ export default function ChangeUsernameModal(){
                     <Link href="/auth/forgot_password" className="text-blue-600 text-xs">
                         Forgot password?
                     </Link>
-                    <AnimatedInput
-                        label="Username"
-                        name="username"
-                        value={ formData.username }
-                        error={ errors.username }
-                        onChange={ onChange }
-                    />
 
                     <div className="text-right">
-                        <Button type="submit" isLoading={ isLoading } className="!mt-5">
+                        <Button type="submit" isLoading={ isLoading }>
                             Update
                         </Button>
                     </div>
