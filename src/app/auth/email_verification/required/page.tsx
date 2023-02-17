@@ -1,5 +1,5 @@
 "use client"
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -12,25 +12,22 @@ import Button from "@components/global/Button"
 import Loading from "@components/global/Loading"
 
 export default function RequiredPage(){
-    const router                            = useRouter()
-    const [resendVerificationLink]          = useResendVerificationLinkMutation()
-    const [email, setEmail]                 = useState<string>( "" )
-    const [isResendEmail, setIsResendEmail] = useState<boolean>( false )
+    const router                                                 = useRouter()
+    const [resendVerificationLink, { isSuccess: isResendEmail }] = useResendVerificationLinkMutation()
+    const [email, setEmail]                                      = useState<string>( "" )
 
-    useAsyncEffect( async() => {
+    useEffect( () => {
         const email = localStorage.getItem( 'email' )
         if( ! email ){
             router.push( '/auth/login' )
         }
         setEmail( email! )
-        localStorage.removeItem( 'email' )
     }, [router] )
 
     async function resendEmail(){
         try {
             await resendVerificationLink( email ).unwrap()
             toast.success( 'Email verification link has sent to your email.' )
-            setIsResendEmail( true )
         } catch ( err ) {
             console.error( err )
         }
