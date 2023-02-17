@@ -17,7 +17,7 @@ export default function EmailVerifyPage( { params }: Props ){
     const [verifyEmail, { isSuccess, isError }] = useVerifyEmailMutation()
     const [resendVerificationLink, {
         isSuccess: isResendEmail,
-        isLoading: resendLoading
+        isLoading: resendEmailLoading
     }]                                          = useResendVerificationLinkMutation()
 
     const email = localStorage?.getItem( 'email' ) || ''
@@ -73,10 +73,16 @@ export default function EmailVerifyPage( { params }: Props ){
                     below.
                 </p>
             </div>
-            <ButtonGray onClick={ resendEmail } size="md" className="inline-block mt-3" isLoading={ resendLoading }
-                        disabled={ isResendEmail || ! email }>
-                Resend email
-            </ButtonGray>
+            <p className="text-sm text-gray-500 mt-8">
+                { ! isResendEmail ? (
+                    <ButtonGray onClick={ resendEmail }
+                                isLoading={ resendEmailLoading }>
+                        Resend email
+                    </ButtonGray>
+                ) : (
+                    <span>Email resent. Please check your inbox.</span>
+                ) }
+            </p>
         </>
     )
 
@@ -87,8 +93,7 @@ export default function EmailVerifyPage( { params }: Props ){
                     <div className="auth-box">
                         <div className="text-center">
                             <h1 className="text-xl text-center mb-4 font-medium">Email verification</h1>
-                            { isSuccess ? successMarkup : null }
-                            { isError ? errorMarkup : null }
+                            { isSuccess ? successMarkup : errorMarkup }
                         </div>
                     </div>
                 </div>

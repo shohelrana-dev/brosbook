@@ -10,11 +10,13 @@ import mailImage from "@images/mail-with-value.png"
 import { useResendVerificationLinkMutation } from "@services/authApi"
 import Button from "@components/global/Button"
 import Loading from "@components/global/Loading"
+import ButtonOutline from "@components/global/ButtonOutline";
+import ButtonGray from "@components/global/ButtonGray";
 
 export default function RequiredPage(){
-    const router                                                 = useRouter()
-    const [resendVerificationLink, { isSuccess: isResendEmail }] = useResendVerificationLinkMutation()
-    const [email, setEmail]                                      = useState<string>( "" )
+    const router                                                            = useRouter()
+    const [resendVerificationLink, { isSuccess: isResendEmail, isLoading }] = useResendVerificationLinkMutation()
+    const [email, setEmail]                                                 = useState<string>( "" )
 
     useEffect( () => {
         const email = localStorage.getItem( 'email' )
@@ -56,7 +58,8 @@ export default function RequiredPage(){
                     <p className="text-sm text-gray-500 mt-8">
                         { ! isResendEmail ? (
                             <span>Didn&apos;t receive the link email?&nbsp;
-                                <Button onClick={ resendEmail }>Resend email</Button>
+                                <ButtonGray onClick={ resendEmail }
+                                            isLoading={ isLoading }>Resend email</ButtonGray>
                             </span> ) : (
                             <span>Email resent. Please check your inbox.</span>
                         ) }
