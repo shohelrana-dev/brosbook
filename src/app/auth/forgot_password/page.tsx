@@ -32,7 +32,7 @@ export default function ForgotPasswordPage() {
                         <div className="text-center">
                             <h1 className="text-xl text-center mb-4 font-medium">Reset Password</h1>
                             <p className="mb-3">Check your email for a link to reset your password. If it doesn't appear within a few minutes, check your spam folder.</p>
-                            <Link href="/auth/login" className="inline-block">
+                            <Link href="/auth/login" className="inline-block mt-3">
                                 <ButtonOutline size="sm">Return to login</ButtonOutline>
                             </Link>
                         </div>
