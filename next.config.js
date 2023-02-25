@@ -8,7 +8,7 @@ const nextConfig = {
     images: {
         domains: [
             'localhost',
-            'brosbook-api.up.railway.app',
+            'brosbook-api.onrender.com',
             'res.cloudinary.com'
         ]
     },

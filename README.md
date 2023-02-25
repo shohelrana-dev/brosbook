@@ -58,7 +58,7 @@
 
 ### Installation
 ```bash
-git clone <sourch>
+git clone <source>
  
 npm run install && npm run dev
 # or
