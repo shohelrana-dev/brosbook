@@ -22,7 +22,7 @@ export default function MediaPage( { params }: Props ){
 
     if( isLoading && mediaList?.length < 1 ){
         return (
-            <div className="box py-3">
+            <div className="box py-3 text-center">
                 <Loading size={ 45 }/>
             </div>
         )
@@ -30,7 +30,7 @@ export default function MediaPage( { params }: Props ){
 
     if( ! isLoading && mediaList?.length < 1 ){
         return (
-            <div className="box">
+            <div className="box text-center py-3">
                 { user?.fullName } haven't media.
             </div>
         )
