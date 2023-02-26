@@ -1,3 +1,4 @@
+"use client"
 import Button from "@components/global/Button"
 
 export default function Error( { error, reset }: { error: Error; reset: () => void; } ){
