@@ -61,21 +61,21 @@ function NavBar( props: Props ){
     }, [unreadConversations] )
 
     useEffect( () => {
+        if( ! user?.id ) return
+
         const socket = io( process.env.NEXT_PUBLIC_SERVER_BASE_URL! )
 
-        if( user?.id ){
-            socket.on( 'connect', () => {
-                socket.on( `notification.unread.count.${ user?.id }`, ( count ) => {
-                    setUnreadNotificationsCount( count )
-                    dispatch( baseApi.util.invalidateTags( ['Notification'] ) )
-                } )
-
-                socket.on( `conversation.unread.count.${ user?.id }`, ( count ) => {
-                    setUnreadConversationsCount( count )
-                    dispatch( baseApi.util.invalidateTags( ['Conversation'] ) )
-                } )
+        socket.on( 'connect', () => {
+            socket.on( `notification.unread.count.${ user?.id }`, ( count ) => {
+                setUnreadNotificationsCount( count )
+                dispatch( baseApi.util.invalidateTags( ['Notification'] ) )
             } )
-        }
+
+            socket.on( `conversation.unread.count.${ user?.id }`, ( count ) => {
+                setUnreadConversationsCount( count )
+                dispatch( baseApi.util.invalidateTags( ['Conversation'] ) )
+            } )
+        } )
 
         if( socket ) return () => {
             socket.close()

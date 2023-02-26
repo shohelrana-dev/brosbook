@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "react"
-import { Kanit } from '@next/font/google'
+import { Kanit } from 'next/font/google'
 import Providers from "./providers"
 import Navbar from "@components/global/Navbar"
 import { cookies } from "next/headers"

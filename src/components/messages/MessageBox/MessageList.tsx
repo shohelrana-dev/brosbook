@@ -31,17 +31,17 @@ export default function MessageList( { conversation }: Props ){
     const participant = conversation.user1.id === user?.id ? conversation.user2 : conversation.user1
 
     useEffect( () => {
+        if( ! conversation?.id || ! user?.id ) return
+
         const socket = io( process.env.NEXT_PUBLIC_SERVER_BASE_URL! )
 
-        if( conversation?.id && user?.id ){
-            socket.on( 'connect', () => {
-                socket.on( `message.new.${ conversation.id }`, addMessage )
+        socket.on( 'connect', () => {
+            socket.on( `message.new.${ conversation.id }`, addMessage )
 
-                socket.on( `message.update.${ conversation.id }`, updateMessage )
+            socket.on( `message.update.${ conversation.id }`, updateMessage )
 
-                socket.on( `message.seen.${ conversation.id }.${ user.id }`, updateMessage )
-            } )
-        }
+            socket.on( `message.seen.${ conversation.id }.${ user.id }`, updateMessage )
+        } )
 
         if( socket ) return () => {
             socket.close()

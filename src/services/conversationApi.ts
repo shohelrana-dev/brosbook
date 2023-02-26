@@ -51,7 +51,7 @@ export const conversationApi = baseApi.injectEndpoints( {
                 method: "POST",
                 body: formData
             } ),
-            invalidatesTags: ['Message', "Conversation"]
+            invalidatesTags: ['Conversation']
         } ),
 
         sendReaction: build.mutation<Message, { messageId: string, conversationId: string, name: string }>( {
@@ -59,8 +59,7 @@ export const conversationApi = baseApi.injectEndpoints( {
                 url: `/conversations/${ conversationId }/messages/${ messageId }/reactions`,
                 method: "POST",
                 body: params
-            } ),
-            invalidatesTags: ['Message']
+            } )
         } ),
 
         seenAllMessages: build.mutation<Message, string>( {
@@ -68,7 +67,7 @@ export const conversationApi = baseApi.injectEndpoints( {
                 url: `/conversations/${ conversationId }/messages/seen_all`,
                 method: "POST"
             } ),
-            invalidatesTags: ['Message', 'Conversation']
+            invalidatesTags: ['Conversation']
         } ),
 
         getConversationMediaList: build.query<ListResponse<Media>, { conversationId: string, page?: number, limit?: number }>( {

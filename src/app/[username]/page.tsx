@@ -4,7 +4,7 @@ import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import { useGetPostsQuery } from "@services/postsApi"
 import { Post } from "@interfaces/posts.interfaces"
 import InfiniteScroll from "react-infinite-scroller"
-import LoadingPosts from "@components/loading/LoadingPosts"
+import PostsLoader from "@components/loaders/PostsLoader"
 import Loading from "@components/global/Loading"
 import { useGetUserByUsernameQuery } from "@services/usersApi"
 
@@ -36,7 +36,7 @@ export default function UserPostsPage( { params }: Props ){
             <InfiniteScroll
                 loadMore={ loadMoreItem }
                 hasMore={ hasMoreItem }
-                loader={ <LoadingPosts/> }
+                loader={ <PostsLoader/> }
             >
                 { posts && posts.map( ( post: Post ) => (
                     <PostCard post={ post } key={ post.id }/>

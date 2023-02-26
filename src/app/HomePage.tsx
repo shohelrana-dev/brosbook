@@ -5,7 +5,7 @@ import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import { useGetFeedPostsQuery } from "@services/postsApi"
 import { Post } from "@interfaces/posts.interfaces"
 import InfiniteScroll from 'react-infinite-scroller'
-import LoadingPosts from "@components/loading/LoadingPosts"
+import PostsLoader from "@components/loaders/PostsLoader"
 
 export default function HomePage(){
     //hooks
@@ -20,12 +20,12 @@ export default function HomePage(){
     return (
         <div className="mt-5 mb-4">
             <CreatePostForm/>
-            { ( posts.length < 1 && isLoading ) ? <LoadingPosts/> : null }
+            { ( posts.length < 1 && isLoading ) ? <PostsLoader/> : null }
 
             <InfiniteScroll
                 loadMore={ loadMoreItem }
                 hasMore={ hasMoreItem }
-                loader={ <LoadingPosts/> }
+                loader={ <PostsLoader/> }
             >
                 { posts.map( ( post: Post ) => (
                     <PostCard post={ post } key={ post.id }/>
