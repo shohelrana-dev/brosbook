@@ -63,15 +63,20 @@ function NavBar( props: Props ){
     useEffect( () => {
         const socket = io( process.env.NEXT_PUBLIC_SERVER_BASE_URL! )
 
-        socket.on( `unread_notification_count_${ user?.id }`, ( count ) => {
-            setUnreadNotificationsCount( count )
-            dispatch( baseApi.util.invalidateTags( ['Notification'] ) )
-        } )
+        if( user ){
+            socket.on( 'connect', () => {
 
-        socket.on( `unread_conversation_count_${ user?.id }`, ( count ) => {
-            setUnreadConversationsCount( count )
-            dispatch( baseApi.util.invalidateTags( ['Conversation'] ) )
-        } )
+                socket.on( `unread_notification_count_${ user?.id }`, ( count ) => {
+                    setUnreadNotificationsCount( count )
+                    dispatch( baseApi.util.invalidateTags( ['Notification'] ) )
+                } )
+
+                socket.on( `unread_conversation_count_${ user?.id }`, ( count ) => {
+                    setUnreadConversationsCount( count )
+                    dispatch( baseApi.util.invalidateTags( ['Conversation'] ) )
+                } )
+            } )
+        }
 
         if( socket ) return () => {
             socket.close()

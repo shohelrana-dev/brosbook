@@ -34,11 +34,13 @@ export default function MessageList( { conversation }: Props ){
         const socket = io( process.env.NEXT_PUBLIC_SERVER_BASE_URL! )
 
         if( conversation ){
-            socket.on( `new_message_${ conversation.id }`, addMessage )
+            socket.on( 'connect', () => {
+                socket.on( `new_message_${ conversation.id }`, addMessage )
 
-            socket.on( `new_reaction_${ conversation.id }`, updateMessage )
+                socket.on( `new_reaction_${ conversation.id }`, updateMessage )
 
-            socket.on( `seen_message_${ conversation.id }_${ user.id }`, updateMessage )
+                socket.on( `seen_message_${ conversation.id }_${ user.id }`, updateMessage )
+            } )
         }
 
         if( socket ) return () => {
