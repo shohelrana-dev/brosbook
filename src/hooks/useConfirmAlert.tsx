@@ -44,20 +44,20 @@ export function ConfirmAlertProvider( { children }: PropsWithChildren ){
             { children }
             <Modal
                 isOpen={ isOpen }
-                style={ { maxWidth: 330, padding: "25px 30px" } }
+                style={ { maxWidth: 330, padding: "16px 28px" } }
                 isShowCancelIcon={false}
             >
-                <div className="mb-5 block">
+                <div className="mb-4 block">
                     <h3 className="text-xl font-bold mb-2">{ options.title }</h3>
                     <p className="text-gray-800">{ options.message }</p>
                 </div>
-                <div className="basis-full mb-2">
-                    <Button fullWidth size="sm" className="mb-3" onClick={ onConfirm }>
-                        { options.confirmButtonLabel }
-                    </Button>
-                    <ButtonOutline size="sm" fullWidth onClick={ onCancel }>
+                <div className="basis-full flex justify-end gap-2">
+                    <ButtonOutline size="sm" onClick={ onCancel }>
                         { options.cancelButtonLabel }
                     </ButtonOutline>
+                    <Button size="sm" className="mb-3" onClick={ onConfirm }>
+                        { options.confirmButtonLabel }
+                    </Button>
                 </div>
             </Modal>
         </ConfirmAlertContext.Provider>
