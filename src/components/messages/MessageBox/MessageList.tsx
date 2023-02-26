@@ -35,11 +35,11 @@ export default function MessageList( { conversation }: Props ){
 
         if( conversation ){
             socket.on( 'connect', () => {
-                socket.on( `new_message_${ conversation.id }`, addMessage )
+                socket.on( `message.new.${ conversation.id }`, addMessage )
 
-                socket.on( `new_reaction_${ conversation.id }`, updateMessage )
+                socket.on( `message.update.${ conversation.id }`, updateMessage )
 
-                socket.on( `seen_message_${ conversation.id }_${ user.id }`, updateMessage )
+                socket.on( `message.seen.${ conversation.id }.${ user.id }`, updateMessage )
             } )
         }
 

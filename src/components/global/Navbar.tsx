@@ -66,12 +66,12 @@ function NavBar( props: Props ){
         if( user ){
             socket.on( 'connect', () => {
 
-                socket.on( `unread_notification_count_${ user?.id }`, ( count ) => {
+                socket.on( `notification.unread.count.${ user?.id }`, ( count ) => {
                     setUnreadNotificationsCount( count )
                     dispatch( baseApi.util.invalidateTags( ['Notification'] ) )
                 } )
 
-                socket.on( `unread_conversation_count_${ user?.id }`, ( count ) => {
+                socket.on( `conversation.unread.count.${ user?.id }`, ( count ) => {
                     setUnreadConversationsCount( count )
                     dispatch( baseApi.util.invalidateTags( ['Conversation'] ) )
                 } )

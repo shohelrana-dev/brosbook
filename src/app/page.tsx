@@ -4,7 +4,7 @@ import SidebarLayout from "@components/global/SidebarLayout"
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
-    title: 'Home'
+    title: `Home | ${ process.env.NEXT_PUBLIC_APP_NAME }`
 }
 
 function Page(){
