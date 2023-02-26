@@ -44,6 +44,7 @@ export default function SearchConversation(){
                 onBlur={ onBlur }
                 onFocus={ () => setIsFocus( true ) }
                 onChange={ ( e ) => {onChange( e.target.value )} }
+                autoComplete="off"
             />
             { isFocus ? <SearchUserList onUserClick={ onUserClick } searchKey={ searchKey }/> : null }
         </div>

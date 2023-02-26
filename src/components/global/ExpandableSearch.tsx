@@ -51,7 +51,9 @@ export default function ExpandableSearch(){
                 onBlur={ onBlur }
                 className="!rounded-3xl z-10 !bg-transparent"
                 wrapperClassname={ inputWrapperClassname } type="text" label="Search"
-                labelHide/>
+                labelHide
+                autoComplete="off"
+            />
 
             <div className="absolute right-1 top-1 -z-10">
                 <IconButton>
