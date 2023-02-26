@@ -1,8 +1,12 @@
-import React, {PropsWithChildren} from 'react'
+import React, { PropsWithChildren } from 'react'
 
-function Layout({children}: PropsWithChildren) {
+function Layout( { children }: PropsWithChildren ){
     return (
-        <div className="auth-layout">{children}</div>
+        <div className="h-screen flex flex-col bg-theme-gray">
+            <div className="w-90 mx-auto mt-12 lg:mt-28">
+                { children }
+            </div>
+        </div>
     )
 }
 

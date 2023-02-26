@@ -4,6 +4,11 @@ import Avatar from "@components/global/Avatar"
 import SidebarLayout from "@components/global/SidebarLayout"
 import { getCurrentUser } from "@services/index"
 import { cookies } from "next/headers"
+import { Metadata } from "next"
+
+export const metadata: Metadata = {
+    title: 'Your account'
+}
 
 const tabLinks = [
     { label: 'Account', pathname: '/account' },

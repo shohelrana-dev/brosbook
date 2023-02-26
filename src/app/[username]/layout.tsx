@@ -13,9 +13,36 @@ import ProfilePhoto from "@components/profile/ProfilePhoto"
 import NotFound from "../not-found"
 import SidebarLayout from "@components/global/SidebarLayout"
 import ExtraOptions from "@components/profile/ExtraOptions"
-import { getCurrentUser, getFollowersCount, getFollowingsCount, getUserByUsername } from "@services/index"
+import {
+    getCurrentUser,
+    getFollowersCount,
+    getFollowingsCount,
+    getUserByUsername
+} from "@services/index"
+import { Metadata } from "next"
 
-interface ProfileLayoutProps {
+export const generateMetadata = async( { params }: Props ): Promise<Metadata> => {
+    const user = await getUserByUsername( params.username, cookies() )
+
+    const title       = `${ user?.fullName } (@${ user?.username }) | ${ process.env.NEXT_PUBLIC_APP_NAME }`
+    const description = user?.profile?.bio
+    const image       = user?.avatar.url
+    const url         = `${ process.env.NEXT_PUBLIC_APP_URL }/${ user?.username }`
+
+    return {
+        title,
+        description,
+        other: {
+            "og:type": 'profile',
+            "og:url": url,
+            "og:title": title,
+            "og:description": description!,
+            "og:image": image!
+        }
+    }
+}
+
+interface Props {
     children: ReactNode
     params: {
         username: string
@@ -24,7 +51,7 @@ interface ProfileLayoutProps {
 
 export const revalidate = 0
 
-export default async function ProfileLayout( { children, params }: ProfileLayoutProps ){
+export default async function ProfileLayout( { children, params }: Props ){
     const nextCookies = cookies()
 
     const user = await getUserByUsername( params.username, nextCookies )
