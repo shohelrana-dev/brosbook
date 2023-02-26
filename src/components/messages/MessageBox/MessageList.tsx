@@ -33,7 +33,7 @@ export default function MessageList( { conversation }: Props ){
     useEffect( () => {
         const socket = io( process.env.NEXT_PUBLIC_SERVER_BASE_URL! )
 
-        if( conversation ){
+        if( conversation?.id && user?.id ){
             socket.on( 'connect', () => {
                 socket.on( `message.new.${ conversation.id }`, addMessage )
 

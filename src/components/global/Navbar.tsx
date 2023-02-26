@@ -63,9 +63,8 @@ function NavBar( props: Props ){
     useEffect( () => {
         const socket = io( process.env.NEXT_PUBLIC_SERVER_BASE_URL! )
 
-        if( user ){
+        if( user?.id ){
             socket.on( 'connect', () => {
-
                 socket.on( `notification.unread.count.${ user?.id }`, ( count ) => {
                     setUnreadNotificationsCount( count )
                     dispatch( baseApi.util.invalidateTags( ['Notification'] ) )
