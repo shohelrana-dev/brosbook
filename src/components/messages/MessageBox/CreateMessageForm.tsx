@@ -33,9 +33,9 @@ export default function CreateMessageForm( { conversation }: Props ){
                 formData.append( 'body', messageText )
                 formData.append( 'type', isMultipleEmoji( messageText ) ? MessageType.EMOJI : MessageType.TEXT )
 
-                await sendMessage( formData ).unwrap()
-
                 setMessageText( '' )
+
+                await sendMessage( formData ).unwrap()
             } catch ( err ) {
                 console.log( err )
             }
