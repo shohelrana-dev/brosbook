@@ -1,12 +1,15 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useRouter, useSearchParams } from "next/navigation"
 import toast from "react-hot-toast"
 import { GoogleLogin, CredentialResponse, GoogleOAuthProvider } from '@react-oauth/google'
 
 import { useLoginWithGoogleMutation } from "@services/authApi"
-import Loading from "@components/global/Loading"
 
-function GoogleLoginButton(){
+interface Props {
+    setIsLoading: ( isLoading: boolean ) => void
+}
+
+function GoogleLoginButton( { setIsLoading }: Props ){
     //hooks
     const router                            = useRouter()
     const params                            = useSearchParams()
@@ -23,14 +26,16 @@ function GoogleLoginButton(){
         }
     }
 
-    if( isSuccess || isLoading ) return <Loading/>
+    useEffect( () => {
+        setIsLoading( isLoading || isSuccess )
+    }, [isSuccess, isLoading] )
 
     return (
         <GoogleOAuthProvider clientId={ process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID! }>
             <div className="flex justify-center my-2">
                 <GoogleLogin
                     onSuccess={ responseGoogle }
-                    onError={ () => console.log( 'Google Login Failed' ) }
+                    onError={ () => console.error( 'Google Login Failed' ) }
                     useOneTap={ true }
                 />
             </div>

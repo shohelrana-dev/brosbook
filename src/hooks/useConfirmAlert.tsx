@@ -2,7 +2,7 @@ import ButtonOutline from "@components/global/ButtonOutline"
 import Button from "@components/global/Button"
 import { createContext, PropsWithChildren, useContext, useState } from "react"
 import Modal from "@components/global/Modal"
-import toast from "react-hot-toast";
+import toast from "react-hot-toast"
 
 export interface Options {
     title: string

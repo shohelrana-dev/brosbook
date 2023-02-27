@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FiLock } from "react-icons/fi"
 import AnimatedInput from "@components/global/AnimatedInput"
 import PasswordInput from "@components/global/PasswordInput"
@@ -14,14 +14,17 @@ import { CredentialPayload } from "@interfaces/auth.interfaces"
 import toast from "react-hot-toast"
 import { useDispatch } from "react-redux"
 import { setEmail } from "@slices/authSlice"
+import Loading from "@components/global/Loading";
+import FrontDropLoading from "@components/global/FrontDropLoading";
 
 export default function Login(){
     //hooks
-    const dispatch                                 = useDispatch()
-    const router                                   = useRouter()
-    const params                                   = useSearchParams()
-    const [login, { isLoading, isSuccess, data }]  = useLoginMutation()
-    const { formData, onChange, onSubmit, errors } = useForm<CredentialPayload>( login )
+    const dispatch                                                = useDispatch()
+    const router                                                  = useRouter()
+    const params                                                  = useSearchParams()
+    const [login, { isLoading, isSuccess, data }]                 = useLoginMutation()
+    const { formData, onChange, onSubmit, errors }                = useForm<CredentialPayload>( login )
+    const [isLoadingLoginWithGoogle, setIsLoadingLoginWithGoogle] = useState<boolean>( false )
 
     useEffect( () => {
         if( isSuccess ){
@@ -37,7 +40,9 @@ export default function Login(){
     }, [isSuccess] )
 
     return (
-        <>
+        <div className="relative z-50">
+            <FrontDropLoading isLoading={ isLoading || isSuccess || isLoadingLoginWithGoogle }/>
+
             <div className="auth-box">
                 <div className="flex justify-center mb-2">
                     <FiLock size="30"/>
@@ -59,14 +64,14 @@ export default function Login(){
                         error={ errors?.password }
                         onChange={ onChange }
                     />
-                    <Button className="w-full mt-3" type="submit" isLoading={ isLoading || isSuccess }>
+                    <Button className="w-full mt-3" type="submit">
                         Log In
                     </Button>
                 </form>
 
                 <Divider>OR</Divider>
 
-                <GoogleLoginButton/>
+                <GoogleLoginButton setIsLoading={ setIsLoadingLoginWithGoogle }/>
 
                 <small className="block text-center">
                     <Link href="/auth/forgot_password" className="text-blue-500">
@@ -83,6 +88,6 @@ export default function Login(){
                     </Link>
                 </p>
             </div>
-        </>
+        </div>
     )
 }

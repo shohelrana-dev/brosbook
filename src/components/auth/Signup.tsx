@@ -14,13 +14,15 @@ import toast from "react-hot-toast"
 import { setEmail } from "@slices/authSlice"
 import { useDispatch } from "react-redux"
 import PasswordStrengthBar from 'react-password-strength-bar'
+import FrontDropLoading from "@components/global/FrontDropLoading"
 
 export default function Signup(){
     //hooks
-    const dispatch                                 = useDispatch()
-    const router                                   = useRouter()
-    const [signup, { isLoading, isSuccess }]       = useSignupMutation()
-    const { formData, onChange, onSubmit, errors } = useForm<SignupPayload>( signup )
+    const dispatch                                                = useDispatch()
+    const router                                                  = useRouter()
+    const [signup, { isLoading, isSuccess }]                      = useSignupMutation()
+    const { formData, onChange, onSubmit, errors }                = useForm<SignupPayload>( signup )
+    const [isLoadingLoginWithGoogle, setIsLoadingLoginWithGoogle] = useState<boolean>( false )
 
     useEffect( () => {
         if( isSuccess ){
@@ -31,11 +33,12 @@ export default function Signup(){
     }, [isSuccess] )
 
     return (
-        <>
+        <div className="relative z-50">
+            <FrontDropLoading isLoading={ isLoading || isSuccess || isLoadingLoginWithGoogle }/>
             <div className="auth-box">
                 <h1 className="text-xl text-center mb-4 font-medium">Sign Up</h1>
 
-                <GoogleLoginButton/>
+                <GoogleLoginButton setIsLoading={ setIsLoadingLoginWithGoogle }/>
 
                 <Divider>OR</Divider>
 
@@ -98,6 +101,6 @@ export default function Signup(){
                     </Link>
                 </p>
             </div>
-        </>
+        </div>
     )
 }
