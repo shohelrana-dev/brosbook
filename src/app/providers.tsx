@@ -7,6 +7,7 @@ import { ConfirmAlertProvider } from "@hooks/useConfirmAlert"
 import { UnauthorizedPopupProvider } from "@hooks/useUnauthorzedAlert"
 import Boot from "@components/global/Boot"
 import { ThemeProvider } from "@material-tailwind/react"
+import 'react-loading-skeleton/dist/skeleton.css'
 
 function Providers( { children }: { children: ReactNode } ){
 
