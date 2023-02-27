@@ -44,7 +44,7 @@ export default function NotificationList(){
                     </div>
                 ) : null }
 
-                { ( ! isLoading && notifications?.length < 1 ) ? <p>No notifications</p> : null }
+                { ( ! isLoading && notifications?.length < 1 ) ? <p className="ml-2">No notifications</p> : null }
             </div>
         </AnimatedComponent>
     )

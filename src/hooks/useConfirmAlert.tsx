@@ -2,12 +2,14 @@ import ButtonOutline from "@components/global/ButtonOutline"
 import Button from "@components/global/Button"
 import { createContext, PropsWithChildren, useContext, useState } from "react"
 import Modal from "@components/global/Modal"
+import toast from "react-hot-toast";
 
 export interface Options {
     title: string
     message?: string
     confirmButtonLabel?: string
     cancelButtonLabel?: string
+    onConfirm?: () => void
 }
 
 // @ts-ignore
@@ -29,9 +31,19 @@ export function ConfirmAlertProvider( { children }: PropsWithChildren ){
         } )
     }
 
-    function onConfirm(){
-        resolver.resolve( true )
-        setIsOpen( false )
+    async function onConfirm(){
+        if( typeof options.onConfirm === 'function' ){
+            try {
+                options.onConfirm()
+                resolver.resolve( true )
+                setIsOpen( false )
+            } catch ( err: any ) {
+                toast.error( err?.message )
+            }
+        } else{
+            resolver.resolve( true )
+            setIsOpen( false )
+        }
     }
 
     function onCancel(){
@@ -45,7 +57,7 @@ export function ConfirmAlertProvider( { children }: PropsWithChildren ){
             <Modal
                 isOpen={ isOpen }
                 style={ { maxWidth: 330, padding: "16px 28px" } }
-                isShowCancelIcon={false}
+                isShowCancelIcon={ false }
             >
                 <div className="mb-4 block">
                     <h3 className="text-xl font-bold mb-2">{ options.title }</h3>

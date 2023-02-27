@@ -7,7 +7,10 @@ import { ImCheckmark as CheckmarkIcon } from "react-icons/im"
 import { ImCross as CrossIcon } from "react-icons/im"
 import Link from "next/link"
 import ButtonOutline from "@components/global/ButtonOutline"
-import ButtonGray from "@components/global/ButtonGray"
+import Button from "@components/global/Button"
+import { jwtDecode } from 'jwt-js-decode'
+import { useEffect, useState } from "react"
+
 
 type Props = {
     params: { token: string }
@@ -16,11 +19,10 @@ type Props = {
 export default function EmailVerifyPage( { params }: Props ){
     const [verifyEmail, { isSuccess, isError }] = useVerifyEmailMutation()
     const [resendVerificationLink, {
-        isSuccess: isResendEmail,
-        isLoading: resendEmailLoading
+        isSuccess: isResentEmail,
+        isLoading: resendingLink
     }]                                          = useResendVerificationLinkMutation()
-
-    const email = localStorage?.getItem( 'email' ) || ''
+    const [email, setEmail]                     = useState<string>( '' )
 
     useAsyncEffect( async() => {
         const token = params.token
@@ -28,26 +30,34 @@ export default function EmailVerifyPage( { params }: Props ){
         try {
             await verifyEmail( token ).unwrap()
             toast.success( 'Email verified.' )
-            localStorage.removeItem( 'email' )
         } catch ( err: any ) {
             console.error( err )
-            toast.error( err?.data?.message || 'Email verification failed.' )
+            toast.error( err?.data?.message || 'Invalid token!' )
+        }
+    }, [] )
+
+    useEffect( () => {
+        try {
+            const decoded = jwtDecode( params.token )
+            setEmail( decoded.payload?.email )
+        } catch ( e ) {
+            console.error( e )
         }
     }, [] )
 
     async function resendEmail(){
         try {
             await resendVerificationLink( email ).unwrap()
-            toast.success( 'Email verification link has sent to your email.' )
+            toast.success( `Email verification link has sent to ${ email }` )
         } catch ( err ) {
             console.error( err )
         }
     }
-
+    
     const successMarkup = (
         <>
             <div className="flex justify-center flex-col items-center">
-                <p className="mb-2 text-green-600">
+                <p className="mb-4 text-green-600">
                     <CheckmarkIcon size={ 25 }/>
                 </p>
                 <p className="mb-3">
@@ -64,7 +74,7 @@ export default function EmailVerifyPage( { params }: Props ){
     const errorMarkup = (
         <>
             <div className="flex justify-center flex-col items-center p-2 rounded-2xl">
-                <p className="mb-2 text-red-600">
+                <p className="mb-4 text-red-600">
                     <CrossIcon size={ 25 }/>
                 </p>
                 <p className="mb-3">
@@ -73,31 +83,36 @@ export default function EmailVerifyPage( { params }: Props ){
                     below.
                 </p>
             </div>
-            <p className="text-sm text-gray-500 mt-8">
-                { isResendEmail ? (
-                    <span>Email resent. Please check your inbox.</span>
+            <div className="text-sm text-gray-700 mt-6">
+                { isResentEmail ? (
+                    <p>Email resent. Please check your inbox.</p>
                 ) : (
-                    <ButtonGray onClick={ resendEmail }
-                                isLoading={ resendEmailLoading } disabled={ ! email }>
-                        Resend email
-                    </ButtonGray>
+                    <div className="flex flex-col items-center">
+                        <p>Didn&apos;t receive the link email?</p>
+                        <Button onClick={ resendEmail } isLoading={ resendingLink } disabled={ ! email } size="sm">
+                            Resend email
+                        </Button>
+                    </div>
                 ) }
-            </p>
+            </div>
         </>
     )
 
     if( isSuccess || isError ){
         return (
-            <div className="h-screen flex flex-col bg-theme-gray">
-                <div className="w-90 mx-auto mt-12 lg:mt-28">
-                    <div className="auth-box">
-                        <div className="text-center">
-                            <h1 className="text-xl text-center mb-4 font-medium">Email verification</h1>
-                            { isSuccess ? successMarkup : errorMarkup }
-                        </div>
+            <>
+                <div className="mb-3">
+                    <h1 className="text-xl md:text-3xl text-center mb-3 font-medium">Email Verification</h1>
+                    <p className="text-center">
+                        Thank you for signing up for a { process.env.NEXT_PUBLIC_APP_NAME } account.
+                    </p>
+                </div>
+                <div className="auth-box">
+                    <div className="text-center">
+                        { isSuccess ? successMarkup : errorMarkup }
                     </div>
                 </div>
-            </div>
+            </>
         )
     }
 

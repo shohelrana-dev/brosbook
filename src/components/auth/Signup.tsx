@@ -4,7 +4,6 @@ import GoogleLoginButton from "@components/global/GoogleLoginButton"
 import Divider from "@components/global/Divider"
 import AnimatedInput from "@components/global/AnimatedInput"
 import PasswordInput from "@components/global/PasswordInput"
-import { Alert } from "@material-tailwind/react"
 import Button from "@components/global/Button"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -12,26 +11,24 @@ import { useSignupMutation } from "@services/authApi"
 import { useForm } from "@hooks/useForm"
 import { SignupPayload } from "@interfaces/auth.interfaces"
 import toast from "react-hot-toast"
-import { passwordStrength } from "check-password-strength"
+import { setEmail } from "@slices/authSlice"
+import { useDispatch } from "react-redux"
+import PasswordStrengthBar from 'react-password-strength-bar'
 
 export default function Signup(){
     //hooks
+    const dispatch                                 = useDispatch()
     const router                                   = useRouter()
     const [signup, { isLoading, isSuccess }]       = useSignupMutation()
     const { formData, onChange, onSubmit, errors } = useForm<SignupPayload>( signup )
 
-    const [passwordWarning, setPasswordWarning] = useState( '' )
-
     useEffect( () => {
         if( isSuccess ){
+            dispatch( setEmail( formData.email ) )
             router.push( '/auth/email_verification/required' )
             toast.success( 'Signup success. You have received a mail to verify the account.' )
         }
     }, [isSuccess] )
-
-    function checkPasswordWarning(){
-        setPasswordWarning( passwordStrength( formData.password ).value )
-    }
 
     return (
         <>
@@ -76,14 +73,10 @@ export default function Signup(){
                         name="password"
                         value={ formData.password }
                         error={ errors.password }
-                        onChange={ ( e ) => {
-                            onChange( e )
-                            checkPasswordWarning()
-                        } }
+                        onChange={ onChange }
                     />
-                    { passwordWarning ? (
-                        <Alert color="amber" className="mt-3 py-1">{ passwordWarning }</Alert>
-                    ) : null }
+                    { formData.password ? <PasswordStrengthBar password={ formData.password }/> : null }
+
                     <Button className="w-full mt-3" type="submit" isLoading={ isLoading || isSuccess }>
                         Sign Up
                     </Button>

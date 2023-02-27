@@ -12,9 +12,12 @@ import { useLoginMutation } from "@services/authApi"
 import { useForm } from "@hooks/useForm"
 import { CredentialPayload } from "@interfaces/auth.interfaces"
 import toast from "react-hot-toast"
+import { useDispatch } from "react-redux"
+import { setEmail } from "@slices/authSlice"
 
 export default function Login(){
     //hooks
+    const dispatch                                 = useDispatch()
     const router                                   = useRouter()
     const params                                   = useSearchParams()
     const [login, { isLoading, isSuccess, data }]  = useLoginMutation()
@@ -26,7 +29,7 @@ export default function Login(){
                 router.push( params.get( 'redirect_to' ) ? params.get( 'redirect_to' )! : '/' )
                 toast.success( 'Logged in.' )
             } else{
-                localStorage.setItem( 'email', data?.user?.email! || '' )
+                dispatch( setEmail( data?.user?.email! ) )
                 router.push( '/auth/email_verification/required' )
                 toast.error( 'Your email not verified yet.' )
             }
