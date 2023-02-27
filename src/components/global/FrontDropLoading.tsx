@@ -11,7 +11,7 @@ export default function FrontDropLoading( { isLoading }: { isLoading: boolean } 
                     animate={ { opacity: 1 } }
                     exit={ { opacity: 0 } }
                     transition={ { duration: 0.2 } }
-                    className="absolute left-0 top-0 w-full h-full rounded-2xl bg-[rgba(244,244,244,0.8)] flex justify-center items-center z-40">
+                    className="absolute left-0 top-0 w-full h-full rounded-2xl bg-[#ffffffc9)] flex justify-center items-center z-40">
                     <Loading color="rgb(58,141,245)"/>
                 </motion.div>
             ) : null }
