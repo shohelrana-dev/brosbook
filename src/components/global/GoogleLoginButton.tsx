@@ -2,7 +2,6 @@ import React, { useEffect } from 'react'
 import { useRouter, useSearchParams } from "next/navigation"
 import toast from "react-hot-toast"
 import { GoogleLogin, CredentialResponse, GoogleOAuthProvider } from '@react-oauth/google'
-
 import { useLoginWithGoogleMutation } from "@services/authApi"
 
 interface Props {
@@ -27,7 +26,13 @@ function GoogleLoginButton( { setIsLoading }: Props ){
     }
 
     useEffect( () => {
-        setIsLoading( isLoading || isSuccess )
+        if( isLoading ){
+            setIsLoading( true )
+        } else if( isSuccess ){
+            setIsLoading( true )
+        } else{
+            setIsLoading( false )
+        }
     }, [isSuccess, isLoading] )
 
     return (

@@ -41,7 +41,7 @@ export default function Login(){
 
     return (
         <div className="relative z-50">
-            <FrontDropLoading isLoading={ !isLoading }/>
+            <FrontDropLoading isLoading={ isLoading || isSuccess || isLoadingLoginWithGoogle }/>
 
             <div className="auth-box">
                 <div className="flex justify-center mb-2">
