@@ -80,7 +80,7 @@ export default function Signup(){
                     />
                     { formData.password ? <PasswordStrengthBar password={ formData.password }/> : null }
 
-                    <Button className="w-full mt-3" type="submit" isLoading={ isLoading || isSuccess }>
+                    <Button className="w-full mt-3" type="submit">
                         Sign Up
                     </Button>
                 </form>
