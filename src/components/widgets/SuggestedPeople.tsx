@@ -7,23 +7,31 @@ import UserItem from "@components/global/UserItem"
 import Link from "next/link"
 import ButtonGray from "@components/global/ButtonGray"
 import UsersLoader from "@components/loaders/UsersLoader"
+import useAuthState from "@hooks/useAuthState"
 
-function SuggestedPeople(){
+export default function SuggestedPeople(){
+    const { isChecked, isAuthenticated } = useAuthState()
     const {
               isLoading,
               items: users,
-              hasMoreItem
-          } = useGetInfiniteListQuery<User>( useGetSuggestedUsersQuery )
+              hasMoreItem,
+              isSuccess
+          }                              = useGetInfiniteListQuery<User>( useGetSuggestedUsersQuery )
 
-    if( ! isLoading && users?.length < 1 ){
-        return null
+    if( ! isChecked || isLoading ){
+        return (
+            <div className="box p-5">
+                <h2 className="text-xl font-medium mb-5">Suggested People</h2>
+                <UsersLoader/>
+            </div>
+        )
     }
+
+    if( ! isAuthenticated ) return null
 
     return (
         <div className="box p-5">
             <h2 className="text-xl font-medium mb-5">Suggested People</h2>
-
-            { isLoading ? <UsersLoader/> : null }
 
             { users.length > 0 ? users.map( ( user: User ) => (
                 <UserItem user={ user } key={ user.id }/>
@@ -36,8 +44,10 @@ function SuggestedPeople(){
                     </ButtonGray>
                 </Link>
             ) : null }
+
+            { isSuccess && users.length < 1 ? (
+                <p>No suggestions</p>
+            ) : null }
         </div>
     )
 }
-
-export default SuggestedPeople

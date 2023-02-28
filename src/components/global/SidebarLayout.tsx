@@ -11,7 +11,6 @@ function SidebarLayout( { children }: PropsWithChildren ){
                 </div>
                 <aside className="hidden lg:block w-4/12 mt-4">
                     <Suspense fallback={ <Loading size={ 40 }/> }>
-                        {/*@ts-ignore*/ }
                         <Sidebar/>
                     </Suspense>
                 </aside>
