@@ -14,8 +14,7 @@ import { CredentialPayload } from "@interfaces/auth.interfaces"
 import toast from "react-hot-toast"
 import { useDispatch } from "react-redux"
 import { setEmail } from "@slices/authSlice"
-import Loading from "@components/global/Loading";
-import FrontDropLoading from "@components/global/FrontDropLoading";
+import FrontDropLoading from "@components/global/FrontDropLoading"
 
 export default function Login(){
     //hooks

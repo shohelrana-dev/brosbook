@@ -1,11 +1,10 @@
 "use client"
 import { useGetFollowingsQuery, useGetUserByUsernameQuery } from "@services/usersApi"
 import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
-import Loading from "@components/global/Loading"
 import { User } from "@interfaces/user.interfaces"
 import UserItem from "@components/global/UserItem"
 import InfiniteScroll from "react-infinite-scroller"
-import UsersLoader from "@components/loaders/UsersLoader";
+import UsersLoader from "@components/loaders/UsersLoader"
 
 interface Props {
     params: { username: string }

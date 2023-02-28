@@ -2,8 +2,8 @@ import PostCard from "@components/post/PostCard"
 import SidebarLayout from "@components/global/SidebarLayout"
 import { getPostById } from "@services/index"
 import { cookies } from "next/headers"
-import NotFound from "../../not-found"
 import { Metadata } from "next"
+import { notFound } from "next/navigation"
 
 export const generateMetadata = async( { params }: Props ): Promise<Metadata> => {
     const post        = await getPostById( params.postId, cookies() )
@@ -36,7 +36,7 @@ export const revalidate = 0
 export default async function SinglePostPage( { params }: Props ){
     const post = await getPostById( params.postId, cookies() )
 
-    if( ! post ) return <NotFound/>
+    if( ! post ) return notFound()
 
     return (
         <SidebarLayout>

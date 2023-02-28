@@ -62,7 +62,7 @@ export default function ProfilePhoto({user}: Props) {
     return (
         <div className="relative">
             <input hidden name="photo" type="file" accept="image/*" onChange={(event) => {
-                onChange(event);
+                onChange(event)
                 setIsModalOpen(true)
             }}
                    ref={inputRef}/>

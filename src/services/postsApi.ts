@@ -1,5 +1,5 @@
 import { Post } from "@interfaces/posts.interfaces"
-import { baseApi } from "@services/baseApi";
+import { baseApi } from "@services/baseApi"
 import { ListResponse } from "@interfaces/index.interfaces"
 
 export const postsApi = baseApi.injectEndpoints( {

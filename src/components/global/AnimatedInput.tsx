@@ -1,6 +1,6 @@
 import React from 'react'
 import {Input, InputProps} from "@material-tailwind/react"
-import classNames from "classnames";
+import classNames from "classnames"
 
 export interface AnimatedInputProps extends Omit<InputProps, 'error'> {
     error?: string

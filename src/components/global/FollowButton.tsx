@@ -14,7 +14,7 @@ interface FollowButtonProps {
     user: User
 }
 
-function FollowButton( props: FollowButtonProps ){
+export default function FollowButton( props: FollowButtonProps ){
     //hooks
     const [user, setUser]     = useState<User>( props.user )
     const [follow]            = useFollowMutation()
@@ -78,5 +78,3 @@ function FollowButton( props: FollowButtonProps ){
         </>
     )
 }
-
-export default FollowButton;

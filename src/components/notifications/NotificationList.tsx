@@ -4,10 +4,8 @@ import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import { useGetNotificationsQuery } from "@services/notificationsApi"
 import { Notification } from "@interfaces/index.interfaces"
 import NotificationItem from "./NotificationItem"
-import Loading from "@components/global/Loading"
 import useInfiniteScroll from "react-infinite-scroll-hook"
-import AnimatedComponent from "@components/global/AnimatedComponent"
-import NotificationsLoader from "@components/loaders/NotificationsLoader";
+import NotificationsLoader from "@components/loaders/NotificationsLoader"
 
 export default function NotificationList(){
     const {
