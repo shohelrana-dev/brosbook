@@ -25,7 +25,7 @@ export default function FollowingPage( { params }: Props ){
     if( isLoading && followings?.length < 1 ){
         return (
             <div className="bg-white box py-3">
-                <UsersLoader count={2}/>
+                <UsersLoader/>
             </div>
         )
     }

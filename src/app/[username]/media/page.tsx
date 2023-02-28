@@ -36,7 +36,7 @@ export default function MediaPage( { params }: Props ){
     }
 
     return (
-        <div className="box bg-white">
+        <div className="box">
             <InfiniteScroll
                 loadMore={ loadMoreItem }
                 hasMore={ hasMoreItem }
