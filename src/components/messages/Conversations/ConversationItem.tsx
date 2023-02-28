@@ -6,6 +6,7 @@ import Avatar from "@components/global/Avatar"
 import useAuthState from "@hooks/useAuthState"
 import timeAgo from "@utils/timeAgo"
 import TextOverflow from 'react-text-overflow'
+import Image from "next/image";
 
 interface SingleConversationProps {
     conversation: Conversation
@@ -29,31 +30,37 @@ function ConversationItem( { conversation }: SingleConversationProps ){
     }
 
     return (
-        <Link legacyBehavior={ true } href={ `/messages/${ conversation.id }` }>
-            <a className="box block cursor-pointer py-2 px-3 flex mb-3">
-                <div className="mr-3">
-                    <Avatar
-                        online={ participant.active === 1 }
-                        alt={ participant.fullName }
-                        src={ participant.avatar.url }
-                    />
-                </div>
-                <div className="mr-3">
+        <Link href={ `/messages/${ conversation.id }` }
+              className="box block cursor-pointer py-2 px-3 flex mb-3 w-full flex-grow gap-3">
+            <div>
+                <Avatar
+                    online={ participant.active === 1 }
+                    alt={ participant.fullName }
+                    src={ participant.avatar.url }
+                />
+            </div>
+            <div className="flex-grow">
+                <div className="flex gap-3">
                     <h5 className="font-medium text-gray-900">
                         { participant.fullName }
                     </h5>
+                    <div>
+                        <small className="text-gray-800">
+                            { timeAgo( conversation?.lastMessage?.createdAt! ) }
+                        </small>
+                    </div>
+                </div>
+                <div className="flex justify-between">
                     <p className={ classNames( 'text-sm text-gray-700', {
                         "!font-bold !text-gray-900": ( ! isLastMessageSenderMe && ! conversation?.lastMessage?.seenAt ) ?? false
                     } ) }>
                         { messageBody ? <TextOverflow text={ messageBody }/> : null }
                     </p>
+                    { isLastMessageSenderMe && conversation?.lastMessage?.seenAt ?
+                        <Image src={ participant?.avatar.url } alt={ participant.fullName } width={ 15 } height={ 15 }
+                               className="rounded-full h-[15px]"/> : null }
                 </div>
-                <div>
-                    <small className="text-gray-800">
-                        { timeAgo( conversation?.lastMessage?.createdAt! ) }
-                    </small>
-                </div>
-            </a>
+            </div>
         </Link>
     )
 }
