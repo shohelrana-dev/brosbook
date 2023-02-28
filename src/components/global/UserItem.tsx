@@ -15,7 +15,7 @@ interface Props {
 
 export default function UserItem( { user, hideFollowButton = false, className }: Props ){
     const { user: currentUser } = useAuthState()
-    const isCurrentUser         = user.id === currentUser.id
+    const isCurrentUser         = user.id === currentUser?.id
 
     return (
         <div className={ classNames( 'flex mb-4 w-full', className ) }>
