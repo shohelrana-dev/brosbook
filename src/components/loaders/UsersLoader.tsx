@@ -4,13 +4,13 @@ export default function UsersLoader( { count = 4 } ){
     return (
         <div className="bg-white">
             { Array.from( { length: count } ).map( () => (
-                <div className="p-2 mb-1 flex gap-3 w-full">
-                    <Skeleton width={ 48 } height={ 48 } circle/>
+                <div className="flex gap-2 w-full mb-3">
+                    <Skeleton width={ 45 } height={ 45 } circle/>
                     <div>
-                        <Skeleton width={ 110 } height={ 12 }/>
-                        <Skeleton width={ 80 } height={ 7 }/>
-                        <div className="mb-[5px]"/>
-                        <Skeleton width={200} height={ 9 }/>
+                        <Skeleton width={ 110 } height={ 10 }/>
+                        <Skeleton width={ 80 } height={ 6 }/>
+                        <div className="mb-[3px]"/>
+                        <Skeleton width={200} height={ 8 }/>
                     </div>
                 </div>
             ) ) }

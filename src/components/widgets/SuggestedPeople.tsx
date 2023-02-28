@@ -1,4 +1,3 @@
-"use client"
 import React from 'react'
 import { User } from "@interfaces/user.interfaces"
 import { useGetSuggestedUsersQuery } from "@services/usersApi"

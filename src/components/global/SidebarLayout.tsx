@@ -1,5 +1,4 @@
-import React, { PropsWithChildren, Suspense } from 'react'
-import Loading from "@components/global/Loading"
+import React, { PropsWithChildren } from 'react'
 import Sidebar from "@components/global/Sidebar"
 
 function SidebarLayout( { children }: PropsWithChildren ){
@@ -10,9 +9,7 @@ function SidebarLayout( { children }: PropsWithChildren ){
                     { children }
                 </div>
                 <aside className="hidden lg:block w-4/12 mt-4">
-                    <Suspense fallback={ <Loading size={ 40 }/> }>
-                        <Sidebar/>
-                    </Suspense>
+                    <Sidebar/>
                 </aside>
             </div>
         </main>

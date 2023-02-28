@@ -1,3 +1,4 @@
+"use client"
 import SuggestedPeople from "@components/widgets/SuggestedPeople"
 import NewUserMessage from "@components/widgets/NewUserMessage"
 
