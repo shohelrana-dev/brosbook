@@ -14,7 +14,8 @@ export default function HomePage(){
               items: posts,
               hasMoreItem,
               loadMoreItem,
-              isSuccess
+              isSuccess,
+              isError
           } = useGetInfiniteListQuery<Post>( useGetFeedPostsQuery )
 
     return (
@@ -32,7 +33,7 @@ export default function HomePage(){
                 ) ) }
             </InfiniteScroll>
 
-            { ( isSuccess && posts?.length < 1 ) ? (
+            { ( ( isSuccess || isError ) && posts?.length < 1 ) ? (
                 <p className="box text-center py-6">Your feed is empty.</p>
             ) : null }
         </div>

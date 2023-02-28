@@ -10,7 +10,6 @@ import TabLinkList from "@components/global/TabLinkList"
 import ButtonOutline from "@components/global/ButtonOutline"
 import CoverPhoto from "@components/profile/CoverPhoto"
 import ProfilePhoto from "@components/profile/ProfilePhoto"
-import NotFound from "../not-found"
 import SidebarLayout from "@components/global/SidebarLayout"
 import ExtraOptions from "@components/profile/ExtraOptions"
 import {
@@ -20,6 +19,7 @@ import {
     getUserByUsername
 } from "@services/index"
 import { Metadata } from "next"
+import { notFound } from "next/navigation"
 
 export const generateMetadata = async( { params }: Props ): Promise<Metadata> => {
     const user = await getUserByUsername( params.username, cookies() )
@@ -56,7 +56,7 @@ export default async function ProfileLayout( { children, params }: Props ){
 
     const user = await getUserByUsername( params.username, nextCookies )
 
-    if( ! user ) return <NotFound/>
+    if( ! user ) return notFound()
 
     const currentUser     = await getCurrentUser( nextCookies )
     const followersCount  = await getFollowersCount( user.id )
