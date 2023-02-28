@@ -2,11 +2,11 @@
 import React from 'react'
 import { User } from "@interfaces/user.interfaces"
 import { useGetSuggestedUsersQuery } from "@services/usersApi"
-import Loading from "@components/global/Loading"
 import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import UserItem from "@components/global/UserItem"
 import Link from "next/link"
 import ButtonGray from "@components/global/ButtonGray"
+import UsersLoader from "@components/loaders/UsersLoader"
 
 function SuggestedPeople(){
     const {
@@ -15,7 +15,7 @@ function SuggestedPeople(){
               hasMoreItem
           } = useGetInfiniteListQuery<User>( useGetSuggestedUsersQuery )
 
-    if( !isLoading && users?.length < 1 ){
+    if( ! isLoading && users?.length < 1 ){
         return null
     }
 
@@ -23,7 +23,7 @@ function SuggestedPeople(){
         <div className="box p-5">
             <h2 className="text-xl font-medium mb-5">Suggested People</h2>
 
-            { isLoading ? <Loading size={ 30 }/> : null }
+            { isLoading ? <UsersLoader/> : null }
 
             { users.length > 0 ? users.map( ( user: User ) => (
                 <UserItem user={ user } key={ user.id }/>

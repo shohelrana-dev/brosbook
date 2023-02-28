@@ -5,7 +5,6 @@ import { useGetPostsQuery } from "@services/postsApi"
 import { Post } from "@interfaces/posts.interfaces"
 import InfiniteScroll from "react-infinite-scroller"
 import PostsLoader from "@components/loaders/PostsLoader"
-import Loading from "@components/global/Loading"
 import { useGetUserByUsernameQuery } from "@services/usersApi"
 
 interface Props {
@@ -24,15 +23,11 @@ export default function UserPostsPage( { params }: Props ){
           }              = useGetInfiniteListQuery<Post>( useGetPostsQuery, { userId: user?.id } )
 
     if( isLoading && posts?.length < 1 ){
-        return (
-            <div className="box text-center py-3">
-                <Loading size={ 45 }/>
-            </div>
-        )
+        return <PostsLoader/>
     }
 
     return (
-        <div className="pt-1">
+        <div className="mt-1">
             <InfiniteScroll
                 loadMore={ loadMoreItem }
                 hasMore={ hasMoreItem }

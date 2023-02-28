@@ -24,7 +24,7 @@ import { Metadata } from "next"
 export const generateMetadata = async( { params }: Props ): Promise<Metadata> => {
     const user = await getUserByUsername( params.username, cookies() )
 
-    const title       = `${ user?.fullName } (@${ user?.username }) | ${ process.env.NEXT_PUBLIC_APP_NAME }`
+    const title       = `${ user?.fullName } (@${ user?.username })`
     const description = user?.profile?.bio
     const image       = user?.avatar.url
     const url         = `${ process.env.NEXT_PUBLIC_APP_URL }/${ user?.username }`

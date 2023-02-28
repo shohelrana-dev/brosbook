@@ -7,6 +7,7 @@ import NotificationItem from "./NotificationItem"
 import Loading from "@components/global/Loading"
 import useInfiniteScroll from "react-infinite-scroll-hook"
 import AnimatedComponent from "@components/global/AnimatedComponent"
+import NotificationsLoader from "@components/loaders/NotificationsLoader";
 
 export default function NotificationList(){
     const {
@@ -28,24 +29,21 @@ export default function NotificationList(){
     } )
 
     return (
-        <AnimatedComponent>
-            <div>
-                <h3 className="text-xl font-bold text-gray-900 ml-2 mb-1">Notifications</h3>
+        <div>
+            <h3 className="text-xl font-bold text-gray-900 ml-2 mb-1">Notifications</h3>
+            { isLoading ? <NotificationsLoader/> : null }
 
-                { isLoading ? <Loading size={ 40 }/> : null }
+            { notifications && notifications.map( ( notification: Notification ) => (
+                <NotificationItem key={ notification.id } notification={ notification }/>
+            ) ) }
 
-                { notifications && notifications.map( ( notification: Notification ) => (
-                    <NotificationItem key={ notification.id } notification={ notification }/>
-                ) ) }
+            { hasMoreItem ? (
+                <div ref={ moreLoadRef }>
+                    <NotificationsLoader count={ 3 }/>
+                </div>
+            ) : null }
 
-                { hasMoreItem ? (
-                    <div ref={ moreLoadRef }>
-                        <Loading size={ 40 }/>
-                    </div>
-                ) : null }
-
-                { ( ! isLoading && notifications?.length < 1 ) ? <p className="ml-2">No notifications</p> : null }
-            </div>
-        </AnimatedComponent>
+            { ( ! isLoading && notifications?.length < 1 ) ? <p className="ml-2">No notifications</p> : null }
+        </div>
     )
 }

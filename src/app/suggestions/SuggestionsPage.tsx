@@ -1,10 +1,10 @@
 "use client"
 import { useGetSuggestedUsersQuery } from "@services/usersApi"
 import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
-import Loading from "@components/global/Loading"
 import { User } from "@interfaces/user.interfaces"
 import UserItem from "@components/global/UserItem"
 import InfiniteScroll from "react-infinite-scroller"
+import UsersLoader from "@components/loaders/UsersLoader"
 
 export default function SuggestionsPage(){
     //hooks
@@ -19,12 +19,12 @@ export default function SuggestionsPage(){
     return (
         <div className="bg-white p-3 pt-4">
             <h2 className="text-lg md:text-xl font-bold mb-4">Suggested for you</h2>
-            { isLoading ? <Loading size={50}/> : null }
+            { isLoading ? <UsersLoader/> : null }
 
             <InfiniteScroll
                 loadMore={ loadMoreItem }
                 hasMore={ hasMoreItem }
-                loader={ <Loading/> }
+                loader={ <UsersLoader/> }
             >
                 { users.map( ( user: User ) => (
                     <div className="pb-1">

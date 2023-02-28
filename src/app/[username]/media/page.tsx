@@ -1,6 +1,5 @@
 "use client"
 import React from 'react'
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 import { useGetMediaListQuery, useGetUserByUsernameQuery } from "@services/usersApi"
 import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import Loading from "@components/global/Loading"

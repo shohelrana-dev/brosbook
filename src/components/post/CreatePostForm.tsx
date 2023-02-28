@@ -11,10 +11,11 @@ import Button from "@components/global/Button"
 import useAuthState from "@hooks/useAuthState"
 import IconButton from "@components/global/IconButton"
 import useSelectFile from "@hooks/useSelectFile"
+import CreatePostFormLoader from "@components/loaders/CreatePostFormLoader"
 
-function CreatePostForm(){
+export default function CreatePostForm(){
     //hooks
-    const { user, isAuthenticated }                                                        = useAuthState()
+    const { user, isAuthenticated, isChecked }                                             = useAuthState()
     const [createPost, { isLoading }]                                                      = useCreatePostMutation()
     const [body, setBody]                                                                  = useState<string>( '' )
     const { inputRef, selectedFile: selectedImage, removeSelectedFile, onChange, onClick } = useSelectFile()
@@ -45,11 +46,16 @@ function CreatePostForm(){
         }
     }
 
+    if( ! isChecked ){
+        return <CreatePostFormLoader/>
+    }
+
     if( ! isAuthenticated ) return null
 
     return (
         <div className="relative box p-6 mb-4">
-            <h1 className="text-center text-lg lg:text-xl font-bold border-b border-gray-100 mb-4 pb-2">Create post</h1>
+            <h1 className="text-center text-lg lg:text-xl font-bold border-b border-gray-100 mb-4 pb-2">Create
+                post</h1>
             <div className="flex items-center mb-3">
                 <Avatar src={ user?.avatar?.url }/>
                 <div className="ml-4">
@@ -104,5 +110,3 @@ function CreatePostForm(){
         </div>
     )
 }
-
-export default CreatePostForm

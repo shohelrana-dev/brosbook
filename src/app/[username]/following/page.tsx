@@ -5,6 +5,7 @@ import Loading from "@components/global/Loading"
 import { User } from "@interfaces/user.interfaces"
 import UserItem from "@components/global/UserItem"
 import InfiniteScroll from "react-infinite-scroller"
+import UsersLoader from "@components/loaders/UsersLoader";
 
 interface Props {
     params: { username: string }
@@ -23,8 +24,8 @@ export default function FollowingPage( { params }: Props ){
 
     if( isLoading && followings?.length < 1 ){
         return (
-            <div className="box text-center py-3">
-                <Loading size={ 45 }/>
+            <div className="bg-white box py-3">
+                <UsersLoader count={2}/>
             </div>
         )
     }
@@ -34,7 +35,7 @@ export default function FollowingPage( { params }: Props ){
             <InfiniteScroll
                 loadMore={ loadMoreItem }
                 hasMore={ hasMoreItem }
-                loader={ <Loading/> }
+                loader={ <UsersLoader count={ 2 }/> }
             >
                 { followings.map( ( user: User ) => (
                     <div className="bg-white p-3 pb-1">

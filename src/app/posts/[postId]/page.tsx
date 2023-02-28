@@ -3,6 +3,27 @@ import SidebarLayout from "@components/global/SidebarLayout"
 import { getPostById } from "@services/index"
 import { cookies } from "next/headers"
 import NotFound from "../../not-found"
+import { Metadata } from "next"
+
+export const generateMetadata = async( { params }: Props ): Promise<Metadata> => {
+    const post        = await getPostById( params.postId, cookies() )
+    const title       = `${ post?.author.fullName } on ${ process.env.NEXT_PUBLIC_APP_NAME }`
+    const description = post?.body.replace( /[\r\n]/gm, '' )
+    const image       = post?.image?.url
+    const url         = `${ process.env.NEXT_PUBLIC_APP_URL }/posts/${ post?.id }`
+
+    return {
+        title,
+        description,
+        other: {
+            "og:type": 'article',
+            "og:url": url,
+            "og:title": title,
+            "og:description": description!,
+            "og:image": image!
+        }
+    }
+}
 
 interface Props {
     params: {

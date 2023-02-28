@@ -1,21 +1,19 @@
-import React from 'react'
-import ContentLoader from 'react-content-loader'
+import Skeleton from 'react-loading-skeleton'
 
-export default function UsersLoader(){
+export default function UsersLoader( { count = 4 } ){
     return (
-        <ContentLoader
-            height={ 1200 }
-            width={ 1060 }
-        >
-            <rect x="103" y="12" rx="3" ry="3" width="123" height="7"/>
-            <rect x="102" y="152" rx="3" ry="3" width="171" height="6"/>
-            <circle cx="44" cy="42" r="38"/>
-            <circle cx="44" cy="147" r="38"/>
-            <circle cx="44" cy="251" r="38"/>
-            <rect x="105" y="117" rx="3" ry="3" width="123" height="7"/>
-            <rect x="104" y="222" rx="3" ry="3" width="123" height="7"/>
-            <rect x="105" y="48" rx="3" ry="3" width="171" height="6"/>
-            <rect x="104" y="257" rx="3" ry="3" width="171" height="6"/>
-        </ContentLoader>
+        <>
+            { Array.from( { length: count } ).map( () => (
+                <div className="p-2 mb-1 flex gap-3 w-full">
+                    <Skeleton width={ 48 } height={ 48 } circle/>
+                    <div>
+                        <Skeleton width={ 110 } height={ 12 }/>
+                        <Skeleton width={ 80 } height={ 7 }/>
+                        <div className="mb-[5px]"/>
+                        <Skeleton width={200} height={ 9 }/>
+                    </div>
+                </div>
+            ) ) }
+        </>
     )
 }

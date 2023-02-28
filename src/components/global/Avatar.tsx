@@ -1,6 +1,7 @@
 import React, { ImgHTMLAttributes } from 'react'
 import Image from "next/image"
 import classNames from "classnames"
+import Skeleton from "react-loading-skeleton";
 
 interface AvatarProps extends ImgHTMLAttributes<HTMLImageElement> {
     online?: boolean
@@ -20,6 +21,10 @@ function Avatar( { online, size, src, className }: AvatarProps ){
     }
 
     className = classNames( `rounded-full object-cover`, className )
+
+    if( ! src ){
+        return <Skeleton width={ width } height={ height } circle/>
+    }
 
     return (
         <div className="flex-none rounded-full relative" style={ { width, height } }>
