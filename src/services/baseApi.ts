@@ -1,7 +1,7 @@
 import { RootState } from './../store';
 import { createApi } from "@reduxjs/toolkit/query/react"
 import { fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react"
-import { getCookie, removeCookie } from "tiny-cookie"
+import { removeCookie } from "tiny-cookie"
 import { userLoggedOut } from "@slices/authSlice"
 
 const BASE_URL = process.env.NEXT_PUBLIC_SERVER_API_URL
@@ -9,7 +9,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_SERVER_API_URL
 const baseQuery = fetchBaseQuery({
     baseUrl: BASE_URL,
     prepareHeaders: (headers, { getState }) => {
-        const token = getCookie('access_token')
+        const token = (getState() as RootState)?.auth?.access_token;
 
         if (token) {
             headers.set('Authorization', `Bearer ${token}`)
