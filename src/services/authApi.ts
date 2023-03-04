@@ -1,7 +1,7 @@
 import { CredentialPayload, ResetPassPayload, SignupPayload } from "@interfaces/auth.interfaces"
 import { User } from "@interfaces/user.interfaces"
 import { baseApi } from "@services/baseApi"
-import { setAuth } from "@slices/authSlice"
+import { userLoggedIn } from "@slices/authSlice"
 import { setCookie } from "tiny-cookie"
 
 
@@ -36,7 +36,7 @@ export const authApi = baseApi.injectEndpoints( {
                     const { user, expires_in, access_token } = data
 
                     dispatch( baseApi.util.resetApiState() )
-                    dispatch( setAuth( user ) )
+                    dispatch( userLoggedIn( user ) )
 
                     setCookie( 'access_token', access_token, {
                         expires: expires_in.endsWith( 'd' ) ? expires_in.toUpperCase() : expires_in,
@@ -61,7 +61,7 @@ export const authApi = baseApi.injectEndpoints( {
                     const { user, expires_in, access_token } = data
 
                     dispatch( baseApi.util.resetApiState() )
-                    dispatch( setAuth( user ) )
+                    dispatch( userLoggedIn( user ) )
 
                     setCookie( 'access_token', access_token, {
                         expires: expires_in.endsWith( 'd' ) ? expires_in.toUpperCase() : expires_in,
