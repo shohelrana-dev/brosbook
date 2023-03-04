@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation"
 import useAuthState from "@hooks/useAuthState"
 
 export default function Boot(){
-    const { isError, isSuccess } = useGetCurrentUserQuery()
+    //const { isError, isSuccess } = useGetCurrentUserQuery()
     const { user }               = useAuthState()
     const unauthorizedAlert      = useUnauthorizedAlert()
     const pathname               = usePathname()
@@ -27,18 +27,18 @@ export default function Boot(){
         }
     }, [user] )
 
-    useEffect( () => {
-        if( isSuccess || pathname?.startsWith( '/auth/' ) ) return
+    // useEffect( () => {
+    //     if( isSuccess || pathname?.startsWith( '/auth/' ) ) return
 
-        if( isError && ( ! user || Object.keys( user ).length < 1 ) ){
-            setTimeout( () => {
-                unauthorizedAlert( {
-                    title: `New to ${ process.env.NEXT_PUBLIC_APP_NAME }?`,
-                    message: 'Sign up now to get your own personalized timeline!'
-                } )
-            }, 3000 )
-        }
-    }, [user, isError, pathname] )
+    //     if( isError && ( ! user || Object.keys( user ).length < 1 ) ){
+    //         setTimeout( () => {
+    //             unauthorizedAlert( {
+    //                 title: `New to ${ process.env.NEXT_PUBLIC_APP_NAME }?`,
+    //                 message: 'Sign up now to get your own personalized timeline!'
+    //             } )
+    //         }, 3000 )
+    //     }
+    // }, [user, isError, pathname] )
 
     return null
 }
