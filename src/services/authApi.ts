@@ -35,7 +35,6 @@ export const authApi = baseApi.injectEndpoints( {
                     const { data }                           = await queryFulfilled
                     const { user, expires_in, access_token } = data
 
-                    dispatch( baseApi.util.resetApiState() )
                     dispatch( userLoggedIn( user ) )
 
                     setCookie( 'access_token', access_token, {
@@ -60,7 +59,6 @@ export const authApi = baseApi.injectEndpoints( {
                     const { data }                           = await queryFulfilled
                     const { user, expires_in, access_token } = data
 
-                    dispatch( baseApi.util.resetApiState() )
                     dispatch( userLoggedIn( user ) )
 
                     setCookie( 'access_token', access_token, {
