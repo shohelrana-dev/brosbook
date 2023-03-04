@@ -1,3 +1,4 @@
+import { RootState } from './../store';
 import { createApi } from "@reduxjs/toolkit/query/react"
 import { fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react"
 import { getCookie, removeCookie } from "tiny-cookie"
@@ -22,9 +23,9 @@ export const baseApi = createApi({
     reducerPath: 'baseApi',
     baseQuery: async (args, api, extraOptions) => {
         let result = await baseQuery(args, api, extraOptions);
-        console.log(result);
+        console.log('baseQuery log: ', result);
         
-        if (result?.error?.status === 401) {
+        if (result?.error?.status === 401 && (api.getState() as RootState)?.auth?.isAuthenticated) {
             api.dispatch(userLoggedOut())
             removeCookie('access_token')
         }
