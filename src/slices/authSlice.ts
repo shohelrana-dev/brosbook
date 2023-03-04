@@ -7,7 +7,6 @@ interface AuthState {
     isAuthenticated: boolean
     isChecked: boolean
     user: User | null,
-    access_token: string | null,
     email: string | null
 }
 
@@ -15,7 +14,6 @@ const initialState: AuthState = {
     isAuthenticated: false,
     isChecked: false,
     user: null,
-    access_token: null,
     email: null
 }
 
@@ -23,20 +21,21 @@ export const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        userLoggedIn: (state, { payload }: PayloadAction<{ user: User, access_token: string }>) => {
+        userLoggedIn: (state, { payload }: PayloadAction<User>) => {
             state.isAuthenticated = true
             state.isChecked = true
-            state.user = payload.user
-            state.access_token = payload.access_token
+            state.user = payload
         },
         userLoggedOut: (state) => {
             state.isAuthenticated = false
             state.isChecked = true
             state.user = null
-            state.access_token = ''
         },
         setEmail: (state, { payload }: PayloadAction<string>) => {
             state.email = payload
+        },
+        authChecked: (state) => {
+            state.isChecked = true
         }
     },
     extraReducers: builder => {
@@ -55,4 +54,4 @@ export const authSlice = createSlice({
 
 export const selectAuthState = (state: RootState) => state.auth
 
-export const { userLoggedIn, userLoggedOut, setEmail } = authSlice.actions
+export const { userLoggedIn, userLoggedOut, authChecked, setEmail } = authSlice.actions

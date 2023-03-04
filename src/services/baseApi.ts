@@ -1,7 +1,7 @@
 import { RootState } from './../store'
 import { createApi } from "@reduxjs/toolkit/query/react"
 import { fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react"
-import { removeCookie } from "tiny-cookie"
+import { getCookie, removeCookie } from "tiny-cookie"
 import { userLoggedOut } from "@slices/authSlice"
 
 const BASE_URL = process.env.NEXT_PUBLIC_SERVER_API_URL
@@ -9,7 +9,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_SERVER_API_URL
 const baseQuery = fetchBaseQuery({
     baseUrl: BASE_URL,
     prepareHeaders: (headers, { getState }) => {
-        const token = (getState() as RootState)?.auth?.access_token;
+        const token = getCookie('access_token')
 
         if (token) {
             headers.set('Authorization', `Bearer ${token}`)
@@ -22,11 +22,11 @@ const baseQuery = fetchBaseQuery({
 export const baseApi = createApi({
     reducerPath: 'baseApi',
     baseQuery: async (args, api, extraOptions) => {
-        let result = await baseQuery(args, api, extraOptions);
-        console.log('baseQuery log: ', result);
-        
+        let result = await baseQuery(args, api, extraOptions)
+
         if (result?.error?.status === 401 && (api.getState() as RootState)?.auth?.isAuthenticated) {
             api.dispatch(userLoggedOut())
+            localStorage.removeItem('user')
             removeCookie('access_token')
         }
 

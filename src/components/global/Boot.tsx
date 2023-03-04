@@ -3,13 +3,30 @@ import { io } from "socket.io-client"
 import useUnauthorizedAlert from "@hooks/useUnauthorzedAlert"
 import { usePathname } from "next/navigation"
 import useAuthState from "@hooks/useAuthState"
+import { useDispatch } from 'react-redux'
+import { userLoggedIn, authChecked } from '@slices/authSlice'
 
 export default function Boot() {
+    const dispatch = useDispatch()
     const auth = useAuthState()
     const unauthorizedAlert = useUnauthorizedAlert()
     const pathname = usePathname()
 
     const { user, isAuthenticated, isChecked } = auth
+
+    useEffect(() => {
+        const storedUser = localStorage?.getItem("user")
+
+        if (isAuthenticated || !storedUser) return
+
+        const user = JSON.parse(storedUser)
+
+        if (Object(user)?.keys?.length > 0) {
+            dispatch(userLoggedIn(user))
+        } else {
+            dispatch(authChecked())
+        }
+    }, [dispatch])
 
     useEffect(() => {
         if (!user || Object.keys(user).length < 1) return

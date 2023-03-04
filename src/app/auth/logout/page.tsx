@@ -16,6 +16,7 @@ function LogoutPage(){
 
     useEffect( () => {
         removeCookie( 'access_token' )
+        localStorage.removeItem( 'user' )
         dispatch( userLoggedOut() )
         toast.success( 'Logged out.' )
 

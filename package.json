@@ -44,7 +44,6 @@
     "react-show-more-text": "^1.6.2",
     "react-spinners": "^0.13.8",
     "react-text-overflow": "^1.0.2",
-    "redux-persist": "^6.0.0",
     "sharp": "^0.31.3",
     "socket.io-client": "^4.5.4",
     "tiny-cookie": "^2.4.0",

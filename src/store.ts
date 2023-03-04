@@ -1,35 +1,16 @@
-import { configureStore, combineReducers } from '@reduxjs/toolkit'
-import { authSlice } from "@slices/authSlice"
+import { configureStore } from '@reduxjs/toolkit'
 import { baseApi } from "@services/baseApi"
-import storage from 'redux-persist/lib/storage'
-import { persistReducer, persistStore } from 'redux-persist'
-import { FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist'
-
-
-const persistConfig = {
-    key: 'root',
-    version: 1,
-    storage,
-    whitelist: [authSlice.name]
-}
-
-const persistedReducer = persistReducer(persistConfig, combineReducers({
-    [baseApi.reducerPath]: baseApi.reducer,
-    [authSlice.name]: authSlice.reducer
-}))
+import { authSlice } from "@slices/authSlice"
 
 
 export const store = configureStore({
-    reducer: persistedReducer,
+    reducer: {
+        [baseApi.reducerPath]: baseApi.reducer,
+        [authSlice.name]: authSlice.reducer
+    },
     devTools: process.env.NODE_ENV !== 'production',
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware({
-        serializableCheck: {
-          ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-        },
-      }).concat([baseApi.middleware]),
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat([baseApi.middleware])
 })
-
-export const persistor = persistStore(store)
 
 
 // Infer the `RootState` and `AppDispatch` interfaces from the store itself
