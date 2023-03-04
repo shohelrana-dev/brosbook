@@ -3,8 +3,8 @@ import Skeleton from 'react-loading-skeleton'
 export default function NotificationsLoader( { count = 5 } ){
     return (
         <>
-            { Array.from( { length: count } ).map( () => (
-                <div className="px-3 py-2 mb-3 flex gap-3 items-center">
+            { Array.from( { length: count } ).map( (_, i) => (
+                <div key={i} className="px-3 py-2 mb-3 flex gap-3 items-center">
                     <Skeleton width={ 45 } height={ 45 } circle/>
                     <div>
                         <div className="flex gap-3 mb-1 items-center">

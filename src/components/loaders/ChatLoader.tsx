@@ -4,8 +4,8 @@ import Skeleton from 'react-loading-skeleton'
 export default function ChatLoader( { count = 3 } ){
     return (
         <>
-            { Array.from( { length: count } ).map( () => (
-                <div>
+            { Array.from( { length: count } ).map( (_, i) => (
+                <div key={i}>
                     <div className="flex gap-2 items-center mb-7">
                         <div className="self-end">
                             <Skeleton

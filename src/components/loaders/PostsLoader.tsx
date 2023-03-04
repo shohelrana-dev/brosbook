@@ -3,8 +3,8 @@ import Skeleton from 'react-loading-skeleton'
 export default function PostsLoader( { count = 3 } ){
     return (
         <>
-            { Array.from( { length: count } ).map( () => (
-                <div className="box bg-white p-5 mb-3">
+            { Array.from( { length: count } ).map( (_, i) => (
+                <div key={i} className="box bg-white p-5 mb-3">
                     <div className="flex justify-between items-center mb-4">
                         <div className="flex gap-3 items-center">
                             <Skeleton width={ 48 } height={ 48 } circle/>
