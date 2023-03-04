@@ -25,7 +25,7 @@ export default function RequiredPage(){
 
     async function resendEmail(){
         try {
-            await resendVerificationLink( email ).unwrap()
+            await resendVerificationLink( email! ).unwrap()
             toast.success( `Email verification link has sent to ${ email }` )
         } catch ( err ) {
             console.error( err )
