@@ -7,7 +7,7 @@ interface AuthState {
     isAuthenticated: boolean
     isChecked: boolean
     user: User | null,
-    email?: string
+    email: string
 }
 
 const initialState: AuthState = {
