@@ -17,7 +17,7 @@ function ConversationItem( { conversation }: SingleConversationProps ){
 
     const participant           = conversation?.user1.id === currentUser?.id ? conversation?.user2 : conversation?.user1
     const lastMessage           = conversation.lastMessage
-    const isLastMessageSenderMe = lastMessage && lastMessage.sender.id === currentUser.id
+    const isLastMessageSenderMe = lastMessage && lastMessage.sender.id === currentUser?.id
     let messageBody
 
     if( lastMessage?.body ){
