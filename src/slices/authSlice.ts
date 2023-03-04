@@ -7,16 +7,16 @@ interface AuthState {
     isAuthenticated: boolean
     isChecked: boolean
     user: User | null,
-    access_token: string,
-    email: string
+    access_token: string | null,
+    email: string | null
 }
 
 const initialState: AuthState = {
     isAuthenticated: false,
     isChecked: false,
     user: null,
-    access_token: '',
-    email: ''
+    access_token: null,
+    email: null
 }
 
 export const authSlice = createSlice({
