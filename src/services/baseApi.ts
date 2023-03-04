@@ -9,9 +9,11 @@ const baseQuery = fetchBaseQuery({
     baseUrl: BASE_URL,
     prepareHeaders: (headers, { getState }) => {
         const token = getCookie('access_token')
+
         if (token) {
             headers.set('Authorization', `Bearer ${token}`)
         }
+
         return headers
     }
 })
@@ -20,7 +22,8 @@ export const baseApi = createApi({
     reducerPath: 'baseApi',
     baseQuery: async (args, api, extraOptions) => {
         let result = await baseQuery(args, api, extraOptions);
-
+        console.log(result);
+        
         if (result?.error?.status === 401) {
             api.dispatch(userLoggedOut())
             removeCookie('access_token')
