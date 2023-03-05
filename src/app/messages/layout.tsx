@@ -14,7 +14,7 @@ export default function Layout( { children }: PropsWithChildren ){
     const isDesktopOrLaptop               = useMediaQuery( '(min-width: 1024px)' )
 
     useEffect( () => {
-        setHeaderHeight( document.querySelector( '#appHeader' )?.clientHeight )
+        setHeaderHeight( document.querySelector( '#appNavbar' )?.clientHeight )
     }, [] )
 
     const conversationId = pathname?.replace( '/messages', '' )?.replace( '/', '' )

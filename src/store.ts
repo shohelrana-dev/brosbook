@@ -1,13 +1,13 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { configureStore, combineReducers } from '@reduxjs/toolkit'
 import { baseApi } from "@services/baseApi"
 import { authSlice } from "@slices/authSlice"
 
 
 export const store = configureStore({
-    reducer: {
+    reducer: combineReducers({
         [baseApi.reducerPath]: baseApi.reducer,
         [authSlice.name]: authSlice.reducer
-    },
+    }),
     devTools: process.env.NODE_ENV !== 'production',
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat([baseApi.middleware])
 })

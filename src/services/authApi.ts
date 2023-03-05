@@ -35,9 +35,7 @@ export const authApi = baseApi.injectEndpoints({
                     const { data } = await queryFulfilled
                     const { user, expires_in, access_token } = data
 
-                    dispatch(userLoggedIn(user))
-
-                    localStorage.setItem('user', JSON.stringify(user))
+                    dispatch(userLoggedIn({user, access_token}))
 
                     setCookie('access_token', access_token, {
                         expires: expires_in.endsWith('d') ? expires_in.toUpperCase() : expires_in,
@@ -61,9 +59,7 @@ export const authApi = baseApi.injectEndpoints({
                     const { data } = await queryFulfilled
                     const { user, expires_in, access_token } = data
 
-                    dispatch(userLoggedIn(user))
-
-                    localStorage.setItem('user', JSON.stringify(user))
+                    dispatch(userLoggedIn({user, access_token}))
 
                     setCookie('access_token', access_token, {
                         expires: expires_in.endsWith('d') ? expires_in.toUpperCase() : expires_in,

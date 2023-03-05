@@ -27,159 +27,147 @@ import useConfirmAlert from "@hooks/useConfirmAlert"
 import { useRouter } from "next/navigation"
 import { useGetUnreadConversationsCountQuery } from "@services/conversationApi"
 import useAuthState from "@hooks/useAuthState"
-import { getCookie } from "tiny-cookie"
 import ExpandableSearch from "@components/global/ExpandableSearch"
 import { useDispatch } from "react-redux"
 import { baseApi } from "@services/baseApi"
 
-interface Props {
-    hasAccessToken: boolean
-}
+function NavBar() {
+    const { user, isAuthenticated } = useAuthState()
+    const [readAllNotification] = useReadAllNotificationMutation()
+    const { data: unreadNotifications } = useGetUnreadNotificationsCountQuery()
+    const { data: unreadConversations } = useGetUnreadConversationsCountQuery()
+    const [unreadNotificationsCount, setUnreadNotificationsCount] = useState<number>(unreadNotifications?.count || 0)
+    const [unreadConversationsCount, setUnreadConversationsCount] = useState<number>(unreadConversations?.count || 0)
+    const confirmAlert = useConfirmAlert()
+    const router = useRouter()
+    const dispatch = useDispatch()
 
-function NavBar( props: Props ){
-    const [hasAccessToken, setHasAccessToken]                     = useState<boolean>( props.hasAccessToken )
-    const { user }                                                = useAuthState()
-    const [readAllNotification]                                   = useReadAllNotificationMutation()
-    const { data: unreadNotifications }                           = useGetUnreadNotificationsCountQuery()
-    const { data: unreadConversations }                           = useGetUnreadConversationsCountQuery()
-    const [unreadNotificationsCount, setUnreadNotificationsCount] = useState<number>( unreadNotifications?.count || 0 )
-    const [unreadConversationsCount, setUnreadConversationsCount] = useState<number>( unreadConversations?.count || 0 )
-    const confirmAlert                                            = useConfirmAlert()
-    const router                                                  = useRouter()
-    const dispatch                                                = useDispatch()
+    useEffect(() => {
+        setUnreadNotificationsCount(unreadNotifications?.count!)
+    }, [unreadNotifications])
 
-    useEffect( () => {
-        setHasAccessToken( !! getCookie( 'access_token' ) )
-    }, [user] )
+    useEffect(() => {
+        setUnreadConversationsCount(unreadConversations?.count!)
+    }, [unreadConversations])
 
-    useEffect( () => {
-        setUnreadNotificationsCount( unreadNotifications?.count! )
-    }, [unreadNotifications] )
+    useEffect(() => {
+        if (!user?.id) return
 
-    useEffect( () => {
-        setUnreadConversationsCount( unreadConversations?.count! )
-    }, [unreadConversations] )
+        const socket = io(process.env.NEXT_PUBLIC_SERVER_BASE_URL!)
 
-    useEffect( () => {
-        if( ! user?.id ) return
+        socket.on('connect', () => {
+            socket.on(`notification.unread.count.${user?.id}`, (count) => {
+                setUnreadNotificationsCount(count)
+                dispatch(baseApi.util.invalidateTags(['Notification']))
+            })
 
-        const socket = io( process.env.NEXT_PUBLIC_SERVER_BASE_URL! )
+            socket.on(`conversation.unread.count.${user?.id}`, (count) => {
+                setUnreadConversationsCount(count)
+                dispatch(baseApi.util.invalidateTags(['Conversation']))
+            })
+        })
 
-        socket.on( 'connect', () => {
-            socket.on( `notification.unread.count.${ user?.id }`, ( count ) => {
-                setUnreadNotificationsCount( count )
-                dispatch( baseApi.util.invalidateTags( ['Notification'] ) )
-            } )
-
-            socket.on( `conversation.unread.count.${ user?.id }`, ( count ) => {
-                setUnreadConversationsCount( count )
-                dispatch( baseApi.util.invalidateTags( ['Conversation'] ) )
-            } )
-        } )
-
-        if( socket ) return () => {
+        if (socket) return () => {
             socket.close()
         }
-    }, [user] )
+    }, [user])
 
-    function onNotificationsCLick(){
+    function onNotificationsCLick() {
         readAllNotification()
     }
 
-    async function onLogoutCLick(){
-        const isOk = await confirmAlert( {
-            title: `Log out of ${ process.env.NEXT_PUBLIC_APP_NAME }?`,
+    async function onLogoutCLick() {
+        const isOk = await confirmAlert({
+            title: `Log out of ${process.env.NEXT_PUBLIC_APP_NAME}?`,
             message: 'You can always log back in at any time. And you can switch another account.',
             confirmButtonLabel: 'Log out',
-        } )
+        })
 
-        if( isOk ){
-            router.push( '/auth/logout' )
+        if (isOk) {
+            router.push('/auth/logout')
         }
     }
 
-    if( ! hasAccessToken ) return null
+    if (!isAuthenticated) return null
 
     return (
-        <header id="appHeader" className="relative z-10">
-            <BaseNavbar fullWidth className="mx-auto px-4 lg:px-8 py-2 lg:py-4 z-20">
-                <div className="container mx-auto flex items-center justify-between text-blue-gray-900">
-                    <div className="mr-1">
-                        <Link href="/">
+        <BaseNavbar id="appNavbar" fullWidth className="relative z-10 mx-auto px-4 lg:px-8 py-2 lg:py-4 z-20">
+            <div className="container mx-auto flex items-center justify-between text-blue-gray-900">
+                <div className="mr-1">
+                    <Link href="/">
+                        <IconButton className="p-5">
+                            <HomeIcon size={27} />
+                        </IconButton>
+                    </Link>
+                </div>
+
+                <div className="flex">
+                    <div className="mr-2 flex">
+                        <ExpandableSearch />
+                        <Popover>
+                            <PopoverHandler>
+                                <div>
+                                    <IconButton className="p-5 block relative" onClick={onNotificationsCLick}>
+                                        {unreadNotificationsCount ? (
+                                            <div
+                                                className="absolute top-[-5px] right-0 bg-red-500 text-white rounded-full font-bold p-[2px] h-[18px] w-[18px]">
+                                                {unreadNotificationsCount}
+                                            </div>
+                                        ) : null}
+                                        <NotificationIcon size={25} className="text-gray-700" />
+                                    </IconButton>
+                                </div>
+                            </PopoverHandler>
+                            <PopoverContent className="w-full max-w-[350px] z-50 p-2">
+                                <div className="max-h-[500px] overflow-y-auto">
+                                    <NotificationList />
+                                </div>
+                            </PopoverContent>
+                        </Popover>
+                        <Link href="/messages" className="block">
                             <IconButton className="p-5">
-                                <HomeIcon size={ 27 }/>
+                                {unreadConversationsCount ? (
+                                    <div
+                                        className="absolute top-[-5px] right-[-5px] bg-red-500 text-white rounded-full font-bold p-[2px] h-[18px] w-[18px]">
+                                        {unreadConversationsCount}
+                                    </div>
+                                ) : null}
+                                <MessageIcon size={25} className="text-gray-700" />
                             </IconButton>
                         </Link>
                     </div>
-
-                    <div className="flex">
-                        <div className="mr-2 flex">
-                            <ExpandableSearch/>
-                            <Popover>
-                                <PopoverHandler>
+                    <Menu>
+                        <MenuHandler>
+                            <button className="rounded-full">
+                                <Avatar src={user?.avatar?.url} size="small" />
+                            </button>
+                        </MenuHandler>
+                        <MenuList>
+                            <MenuItem className="py-0 mb-2">
+                                <Link href={`/${user?.username}`}
+                                    className="flex py-2 gap-2 border-b-2 border-gray-50">
+                                    <Avatar src={user?.avatar?.url} size="small" />
                                     <div>
-                                        <IconButton className="p-5 block relative" onClick={ onNotificationsCLick }>
-                                            { unreadNotificationsCount ? (
-                                                <div
-                                                    className="absolute top-[-5px] right-0 bg-red-500 text-white rounded-full font-bold p-[2px] h-[18px] w-[18px]">
-                                                    { unreadNotificationsCount }
-                                                </div>
-                                            ) : null }
-                                            <NotificationIcon size={ 25 } className="text-gray-700"/>
-                                        </IconButton>
+                                        <p>{user?.fullName}</p>
+                                        <p className="text-xs">Your profile</p>
                                     </div>
-                                </PopoverHandler>
-                                <PopoverContent className="w-full max-w-[350px] z-50 p-2">
-                                    <div className="max-h-[500px] overflow-y-auto">
-                                        <NotificationList/>
-                                    </div>
-                                </PopoverContent>
-                            </Popover>
-                            <Link href="/messages" className="block">
-                                <IconButton className="p-5">
-                                    { unreadConversationsCount ? (
-                                        <div
-                                            className="absolute top-[-5px] right-[-5px] bg-red-500 text-white rounded-full font-bold p-[2px] h-[18px] w-[18px]">
-                                            { unreadConversationsCount }
-                                        </div>
-                                    ) : null }
-                                    <MessageIcon size={ 25 } className="text-gray-700"/>
-                                </IconButton>
-                            </Link>
-                        </div>
-                        <Menu>
-                            <MenuHandler>
-                                <button className="rounded-full">
-                                    <Avatar src={ user?.avatar?.url } size="small"/>
-                                </button>
-                            </MenuHandler>
-                            <MenuList>
-                                <MenuItem className="py-0 mb-2">
-                                    <Link href={ `/${ user?.username }` }
-                                          className="flex py-2 gap-2 border-b-2 border-gray-50">
-                                        <Avatar src={ user?.avatar?.url } size="small"/>
-                                        <div>
-                                            <p>{ user?.fullName }</p>
-                                            <p className="text-xs">Your profile</p>
-                                        </div>
-                                    </Link>
-                                </MenuItem>
-                                <MenuItem className="py-0">
-                                    <Link href="/account" className="block py-2">
-                                        <SettingIcon className="inline-block mr-2" size={ 20 }/>
-                                        Settings
-                                    </Link>
-                                </MenuItem>
-                                <MenuItem onClick={ onLogoutCLick }>
-                                    <LogoutIcon className="inline-block mr-2" size={ 20 }/>
-                                    Logout
-                                </MenuItem>
-                            </MenuList>
-                        </Menu>
-                    </div>
+                                </Link>
+                            </MenuItem>
+                            <MenuItem className="py-0">
+                                <Link href="/account" className="block py-2">
+                                    <SettingIcon className="inline-block mr-2" size={20} />
+                                    Settings
+                                </Link>
+                            </MenuItem>
+                            <MenuItem onClick={onLogoutCLick}>
+                                <LogoutIcon className="inline-block mr-2" size={20} />
+                                Logout
+                            </MenuItem>
+                        </MenuList>
+                    </Menu>
                 </div>
-            </BaseNavbar>
-        </header>
+            </div>
+        </BaseNavbar>
     )
 }
 

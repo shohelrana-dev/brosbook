@@ -22,13 +22,15 @@ const baseQuery = fetchBaseQuery({
 export const baseApi = createApi({
     reducerPath: 'baseApi',
     baseQuery: async (args, api, extraOptions) => {
-        let result = await baseQuery(args, api, extraOptions)
+        const result = await baseQuery(args, api, extraOptions)
 
-        if (result?.error?.status === 401 && (api.getState() as RootState)?.auth?.isAuthenticated) {
-            api.dispatch(userLoggedOut())
-            localStorage.removeItem('user')
-            removeCookie('access_token')
-        }
+        // if (typeof window !== "undefined") {
+        //     if (result?.error?.status === 401) {
+        //         api.dispatch(userLoggedOut())
+        //         localStorage.removeItem('user')
+        //         removeCookie('access_token')
+        //     }
+        // }
 
         return result
     },
