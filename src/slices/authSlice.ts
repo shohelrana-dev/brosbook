@@ -6,7 +6,6 @@ interface AuthState {
     isAuthenticated: boolean
     isChecked: boolean
     user: User | null,
-    access_token: string | null
     email: string | null
 }
 
@@ -14,7 +13,6 @@ const initialState: AuthState = {
     isAuthenticated: false,
     isChecked: false,
     user: null,
-    access_token: null,
     email: null
 }
 
@@ -38,18 +36,16 @@ export const authSlice = createSlice({
     name: 'auth',
     initialState: getStoredState,
     reducers: {
-        userLoggedIn: (state, { payload }: PayloadAction<{ user: User, access_token: string }>) => {
+        userLoggedIn: (state, { payload }: PayloadAction< User >) => {
             state.isAuthenticated = true
             state.isChecked = true
-            state.user = payload.user
-            state.access_token = payload.access_token
+            state.user = payload
             localStorage.setItem('auth', JSON.stringify(state))
         },
         userLoggedOut: (state) => {
             state.isAuthenticated = false
             state.isChecked = true
             state.user = null
-            state.access_token = null
             localStorage.removeItem('auth')
         },
         setEmail: (state, { payload }: PayloadAction<string>) => {
