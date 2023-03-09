@@ -111,9 +111,9 @@ export const usersApi = baseApi.injectEndpoints( {
 
 export const {
                  useGetCurrentUserQuery,
-                 useLazyGetCurrentUserQuery,
                  useChangeProfilePhotoMutation,
                  useChangeCoverPhotoMutation,
+                 useGetUserByIdQuery,
                  useGetUserByUsernameQuery,
                  useGetSuggestedUsersQuery,
                  useFollowMutation,

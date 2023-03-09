@@ -21,17 +21,17 @@ import {
 import { Metadata } from "next"
 import { notFound } from "next/navigation"
 
-export const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
-    const user = await getUserByUsername(params.username, cookies())
+export const generateMetadata = async( { params }: Props ): Promise<Metadata> => {
+    const user = await getUserByUsername( params.username, cookies() )
 
-    if (!user) return {
+    if( ! user ) return {
         title: 'Not found'
     }
 
-    const title = `${user?.fullName} (@${user?.username})`
+    const title       = `${ user?.fullName } (@${ user?.username })`
     const description = user?.profile?.bio
-    const image = user?.avatar.url
-    const url = `${process.env.NEXT_PUBLIC_APP_URL}/${user?.username}`
+    const image       = user?.avatar.url
+    const url         = `${ process.env.NEXT_PUBLIC_APP_URL }/${ user?.username }`
 
     return {
         title,
@@ -55,22 +55,22 @@ interface Props {
 
 export const revalidate = 0
 
-export default async function ProfileLayout({ children, params }: Props) {
+export default async function ProfileLayout( { children, params }: Props ){
     const nextCookies = cookies()
 
-    const user = await getUserByUsername(params.username, nextCookies)
+    const user = await getUserByUsername( params.username, nextCookies )
 
-    if (!user) return notFound()
+    if( ! user ) return notFound()
 
-    const currentUser = await getCurrentUser(nextCookies)
-    const followersCount = await getFollowersCount(user.id)
-    const followingsCount = await getFollowingsCount(user.id)
+    const [currentUser, followersCount, followingsCount] = await Promise.all(
+        [getCurrentUser( nextCookies ), getFollowersCount( user.id ), getFollowingsCount( user.id )]
+    )
 
     const tabLinks = [
-        { label: "Posts", pathname: `/${user?.username}` },
-        { label: "Followers", pathname: `/${user?.username}/followers` },
-        { label: "Following", pathname: `/${user?.username}/following` },
-        { label: "Media", pathname: `/${user?.username}/media` }
+        { label: "Posts", pathname: `/${ user?.username }` },
+        { label: "Followers", pathname: `/${ user?.username }/followers` },
+        { label: "Following", pathname: `/${ user?.username }/following` },
+        { label: "Media", pathname: `/${ user?.username }/media` }
     ]
 
     return (
@@ -78,72 +78,72 @@ export default async function ProfileLayout({ children, params }: Props) {
             <div>
                 <div className="bg-white pb-5 mb-3">
                     <div>
-                        <CoverPhoto user={user} />
+                        <CoverPhoto user={ user }/>
                         <div className="p-4 flex justify-between relative">
-                            <ProfilePhoto user={user} />
+                            <ProfilePhoto user={ user }/>
 
                             <div className="flex items-center gap-2">
-                                <ExtraOptions user={user} />
-                                {currentUser && currentUser?.username !== user?.username ? (
+                                <ExtraOptions user={ user }/>
+                                { currentUser && currentUser?.username !== user?.username ? (
                                     <div>
-                                        <FollowButton user={user!} />
+                                        <FollowButton user={ user! }/>
                                     </div>
-                                ) : null}
-                                {currentUser && currentUser?.username === user?.username ? (
+                                ) : null }
+                                { currentUser && currentUser?.username === user?.username ? (
                                     <ButtonOutline className="flex h-[35px] items-center">
                                         <Link href="/account/profile">
                                             Edit Profile
                                         </Link>
                                     </ButtonOutline>
-                                ) : null}
+                                ) : null }
                             </div>
                         </div>
                     </div>
 
                     <div className="px-3 sm:px-6">
                         <div>
-                            <h2 className="text:lg md:text-xl font-bold">{user?.fullName}</h2>
-                            <p className="text-gray-600 mb-2">@{user?.username}</p>
-                            <div>{user?.profile?.bio}</div>
+                            <h2 className="text:lg md:text-xl font-bold">{ user?.fullName }</h2>
+                            <p className="text-gray-600 mb-2">@{ user?.username }</p>
+                            <div>{ user?.profile?.bio }</div>
                         </div>
                         <ul className="mt-4">
-                            {user?.profile?.location && (
+                            { user?.profile?.location && (
                                 <li className="text-gray-600 inline-block mr-3 mb-1">
-                                    <GoLocation className="inline-block text-lg" />&nbsp;
-                                    {user?.profile?.location}
+                                    <GoLocation className="inline-block text-lg"/>&nbsp;
+                                    { user?.profile?.location }
                                 </li>
-                            )}
-                            {user?.profile?.birthdate && (
+                            ) }
+                            { user?.profile?.birthdate && (
                                 <li className="text-gray-600 inline-block mr-3 mb-1">
-                                    <HiOutlineCake className="inline-block text-lg" />&nbsp;
-                                    Born {new Date(user?.profile?.birthdate).toLocaleDateString('en-us', {
-                                        day: "numeric",
-                                        year: "numeric",
-                                        month: "short"
-                                    })}
-                                </li>
-                            )}
-                            <li className="text-gray-600 inline-block mr-3 mb-1">
-                                <MdOutlineSchedule className="inline-block text-lg" />&nbsp;
-                                Joined {new Date(user?.createdAt!).toLocaleDateString('en-us', {
+                                    <HiOutlineCake className="inline-block text-lg"/>&nbsp;
+                                    Born { new Date( user?.profile?.birthdate ).toLocaleDateString( 'en-us', {
                                     day: "numeric",
                                     year: "numeric",
                                     month: "short"
-                                })}
+                                } ) }
+                                </li>
+                            ) }
+                            <li className="text-gray-600 inline-block mr-3 mb-1">
+                                <MdOutlineSchedule className="inline-block text-lg"/>&nbsp;
+                                Joined { new Date( user?.createdAt! ).toLocaleDateString( 'en-us', {
+                                day: "numeric",
+                                year: "numeric",
+                                month: "short"
+                            } ) }
                             </li>
                         </ul>
                         <ul className="mt-4">
                             <li className="text-gray-600 inline-block mr-3">
-                                <Link href={`/${user.username}/following`}>
+                                <Link href={ `/${ user.username }/following` }>
                                     <strong className="text-gray-900">
-                                        {followingsCount?.count}
+                                        { followingsCount?.count }
                                     </strong> Following
                                 </Link>
                             </li>
                             <li className="text-gray-600 inline-block mr-3">
-                                <Link href={`/${user.username}/followers`}>
+                                <Link href={ `/${ user.username }/followers` }>
                                     <strong className="text-gray-900">
-                                        {followersCount?.count}
+                                        { followersCount?.count }
                                     </strong> Followers
                                 </Link>
                             </li>
@@ -151,10 +151,10 @@ export default async function ProfileLayout({ children, params }: Props) {
                     </div>
 
 
-                    <TabLinkList links={tabLinks} />
+                    <TabLinkList links={ tabLinks }/>
                 </div>
 
-                {children}
+                { children }
 
             </div>
         </SidebarLayout>

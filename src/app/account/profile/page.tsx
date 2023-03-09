@@ -10,10 +10,12 @@ import useAuthState from "@hooks/useAuthState"
 import Loading from "@components/global/Loading"
 import { useForm } from "@hooks/useForm"
 import toast from "react-hot-toast"
+import { useGetUserByIdQuery } from "@services/usersApi"
 
 export default function ProfileSettingsPage(){
     //hooks
-    const { user, isAuthenticated }                                          = useAuthState()
+    const { user: currentUser }                                              = useAuthState()
+    const { data: user, isLoading: isUserLoading }                           = useGetUserByIdQuery( currentUser.id )
     const [updateProfile, { isLoading, isSuccess }]                          = useUpdateProfileMutation()
     const { formData, onChange, onSubmit, errors, setFormData, clearErrors } = useForm<ProfilePayload>( updateProfile )
 
@@ -36,7 +38,9 @@ export default function ProfileSettingsPage(){
         }
     }, [isLoading, isSuccess] )
 
-    if( ! isAuthenticated ) return <Loading/>
+    if( isUserLoading ){
+        return <Loading/>
+    }
 
     return (
         <form className="flex-auto p-4 w-full" onSubmit={ onSubmit }>
