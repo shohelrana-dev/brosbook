@@ -5,7 +5,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import toast from "react-hot-toast"
 
-import mailImage from "@images/mail-with-value.png"
+import mailImage from "@assets/images/mail-with-value.png"
 import { useResendVerificationLinkMutation } from "@services/authApi"
 import Loading from "@components/global/Loading"
 import { useSelector } from "react-redux"

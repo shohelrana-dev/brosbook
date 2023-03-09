@@ -2,8 +2,8 @@ import { PropsWithChildren } from "react"
 import { Kanit } from 'next/font/google'
 import Providers from "./providers"
 import Navbar from "@components/global/Navbar"
-import '@styles/app.css'
 import { Metadata } from "next"
+import '@assets/styles/app.css'
 
 const font = Kanit( { weight: '400' } )
 

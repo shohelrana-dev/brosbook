@@ -24,17 +24,11 @@
       "@/": [
         "*"
       ],
-      "@boot/*": [
-        "boot/*"
-      ],
       "@components/*": [
         "components/*"
       ],
-      "@ui/*": [
-        "ui/*"
-      ],
-      "@images/*": [
-        "images/*"
+      "@assets/*": [
+        "assets/*"
       ],
       "@hooks/*": [
         "hooks/*"
@@ -47,9 +41,6 @@
       ],
       "@services/*": [
         "services/*"
-      ],
-      "@styles/*": [
-        "styles/*"
       ],
       "@interfaces/*": [
         "interfaces/*"
