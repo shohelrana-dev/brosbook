@@ -11,8 +11,8 @@ export default function ConversationList(){
     const {
               items: conversations,
               isLoading,
-              hasMoreItem,
-              loadMoreItem
+              hasMore,
+              loadMore
           } = useGetInfiniteListQuery<Conversation>( useGetConversationsQuery )
 
     return (
@@ -21,8 +21,8 @@ export default function ConversationList(){
             { isLoading ? <ConversationsLoader/> : null }
 
             <InfiniteScroll
-                loadMore={ loadMoreItem }
-                hasMore={ hasMoreItem }
+                loadMore={ loadMore }
+                hasMore={ hasMore }
                 loader={ <Loading size={ 50 }/> }
                 className="h-full overflow-y-auto scrollbar-hide"
             >

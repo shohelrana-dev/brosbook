@@ -7,10 +7,10 @@ export function useGetInfiniteListQuery<T>( useQueryHook: UseQuery<QueryDefiniti
     let { data, ...rest }   = useQueryHook( { ...queryParams, page }, options )
     const [items, setItems] = useState<T[]>( [] )
 
-    const hasMoreItem = !! data?.nextPage
+    const hasMore = !! data?.nextPage
 
-    function loadMoreItem(){
-        if( hasMoreItem ){
+    function loadMore(){
+        if( hasMore ){
             setPage( data.nextPage )
         }
     }
@@ -29,5 +29,5 @@ export function useGetInfiniteListQuery<T>( useQueryHook: UseQuery<QueryDefiniti
         }
     }, [data?.items] )
 
-    return { hasMoreItem, items, loadMoreItem, setItems, data, ...rest }
+    return { hasMore, items, loadMore, setItems, data, ...rest }
 }

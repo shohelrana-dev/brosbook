@@ -17,8 +17,8 @@ export default function FollowersPage( { params }: Props ){
               isLoading,
               isFetching,
               items: followers,
-              loadMoreItem,
-              hasMoreItem
+              loadMore,
+              hasMore
           }              = useGetInfiniteListQuery<User>( useGetFollowersQuery, { userId: user?.id! } )
 
     if( isLoading && followers?.length < 1 ){
@@ -32,8 +32,8 @@ export default function FollowersPage( { params }: Props ){
     return (
         <>
             <InfiniteScroll
-                loadMore={ loadMoreItem }
-                hasMore={ hasMoreItem }
+                loadMore={ loadMore }
+                hasMore={ hasMore }
                 loader={ <UsersLoader/> }
             >
                 { followers.map( ( user: User ) => (

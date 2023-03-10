@@ -11,8 +11,8 @@ export default function NotificationList(){
     const {
               isLoading,
               items: notifications,
-              loadMoreItem,
-              hasMoreItem
+              loadMore,
+              hasMore
           } = useGetInfiniteListQuery<Notification>(
         useGetNotificationsQuery, {
             page: 1,
@@ -22,8 +22,8 @@ export default function NotificationList(){
 
     const [moreLoadRef] = useInfiniteScroll( {
         loading: isLoading,
-        hasNextPage: hasMoreItem,
-        onLoadMore: loadMoreItem,
+        hasNextPage: hasMore,
+        onLoadMore: loadMore,
     } )
 
     return (
@@ -35,7 +35,7 @@ export default function NotificationList(){
                 <NotificationItem key={ notification.id } notification={ notification }/>
             ) ) }
 
-            { hasMoreItem ? (
+            { hasMore ? (
                 <div ref={ moreLoadRef }>
                     <NotificationsLoader count={ 3 }/>
                 </div>

@@ -1,3 +1,4 @@
+"use client"
 import React from 'react'
 import { Button as BaseButton, ButtonProps as BaseButtonProps } from '@material-tailwind/react'
 import { PuffLoader } from "react-spinners"

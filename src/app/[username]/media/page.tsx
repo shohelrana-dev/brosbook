@@ -15,8 +15,8 @@ export default function MediaPage( { params }: Props ){
     const {
               isLoading,
               items: mediaList,
-              loadMoreItem,
-              hasMoreItem
+              loadMore,
+              hasMore
           }              = useGetInfiniteListQuery( useGetMediaListQuery, { userId: user?.id } )
 
     if( isLoading && mediaList?.length < 1 ){
@@ -38,8 +38,8 @@ export default function MediaPage( { params }: Props ){
     return (
         <div className="box">
             <InfiniteScroll
-                loadMore={ loadMoreItem }
-                hasMore={ hasMoreItem }
+                loadMore={ loadMore }
+                hasMore={ hasMore }
                 loader={ <Loading size={ 40 }/> }
             >
                 <ImageLightbox imageList={ mediaList } width={ 200 } height={ 200 } alt="Media"/>

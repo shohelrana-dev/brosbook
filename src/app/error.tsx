@@ -3,7 +3,7 @@ import Button from "@components/global/Button"
 import { IoReload as ReloadIcon } from "react-icons/io5"
 import { BiErrorCircle as ErrorIcon } from "react-icons/bi"
 
-export default function Error( { error, reset }: { error: Error; reset: () => void; } ){
+export default function GlobalError( { error, reset }: { error: Error; reset: () => void; } ){
     return (
         <div className="w-full h-full flex items-center justify-center flex-col py-5">
             <div className="mb-5">

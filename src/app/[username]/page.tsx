@@ -18,8 +18,8 @@ export default function UserPostsPage( { params }: Props ){
               isLoading,
               isFetching,
               items: posts,
-              hasMoreItem,
-              loadMoreItem
+              hasMore,
+              loadMore
           }              = useGetInfiniteListQuery<Post>( useGetPostsQuery, { userId: user?.id } )
 
     if( isLoading && posts?.length < 1 ){
@@ -29,8 +29,8 @@ export default function UserPostsPage( { params }: Props ){
     return (
         <div className="mt-1">
             <InfiniteScroll
-                loadMore={ loadMoreItem }
-                hasMore={ hasMoreItem }
+                loadMore={ loadMore }
+                hasMore={ hasMore }
                 loader={ <PostsLoader/> }
             >
                 { posts && posts.map( ( post: Post ) => (

@@ -4,6 +4,8 @@ import Providers from "./providers"
 import Navbar from "@components/global/Navbar"
 import { Metadata } from "next"
 import '@assets/styles/app.css'
+import isAuthenticated from "@utils/isAuthenticated"
+import { cookies } from "next/headers"
 
 const font = Kanit( { weight: '400' } )
 
@@ -34,7 +36,7 @@ export default async function RootLayout( { children }: PropsWithChildren ){
         <head/>
         <body className="bg-theme-gray">
         <Providers>
-            <Navbar/>
+            { isAuthenticated( cookies() ) ? <Navbar/> : null }
             { children }
         </Providers>
         </body>

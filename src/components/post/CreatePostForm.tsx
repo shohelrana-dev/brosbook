@@ -1,3 +1,4 @@
+"use client"
 import React, { FormEvent, useState } from 'react'
 import { MdPublic } from "react-icons/md"
 import { HiPhotograph } from "react-icons/hi"
@@ -14,7 +15,7 @@ import useSelectFile from "@hooks/useSelectFile"
 
 export default function CreatePostForm(){
     //hooks
-    const { user, isAuthenticated }                                             = useAuthState()
+    const { user }                                                                         = useAuthState()
     const [createPost, { isLoading }]                                                      = useCreatePostMutation()
     const [body, setBody]                                                                  = useState<string>( '' )
     const { inputRef, selectedFile: selectedImage, removeSelectedFile, onChange, onClick } = useSelectFile()
@@ -44,8 +45,6 @@ export default function CreatePostForm(){
             toast.error( 'Post couldn\'t be saved.' )
         }
     }
-
-    if( ! isAuthenticated ) return null
 
     return (
         <div className="relative box p-6 mb-4">

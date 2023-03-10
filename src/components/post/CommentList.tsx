@@ -21,8 +21,8 @@ function CommentList( { postId }: CommentListPost ){
               isLoading,
               isFetching,
               items: comments,
-              hasMoreItem,
-              loadMoreItem,
+              hasMore,
+              loadMore,
               setItems
           }                                      = useGetInfiniteListQuery<Comment>( useGetCommentsQuery, { postId } )
     const { data: post }                         = useGetPostByIdQuery( postId )
@@ -73,8 +73,8 @@ function CommentList( { postId }: CommentListPost ){
 
             { isLoading || isFetching ? <Loading size={ 35 }/> : null }
 
-            { hasMoreItem && ( ! isLoading && ! isFetching ) ? (
-                <ButtonGray isLoading={ isLoading } onClick={ () => loadMoreItem() }>
+            { hasMore && ( ! isLoading && ! isFetching ) ? (
+                <ButtonGray isLoading={ isLoading } onClick={ () => loadMore() }>
                     See more comments
                 </ButtonGray>
             ) : null }

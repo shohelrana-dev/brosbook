@@ -21,8 +21,8 @@ export default function MessageList( { conversation }: Props ){
               items: messages,
               isLoading,
               setItems: setMessages,
-              hasMoreItem,
-              loadMoreItem,
+              hasMore,
+              loadMore,
               isSuccess
           }                 = useGetInfiniteListQuery<Message>(
         useGetMessagesQuery, { conversationId: conversation?.id!, limit: 15 }
@@ -85,8 +85,8 @@ export default function MessageList( { conversation }: Props ){
 
     const [moreLoadRef] = useInfiniteScroll( {
         loading: isLoading,
-        hasNextPage: hasMoreItem,
-        onLoadMore: loadMoreItem,
+        hasNextPage: hasMore,
+        onLoadMore: loadMore,
     } )
 
     return (
@@ -110,7 +110,7 @@ export default function MessageList( { conversation }: Props ){
                 </div>
             ) : null }
 
-            { hasMoreItem ? (
+            { hasMore ? (
                 <div className="py-[60px]" ref={ moreLoadRef }>
                     <Loading size={ 50 }/>
                 </div>

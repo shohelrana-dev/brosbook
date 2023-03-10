@@ -11,8 +11,8 @@ export default function SuggestionsPage(){
     const {
               isLoading,
               items: users,
-              loadMoreItem,
-              hasMoreItem,
+              loadMore,
+              hasMore,
               isSuccess
           } = useGetInfiniteListQuery<User>( useGetSuggestedUsersQuery )
 
@@ -22,8 +22,8 @@ export default function SuggestionsPage(){
             { isLoading ? <UsersLoader/> : null }
 
             <InfiniteScroll
-                loadMore={ loadMoreItem }
-                hasMore={ hasMoreItem }
+                loadMore={ loadMore }
+                hasMore={ hasMore }
                 loader={ <UsersLoader/> }
             >
                 { users.map( ( user: User ) => (

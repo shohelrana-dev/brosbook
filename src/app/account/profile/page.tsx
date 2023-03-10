@@ -15,7 +15,7 @@ import { useGetUserByIdQuery } from "@services/usersApi"
 export default function ProfileSettingsPage(){
     //hooks
     const { user: currentUser }                                              = useAuthState()
-    const { data: user, isLoading: isUserLoading }                           = useGetUserByIdQuery( currentUser.id )
+    const { data: user, isLoading: isUserLoading }                           = useGetUserByIdQuery( currentUser?.id! )
     const [updateProfile, { isLoading, isSuccess }]                          = useUpdateProfileMutation()
     const { formData, onChange, onSubmit, errors, setFormData, clearErrors } = useForm<ProfilePayload>( updateProfile )
 

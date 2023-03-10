@@ -16,7 +16,6 @@ function LogoutPage(){
 
     useEffect( () => {
         removeCookie( 'access_token' )
-        localStorage.removeItem( 'user' )
         dispatch( userLoggedOut() )
         toast.success( 'Logged out.' )
 
@@ -24,7 +23,7 @@ function LogoutPage(){
             dispatch( baseApi.util.resetApiState() )
         }, 1000 )
 
-        router.push( '/auth/login' )
+        router.replace( '/auth/login' )
     }, [dispatch, router] )
 
     return <Loading/>

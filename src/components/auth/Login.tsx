@@ -28,7 +28,7 @@ export default function Login(){
     useEffect( () => {
         if( isSuccess ){
             if( data?.user?.hasEmailVerified ){
-                router.push( params.get( 'redirect_to' ) ? params.get( 'redirect_to' )! : '/' )
+                router.replace( params.get( 'redirect_to' ) ? params.get( 'redirect_to' )! : '/' )
                 toast.success( 'Logged in.' )
             } else{
                 dispatch( setEmail( data?.user?.email! ) )

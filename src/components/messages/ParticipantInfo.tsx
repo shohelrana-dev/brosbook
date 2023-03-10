@@ -13,7 +13,7 @@ interface Props {
 
 function ParticipantInfo( { conversationId }: Props ){
     const { data: conversation, isLoading }                                          = useGetConversationByIdQuery( conversationId )
-    const { items: mediaList, isLoading: isMediaLoading, loadMoreItem, hasMoreItem } = useGetInfiniteListQuery<Media>(
+    const { items: mediaList, isLoading: isMediaLoading, loadMore, hasMore } = useGetInfiniteListQuery<Media>(
         useGetConversationMediaListQuery, { conversationId }
     )
     const containerRef                                                               = useRef<HTMLDivElement>( null )
@@ -84,8 +84,8 @@ function ParticipantInfo( { conversationId }: Props ){
                 { ( ! mediaList && isMediaLoading ) ? <Loading size={ 40 }/> : null }
                 <div>
                     <InfiniteScroll
-                        loadMore={ loadMoreItem }
-                        hasMore={ hasMoreItem }
+                        loadMore={ loadMore }
+                        hasMore={ hasMore }
                         loader={ <Loading size={ 40 }/> }
                     >
                         <ImageLightbox imageList={ mediaList } alt="Chat photo"/>

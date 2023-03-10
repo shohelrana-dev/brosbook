@@ -1,3 +1,4 @@
+"use client"
 import React from 'react'
 import { User } from "@interfaces/user.interfaces"
 import { useGetSuggestedUsersQuery } from "@services/usersApi"
@@ -8,45 +9,45 @@ import ButtonGray from "@components/global/ButtonGray"
 import UsersLoader from "@components/loaders/UsersLoader"
 import useAuthState from "@hooks/useAuthState"
 
-export default function SuggestedPeople() {
+export default function SuggestedPeople(){
     const { isAuthenticated } = useAuthState()
     const {
-        isLoading,
-        items: users,
-        hasMoreItem,
-        isSuccess
-    } = useGetInfiniteListQuery<User>(useGetSuggestedUsersQuery)
+              isLoading,
+              items: users,
+              hasMore,
+              isSuccess
+          }                   = useGetInfiniteListQuery<User>( useGetSuggestedUsersQuery )
 
-    if (isLoading) {
+    if( isLoading ){
         return (
             <div className="box p-5">
                 <h2 className="text-xl font-medium mb-5">Suggested People</h2>
-                <UsersLoader />
+                <UsersLoader/>
             </div>
         )
     }
 
-    if (!isAuthenticated) return null
+    if( ! isAuthenticated ) return null
 
     return (
         <div className="box p-5">
             <h2 className="text-xl font-medium mb-5">Suggested People</h2>
 
-            {users.length > 0 ? users.map((user: User) => (
-                <UserItem user={user} key={user.id} />
-            )) : null}
+            { users.length > 0 ? users.map( ( user: User ) => (
+                <UserItem user={ user } key={ user.id }/>
+            ) ) : null }
 
-            {hasMoreItem ? (
+            { hasMore ? (
                 <Link href="/suggestions">
                     <ButtonGray>
                         Show More
                     </ButtonGray>
                 </Link>
-            ) : null}
+            ) : null }
 
-            {isSuccess && users.length < 1 ? (
+            { isSuccess && users.length < 1 ? (
                 <p>No suggestions</p>
-            ) : null}
+            ) : null }
         </div>
     )
 }
