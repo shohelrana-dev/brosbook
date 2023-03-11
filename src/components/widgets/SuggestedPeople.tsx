@@ -18,21 +18,12 @@ export default function SuggestedPeople(){
               isSuccess
           }                   = useGetInfiniteListQuery<User>( useGetSuggestedUsersQuery )
 
-    if( isLoading ){
-        return (
-            <div className="box p-5">
-                <h2 className="text-xl font-medium mb-5">Suggested People</h2>
-                <UsersLoader/>
-            </div>
-        )
-    }
-
     if( ! isAuthenticated ) return null
 
-    return (
-        <div className="box p-5">
-            <h2 className="text-xl font-medium mb-5">Suggested People</h2>
-
+    //decide render content
+    let content = null
+    if( isSuccess && users.length > 0 ){
+        content = <>
             { users.length > 0 ? users.map( ( user: User ) => (
                 <UserItem user={ user } key={ user.id }/>
             ) ) : null }
@@ -44,10 +35,17 @@ export default function SuggestedPeople(){
                     </ButtonGray>
                 </Link>
             ) : null }
+        </>
+    } else if( isSuccess && users.length === 0 ){
+        content = <p>No suggestions</p>
+    } else if( isLoading ){
+        content = <UsersLoader/>
+    }
 
-            { isSuccess && users.length < 1 ? (
-                <p>No suggestions</p>
-            ) : null }
+    return (
+        <div className="box p-5">
+            <h2 className="text-xl font-medium mb-5">Suggested People</h2>
+            { content }
         </div>
     )
 }

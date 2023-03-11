@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { RootState } from "../store"
 import { User } from "@interfaces/user.interfaces"
-import isServer from "@utils/isServer";
+import isServer from "@utils/isServer"
 
 interface AuthState {
     isAuthenticated: boolean
@@ -51,10 +51,13 @@ export const authSlice = createSlice( {
         },
         setEmail: ( state, { payload }: PayloadAction<string> ) => {
             state.email = payload
+        },
+        authChecked: ( state ) => {
+            state.isChecked = true
         }
     }
 } )
 
 export const selectAuthState = ( state: RootState ) => state.auth
 
-export const { userLoggedIn, userLoggedOut, setEmail } = authSlice.actions
+export const { userLoggedIn, userLoggedOut, setEmail, authChecked } = authSlice.actions
