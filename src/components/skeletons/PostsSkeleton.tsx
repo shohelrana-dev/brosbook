@@ -1,6 +1,6 @@
 import Skeleton from 'react-loading-skeleton'
 
-export default function PostsLoader( { count = 3 } ){
+export default function PostsSkeleton( { count = 3 } ){
     return (
         <>
             { Array.from( { length: count } ).map( (_, i) => (

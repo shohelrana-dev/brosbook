@@ -1,6 +1,6 @@
 import Skeleton from 'react-loading-skeleton'
 
-export default function NotificationsLoader( { count = 5 } ){
+export default function NotificationsSkeleton( { count = 5 } ){
     return (
         <>
             { Array.from( { length: count } ).map( (_, i) => (

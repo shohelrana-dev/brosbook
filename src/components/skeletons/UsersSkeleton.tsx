@@ -1,6 +1,6 @@
 import Skeleton from 'react-loading-skeleton'
 
-export default function UsersLoader( { count = 4 } ){
+export default function UsersSkeleton( { count = 4 } ){
     return (
         <div className="bg-white">
             { Array.from( { length: count } ).map( (_, i) => (

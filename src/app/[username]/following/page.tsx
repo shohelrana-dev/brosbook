@@ -4,7 +4,7 @@ import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import { User } from "@interfaces/user.interfaces"
 import UserItem from "@components/global/UserItem"
 import InfiniteScroll from "react-infinite-scroller"
-import UsersLoader from "@components/loaders/UsersLoader"
+import UsersSkeleton from "@components/skeletons/UsersSkeleton"
 
 interface Props {
     params: { username: string }
@@ -24,7 +24,7 @@ export default function FollowingPage( { params }: Props ){
     if( isLoading && followings?.length < 1 ){
         return (
             <div className="bg-white box py-3">
-                <UsersLoader/>
+                <UsersSkeleton/>
             </div>
         )
     }
@@ -34,7 +34,7 @@ export default function FollowingPage( { params }: Props ){
             <InfiniteScroll
                 loadMore={ loadMore }
                 hasMore={ hasMore }
-                loader={ <UsersLoader count={ 2 }/> }
+                loader={ <UsersSkeleton count={ 2 }/> }
             >
                 { followings.map( ( user: User ) => (
                     <div className="bg-white p-3 pb-1">

@@ -1,6 +1,6 @@
 import Skeleton from 'react-loading-skeleton'
 
-export default function CreatePostFormLoader(){
+export default function CreatePostFormSkeleton(){
     return (
         <div className="box bg-white p-5 mb-3">
             <div className="text-center mb-4">

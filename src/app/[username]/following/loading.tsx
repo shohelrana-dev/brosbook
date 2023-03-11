@@ -1,6 +1,6 @@
 import React from 'react'
-import UsersLoader from "@components/loaders/UsersLoader"
+import UsersSkeleton from "@components/skeletons/UsersSkeleton"
 
 export default function Loading(){
-    return <UsersLoader/>
+    return <UsersSkeleton/>
 }

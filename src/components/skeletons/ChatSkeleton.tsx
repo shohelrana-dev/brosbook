@@ -1,7 +1,7 @@
 import React from 'react'
 import Skeleton from 'react-loading-skeleton'
 
-export default function ChatLoader( { count = 3 } ){
+export default function ChatSkeleton( { count = 3 } ){
     return (
         <>
             { Array.from( { length: count } ).map( (_, i) => (

@@ -5,7 +5,7 @@ import { useGetNotificationsQuery } from "@services/notificationsApi"
 import { Notification } from "@interfaces/index.interfaces"
 import NotificationItem from "./NotificationItem"
 import useInfiniteScroll from "react-infinite-scroll-hook"
-import NotificationsLoader from "@components/loaders/NotificationsLoader"
+import NotificationsSkeleton from "@components/skeletons/NotificationsSkeleton"
 
 export default function NotificationList(){
     const {
@@ -29,7 +29,7 @@ export default function NotificationList(){
     return (
         <div>
             <h3 className="text-xl font-bold text-gray-900 ml-2 mb-1">Notifications</h3>
-            { isLoading ? <NotificationsLoader/> : null }
+            { isLoading ? <NotificationsSkeleton/> : null }
 
             { notifications && notifications.map( ( notification: Notification ) => (
                 <NotificationItem key={ notification.id } notification={ notification }/>
@@ -37,7 +37,7 @@ export default function NotificationList(){
 
             { hasMore ? (
                 <div ref={ moreLoadRef }>
-                    <NotificationsLoader count={ 3 }/>
+                    <NotificationsSkeleton count={ 3 }/>
                 </div>
             ) : null }
 

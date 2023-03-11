@@ -12,7 +12,7 @@ import Button from "@components/global/Button"
 import useAuthState from "@hooks/useAuthState"
 import IconButton from "@components/global/IconButton"
 import useSelectFile from "@hooks/useSelectFile"
-import CreatePostFormLoader from "@components/loaders/CreatePostFormLoader"
+import CreatePostFormSkeleton from "@components/skeletons/CreatePostFormSkeleton"
 
 export default function CreatePostForm(){
     //hooks
@@ -47,7 +47,7 @@ export default function CreatePostForm(){
         }
     }
 
-    if( ! isChecked ) return <CreatePostFormLoader/>
+    if( ! isChecked ) return <CreatePostFormSkeleton/>
 
     if( ! isAuthenticated ) return null
 

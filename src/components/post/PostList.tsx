@@ -1,5 +1,5 @@
 import React from 'react'
-import PostsLoader from "@components/loaders/PostsLoader"
+import PostsSkeleton from "@components/skeletons/PostsSkeleton"
 import { Post } from "@interfaces/posts.interfaces"
 import PostCard from "@components/post/PostCard"
 import InfiniteScroll from "react-infinite-scroller"
@@ -15,7 +15,7 @@ export default function PostList( { posts, loadMore, hasMore }: Props ){
         <InfiniteScroll
             loadMore={ loadMore }
             hasMore={ hasMore }
-            loader={ <PostsLoader/> }
+            loader={ <PostsSkeleton/> }
         >
             { posts.map( ( post: Post ) => (
                 <PostCard post={ post } key={ post.id }/>

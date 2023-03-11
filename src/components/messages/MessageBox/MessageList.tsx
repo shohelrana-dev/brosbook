@@ -7,7 +7,7 @@ import { io } from "socket.io-client"
 import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import useAuthState from "@hooks/useAuthState"
 import useInfiniteScroll from "react-infinite-scroll-hook"
-import ChatLoader from "@components/loaders/ChatLoader"
+import ChatSkeleton from "@components/skeletons/ChatSkeleton"
 
 interface Props {
     conversation: Conversation
@@ -91,7 +91,7 @@ export default function MessageList( { conversation }: Props ){
 
     return (
         <div ref={ messageListRef } className="h-full overflow-y-auto flex flex-col-reverse mb-[60px] scrollbar-hide">
-            { isLoading ? <ChatLoader/> : null }
+            { isLoading ? <ChatSkeleton/> : null }
 
             { ( messages && messages.length > 0 ) ? messages.map( ( message: Message, index: number ) => (
                 <SingleMessage

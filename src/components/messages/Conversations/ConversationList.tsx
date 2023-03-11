@@ -5,7 +5,7 @@ import ConversationItem from "@components/messages/Conversations/ConversationIte
 import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import { useGetConversationsQuery } from "@services/conversationApi"
 import InfiniteScroll from 'react-infinite-scroller'
-import ConversationsLoader from "@components/loaders/ConversationsLoader"
+import ConversationsSkeleton from "@components/skeletons/ConversationsSkeleton"
 
 export default function ConversationList(){
     const {
@@ -18,7 +18,7 @@ export default function ConversationList(){
     return (
         <div className="h-full">
             <h2 className="text-lg font-medium mb-3">Recent chats</h2>
-            { isLoading ? <ConversationsLoader/> : null }
+            { isLoading ? <ConversationsSkeleton/> : null }
 
             <InfiniteScroll
                 loadMore={ loadMore }

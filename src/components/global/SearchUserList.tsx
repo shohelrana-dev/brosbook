@@ -3,7 +3,7 @@ import { User } from "@interfaces/user.interfaces"
 import { useSearchUsersQuery } from "@services/usersApi"
 import classNames from "classnames"
 import UserItem from "@components/global/UserItem"
-import UsersLoader from "@components/loaders/UsersLoader"
+import UsersSkeleton from "@components/skeletons/UsersSkeleton"
 
 interface Props {
     onUserClick: ( user: User ) => void
@@ -19,7 +19,7 @@ export default function SearchUserList( { onUserClick, searchKey, wrapperClassna
     return (
         <div
             className={ classNames( "box bg-white max-w-5xl p-3 absolute top-full left-0 w-max h-fit overflow-y-auto mt-1 bg-white drop-shadow-2xl max-h-[80vh] overflow-y-auto min-w-[250px]", wrapperClassname ) }>
-            { isLoading ? <UsersLoader count={2}/> : null }
+            { isLoading ? <UsersSkeleton count={2}/> : null }
 
             { ( users && users.length > 0 ) ? users.map( user => (
                 <div key={ user.id } onClick={ () => onUserClick( user ) } className="cursor-pointer">

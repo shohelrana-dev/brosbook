@@ -1,6 +1,6 @@
 import Skeleton from 'react-loading-skeleton'
 
-export default function ConversationsLoader( { count = 5 } ){
+export default function ConversationsSkeleton( { count = 5 } ){
     return (
         <>
             { Array.from( { length: count } ).map( (_, i) => (

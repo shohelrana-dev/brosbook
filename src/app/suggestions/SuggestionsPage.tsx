@@ -4,7 +4,7 @@ import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import { User } from "@interfaces/user.interfaces"
 import UserItem from "@components/global/UserItem"
 import InfiniteScroll from "react-infinite-scroller"
-import UsersLoader from "@components/loaders/UsersLoader"
+import UsersSkeleton from "@components/skeletons/UsersSkeleton"
 
 export default function SuggestionsPage(){
     //hooks
@@ -19,12 +19,12 @@ export default function SuggestionsPage(){
     return (
         <div className="bg-white p-3 pt-4">
             <h2 className="text-lg md:text-xl font-bold mb-4">Suggested for you</h2>
-            { isLoading ? <UsersLoader/> : null }
+            { isLoading ? <UsersSkeleton/> : null }
 
             <InfiniteScroll
                 loadMore={ loadMore }
                 hasMore={ hasMore }
-                loader={ <UsersLoader/> }
+                loader={ <UsersSkeleton/> }
             >
                 { users.map( ( user: User ) => (
                     <div className="pb-1">

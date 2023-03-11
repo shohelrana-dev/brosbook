@@ -6,7 +6,7 @@ import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import UserItem from "@components/global/UserItem"
 import Link from "next/link"
 import ButtonGray from "@components/global/ButtonGray"
-import UsersLoader from "@components/loaders/UsersLoader"
+import UsersSkeleton from "@components/skeletons/UsersSkeleton"
 import useAuthState from "@hooks/useAuthState"
 
 export default function SuggestedPeople(){
@@ -39,7 +39,7 @@ export default function SuggestedPeople(){
     } else if( isSuccess && users.length === 0 ){
         content = <p>No suggestions</p>
     } else if( isLoading ){
-        content = <UsersLoader/>
+        content = <UsersSkeleton/>
     }
 
     return (

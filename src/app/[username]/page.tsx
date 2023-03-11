@@ -4,7 +4,7 @@ import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import { useGetPostsQuery } from "@services/postsApi"
 import { Post } from "@interfaces/posts.interfaces"
 import InfiniteScroll from "react-infinite-scroller"
-import PostsLoader from "@components/loaders/PostsLoader"
+import PostsSkeleton from "@components/skeletons/PostsSkeleton"
 import { useGetUserByUsernameQuery } from "@services/usersApi"
 
 interface Props {
@@ -23,7 +23,7 @@ export default function UserPostsPage( { params }: Props ){
           }              = useGetInfiniteListQuery<Post>( useGetPostsQuery, { userId: user?.id } )
 
     if( isLoading && posts?.length < 1 ){
-        return <PostsLoader/>
+        return <PostsSkeleton/>
     }
 
     return (
@@ -31,7 +31,7 @@ export default function UserPostsPage( { params }: Props ){
             <InfiniteScroll
                 loadMore={ loadMore }
                 hasMore={ hasMore }
-                loader={ <PostsLoader/> }
+                loader={ <PostsSkeleton/> }
             >
                 { posts && posts.map( ( post: Post ) => (
                     <PostCard post={ post } key={ post.id }/>
