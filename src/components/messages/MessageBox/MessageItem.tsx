@@ -2,7 +2,6 @@ import React from 'react'
 import Avatar from "@components/global/Avatar"
 import { Message } from "@interfaces/conversation.interfaces"
 import MessageContent from "@components/messages/MessageBox/MessageContent"
-import useAuthState from "@hooks/useAuthState"
 import timeAgo from "@utils/timeAgo"
 import moment from "moment/moment"
 import { IoCheckmarkCircleOutline as TickIcon } from "react-icons/io5"
@@ -27,7 +26,7 @@ interface SingleMessageProps {
     participant: User
 }
 
-function SingleMessage( { message, prevMessage, isLastMessage, participant }: SingleMessageProps ){
+function MessageItem( { message, prevMessage, isLastMessage, participant }: SingleMessageProps ){
     const timeDiff                         = moment( prevMessage?.createdAt ).diff( message.createdAt, "minutes" )
     const isSameUser                       = prevMessage && ( message.sender.id === prevMessage?.sender.id )
     const isSameUserAndTimeLessThanFiveMin = isSameUser && ( timeDiff <= 5 )
@@ -100,4 +99,4 @@ function SingleMessage( { message, prevMessage, isLastMessage, participant }: Si
     )
 }
 
-export default SingleMessage
+export default MessageItem

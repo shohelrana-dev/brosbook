@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import SingleMessage from "@components/messages/MessageBox/SingleMessage"
+import MessageItem from "@components/messages/MessageBox/MessageItem"
 import { useGetMessagesQuery, useSeenAllMessagesMutation } from "@services/conversationApi"
 import Loading from "@components/global/Loading"
 import { Conversation, Message } from "@interfaces/conversation.interfaces"
@@ -59,7 +59,7 @@ export default function MessageList( { conversation }: Props ){
         setMessages( ( prevMessages: Message[] ) => {
             return [message, ...prevMessages]
         } )
-        setInterval( () => {
+        setTimeout( () => {
             scrollToBottom()
         }, 500 )
     }
@@ -89,26 +89,29 @@ export default function MessageList( { conversation }: Props ){
         onLoadMore: loadMore,
     } )
 
+    //decide content
+    let content = null
+    if( isLoading ){
+        content = <ChatSkeleton/>
+    } else if( isSuccess && messages?.length === 0 ){
+        content = <div className="h-full flex justify-center items-center">
+            <h4 className="text-gray-700 text-lg">No messages</h4>
+        </div>
+    } else if( isSuccess && messages.length > 0 ){
+        content = messages.map( ( message: Message, index: number ) => (
+            <MessageItem
+                key={ message.id }
+                message={ message }
+                participant={ participant }
+                prevMessage={ index === 0 ? null : messages[index - 1] }
+                isLastMessage={ 0 === index }
+            />
+        ) )
+    }
+
     return (
         <div ref={ messageListRef } className="h-full overflow-y-auto flex flex-col-reverse mb-[60px] scrollbar-hide">
-            { isLoading ? <ChatSkeleton/> : null }
-
-            { ( messages && messages.length > 0 ) ? messages.map( ( message: Message, index: number ) => (
-                <SingleMessage
-                    key={ message.id }
-                    message={ message }
-                    participant={ participant }
-                    prevMessage={ index === 0 ? null : messages[index - 1] }
-                    isLastMessage={ 0 === index }
-                />
-            ) ) : null }
-
-
-            { ( isSuccess && messages?.length < 1 ) ? (
-                <div className="h-full flex justify-center items-center">
-                    <h4 className="text-gray-700 text-lg">No messages</h4>
-                </div>
-            ) : null }
+            { content }
 
             { hasMore ? (
                 <div className="py-[60px]" ref={ moreLoadRef }>
