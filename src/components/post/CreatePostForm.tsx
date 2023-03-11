@@ -12,10 +12,11 @@ import Button from "@components/global/Button"
 import useAuthState from "@hooks/useAuthState"
 import IconButton from "@components/global/IconButton"
 import useSelectFile from "@hooks/useSelectFile"
+import CreatePostFormLoader from "@components/loaders/CreatePostFormLoader"
 
 export default function CreatePostForm(){
     //hooks
-    const { user }                                                                         = useAuthState()
+    const { user, isAuthenticated, isChecked }                                             = useAuthState()
     const [createPost, { isLoading }]                                                      = useCreatePostMutation()
     const [body, setBody]                                                                  = useState<string>( '' )
     const { inputRef, selectedFile: selectedImage, removeSelectedFile, onChange, onClick } = useSelectFile()
@@ -45,6 +46,10 @@ export default function CreatePostForm(){
             toast.error( 'Post couldn\'t be saved.' )
         }
     }
+
+    if( ! isChecked ) return <CreatePostFormLoader/>
+
+    if( ! isAuthenticated ) return null
 
     return (
         <div className="relative box p-6 mb-4">

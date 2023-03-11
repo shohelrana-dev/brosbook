@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { RootState } from "../store"
 import { User } from "@interfaces/user.interfaces"
+import isServer from "@utils/isServer";
 
 interface AuthState {
     isAuthenticated: boolean
@@ -17,7 +18,7 @@ const initialState: AuthState = {
 }
 
 function getStoredState(): AuthState{
-    if( typeof window === "undefined" ){
+    if( isServer ){
         return initialState
     }
 

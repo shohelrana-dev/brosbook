@@ -1,3 +1,4 @@
+"use client"
 import React from 'react'
 import {IconButton as BaseIconButton, IconButtonProps} from "@material-tailwind/react"
 import classNames from "classnames"

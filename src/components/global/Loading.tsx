@@ -8,10 +8,10 @@ interface LoadingProps {
     color?: string
 }
 
-function Loading( { color = "#36d7b7", size = 50, ...rest }: LoadingProps ){
+function Loading( { color = "#36d7b7", ...rest }: LoadingProps ){
     return (
         <div className="flex justify-center my-2">
-            <PuffLoader color={ color } size={ size }  { ...rest }/>
+            <PuffLoader color={ color }  { ...rest }/>
         </div>
     )
 }

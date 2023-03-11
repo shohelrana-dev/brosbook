@@ -9,20 +9,18 @@ import Boot from "@components/global/Boot"
 import { ThemeProvider } from "@material-tailwind/react"
 import 'react-loading-skeleton/dist/skeleton.css'
 
-function Providers({ children }: { children: ReactNode }) {
+export default function Providers( { children }: { children: ReactNode } ){
     return (
-        <Provider store={store}>
+        <Provider store={ store }>
             <ThemeProvider>
                 <UnauthorizedPopupProvider>
                     <ConfirmAlertProvider>
-                        <Boot />
-                        {children}
-                        <Toaster />
+                        <Boot/>
+                        { children }
+                        <Toaster/>
                     </ConfirmAlertProvider>
                 </UnauthorizedPopupProvider>
             </ThemeProvider>
         </Provider>
     )
 }
-
-export default Providers

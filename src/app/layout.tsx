@@ -1,11 +1,9 @@
 import { PropsWithChildren } from "react"
 import { Kanit } from 'next/font/google'
 import Providers from "./providers"
-import Navbar from "@components/global/Navbar"
+import Navbar from "@components/navbar/Navbar"
 import { Metadata } from "next"
 import '@assets/styles/app.css'
-import isAuthenticated from "@utils/isAuthenticated"
-import { cookies } from "next/headers"
 
 const font = Kanit( { weight: '400' } )
 
@@ -30,13 +28,13 @@ export const metadata: Metadata = {
     creator: "Shohel Rana"
 }
 
-export default async function RootLayout( { children }: PropsWithChildren ){
+export default function RootLayout( { children }: PropsWithChildren ){
     return (
         <html lang='eng' className={ font.className }>
         <head/>
         <body className="bg-theme-gray">
         <Providers>
-            { isAuthenticated( cookies() ) ? <Navbar/> : null }
+            <Navbar/>
             { children }
         </Providers>
         </body>
