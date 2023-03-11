@@ -1,11 +1,11 @@
 "use client"
-import PostCard from "@components/post/PostCard"
 import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import { useGetPostsQuery } from "@services/postsApi"
 import { Post } from "@interfaces/posts.interfaces"
-import InfiniteScroll from "react-infinite-scroller"
 import PostsSkeleton from "@components/skeletons/PostsSkeleton"
 import { useGetUserByUsernameQuery } from "@services/usersApi"
+import Error from "@components/global/Error"
+import PostList from "@components/post/PostList"
 
 interface Props {
     params: { username: string }
@@ -13,34 +13,26 @@ interface Props {
 
 export default function UserPostsPage( { params }: Props ){
     //hooks
-    const { data: user } = useGetUserByUsernameQuery( params.username )
-    const {
-              isLoading,
-              isFetching,
-              items: posts,
-              hasMore,
-              loadMore
-          }              = useGetInfiniteListQuery<Post>( useGetPostsQuery, { userId: user?.id } )
+    const { data: user }                                                            = useGetUserByUsernameQuery( params.username )
+    const { isLoading, isSuccess, isError, items: posts, error, hasMore, loadMore } = useGetInfiniteListQuery<Post>(
+        useGetPostsQuery, { userId: user?.id }
+    )
 
-    if( isLoading && posts?.length < 1 ){
-        return <PostsSkeleton/>
+    //decide content
+    let content = null
+    if( isLoading ){
+        content = <PostsSkeleton/>
+    } else if( isSuccess && posts.length === 0 ){
+        content = <p className="box text-center py-6">{ user?.fullName }'s haven't any post.</p>
+    } else if( isError ){
+        content = <Error message={ error?.data?.message }/>
+    } else if( isSuccess && posts.length > 0 ){
+        content = <PostList posts={ posts } loadMore={ loadMore } hasMore={ hasMore }/>
     }
 
     return (
         <div className="mt-1">
-            <InfiniteScroll
-                loadMore={ loadMore }
-                hasMore={ hasMore }
-                loader={ <PostsSkeleton/> }
-            >
-                { posts && posts.map( ( post: Post ) => (
-                    <PostCard post={ post } key={ post.id }/>
-                ) ) }
-            </InfiniteScroll>
-
-            { ( ! isLoading && ! isFetching && posts?.length < 1 ) ? (
-                <p className="box text-center py-6">{ user?.fullName }'s haven't any post.</p>
-            ) : null }
+            { content }
         </div>
     )
 }

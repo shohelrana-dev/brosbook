@@ -8,19 +8,20 @@ import PostList from "@components/post/PostList"
 
 export default function FeedPosts(){
     //hooks
-    const { isLoading, items: posts, hasMore, loadMore, isSuccess, isError, error } =
-              useGetInfiniteListQuery<Post>( useGetFeedPostsQuery )
+    const { isLoading, items: posts, hasMore, loadMore, isSuccess, isError, error } = useGetInfiniteListQuery<Post>(
+        useGetFeedPostsQuery, { limit: 1 }
+    )
 
     //decide content
     let content = null
-    if( isSuccess && posts.length > 0 ){
-        content = <PostList posts={ posts } loadMore={ loadMore } hasMore={ hasMore }/>
+    if( isLoading ){
+        content = <PostsSkeleton/>
     } else if( isSuccess && posts.length === 0 ){
         content = <p className="box text-center py-6">Your feed is empty.</p>
-    } else if( isLoading ){
-        content = <PostsSkeleton/>
     } else if( isError ){
-        content = <Error message={ error.error }/>
+        content = <Error message={ error?.data?.message }/>
+    } else if( isSuccess && posts.length > 0 ){
+        content = <PostList posts={ posts } loadMore={ loadMore } hasMore={ hasMore }/>
     }
 
     return content

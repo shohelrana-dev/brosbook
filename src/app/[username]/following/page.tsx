@@ -1,10 +1,13 @@
 "use client"
+import React from "react"
 import { useGetFollowingsQuery, useGetUserByUsernameQuery } from "@services/usersApi"
 import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import { User } from "@interfaces/user.interfaces"
 import UserItem from "@components/global/UserItem"
 import InfiniteScroll from "react-infinite-scroller"
 import UsersSkeleton from "@components/skeletons/UsersSkeleton"
+import Loading from "@components/global/Loading"
+import Error from "@components/global/Error"
 
 interface Props {
     params: { username: string }
@@ -15,37 +18,44 @@ export default function FollowingPage( { params }: Props ){
     const { data: user } = useGetUserByUsernameQuery( params.username )
     const {
               isLoading,
-              isFetching,
+              isSuccess,
+              isError,
               items: followings,
+              error,
               loadMore,
               hasMore
-          }              = useGetInfiniteListQuery<User>( useGetFollowingsQuery, { userId: user?.id! } )
+          }              = useGetInfiniteListQuery<User>(
+        useGetFollowingsQuery, { userId: user?.id! }
+    )
 
-    if( isLoading && followings?.length < 1 ){
-        return (
-            <div className="bg-white box py-3">
-                <UsersSkeleton/>
-            </div>
-        )
-    }
 
-    return (
-        <>
+    //decide content
+    let content = null
+    if( isLoading ){
+        content = <Loading size={ 50 }/>
+    } else if( isSuccess && followings.length === 0 ){
+        content = <p className="text-center">{ user?.fullName }'s haven't following.</p>
+    } else if( isError ){
+        content = <Error message={ error?.data?.message }/>
+    } else if( isSuccess && followings.length > 0 ){
+        content = (
             <InfiniteScroll
                 loadMore={ loadMore }
                 hasMore={ hasMore }
                 loader={ <UsersSkeleton count={ 2 }/> }
             >
                 { followings.map( ( user: User ) => (
-                    <div className="bg-white p-3 pb-1">
+                    <div className="mb-2">
                         <UserItem user={ user } key={ user.id }/>
                     </div>
                 ) ) }
             </InfiniteScroll>
+        )
+    }
 
-            { ( ! isLoading && ! isFetching && followings?.length < 1 ) ? (
-                <p className="box text-center py-6">{ user?.fullName }'s haven't following.</p>
-            ) : null }
-        </>
+    return (
+        <div className="box p-3">
+            { content }
+        </div>
     )
 }

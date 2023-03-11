@@ -6,8 +6,8 @@ export default function Error( { message }: { message: string } ){
     return (
         <Alert color="red" className="bg-red-400">
             <div className="flex gap-3 items-center">
-                <ErrorIcon size={20}/>
-                <p>{ message }</p>
+                <ErrorIcon size={ 20 }/>
+                <p>{ message ? message : "There was an error!" }</p>
             </div>
         </Alert>
     )

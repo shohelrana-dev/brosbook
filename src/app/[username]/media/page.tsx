@@ -5,38 +5,28 @@ import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import Loading from "@components/global/Loading"
 import ImageLightbox from "@components/global/ImageLightbox"
 import InfiniteScroll from "react-infinite-scroller"
+import Error from "@components/global/Error"
 
 interface Props {
     params: { username: string }
 }
 
 export default function MediaPage( { params }: Props ){
-    const { data: user } = useGetUserByUsernameQuery( params.username )
-    const {
-              isLoading,
-              items: mediaList,
-              loadMore,
-              hasMore
-          }              = useGetInfiniteListQuery( useGetMediaListQuery, { userId: user?.id } )
+    const { data: user }                                                                = useGetUserByUsernameQuery( params.username )
+    const { isLoading, isSuccess, isError, items: mediaList, error, loadMore, hasMore } = useGetInfiniteListQuery(
+        useGetMediaListQuery, { userId: user?.id }
+    )
 
-    if( isLoading && mediaList?.length < 1 ){
-        return (
-            <div className="box py-3 text-center">
-                <Loading size={ 45 }/>
-            </div>
-        )
-    }
-
-    if( ! isLoading && mediaList?.length < 1 ){
-        return (
-            <div className="box text-center py-3">
-                { user?.fullName } haven't media.
-            </div>
-        )
-    }
-
-    return (
-        <div className="box">
+    //decide content
+    let content = null
+    if( isLoading ){
+        content = <Loading size={ 50 }/>
+    } else if( isSuccess && mediaList.length === 0 ){
+        content = <p className="text-center">{ user?.fullName } haven't media.</p>
+    } else if( isError ){
+        content = <Error message={ error?.data?.message }/>
+    } else if( isSuccess && mediaList.length > 0 ){
+        content = (
             <InfiniteScroll
                 loadMore={ loadMore }
                 hasMore={ hasMore }
@@ -44,6 +34,12 @@ export default function MediaPage( { params }: Props ){
             >
                 <ImageLightbox imageList={ mediaList } width={ 200 } height={ 200 } alt="Media"/>
             </InfiniteScroll>
+        )
+    }
+
+    return (
+        <div className="box">
+            { content }
         </div>
     )
 }

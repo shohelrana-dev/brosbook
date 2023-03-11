@@ -8,6 +8,7 @@ import Link from "next/link"
 import ButtonGray from "@components/global/ButtonGray"
 import UsersSkeleton from "@components/skeletons/UsersSkeleton"
 import useAuthState from "@hooks/useAuthState"
+import Error from "@components/global/Error"
 
 export default function SuggestedPeople(){
     const { isAuthenticated } = useAuthState()
@@ -15,18 +16,31 @@ export default function SuggestedPeople(){
               isLoading,
               items: users,
               hasMore,
-              isSuccess
+              isSuccess,
+              isError,
+              error
           }                   = useGetInfiniteListQuery<User>( useGetSuggestedUsersQuery )
 
     if( ! isAuthenticated ) return null
 
     //decide render content
     let content = null
-    if( isSuccess && users.length > 0 ){
-        content = <>
-            { users.length > 0 ? users.map( ( user: User ) => (
-                <UserItem user={ user } key={ user.id }/>
-            ) ) : null }
+    if( isLoading ){
+        content = <UsersSkeleton/>
+    } else if( isSuccess && users.length === 0 ){
+        content = <p>No suggestions</p>
+    } else if( isError ){
+        content = <Error message={ error?.data?.message }/>
+    } else if( isSuccess && users.length > 0 ){
+        content = users.map( ( user: User ) => (
+            <UserItem user={ user } key={ user.id }/>
+        ) )
+    }
+
+    return (
+        <div className="box p-5">
+            <h2 className="text-xl font-medium mb-5">Suggested People</h2>
+            { content }
 
             { hasMore ? (
                 <Link href="/suggestions">
@@ -35,17 +49,6 @@ export default function SuggestedPeople(){
                     </ButtonGray>
                 </Link>
             ) : null }
-        </>
-    } else if( isSuccess && users.length === 0 ){
-        content = <p>No suggestions</p>
-    } else if( isLoading ){
-        content = <UsersSkeleton/>
-    }
-
-    return (
-        <div className="box p-5">
-            <h2 className="text-xl font-medium mb-5">Suggested People</h2>
-            { content }
         </div>
     )
 }

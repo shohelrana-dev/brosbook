@@ -8,6 +8,7 @@ import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import useAuthState from "@hooks/useAuthState"
 import useInfiniteScroll from "react-infinite-scroll-hook"
 import ChatSkeleton from "@components/skeletons/ChatSkeleton"
+import Error from "@components/global/Error"
 
 interface Props {
     conversation: Conversation
@@ -23,7 +24,9 @@ export default function MessageList( { conversation }: Props ){
               setItems: setMessages,
               hasMore,
               loadMore,
-              isSuccess
+              isSuccess,
+              isError,
+              error
           }                 = useGetInfiniteListQuery<Message>(
         useGetMessagesQuery, { conversationId: conversation?.id!, limit: 15 }
     )
@@ -97,6 +100,8 @@ export default function MessageList( { conversation }: Props ){
         content = <div className="h-full flex justify-center items-center">
             <h4 className="text-gray-700 text-lg">No messages</h4>
         </div>
+    } else if( isError ){
+        content = <Error message={ error?.data?.message }/>
     } else if( isSuccess && messages.length > 0 ){
         content = messages.map( ( message: Message, index: number ) => (
             <MessageItem
