@@ -6,21 +6,33 @@ import { Metadata } from "next"
 import { notFound } from "next/navigation"
 
 export const generateMetadata = async( { params }: Props ): Promise<Metadata> => {
-    const post        = await getPostById( params.postId, cookies() )
-    const title       = `${ post?.author.fullName } on ${ process.env.NEXT_PUBLIC_APP_NAME }`
+    const post = await getPostById( params.postId, cookies() )
+
+    if( ! post ) return { title: "Post not found" }
+
+    const title       = `${ post?.author.fullName } on ${ process.env.NEXT_PUBLIC_APP_NAME }: "${ post?.body.replace( /[\r\n]/gm, '' ) }"`
+    const ogTitle     = `${ post?.author.fullName } on ${ process.env.NEXT_PUBLIC_APP_NAME }`
     const description = post?.body.replace( /[\r\n]/gm, '' )
     const image       = post?.image?.url
     const url         = `${ process.env.NEXT_PUBLIC_APP_URL }/posts/${ post?.id }`
+    const authorUrl   = `${ process.env.NEXT_PUBLIC_APP_URL }/${ post?.author.username }`
 
     return {
         title,
         description,
+        authors: {
+            name: post?.author.fullName!,
+            url: authorUrl
+        },
+        keywords: [process.env.NEXT_PUBLIC_APP_NAME!, 'post', post?.author.username!],
         other: {
             "og:type": 'article',
             "og:url": url,
-            "og:title": title,
+            "og:title": ogTitle,
             "og:description": description!,
-            "og:image": image!
+            "og:image": image!,
+            "og:image:alt": title,
+            "article:published_time": post?.createdAt!
         }
     }
 }

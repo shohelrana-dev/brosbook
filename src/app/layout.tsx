@@ -14,6 +14,7 @@ export const metadata: Metadata = {
         default: appName,
         template: `%s | ${ appName }`,
     },
+    keywords: [process.env.NEXT_PUBLIC_APP_NAME!, 'social media'],
     colorScheme: "light",
     themeColor: "#FFFFFF",
     applicationName: appName,

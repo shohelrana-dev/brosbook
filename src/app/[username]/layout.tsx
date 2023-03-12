@@ -25,7 +25,7 @@ export const generateMetadata = async( { params }: Props ): Promise<Metadata> =>
     const user = await getUserByUsername( params.username, cookies() )
 
     if( ! user ) return {
-        title: 'Not found'
+        title: 'User not found'
     }
 
     const title       = `${ user?.fullName } (@${ user?.username })`
@@ -36,12 +36,19 @@ export const generateMetadata = async( { params }: Props ): Promise<Metadata> =>
     return {
         title,
         description,
+        keywords: [user.fullName, user.username, 'posts', 'profile', 'interests', 'contact', process.env.NEXT_PUBLIC_APP_NAME!],
         other: {
             "og:type": 'profile',
             "og:url": url,
             "og:title": title,
             "og:description": description!,
-            "og:image": image!
+            "og:image": image!,
+            "og:image:alt": user.fullName,
+            "profile:first_name": user.firstName,
+            "profile:last_name": user.lastName,
+            "profile:username": user.username,
+            "profile:email": user.email,
+            "profile:phone_number": user.profile?.phone!,
         }
     }
 }
