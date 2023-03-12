@@ -1,6 +1,6 @@
 import React from 'react'
-import Loading from "@components/global/Loading"
+import PostsSkeleton from "@components/skeletons/PostsSkeleton"
 
 export default function PageLoading(){
-    return <Loading/>
+    return <PostsSkeleton count={1}/>
 }

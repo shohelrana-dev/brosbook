@@ -1,5 +1,4 @@
 import PostCard from "@components/post/PostCard"
-import SidebarLayout from "@components/global/SidebarLayout"
 import { getPostById } from "@services/index"
 import { cookies } from "next/headers"
 import { Metadata } from "next"
@@ -50,11 +49,5 @@ export default async function SinglePostPage( { params }: Props ){
 
     if( ! post ) return notFound()
 
-    return (
-        <SidebarLayout>
-            <div className="mt-5">
-                <PostCard post={ post! } isCommentsShow={ true }/>
-            </div>
-        </SidebarLayout>
-    )
+    return <PostCard post={ post! } isCommentsShow={ true }/>
 }
