@@ -15,6 +15,7 @@ export default function NotificationsNavLink(){
     const { data: unreadNotifications }                           = useGetUnreadNotificationsCountQuery()
     const [unreadNotificationsCount, setUnreadNotificationsCount] = useState<number>( unreadNotifications?.count || 0 )
     const [readAllNotification]                                   = useReadAllNotificationMutation()
+    const [isOpen, setIsOpen]                                     = useState( false )
 
     useEffect( () => {
         setUnreadNotificationsCount( unreadNotifications?.count! )
@@ -38,11 +39,16 @@ export default function NotificationsNavLink(){
     }, [user] )
 
     function onNotificationsCLick(){
+        toggleModal()
         readAllNotification()
     }
 
+    function toggleModal(){
+        setIsOpen( ! isOpen )
+    }
+
     return (
-        <Popover>
+        <Popover open={ isOpen }>
             <PopoverHandler>
                 <div>
                     <IconButton className="p-5 block relative" onClick={ onNotificationsCLick }>
@@ -56,7 +62,8 @@ export default function NotificationsNavLink(){
                     </IconButton>
                 </div>
             </PopoverHandler>
-            <PopoverContent className="w-full font-[inherit] max-w-[350px] z-50 p-2">
+            <PopoverContent className="w-full font-[inherit] max-w-[350px] z-50 p-2"
+                            onBlur={ () => setTimeout( toggleModal, 400 ) }>
                 <div className="max-h-[500px] overflow-y-auto">
                     <NotificationList/>
                 </div>

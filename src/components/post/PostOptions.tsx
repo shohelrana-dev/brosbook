@@ -35,7 +35,7 @@ function PostOptions( { post, setPost }: Props ){
 
     const isCurrentUserAuthor = isAuthenticated && author && author.id === currentUser?.id
 
-    function toggleOpen(){
+    function toggleModal(){
         setIsOpen( ! isOpen )
     }
 
@@ -69,7 +69,7 @@ function PostOptions( { post, setPost }: Props ){
 
             setAuthor( user )
             toast.success( `You followed @${ author.username }` )
-            toggleOpen()
+            toggleModal()
         } catch ( err: any ) {
             console.error( err )
         }
@@ -81,7 +81,7 @@ function PostOptions( { post, setPost }: Props ){
 
             setAuthor( user )
             toast.success( `You unfollowed @${ author.username }` )
-            toggleOpen()
+            toggleModal()
         } catch ( err ) {
             console.error( err )
         }
@@ -97,12 +97,12 @@ function PostOptions( { post, setPost }: Props ){
         <Popover placement="bottom-end" open={ isOpen }>
             <PopoverHandler>
                 <div>
-                    <IconButton onClick={ toggleOpen }>
+                    <IconButton onClick={ toggleModal }>
                         <ThreeDotsIcon size="18"/>
                     </IconButton>
                 </div>
             </PopoverHandler>
-            <PopoverContent className="font-[inherit] p-0 rounded-2xl overflow-hidden" onBlur={ toggleOpen }>
+            <PopoverContent className="font-[inherit] p-0 rounded-2xl overflow-hidden" onBlur={ toggleModal }>
                 <div className="min-w-[150px]">
                     { isCurrentUserAuthor ? (
                         <OptionButton onClick={ handleDeletePostClick }>
@@ -128,7 +128,7 @@ function PostOptions( { post, setPost }: Props ){
                     </OptionButton>
                     <OptionButton onClick={ () => {
                         setPost( null )
-                        toggleOpen()
+                        toggleModal()
                     } }>
                         <HideIcon size="18"/>
                         Hide

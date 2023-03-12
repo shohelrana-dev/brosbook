@@ -25,7 +25,7 @@ export const metadata: Metadata = {
         minimumScale: 1.0,
         maximumScale: 1.0
     },
-    icons: '/images/favicon.png',
+    icons: '/favicon.png',
     creator: "Shohel Rana"
 }
 

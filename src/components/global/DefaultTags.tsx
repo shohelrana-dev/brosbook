@@ -11,7 +11,7 @@ function DefaultTags(){
             <meta name="theme-color" content="#FFFFFF"/>
             <meta property="og:site_name" content={process.env.NEXT_PUBLIC_APP_NAME}/>
             <meta property="twitter:card" content="summary"/>
-            <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png"/>
+            <link rel="icon" type="image/png" sizes="16x16" href="/favicon.png"/>
         </>
     )
 }

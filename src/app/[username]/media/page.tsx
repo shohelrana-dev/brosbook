@@ -22,7 +22,7 @@ export default function MediaPage( { params }: Props ){
     if( isLoading ){
         content = <Loading size={ 50 }/>
     } else if( isSuccess && mediaList.length === 0 ){
-        content = <p className="text-center">{ user?.fullName } haven't media.</p>
+        content = <p className="text-center py-3">{ user?.fullName } haven't media.</p>
     } else if( isError ){
         content = <Error message={ error?.data?.message }/>
     } else if( isSuccess && mediaList.length > 0 ){
