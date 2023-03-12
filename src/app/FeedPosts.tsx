@@ -9,7 +9,7 @@ import PostList from "@components/post/PostList"
 export default function FeedPosts(){
     //hooks
     const { isLoading, items: posts, hasMore, loadMore, isSuccess, isError, error } = useGetInfiniteListQuery<Post>(
-        useGetFeedPostsQuery, { limit: 1 }
+        useGetFeedPostsQuery
     )
 
     //decide content
