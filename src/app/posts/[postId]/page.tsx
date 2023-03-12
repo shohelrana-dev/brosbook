@@ -12,7 +12,7 @@ export const generateMetadata = async( { params }: Props ): Promise<Metadata> =>
     const ogTitle     = `${ post?.author.fullName } on ${ process.env.NEXT_PUBLIC_APP_NAME }`
     const title       = `${ post?.author.fullName } on ${ process.env.NEXT_PUBLIC_APP_NAME }: "${ post?.body.replace( /[\r\n]/gm, '' ) }"`
     const description = post?.body.replace( /[\r\n]/gm, '' )
-    const image       = post?.image?.url
+    const imageUrl    = post?.image?.url
     const url         = `${ process.env.NEXT_PUBLIC_APP_URL }/posts/${ post?.id }`
     const authorUrl   = `${ process.env.NEXT_PUBLIC_APP_URL }/${ post?.author.username }`
 
@@ -29,7 +29,9 @@ export const generateMetadata = async( { params }: Props ): Promise<Metadata> =>
             "og:url": url,
             "og:title": ogTitle,
             "og:description": description!,
-            "og:image": image!,
+            "og:image": imageUrl!,
+            "og:image:secure": imageUrl!,
+            "og:image:url": imageUrl!,
             "og:image:alt": post.body ? title : ogTitle,
             "article:published_time": post?.createdAt!
         }
