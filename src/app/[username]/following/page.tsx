@@ -6,7 +6,6 @@ import { User } from "@interfaces/user.interfaces"
 import UserItem from "@components/global/UserItem"
 import InfiniteScroll from "react-infinite-scroller"
 import UsersSkeleton from "@components/skeletons/UsersSkeleton"
-import Loading from "@components/global/Loading"
 import Error from "@components/global/Error"
 
 interface Props {
@@ -32,7 +31,7 @@ export default function FollowingPage( { params }: Props ){
     //decide content
     let content = null
     if( isLoading ){
-        content = <Loading size={ 50 }/>
+        content = <UsersSkeleton/>
     } else if( isSuccess && followings.length === 0 ){
         content = <p className="text-center">{ user?.fullName }'s haven't following.</p>
     } else if( isError ){
