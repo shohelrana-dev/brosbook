@@ -32,7 +32,7 @@ export default function UserMenu(){
                     <Avatar src={ user?.avatar?.url } size="small"/>
                 </button>
             </MenuHandler>
-            <MenuList>
+            <MenuList className="font-[inherit]">
                 <MenuItem className="py-0 mb-2">
                     <Link href={ `/${ user?.username }` }
                           className="flex py-2 gap-2 border-b-2 border-gray-50">
