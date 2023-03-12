@@ -45,7 +45,7 @@ export default function Boot(){
                 } )
             }, 3000 )
         }
-    }, [isAuthenticated, isChecked, pathname] )
+    }, [isAuthenticated, isChecked] )
 
     return null
 }

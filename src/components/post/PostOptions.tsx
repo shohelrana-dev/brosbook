@@ -102,7 +102,7 @@ function PostOptions( { post, setPost }: Props ){
                     </IconButton>
                 </div>
             </PopoverHandler>
-            <PopoverContent className="p-0 rounded-2xl overflow-hidden" onBlur={ toggleOpen }>
+            <PopoverContent className="font-[inherit] p-0 rounded-2xl overflow-hidden" onBlur={ toggleOpen }>
                 <div className="min-w-[150px]">
                     { isCurrentUserAuthor ? (
                         <OptionButton onClick={ handleDeletePostClick }>

@@ -31,7 +31,7 @@ export default function ExtraOptions( { user }: { user: User } ){
                     </IconButton>
                 </div>
             </PopoverHandler>
-            <PopoverContent className="p-0 rounded-2xl block relative block" onBlur={ toggleOpen }>
+            <PopoverContent className="font-[inherit] p-0 rounded-2xl block relative block" onBlur={ toggleOpen }>
                 <div>
                     <OptionButton className="z-50" onClick={ copyProfileLinkToClipboard }>
                         <LinkIcon size="18"/>

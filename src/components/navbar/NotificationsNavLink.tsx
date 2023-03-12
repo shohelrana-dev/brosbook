@@ -56,7 +56,7 @@ export default function NotificationsNavLink(){
                     </IconButton>
                 </div>
             </PopoverHandler>
-            <PopoverContent className="w-full max-w-[350px] z-50 p-2">
+            <PopoverContent className="w-full font-[inherit] max-w-[350px] z-50 p-2">
                 <div className="max-h-[500px] overflow-y-auto">
                     <NotificationList/>
                 </div>
