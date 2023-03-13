@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react'
+import React from 'react'
 import Link from "next/link"
 import Avatar from "@components/global/Avatar"
 import MessageList from "@components/messages/MessageBox/MessageList"
@@ -11,6 +11,7 @@ import IconButton from "@components/global/IconButton"
 import { BiInfoCircle as InfoIcon } from "react-icons/bi"
 import Modal from "@components/global/Modal"
 import ParticipantInfo from "@components/messages/ParticipantInfo"
+import useModal from "@hooks/useModal"
 
 interface Props {
     conversationId: string
@@ -18,8 +19,8 @@ interface Props {
 
 export default function MessageBox( { conversationId }: Props ){
     //hooks
-    const [isOpenModal, setIsOpenModal]     = useState<boolean>( false )
     const { data: conversation, isLoading } = useGetConversationByIdQuery( conversationId )
+    const { isVisible, toggle }             = useModal()
 
     if( isLoading ) return <Loading/>
 
@@ -27,7 +28,7 @@ export default function MessageBox( { conversationId }: Props ){
 
     return (
         <div className="flex flex-col relative h-full">
-            <Modal isOpen={ isOpenModal } onClose={ () => setIsOpenModal( false ) }
+            <Modal isVisible={ isVisible } toggle={ toggle } hideIcon
                    className="max-h-[85vh] bg-theme-gray overflow-hidden !p-0">
                 <ParticipantInfo conversationId={ conversationId }/>
             </Modal>
@@ -53,7 +54,7 @@ export default function MessageBox( { conversationId }: Props ){
                         </p>
                     </div>
                 </div>
-                <div className="self-center" onClick={ () => setIsOpenModal( true ) }>
+                <div className="self-center" onClick={ toggle }>
                     <IconButton>
                         <InfoIcon size={ 25 }/>
                     </IconButton>

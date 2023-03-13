@@ -9,10 +9,10 @@ import { User } from "@interfaces/user.interfaces"
 import OptionButton from "@components/global/OptionButton"
 
 export default function ExtraOptions( { user }: { user: User } ){
-    const [isOpen, setIsOpen] = useState( false )
+    const [isVisible, setIsOpen] = useState( false )
 
     function toggleOpen(){
-        setIsOpen( ! isOpen )
+        setIsOpen( ! isVisible )
     }
 
     function copyProfileLinkToClipboard(){
@@ -23,7 +23,7 @@ export default function ExtraOptions( { user }: { user: User } ){
     }
 
     return (
-        <Popover placement="bottom" open={ isOpen }>
+        <Popover placement="bottom" open={ isVisible }>
             <PopoverHandler>
                 <div>
                     <IconButton className="ml-2 border-2 border-gray-200 block z-10" onClick={ toggleOpen }>

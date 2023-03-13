@@ -29,14 +29,14 @@ function PostOptions( { post, setPost }: Props ){
 
     const { user: currentUser, isAuthenticated } = useAuthState()
     const [author, setAuthor]                    = useState<User>( post.author )
-    const [isOpen, setIsOpen]                    = useState( false )
+    const [isVisible, setIsOpen]                    = useState( false )
     const confirmAlert                           = useConfirmAlert()
     const unauthorizedAlert                      = useUnauthorizedAlert()
 
     const isCurrentUserAuthor = isAuthenticated && author && author.id === currentUser?.id
 
     function toggleModal(){
-        setIsOpen( ! isOpen )
+        setIsOpen( ! isVisible )
     }
 
     async function handleDeletePostClick(){
@@ -94,7 +94,7 @@ function PostOptions( { post, setPost }: Props ){
     }
 
     return (
-        <Popover placement="bottom-end" open={ isOpen }>
+        <Popover placement="bottom-end" open={ isVisible }>
             <PopoverHandler>
                 <div>
                     <IconButton onClick={ toggleModal }>

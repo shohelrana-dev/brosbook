@@ -26,7 +26,7 @@ export default function CommentOptions( { post, comment, setComment }: Props ){
     const [follow]            = useFollowMutation()
     const [unfollow]          = useUnfollowMutation()
     const [deleteComment]     = useDeleteCommentMutation()
-    const [isOpen, setIsOpen] = useState( false )
+    const [isVisible, setIsOpen] = useState( false )
 
     const { user: currentUser, isAuthenticated } = useAuthState()
     const confirmAlert                                = useConfirmAlert()
@@ -36,7 +36,7 @@ export default function CommentOptions( { post, comment, setComment }: Props ){
     const isCurrentUserAuthor = isAuthenticated && comment.author && ( comment.author.id === currentUser?.id || post.author.id === currentUser?.id )
 
     function toggleOpen(){
-        setIsOpen( ! isOpen )
+        setIsOpen( ! isVisible )
     }
 
     async function handleDeleteComment(){
@@ -90,7 +90,7 @@ export default function CommentOptions( { post, comment, setComment }: Props ){
     }
 
     return (
-        <Popover placement="bottom-end" open={ isOpen }>
+        <Popover placement="bottom-end" open={ isVisible }>
             <PopoverHandler>
                 <div>
                     <IconButton className="ml-2" onClick={ toggleOpen }>

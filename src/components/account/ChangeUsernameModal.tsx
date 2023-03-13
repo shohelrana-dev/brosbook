@@ -10,6 +10,7 @@ import { useForm } from "@hooks/useForm"
 import AnimatedInput from "@components/global/AnimatedInput"
 import Modal from "@components/global/Modal"
 import useAuthState from "@hooks/useAuthState"
+import useModal from "@hooks/useModal"
 
 export default function ChangeUsernameModal(){
     const { user }                                   = useAuthState()
@@ -24,30 +25,28 @@ export default function ChangeUsernameModal(){
         username: user?.username!,
         password: ''
     } )
+    const { toggle, isVisible }                      = useModal()
 
-    const [isModalOpen, setIsModalOpen] = useState( false )
-
-    function handleModalOpen(){
-        reset()
-        setIsModalOpen( ! isModalOpen )
-    }
+    useEffect( () => {
+        if( ! isVisible ) reset()
+    }, [isVisible] )
 
     useEffect( () => {
         if( isSuccess ){
             toast.success( 'Username changed.' )
-            handleModalOpen()
+            toggle()
         }
     }, [isSuccess] )
 
     return (
         <>
-            <ButtonOutline onClick={ handleModalOpen } type="button" size="sm">
+            <ButtonOutline onClick={ toggle } type="button" size="sm">
                 Change
             </ButtonOutline>
 
             <Modal
-                isOpen={ isModalOpen }
-                onClose={ handleModalOpen }
+                isVisible={ isVisible }
+                toggle={ toggle }
                 title="Update username"
             >
                 <form onSubmit={ onSubmit }>

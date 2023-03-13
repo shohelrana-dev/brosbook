@@ -5,6 +5,7 @@ import { BiLogInCircle as LoginIcon } from "react-icons/bi"
 import Link from "next/link"
 import Modal from "@components/global/Modal"
 import { usePathname } from "next/navigation"
+import useModal from "@hooks/useModal"
 
 export interface Options {
     title: string
@@ -16,22 +17,18 @@ const UnauthorizedPopupContext = createContext<( options: Options ) => void>( nu
 
 export function UnauthorizedPopupProvider( { children }: PropsWithChildren ){
     const [options, setOptions] = useState<Options>()
-    const [isOpen, setIsOpen]   = useState<boolean>( false )
     const pathname              = usePathname()
+    const { isVisible, toggle } = useModal()
 
     function unauthorizedAlert( options: Options ): void{
         setOptions( () => options )
-        setIsOpen( true )
-    }
-
-    function toggleOpen(){
-        setIsOpen( ! isOpen )
+        toggle()
     }
 
     return (
         <UnauthorizedPopupContext.Provider value={ unauthorizedAlert }>
             { children }
-            <Modal isOpen={ isOpen } onClose={ toggleOpen } style={ { padding: 30 } }>
+            <Modal isVisible={ isVisible } toggle={ toggle } hideIcon>
                 <div className="h-full flex flex-col justify-center items-center text-center">
                     <div className="mb-4">
                         <LoginIcon fontSize="50" color="#FF1493"/>
@@ -44,10 +41,10 @@ export function UnauthorizedPopupProvider( { children }: PropsWithChildren ){
                             { options?.message }
                         </p>
                     </div>
-                    <Link onClick={ toggleOpen } href={ `/auth/login?redirect_to=${ pathname }` } className="mb-3 w-full">
+                    <Link onClick={ toggle } href={ `/auth/login?redirect_to=${ pathname }` } className="mb-3 w-full">
                         <Button size="md" className="w-full">Log in</Button>
                     </Link>
-                    <Link onClick={ toggleOpen } href="/auth/signup" className="w-full">
+                    <Link onClick={ toggle } href="/auth/signup" className="w-full">
                         <ButtonOutline size="md" className="w-full">Sign up</ButtonOutline>
                     </Link>
                 </div>

@@ -15,7 +15,7 @@ export default function NotificationsNavLink(){
     const { data: unreadNotifications }                           = useGetUnreadNotificationsCountQuery()
     const [unreadNotificationsCount, setUnreadNotificationsCount] = useState<number>( unreadNotifications?.count || 0 )
     const [readAllNotification]                                   = useReadAllNotificationMutation()
-    const [isOpen, setIsOpen]                                     = useState( false )
+    const [isVisible, setIsOpen]                                     = useState( false )
 
     useEffect( () => {
         setUnreadNotificationsCount( unreadNotifications?.count! )
@@ -44,11 +44,11 @@ export default function NotificationsNavLink(){
     }
 
     function toggleModal(){
-        setIsOpen( ! isOpen )
+        setIsOpen( ! isVisible )
     }
 
     return (
-        <Popover open={ isOpen }>
+        <Popover open={ isVisible }>
             <PopoverHandler>
                 <div>
                     <IconButton className="p-5 block relative" onClick={ onNotificationsCLick }>

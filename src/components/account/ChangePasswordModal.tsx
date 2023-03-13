@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import ButtonOutline from "@components/global/ButtonOutline"
 import PasswordInput from "@components/global/PasswordInput"
 import Link from "next/link"
@@ -8,32 +8,31 @@ import { ChangePasswordPayload } from "@interfaces/account.interfaces"
 import toast from "react-hot-toast"
 import { useForm } from "@hooks/useForm"
 import Modal from "@components/global/Modal"
+import useModal from "@hooks/useModal"
 
 export default function ChangePasswordModal(){
     const [changePassword, { isLoading, isSuccess }]      = useChangePasswordMutation()
     const { formData, onChange, onSubmit, errors, reset } = useForm<ChangePasswordPayload>( changePassword )
-
-    const [isModalOpen, setIsModalOpen] = useState( false )
-
-    function handleModalOpen(){
-        reset()
-        setIsModalOpen( ! isModalOpen )
-    }
+    const { toggle, isVisible }                           = useModal()
 
     useEffect( () => {
         if( isSuccess ){
             toast.success( 'Password changed.' )
-            handleModalOpen()
+            toggle()
         }
     }, [isSuccess] )
 
+    useEffect( () => {
+        if( ! isVisible ) reset()
+    }, [isVisible] )
+
     return (
         <>
-            <ButtonOutline onClick={ handleModalOpen } type="button" size="sm">
+            <ButtonOutline onClick={ toggle } type="button" size="sm">
                 Change
             </ButtonOutline>
 
-            <Modal isOpen={ isModalOpen } onClose={ handleModalOpen } title="Update your password">
+            <Modal isVisible={ isVisible } toggle={ toggle } title="Update your password">
                 <form onSubmit={ onSubmit }>
                     <PasswordInput
                         label="Current Password"

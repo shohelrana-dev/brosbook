@@ -13,7 +13,7 @@ type ReactionsProps = {
 
 function Reactions( { message }: ReactionsProps ){
     //hooks
-    const [isOpen, setIsOpen] = useState<boolean>( false )
+    const [isVisible, setIsOpen] = useState<boolean>( false )
     const [sendReaction]      = useSendReactionMutation()
 
     //default message reactions
@@ -28,12 +28,12 @@ function Reactions( { message }: ReactionsProps ){
     }
 
     function toggleOpen(){
-        setIsOpen( ! isOpen )
+        setIsOpen( ! isVisible )
     }
 
     return (
         <Fragment>
-            <Popover open={ isOpen }>
+            <Popover open={ isVisible }>
                 <PopoverHandler>
                     <div className={ classNames( 'absolute top-[50%] translate-y-[-50%]', {
                         "-right-9": ! message.isMeSender,

@@ -3,6 +3,7 @@ import Button from "@components/global/Button"
 import { createContext, PropsWithChildren, useContext, useState } from "react"
 import Modal from "@components/global/Modal"
 import toast from "react-hot-toast"
+import useModal from "@hooks/useModal"
 
 export interface Options {
     title: string
@@ -16,60 +17,60 @@ export interface Options {
 const ConfirmAlertContext = createContext<( options: Options ) => Promise<boolean>>( null )
 
 export function ConfirmAlertProvider( { children }: PropsWithChildren ){
-    const [options, setOptions]   = useState<Options>( {
+    const [options, setOptions] = useState<Options>( {
         title: '', confirmButtonLabel: 'Yes', cancelButtonLabel: 'Cancel'
     } )
-    const [isOpen, setIsOpen]     = useState<boolean>( false )
-    // @ts-ignore
-    const [resolver, setResolver] = useState<{ resolve: ( value: boolean ) => void }>( { resolve: null } )
+    const { isVisible, toggle } = useModal()
+    const [resolve, setResolve] = useState<( value: boolean ) => void>( () => {} )
+
+    const { onConfirm: onConfirmFn, confirmButtonLabel, cancelButtonLabel, title, message } = options
 
     function confirmAlert( options: Options ): Promise<boolean>{
         setOptions( ( prevState ) => ( { ...prevState, ...options } ) )
-        setIsOpen( true )
+        toggle()
         return new Promise<boolean>( ( resolve, reject ) => {
-            setResolver( { resolve } )
+            setResolve( resolve )
         } )
     }
 
     async function onConfirm(){
-        if( typeof options.onConfirm === 'function' ){
+        if( typeof onConfirmFn === 'function' ){
             try {
-                options.onConfirm()
-                resolver.resolve( true )
-                setIsOpen( false )
+                onConfirmFn()
+                resolve( true )
+                toggle()
             } catch ( err: any ) {
                 toast.error( err?.message )
             }
         } else{
-            resolver.resolve( true )
-            setIsOpen( false )
+            resolve( true )
+            toggle()
         }
     }
 
     function onCancel(){
-        setIsOpen( false )
-        resolver.resolve( false )
+        toggle()
+        resolve( false )
     }
 
     return (
         <ConfirmAlertContext.Provider value={ confirmAlert }>
             { children }
             <Modal
-                isOpen={ isOpen }
-                style={ { maxWidth: 330, padding: "16px 28px" } }
-                isShowCancelIcon={ false }
+                isVisible={ isVisible }
+                toggle={ toggle }
+                title={ title }
+                hideIcon
+                className="!max-w-[385px]"
             >
-                <div className="mb-4 block">
-                    <h3 className="text-xl font-bold mb-2">{ options.title }</h3>
-                    <p className="text-gray-800">{ options.message }</p>
-                </div>
-                <div className="basis-full flex justify-end gap-2">
-                    <ButtonOutline size="sm" onClick={ onCancel }>
-                        { options.cancelButtonLabel }
-                    </ButtonOutline>
-                    <Button size="sm" className="mb-3" onClick={ onConfirm }>
-                        { options.confirmButtonLabel }
+                <p className="text-gray-800 mb-4">{ message }</p>
+                <div>
+                    <Button size="sm" className="mb-2 py-[11px] text-[13px]" onClick={ onConfirm } fullWidth>
+                        { confirmButtonLabel }
                     </Button>
+                    <ButtonOutline size="sm" className="py-[11px] text-[13px]" onClick={ onCancel } fullWidth>
+                        { cancelButtonLabel }
+                    </ButtonOutline>
                 </div>
             </Modal>
         </ConfirmAlertContext.Provider>

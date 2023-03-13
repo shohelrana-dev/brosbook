@@ -13,6 +13,7 @@ import useAuthState from "@hooks/useAuthState"
 import Modal from "@components/global/Modal"
 import useSelectFile from "@hooks/useSelectFile"
 import { Media } from "@interfaces/index.interfaces"
+import useModal from "@hooks/useModal"
 
 type Props = { user: User }
 
@@ -21,12 +22,7 @@ export default function CoverPhoto( { user }: Props ){
     const [changeCoverPhoto, { isLoading }]                                                = useChangeCoverPhotoMutation()
     const [coverPhoto, setCoverPhoto]                                                      = useState<Media | undefined>( user.profile?.coverPhoto )
     const { inputRef, selectedFile: selectedPhoto, removeSelectedFile, onClick, onChange } = useSelectFile()
-
-    const [isModalOpen, setIsModalOpen] = useState( false )
-
-    function handleModalOpen(){
-        setIsModalOpen( ! isModalOpen )
-    }
+    const { isVisible, toggle }                                                            = useModal()
 
     async function handleSubmit(){
         if( ! selectedPhoto ) return
@@ -35,7 +31,7 @@ export default function CoverPhoto( { user }: Props ){
             const formData = new FormData()
             formData.append( 'coverPhoto', selectedPhoto )
             const data = await changeCoverPhoto( formData ).unwrap()
-            setIsModalOpen( false )
+            toggle()
             removeSelectedFile()
             setCoverPhoto( data.profile?.coverPhoto )
             toast.success( 'Cover photo saved.' )
@@ -47,7 +43,7 @@ export default function CoverPhoto( { user }: Props ){
 
     function fileInputChangeHandle( event: ChangeEvent<HTMLInputElement> ){
         onChange( event )
-        setIsModalOpen( true )
+        toggle()
     }
 
     if( user.id !== currentUser?.id ){
@@ -91,8 +87,8 @@ export default function CoverPhoto( { user }: Props ){
             </IconButton>
 
             <Modal
-                isOpen={ isModalOpen }
-                onClose={ handleModalOpen }
+                isVisible={ isVisible }
+                toggle={ toggle }
                 title="New cover photo"
                 className="max-w-[625px] !p-3 max-h-screen"
             >
