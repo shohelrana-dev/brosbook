@@ -1,5 +1,5 @@
-import { RootState } from '../store'
-import { createApi } from "@reduxjs/toolkit/query/react"
+import { RootState } from '@store/index'
+import { createApi } from '@reduxjs/toolkit/query/react'
 import { fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react"
 import { getCookie, removeCookie } from "tiny-cookie"
 import { userLoggedOut } from "@slices/authSlice"

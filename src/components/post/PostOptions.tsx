@@ -11,7 +11,7 @@ import OptionButton from "@components/global/OptionButton"
 import { useFollowMutation, useUnfollowMutation } from "@services/usersApi"
 import { useDeletePostMutation } from "@services/postsApi"
 import useAuthState from "@hooks/useAuthState"
-import useConfirmAlert from "@hooks/useConfirmAlert"
+import { useConfirmAlert } from "react-use-confirm-alert"
 import { Post } from "@interfaces/posts.interfaces"
 import { User } from "@interfaces/user.interfaces"
 import IconButton from "@components/global/IconButton"
@@ -29,7 +29,7 @@ function PostOptions( { post, setPost }: Props ){
 
     const { user: currentUser, isAuthenticated } = useAuthState()
     const [author, setAuthor]                    = useState<User>( post.author )
-    const [isVisible, setIsOpen]                    = useState( false )
+    const [isVisible, setIsOpen]                 = useState( false )
     const confirmAlert                           = useConfirmAlert()
     const unauthorizedAlert                      = useUnauthorizedAlert()
 
@@ -40,19 +40,19 @@ function PostOptions( { post, setPost }: Props ){
     }
 
     async function handleDeletePostClick(){
-        const isConfirm = await confirmAlert( {
+        await confirmAlert( {
             title: 'Delete Post?',
             message: 'This can’t be undone and it will be removed from your profile',
-            confirmButtonLabel: 'Delete'
+            confirmButtonLabel: 'Delete',
+            onConfirm: async() => {
+                try {
+                    await deletePost( post.id ).unwrap()
+                    toast.success( 'Post deleted.' )
+                } catch ( err: any ) {
+                    toast.error( err?.data?.message || 'Post deleting failed.' )
+                }
+            }
         } )
-        if( ! isConfirm ) return
-
-        try {
-            await deletePost( post.id ).unwrap()
-            toast.success( 'Post deleted.' )
-        } catch ( err: any ) {
-            toast.error( err?.data?.message || 'Post deleting failed.' )
-        }
     }
 
     async function handleFollowClick(){

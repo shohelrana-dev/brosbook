@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { RootState } from "../store"
+import { RootState } from "@store/index"
 import { User } from "@interfaces/user.interfaces"
 import isServer from "@utils/isServer"
 
@@ -41,13 +41,13 @@ export const authSlice = createSlice( {
             state.isAuthenticated = true
             state.isChecked       = true
             state.user            = payload
-            localStorage.setItem( 'auth', JSON.stringify( state ) )
+            //localStorage.setItem( 'auth', JSON.stringify( state ) )
         },
         userLoggedOut: ( state ) => {
             state.isAuthenticated = false
             state.isChecked       = true
             state.user            = null
-            localStorage.removeItem( 'auth' )
+            //localStorage.removeItem( 'auth' )
         },
         setEmail: ( state, { payload }: PayloadAction<string> ) => {
             state.email = payload

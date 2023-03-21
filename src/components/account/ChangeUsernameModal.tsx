@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import ButtonOutline from "@components/global/ButtonOutline"
 import PasswordInput from "@components/global/PasswordInput"
 import Link from "next/link"
@@ -8,9 +8,8 @@ import { ChangeUsernamePayload } from "@interfaces/account.interfaces"
 import toast from "react-hot-toast"
 import { useForm } from "@hooks/useForm"
 import AnimatedInput from "@components/global/AnimatedInput"
-import Modal from "@components/global/Modal"
+import Modal, { useModal } from "react-minimal-modal"
 import useAuthState from "@hooks/useAuthState"
-import useModal from "@hooks/useModal"
 
 export default function ChangeUsernameModal(){
     const { user }                                   = useAuthState()
@@ -45,7 +44,7 @@ export default function ChangeUsernameModal(){
             </ButtonOutline>
 
             <Modal
-                isVisible={ isVisible }
+                visible={ isVisible }
                 toggle={ toggle }
                 title="Update username"
             >
@@ -63,8 +62,9 @@ export default function ChangeUsernameModal(){
                         value={ formData.password }
                         error={ errors.password }
                         onChange={ onChange }
+                        wrapperClassname="mt-3"
                     />
-                    <Link href="/auth/forgot_password" className="text-blue-600 text-xs">
+                    <Link href="/auth/forgot_password" className="text-blue-600 text-xs block">
                         Forgot password?
                     </Link>
 

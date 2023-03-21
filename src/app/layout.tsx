@@ -4,6 +4,11 @@ import Providers from "./providers"
 import Navbar from "@components/navbar/Navbar"
 import { Metadata } from "next"
 import '@assets/styles/app.css'
+import PreLoader from "@components/global/PreLoader"
+import { getCurrentUser } from "@services/index"
+import { cookies } from "next/headers"
+import { store } from "@store/index"
+import { userLoggedIn } from "@slices/authSlice"
 
 const font = Kanit( { weight: '400' } )
 
@@ -29,11 +34,16 @@ export const metadata: Metadata = {
     creator: "Shohel Rana"
 }
 
-export default function RootLayout( { children }: PropsWithChildren ){
+export default async function RootLayout( { children }: PropsWithChildren ){
+    const user = await getCurrentUser( cookies() )
+
+    /*if( user ) store.dispatch( userLoggedIn( user ) )*/
+
     return (
         <html lang='eng' className={ font.className }>
         <head/>
         <body className="bg-theme-gray">
+        {/*<PreLoader user={ user }/>*/}
         <Providers>
             <Navbar/>
             { children }

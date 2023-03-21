@@ -40,7 +40,7 @@ export default function ResetPassword( { token }: { token: string } ){
                     Your password must be at least six characters.
                 </small>
 
-                <form method="post" onSubmit={ onSubmit }>
+                <form method="post" onSubmit={ onSubmit } className="mt-3">
                     <PasswordInput
                         label="Password"
                         name="password"
@@ -54,6 +54,7 @@ export default function ResetPassword( { token }: { token: string } ){
                         value={ formData.confirmPassword }
                         error={ errors.confirmPassword }
                         onChange={ onChange }
+                        wrapperClassname="mt-3"
                     />
                     <Button className="w-full mt-3" type="submit" isLoading={ isLoading || isSuccess }>
                         Reset

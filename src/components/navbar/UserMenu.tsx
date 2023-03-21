@@ -6,7 +6,7 @@ import { RiUserSettingsFill as SettingIcon } from "react-icons/ri"
 import { FaSignOutAlt as LogoutIcon } from "react-icons/fa"
 import useAuthState from "@hooks/useAuthState"
 import { useRouter } from "next/navigation"
-import useConfirmAlert from "@hooks/useConfirmAlert"
+import { useConfirmAlert } from "react-use-confirm-alert"
 
 export default function UserMenu(){
     const { user }     = useAuthState()

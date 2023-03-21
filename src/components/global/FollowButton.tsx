@@ -4,7 +4,7 @@ import { User } from "@interfaces/user.interfaces"
 import { useFollowMutation, useUnfollowMutation } from "@services/usersApi"
 import Button from "@components/global/Button"
 import ButtonOutline from "@components/global/ButtonOutline"
-import useConfirmAlert from "@hooks/useConfirmAlert"
+import { useConfirmAlert } from "react-use-confirm-alert"
 import toast from "react-hot-toast"
 import useUnauthorizedAlert from "@hooks/useUnauthorzedAlert"
 import useAuthState from "@hooks/useAuthState"
@@ -20,7 +20,7 @@ export default function FollowButton( props: FollowButtonProps ){
     const [follow]            = useFollowMutation()
     const [unfollow]          = useUnfollowMutation()
     const { isAuthenticated } = useAuthState()
-    const confirmAlert             = useConfirmAlert()
+    const confirmAlert        = useConfirmAlert()
     const unauthorizedAlert   = useUnauthorizedAlert()
 
     async function handleFollowClick(){
@@ -44,22 +44,22 @@ export default function FollowButton( props: FollowButtonProps ){
     }
 
     async function handleUnfollowClick(){
-        const isConfirm = await confirmAlert( {
+        await confirmAlert( {
             title: `Unfollow ${ user.username }?`,
             message: 'Their Posts will no longer show up in your home timeline. You can still view their profile.',
-            confirmButtonLabel: 'Unfollow'
+            confirmButtonLabel: 'Unfollow',
+            onConfirm: async() => {
+                try {
+                    await unfollow( user.id ).unwrap()
+
+                    setUser( { ...user, isViewerFollow: false } )
+                    toast.success( `You unfollowed @${ user.username }` )
+                } catch ( err ) {
+                    toast.error( 'Something went wrong, Please try again.' )
+                    console.error( err )
+                }
+            }
         } )
-        if( ! isConfirm ) return
-
-        try {
-            await unfollow( user.id ).unwrap()
-
-            setUser( { ...user, isViewerFollow: false } )
-            toast.success( `You unfollowed @${ user.username }` )
-        } catch ( err ) {
-            toast.error( 'Something went wrong, Please try again.' )
-            console.error( err )
-        }
     }
 
     return (

@@ -7,8 +7,7 @@ import { useChangePasswordMutation } from "@services/accountApi"
 import { ChangePasswordPayload } from "@interfaces/account.interfaces"
 import toast from "react-hot-toast"
 import { useForm } from "@hooks/useForm"
-import Modal from "@components/global/Modal"
-import useModal from "@hooks/useModal"
+import Modal, { useModal } from "react-minimal-modal"
 
 export default function ChangePasswordModal(){
     const [changePassword, { isLoading, isSuccess }]      = useChangePasswordMutation()
@@ -32,7 +31,7 @@ export default function ChangePasswordModal(){
                 Change
             </ButtonOutline>
 
-            <Modal isVisible={ isVisible } toggle={ toggle } title="Update your password">
+            <Modal visible={ isVisible } toggle={ toggle } title="Update your password">
                 <form onSubmit={ onSubmit }>
                     <PasswordInput
                         label="Current Password"
@@ -50,6 +49,7 @@ export default function ChangePasswordModal(){
                         value={ formData.newPassword }
                         error={ errors.newPassword }
                         onChange={ onChange }
+                        wrapperClassname="mt-3"
                     />
                     <PasswordInput
                         label="Confirm New Password"
@@ -57,6 +57,7 @@ export default function ChangePasswordModal(){
                         value={ formData.confirmNewPassword }
                         error={ errors.confirmNewPassword }
                         onChange={ onChange }
+                        wrapperClassname="mt-3"
                     />
 
                     <div className="text-right">

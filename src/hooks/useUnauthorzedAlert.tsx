@@ -3,9 +3,8 @@ import Button from "@components/global/Button"
 import React, { createContext, PropsWithChildren, useContext, useState } from "react"
 import { BiLogInCircle as LoginIcon } from "react-icons/bi"
 import Link from "next/link"
-import Modal from "@components/global/Modal"
+import Modal, { useModal } from "react-minimal-modal"
 import { usePathname } from "next/navigation"
-import useModal from "@hooks/useModal"
 
 export interface Options {
     title: string
@@ -28,7 +27,7 @@ export function UnauthorizedPopupProvider( { children }: PropsWithChildren ){
     return (
         <UnauthorizedPopupContext.Provider value={ unauthorizedAlert }>
             { children }
-            <Modal isVisible={ isVisible } toggle={ toggle } hideIcon>
+            <Modal visible={ isVisible } toggle={ toggle } hideIcon>
                 <div className="h-full flex flex-col justify-center items-center text-center">
                     <div className="mb-4">
                         <LoginIcon fontSize="50" color="#FF1493"/>

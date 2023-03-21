@@ -10,10 +10,9 @@ import Image from "next/image"
 import { User } from "@interfaces/user.interfaces"
 import placeholderCoverPhoto from "@assets/images/placeholder-cover-photo.png"
 import useAuthState from "@hooks/useAuthState"
-import Modal from "@components/global/Modal"
+import Modal, { useModal } from "react-minimal-modal"
 import useSelectFile from "@hooks/useSelectFile"
 import { Media } from "@interfaces/index.interfaces"
-import useModal from "@hooks/useModal"
 
 type Props = { user: User }
 
@@ -87,7 +86,7 @@ export default function CoverPhoto( { user }: Props ){
             </IconButton>
 
             <Modal
-                isVisible={ isVisible }
+                visible={ isVisible }
                 toggle={ toggle }
                 title="New cover photo"
                 className="max-w-[625px] !p-3 max-h-screen"

@@ -42,7 +42,7 @@ export default function Signup(){
 
                 <Divider>OR</Divider>
 
-                <form method="post" onSubmit={ onSubmit }>
+                <form method="post" onSubmit={ onSubmit } className="mt-3">
                     <AnimatedInput
                         label="First Name"
                         name="firstName"
@@ -56,6 +56,7 @@ export default function Signup(){
                         value={ formData.lastName }
                         error={ errors.lastName }
                         onChange={ onChange }
+                        wrapperClassname="mt-3"
                     />
                     <AnimatedInput
                         label="Email"
@@ -63,6 +64,7 @@ export default function Signup(){
                         value={ formData.email }
                         error={ errors.email }
                         onChange={ onChange }
+                        wrapperClassname="mt-3"
                     />
                     <AnimatedInput
                         label="Username"
@@ -70,6 +72,7 @@ export default function Signup(){
                         value={ formData.username }
                         error={ errors.username }
                         onChange={ onChange }
+                        wrapperClassname="mt-3"
                     />
                     <PasswordInput
                         label="Password"
@@ -77,6 +80,7 @@ export default function Signup(){
                         value={ formData.password }
                         error={ errors.password }
                         onChange={ onChange }
+                        wrapperClassname="mt-3"
                     />
                     { formData.password ? <PasswordStrengthBar password={ formData.password }/> : null }
 

@@ -62,6 +62,7 @@ export default function Login(){
                         value={ formData.password }
                         error={ errors?.password }
                         onChange={ onChange }
+                        wrapperClassname="mt-3"
                     />
                     <Button className="w-full mt-3" type="submit">
                         Log In

@@ -9,9 +9,8 @@ import Loading from "@components/global/Loading"
 import { useGetConversationByIdQuery } from "@services/conversationApi"
 import IconButton from "@components/global/IconButton"
 import { BiInfoCircle as InfoIcon } from "react-icons/bi"
-import Modal from "@components/global/Modal"
+import Modal, { useModal } from "react-minimal-modal"
 import ParticipantInfo from "@components/messages/ParticipantInfo"
-import useModal from "@hooks/useModal"
 
 interface Props {
     conversationId: string
@@ -28,7 +27,7 @@ export default function MessageBox( { conversationId }: Props ){
 
     return (
         <div className="flex flex-col relative h-full">
-            <Modal isVisible={ isVisible } toggle={ toggle } hideIcon
+            <Modal visible={ isVisible } toggle={ toggle } hideIcon
                    className="max-h-[85vh] bg-theme-gray overflow-hidden !p-0">
                 <ParticipantInfo conversationId={ conversationId }/>
             </Modal>
