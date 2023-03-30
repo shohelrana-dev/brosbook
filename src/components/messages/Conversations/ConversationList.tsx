@@ -6,6 +6,11 @@ import { useGetConversationsQuery } from "@services/conversationApi"
 import InfiniteScroll from 'react-infinite-scroller'
 import ConversationsSkeleton from "@components/skeletons/ConversationsSkeleton"
 import Error from "@components/global/Error"
+import tw from "twin.macro"
+
+const Wrapper              = tw.div`h-full`
+const Heading              = tw.h2`text-lg font-medium mb-3`
+const StyledInfiniteScroll = tw( InfiniteScroll )`h-full overflow-y-auto scrollbar-hide`
 
 export default function ConversationList(){
     const {
@@ -30,24 +35,23 @@ export default function ConversationList(){
         content = <Error message={ error?.data?.message }/>
     } else if( isSuccess && conversations.length > 0 ){
         content = (
-            <InfiniteScroll
+            <StyledInfiniteScroll
                 loadMore={ loadMore }
                 hasMore={ hasMore }
                 loader={ <ConversationsSkeleton/> }
-                className="h-full overflow-y-auto scrollbar-hide"
             >
                 { conversations && conversations.map( ( conversation: Conversation ) => (
                     <ConversationItem conversation={ conversation } key={ conversation.id }/>
                 ) ) }
-            </InfiniteScroll>
+            </StyledInfiniteScroll>
         )
     }
 
     return (
-        <div className="h-full">
-            <h2 className="text-lg font-medium mb-3">Recent chats</h2>
+        <Wrapper>
+            <Heading>Recent chats</Heading>
 
             { content }
-        </div>
+        </Wrapper>
     )
 }

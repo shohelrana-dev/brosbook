@@ -15,6 +15,11 @@ import { setEmail } from "@slices/authSlice"
 import { useDispatch } from "react-redux"
 import PasswordStrengthBar from 'react-password-strength-bar'
 import FrontDropLoading from "@components/global/FrontDropLoading"
+import tw from "twin.macro"
+import { Box, FooterBox, Heading, Wrapper } from "@components/styles/Auth.styles"
+import { Form } from "@components/styles/Global.styles"
+
+const Policy = tw.p`text-center text-gray-600 text-xs mt-3`
 
 export default function Signup(){
     //hooks
@@ -33,16 +38,16 @@ export default function Signup(){
     }, [isSuccess] )
 
     return (
-        <div className="relative z-50">
+        <Wrapper>
             <FrontDropLoading isLoading={ isLoading || isSuccess || isLoadingLoginWithGoogle }/>
-            <div className="auth-box">
-                <h1 className="text-xl text-center mb-4 font-medium">Sign Up</h1>
+            <Box>
+                <Heading>Sign Up</Heading>
 
                 <GoogleLoginButton setIsLoading={ setIsLoadingLoginWithGoogle }/>
 
                 <Divider>OR</Divider>
 
-                <form method="post" onSubmit={ onSubmit } className="mt-3">
+                <Form method="post" onSubmit={ onSubmit }>
                     <AnimatedInput
                         label="First Name"
                         name="firstName"
@@ -56,7 +61,6 @@ export default function Signup(){
                         value={ formData.lastName }
                         error={ errors.lastName }
                         onChange={ onChange }
-                        wrapperClassname="mt-3"
                     />
                     <AnimatedInput
                         label="Email"
@@ -64,7 +68,6 @@ export default function Signup(){
                         value={ formData.email }
                         error={ errors.email }
                         onChange={ onChange }
-                        wrapperClassname="mt-3"
                     />
                     <AnimatedInput
                         label="Username"
@@ -72,7 +75,6 @@ export default function Signup(){
                         value={ formData.username }
                         error={ errors.username }
                         onChange={ onChange }
-                        wrapperClassname="mt-3"
                     />
                     <PasswordInput
                         label="Password"
@@ -80,31 +82,23 @@ export default function Signup(){
                         value={ formData.password }
                         error={ errors.password }
                         onChange={ onChange }
-                        wrapperClassname="mt-3"
                     />
                     { formData.password ? <PasswordStrengthBar password={ formData.password }/> : null }
 
-                    <Button className="w-full mt-3" type="submit">
+                    <Button type="submit">
                         Sign Up
                     </Button>
-                </form>
+                </Form>
 
-                <div className="text-center">
-                    <small className="text-gray-600">
-                        By signing up, you agree to our Terms, Data Policy and Cookie Policy.
-                    </small>
-                </div>
+                <Policy>By signing up, you agree to our Terms, Data Policy and Cookie Policy.</Policy>
+            </Box>
 
-            </div>
-
-            <div className="auth-box text-center mt-2">
-                <p className="text-gray-800">
-                    Have an account?
-                    <Link href="/auth/login" className="ml-1 text-blue-500 font-medium">
-                        Log In
-                    </Link>
-                </p>
-            </div>
-        </div>
+            <FooterBox>
+                Have an account? &nbsp;
+                <Link href="/auth/login">
+                    Log In
+                </Link>
+            </FooterBox>
+        </Wrapper>
     )
 }

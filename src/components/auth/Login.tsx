@@ -15,6 +15,11 @@ import toast from "react-hot-toast"
 import { useDispatch } from "react-redux"
 import { setEmail } from "@slices/authSlice"
 import FrontDropLoading from "@components/global/FrontDropLoading"
+import tw from 'twin.macro'
+import { Wrapper, Box, FooterBox, Heading, Icon } from "@components/styles/Auth.styles"
+import { Form } from "@components/styles/Global.styles"
+
+const Forgotten = tw.small`block text-center mt-2 [a]:text-blue-500`
 
 export default function Login(){
     //hooks
@@ -39,16 +44,16 @@ export default function Login(){
     }, [isSuccess] )
 
     return (
-        <div className="relative z-50">
+        <Wrapper>
             <FrontDropLoading isLoading={ isLoading || isSuccess || isLoadingLoginWithGoogle }/>
-
-            <div className="auth-box">
-                <div className="flex justify-center mb-2">
+            <Box>
+                <Icon>
                     <FiLock size="30"/>
-                </div>
-                <h1 className="text-xl text-center mb-4 font-medium">Log In
-                    to { process.env.NEXT_PUBLIC_APP_NAME || 'Brosbook' }</h1>
-                <form method="post" onSubmit={ onSubmit } className="mb-2">
+                </Icon>
+                <Heading>
+                    Log In to { process.env.NEXT_PUBLIC_APP_NAME || 'Brosbook' }
+                </Heading>
+                <Form method="post" onSubmit={ onSubmit }>
                     <AnimatedInput
                         label="Username or email"
                         name="username"
@@ -62,32 +67,29 @@ export default function Login(){
                         value={ formData.password }
                         error={ errors?.password }
                         onChange={ onChange }
-                        wrapperClassname="mt-3"
                     />
-                    <Button className="w-full mt-3" type="submit">
+                    <Button type="submit" fullWidth>
                         Log In
                     </Button>
-                </form>
+                </Form>
 
                 <Divider>OR</Divider>
 
                 <GoogleLoginButton setIsLoading={ setIsLoadingLoginWithGoogle }/>
 
-                <small className="block text-center">
-                    <Link href="/auth/forgot_password" className="text-blue-500">
+                <Forgotten>
+                    <Link href="/auth/forgot_password">
                         Forgotten your password?
                     </Link>
-                </small>
-            </div>
+                </Forgotten>
+            </Box>
 
-            <div className="auth-box text-center mt-2">
-                <p className="text-gray-800">
-                    Don&apost have an account?
-                    <Link href="/auth/signup" className="ml-1 text-blue-500 font-medium">
-                        Sign Up
-                    </Link>
-                </p>
-            </div>
-        </div>
+            <FooterBox>
+                Don't have an account? &nbsp;
+                <Link href="/auth/signup">
+                    Sign Up
+                </Link>
+            </FooterBox>
+        </Wrapper>
     )
 }

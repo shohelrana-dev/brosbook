@@ -4,9 +4,7 @@ const withMT = require("@material-tailwind/react/utils/withMT")
 module.exports = withMT({
   mode: 'jit',
   content: [
-      "./src/app/**/*.{js,jsx,ts,tsx}",
-      "./src/components/**/*.{js,jsx,ts,tsx}",
-      "./src/hooks/**/*.{js,jsx,ts,tsx}",
+    "./src/**/*.{js,ts,jsx,tsx}"
   ],
   theme: {
     colors: {
@@ -35,7 +33,10 @@ module.exports = withMT({
       spacing: {
         90: '22.5rem',
         160: '40rem',
-      }
+      },
+      fontFamily: {
+        kanit: ['Kanit', 'sans-serif']
+      },
     },
   },
   plugins: [

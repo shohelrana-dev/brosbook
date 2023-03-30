@@ -4,7 +4,7 @@
 
 const nextConfig = {
     reactStrictMode: true,
-    swcMinify: true,
+    swcMinify: false,
     images: {
         domains: [
             'localhost',
@@ -13,17 +13,7 @@ const nextConfig = {
         ]
     },
     experimental: {
-        appDir: true,
-        fontLoaders: [
-            { loader: '@next/font/google', options: { subsets: ['latin'] } },
-        ]
-    },
-    typescript: {
-        // !! WARN !!
-        // Dangerously allow production builds to successfully complete even if
-        // your project has type errors.
-        // !! WARN !!
-        ignoreBuildErrors: false
+        appDir: true
     }
 }
 

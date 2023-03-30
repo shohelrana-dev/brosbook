@@ -1,13 +1,18 @@
 import React, { useEffect } from 'react'
 import ButtonOutline from "@components/global/ButtonOutline"
 import PasswordInput from "@components/global/PasswordInput"
-import Link from "next/link"
 import Button from "@components/global/Button"
 import { useChangePasswordMutation } from "@services/accountApi"
 import { ChangePasswordPayload } from "@interfaces/account.interfaces"
 import toast from "react-hot-toast"
 import { useForm } from "@hooks/useForm"
 import Modal, { useModal } from "react-minimal-modal"
+import { Form } from "@components/styles/Global.styles"
+import tw from "twin.macro"
+import BaseLink from "next/link"
+
+const ButtonWrapper = tw.div`text-right [button[type=submit]]:mt-4`
+const Link          = tw( BaseLink )`text-blue-600 text-xs block`
 
 export default function ChangePasswordModal(){
     const [changePassword, { isLoading, isSuccess }]      = useChangePasswordMutation()
@@ -32,24 +37,25 @@ export default function ChangePasswordModal(){
             </ButtonOutline>
 
             <Modal visible={ isVisible } toggle={ toggle } title="Update your password">
-                <form onSubmit={ onSubmit }>
-                    <PasswordInput
-                        label="Current Password"
-                        name="currentPassword"
-                        value={ formData.currentPassword }
-                        error={ errors.currentPassword }
-                        onChange={ onChange }
-                    />
-                    <Link href="/auth/forgot_password" className="text-blue-600 text-xs">
-                        Forgot password?
-                    </Link>
+                <Form onSubmit={ onSubmit }>
+                    <div>
+                        <PasswordInput
+                            label="Current Password"
+                            name="currentPassword"
+                            value={ formData.currentPassword }
+                            error={ errors.currentPassword }
+                            onChange={ onChange }
+                        />
+                        <Link href="/auth/forgot_password">
+                            Forgot password?
+                        </Link>
+                    </div>
                     <PasswordInput
                         label="New Password"
                         name="newPassword"
                         value={ formData.newPassword }
                         error={ errors.newPassword }
                         onChange={ onChange }
-                        wrapperClassname="mt-3"
                     />
                     <PasswordInput
                         label="Confirm New Password"
@@ -57,15 +63,14 @@ export default function ChangePasswordModal(){
                         value={ formData.confirmNewPassword }
                         error={ errors.confirmNewPassword }
                         onChange={ onChange }
-                        wrapperClassname="mt-3"
                     />
 
-                    <div className="text-right">
-                        <Button type="submit" isLoading={ isLoading } className="!mt-5">
+                    <ButtonWrapper>
+                        <Button type="submit" isLoading={ isLoading }>
                             Update
                         </Button>
-                    </div>
-                </form>
+                    </ButtonWrapper>
+                </Form>
             </Modal>
         </>
     )

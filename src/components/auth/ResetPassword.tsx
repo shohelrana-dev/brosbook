@@ -9,6 +9,8 @@ import { useResetPasswordMutation } from "@services/authApi"
 import { useForm } from "@hooks/useForm"
 import { ResetPassPayload } from "@interfaces/auth.interfaces"
 import toast from "react-hot-toast"
+import { Box, Describe, FooterBox, Heading, Icon, Wrapper } from "@components/styles/Auth.styles"
+import { Form } from "@components/styles/Global.styles"
 
 export default function ResetPassword( { token }: { token: string } ){
     //hooks
@@ -28,19 +30,19 @@ export default function ResetPassword( { token }: { token: string } ){
     }, [isSuccess] )
 
     return (
-        <>
-            <div className="auth-box">
-                <div className="flex justify-center mb-2">
+        <Wrapper>
+            <Box>
+                <Icon>
                     <FiLock size="30"/>
-                </div>
+                </Icon>
 
-                <h1 className="text-lg text-center mb-4 font-medium">Create a strong password</h1>
-                <small className="block text-gray-500 text-center mb-2">
+                <Heading>Create a strong password</Heading>
+                <Describe>
                     Enter your new password to reset account password.
                     Your password must be at least six characters.
-                </small>
+                </Describe>
 
-                <form method="post" onSubmit={ onSubmit } className="mt-3">
+                <Form method="post" onSubmit={ onSubmit }>
                     <PasswordInput
                         label="Password"
                         name="password"
@@ -54,22 +56,19 @@ export default function ResetPassword( { token }: { token: string } ){
                         value={ formData.confirmPassword }
                         error={ errors.confirmPassword }
                         onChange={ onChange }
-                        wrapperClassname="mt-3"
                     />
-                    <Button className="w-full mt-3" type="submit" isLoading={ isLoading || isSuccess }>
+                    <Button type="submit" isLoading={ isLoading || isSuccess }>
                         Reset
                     </Button>
-                </form>
-            </div>
+                </Form>
+            </Box>
 
-            <div className="auth-box text-center mt-2 py-6">
-                <p className="text-gray-800">
-                    Go back?
-                    <Link href="/auth/login" className="ml-1 text-blue-500 font-medium">
-                        Log In
-                    </Link>
-                </p>
-            </div>
-        </>
+            <FooterBox>
+                Go back? &nbsp;
+                <Link href="/auth/login">
+                    Log In
+                </Link>
+            </FooterBox>
+        </Wrapper>
     )
 }

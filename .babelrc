@@ -1,0 +1,17 @@
+{
+    "presets": ["next/babel"],
+    "plugins": [
+        [
+            "babel-plugin-macros",
+            {
+                "twin": {
+                    "config": "./tailwind.config.js",
+                    "preset": "styled-components",
+                    "debug": false,
+                    "import": false,
+                    "styled": false
+                }
+            }
+        ]
+    ]
+}

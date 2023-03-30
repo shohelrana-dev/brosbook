@@ -11,6 +11,14 @@ import IconButton from "@components/global/IconButton"
 import { BiInfoCircle as InfoIcon } from "react-icons/bi"
 import Modal, { useModal } from "react-minimal-modal"
 import ParticipantInfo from "@components/messages/ParticipantInfo"
+import tw from "twin.macro";
+import { Box as BaseBox } from "@components/styles/Global.styles"
+
+const Wrapper     = tw.div`flex flex-col relative h-full`
+const StyledModal = tw( Modal )`max-h-[85vh] bg-theme-gray overflow-hidden !p-0`
+const Box         = tw( BaseBox )`py-3 px-4 lg:px-6 flex justify-between`
+const Name        = tw.h3`font-medium text-gray-800`
+const Active      = tw.p`text-gray-500 text-sm`
 
 interface Props {
     conversationId: string
@@ -23,34 +31,33 @@ export default function MessageBox( { conversationId }: Props ){
 
     if( isLoading ) return <Loading/>
 
-    const participant = conversation?.participant
+    const { fullName, active, avatar, username, updatedAt } = conversation?.participant || {}
 
     return (
-        <div className="flex flex-col relative h-full">
-            <Modal visible={ isVisible } toggle={ toggle } hideIcon
-                   className="max-h-[85vh] bg-theme-gray overflow-hidden !p-0">
+        <Wrapper>
+            <StyledModal visible={ isVisible } toggle={ toggle } hideIcon>
                 <ParticipantInfo conversationId={ conversationId }/>
-            </Modal>
+            </StyledModal>
 
             {/*User top bar*/ }
-            <div className="box py-3 px-4 lg:px-6 flex justify-between">
+            <Box>
                 <div className="flex">
                     <div className="mr-4">
                         <Avatar
-                            src={ participant?.avatar.url }
-                            online={ participant?.active === 1 }
-                            alt={ participant?.fullName }
+                            src={ avatar?.url }
+                            online={ active === 1 }
+                            alt={ fullName }
                         />
                     </div>
                     <div className="mr-3">
-                        <h5 className="font-medium text-gray-800">
-                            <Link href={ `/${ participant?.username }` }>
-                                { participant?.fullName }
+                        <Name>
+                            <Link href={ `/${ username }` }>
+                                { fullName }
                             </Link>
-                        </h5>
-                        <p className="text-gray-500 text-sm">
-                            { participant?.active === 1 ? 'Active now' : 'Active ' + timeAgo( participant?.updatedAt! ) }
-                        </p>
+                        </Name>
+                        <Active>
+                            { active === 1 ? 'Active now' : 'Active ' + timeAgo( updatedAt! ) }
+                        </Active>
                     </div>
                 </div>
                 <div className="self-center" onClick={ toggle }>
@@ -58,7 +65,7 @@ export default function MessageBox( { conversationId }: Props ){
                         <InfoIcon size={ 25 }/>
                     </IconButton>
                 </div>
-            </div>
+            </Box>
 
             {/*Messages*/ }
             <MessageList conversation={ conversation! }/>
@@ -66,6 +73,6 @@ export default function MessageBox( { conversationId }: Props ){
             {/*message form*/ }
             <CreateMessageForm conversation={ conversation! }/>
 
-        </div>
+        </Wrapper>
     )
 }
