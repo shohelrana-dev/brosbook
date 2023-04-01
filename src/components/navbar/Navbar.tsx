@@ -12,7 +12,7 @@ import useAuthState from "@hooks/useAuthState"
 import tw from "twin.macro"
 import { Container } from "@components/styles/Global.styles"
 
-const StyledNavbar    = tw( BaseNavbar )`relative z-10 mx-auto px-4 lg:px-8 py-2 lg:py-4 z-20`
+const StyledNavbar    = tw( BaseNavbar )`relative bg-white z-10 mx-auto px-4 lg:px-8 py-2 lg:py-4 z-20`
 const StyledContainer = tw( Container )`mx-auto flex items-center justify-between text-blue-gray-900`
 const LeftArea        = tw.div`mr-1 [button]:p-5`
 const RightArea       = tw.div`flex`
