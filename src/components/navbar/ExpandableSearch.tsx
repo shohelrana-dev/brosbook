@@ -7,6 +7,7 @@ import { User } from "@interfaces/user.interfaces"
 import { useRouter } from "next/navigation"
 import SearchUserList from "@components/global/SearchUserList"
 import { useDebouncedCallback } from "use-debounce"
+import delay from "delay";
 
 export default function ExpandableSearch(){
     const [expanded, setExpanded]   = useState<boolean>( false )
@@ -30,7 +31,10 @@ export default function ExpandableSearch(){
         500,
     )
 
-    function toggleExpand(){
+    async function toggleExpand(){
+        if( expanded ){
+            await delay( 300 )
+        }
         setExpanded( ! expanded )
     }
 
@@ -60,7 +64,7 @@ export default function ExpandableSearch(){
             />
 
             <div className="absolute right-1 top-1">
-                <IconButton onClick={ toggleExpand } disabled={expanded}>
+                <IconButton onClick={ toggleExpand } disabled={ expanded }>
                     <SearchIcon size={ 18 } className="text-gray-700"/>
                 </IconButton>
             </div>
