@@ -14,7 +14,7 @@ import toast from "react-hot-toast"
 import { setEmail } from "@slices/authSlice"
 import { useDispatch } from "react-redux"
 import PasswordStrengthBar from 'react-password-strength-bar'
-import FrontDropLoading from "@components/global/FrontDropLoading"
+import LoadingOverlay from "@components/global/LoadingOverlay"
 import tw from "twin.macro"
 import { Box, FooterBox, Heading, Wrapper } from "@components/styles/Auth.styles"
 import { Form } from "@components/styles/Global.styles"
@@ -39,7 +39,7 @@ export default function Signup(){
 
     return (
         <Wrapper>
-            <FrontDropLoading isLoading={ isLoading || isSuccess || isLoadingLoginWithGoogle }/>
+            <LoadingOverlay isLoading={ isLoading || isSuccess || isLoadingLoginWithGoogle }/>
             <Box>
                 <Heading>Sign Up</Heading>
 

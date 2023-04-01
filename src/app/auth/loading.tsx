@@ -1,6 +1,3 @@
-import React from 'react'
-import Loading from "@components/global/Loading"
+import PageLoader from "@components/global/PageLoader"
 
-export default function PageLoading(){
-    return <Loading/>
-}
+export default PageLoader

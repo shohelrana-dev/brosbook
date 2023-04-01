@@ -28,7 +28,7 @@ export default function UserMenu(){
     return (
         <Menu>
             <MenuHandler>
-                <button className="rounded-full">
+                <button className="rounded-full ml-2">
                     <Avatar src={ user?.avatar?.url } size="small"/>
                 </button>
             </MenuHandler>

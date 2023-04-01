@@ -8,7 +8,9 @@ interface LoadingProps {
     color?: string
 }
 
-function Loading( { color = "#36d7b7", ...rest }: LoadingProps ){
+function Loading( { color = "#36d7b7", loading = true, ...rest }: LoadingProps ){
+    if( ! loading ) return null
+
     return (
         <div className="flex justify-center my-2">
             <PuffLoader color={ color }  { ...rest }/>

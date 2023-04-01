@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { BiSearch as SearchIcon } from "react-icons/bi"
 import IconButton from "@components/global/IconButton"
 import BasicInput from "@components/global/BasicInput"
@@ -12,17 +12,26 @@ export default function ExpandableSearch(){
     const [expanded, setExpanded]   = useState<boolean>( false )
     const [searchKey, setSearchKey] = useState<string>( '' )
     const router                    = useRouter()
+    const inputRef                  = useRef<HTMLInputElement>()
 
-    function onMouseEnter(){
-        setExpanded( true )
-        document?.getElementById( 'search-input' )?.focus()
-    }
-
-    function onBlur(){
-        setTimeout( () => {
-            setExpanded( false )
+    useEffect( () => {
+        if( expanded ){
+            inputRef.current?.focus()
+        } else{
             setSearchKey( '' )
-        }, 200 )
+            inputRef.current?.blur()
+        }
+    }, [expanded] )
+
+    const handleInputChange = useDebouncedCallback(
+        ( value ) => {
+            setSearchKey( value )
+        },
+        500,
+    )
+
+    function toggleExpand(){
+        setExpanded( ! expanded )
     }
 
     async function onUserClick( user: User ){
@@ -33,30 +42,25 @@ export default function ExpandableSearch(){
         }
     }
 
-    const onChange = useDebouncedCallback(
-        ( value ) => {
-            setSearchKey( value )
-        },
-        500,
-    )
-
     const inputWrapperClassname = classNames( '!mb-0 w-[50px] duration-300 transition-all opacity-0 float-right', { "w-full opacity-100": expanded } )
 
     return (
-        <div className="relative rounded-3xl flex-none" onMouseEnter={ onMouseEnter }>
+        <div className="relative rounded-3xl flex-none">
             <BasicInput
-                onChange={ ( e ) => onChange( e.target.value ) }
+                onChange={ ( e ) => handleInputChange( e.target.value ) }
                 value={ searchKey }
-                id="search-input"
-                onBlur={ onBlur }
+                inputRef={ inputRef }
+                onBlur={ toggleExpand }
                 className="!rounded-3xl z-10 !bg-transparent"
-                wrapperClassname={ inputWrapperClassname } type="text" label="Search"
+                wrapperClassname={ inputWrapperClassname }
+                type="text"
+                label="Search"
                 labelHide
                 autoComplete="off"
             />
 
-            <div className="absolute right-1 top-1 -z-10">
-                <IconButton>
+            <div className="absolute right-1 top-1">
+                <IconButton onClick={ toggleExpand } disabled={expanded}>
                     <SearchIcon size={ 18 } className="text-gray-700"/>
                 </IconButton>
             </div>

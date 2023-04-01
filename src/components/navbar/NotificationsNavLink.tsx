@@ -8,6 +8,7 @@ import { io } from "socket.io-client"
 import { baseApi } from "@services/baseApi"
 import useAuthState from "@hooks/useAuthState"
 import { useDispatch } from "react-redux"
+import { useModal } from "react-minimal-modal"
 
 export default function NotificationsNavLink(){
     const { user }                                                = useAuthState()
@@ -15,7 +16,7 @@ export default function NotificationsNavLink(){
     const { data: unreadNotifications }                           = useGetUnreadNotificationsCountQuery()
     const [unreadNotificationsCount, setUnreadNotificationsCount] = useState<number>( unreadNotifications?.count || 0 )
     const [readAllNotification]                                   = useReadAllNotificationMutation()
-    const [isVisible, setIsOpen]                                     = useState( false )
+    const { isVisible, toggle }                                   = useModal()
 
     useEffect( () => {
         setUnreadNotificationsCount( unreadNotifications?.count! )
@@ -39,12 +40,8 @@ export default function NotificationsNavLink(){
     }, [user] )
 
     function onNotificationsCLick(){
-        toggleModal()
+        toggle()
         readAllNotification()
-    }
-
-    function toggleModal(){
-        setIsOpen( ! isVisible )
     }
 
     return (
@@ -63,7 +60,7 @@ export default function NotificationsNavLink(){
                 </div>
             </PopoverHandler>
             <PopoverContent className="w-full font-[inherit] max-w-[350px] z-50 p-2"
-                            onBlur={ () => setTimeout( toggleModal, 400 ) }>
+                            onBlur={ () => setTimeout( toggle, 200 ) }>
                 <div className="max-h-[500px] overflow-y-auto">
                     <NotificationList/>
                 </div>

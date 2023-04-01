@@ -8,10 +8,11 @@ interface BasicInputProps extends InputHTMLAttributes<HTMLInputElement | HTMLTex
     helpText?: string
     labelHide?: boolean
     wrapperClassname?: string
+    inputRef?: LegacyRef<any>
 }
 
 export default function BasicInput( props: BasicInputProps ){
-    let { label, name, textarea, className, type = 'text', error, helpText, labelHide = false, wrapperClassname, ...rest } = props
+    let { label, name, textarea, className, type = 'text', error, helpText, labelHide = false, wrapperClassname, inputRef, ...rest } = props
 
     if( className ){
         className = classNames( 'block w-full outline-none py-2 px-3 rounded-lg border-2 border-blue-50 focus:border-blue-300', className )
@@ -34,9 +35,9 @@ export default function BasicInput( props: BasicInputProps ){
             <div>
                 { ! textarea ? (
                     <input id={ id } type={ type } className={ className } name={ name }
-                           placeholder={ label }  { ...rest }/>
+                           placeholder={ label } ref={inputRef}  { ...rest }/>
                 ) : (
-                    <textarea id={ id } className={ className } name={ name } placeholder={ label } { ...rest }/>
+                    <textarea id={ id } className={ className } name={ name } placeholder={ label } ref={inputRef} { ...rest }/>
                 ) }
                 { error ? (
                     <p className="font-medium text-red-600 text-[12px]">

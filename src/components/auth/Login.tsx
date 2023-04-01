@@ -14,7 +14,7 @@ import { CredentialPayload } from "@interfaces/auth.interfaces"
 import toast from "react-hot-toast"
 import { useDispatch } from "react-redux"
 import { setEmail } from "@slices/authSlice"
-import FrontDropLoading from "@components/global/FrontDropLoading"
+import LoadingOverlay from "@components/global/LoadingOverlay"
 import tw from 'twin.macro'
 import { Wrapper, Box, FooterBox, Heading, Icon } from "@components/styles/Auth.styles"
 import { Form } from "@components/styles/Global.styles"
@@ -45,7 +45,7 @@ export default function Login(){
 
     return (
         <Wrapper>
-            <FrontDropLoading isLoading={ isLoading || isSuccess || isLoadingLoginWithGoogle }/>
+            <LoadingOverlay isLoading={ isLoading || isSuccess || isLoadingLoginWithGoogle }/>
             <Box>
                 <Icon>
                     <FiLock size="30"/>
