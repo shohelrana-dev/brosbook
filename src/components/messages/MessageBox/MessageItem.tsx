@@ -7,16 +7,14 @@ import moment from "moment/moment"
 import { IoCheckmarkCircleOutline as TickIcon } from "react-icons/io5"
 import Image from "next/image"
 import { User } from "@interfaces/user.interfaces"
+import tw from "twin.macro"
+import { Flex } from "@components/styles/Global.styles"
 
-//the component classes
-const classes = {
-    ownRow: 'flex items-end float-right mb-2 max-w-[70%]',
-    partnerRow: 'flex items-end float-left mb-1 max-w-[70%]',
-    ownMessageWrap: 'w-full',
-    partnerMessageWrap: 'w-full',
-    date: 'text-gray-500 text-center text-sm',
-    time: 'text-gray-500 text-xs'
-}
+const OwnRow             = tw.div`flex items-end float-right mb-2 max-w-[70%]`
+const PartnerRow         = tw.div`flex items-end float-left mb-1 max-w-[70%]`
+const OwnMessageWrap     = tw.div`w-full`
+const PartnerMessageWrap = tw.div`w-full`
+const Time               = tw.div`text-gray-500 text-xs`
 
 
 interface SingleMessageProps {
@@ -42,11 +40,10 @@ function MessageItem( { message, prevMessage, isLastMessage, participant }: Sing
 
     return (
         <div>
-
             { message.isMeSender ? (
-                <div className={ classes.ownRow }>
-                    <div className={ classes.ownMessageWrap }>
-                        <div className="flex">
+                <OwnRow>
+                    <OwnMessageWrap>
+                        <Flex>
                             <MessageContent message={ message }/>
                             <div className="min-w-[20px] self-end ml-1">
                                 { isLastMessage ? (
@@ -65,34 +62,27 @@ function MessageItem( { message, prevMessage, isLastMessage, participant }: Sing
                                     )
                                 ) : null }
                             </div>
-                        </div>
+                        </Flex>
                         <div className="flex justify-between">
-                            { ! isSameUserAndTimeLessThanFiveMin ? (
-                                <time className={ classes.time }>
-                                    { timeAgo( message.createdAt ) }
-                                </time>
-                            ) : null }
+                            { ! isSameUserAndTimeLessThanFiveMin ?
+                                <Time>{ timeAgo( message.createdAt ) }</Time> : null }
                         </div>
-                    </div>
-                </div>
+                    </OwnMessageWrap>
+                </OwnRow>
             ) : null }
 
             <div className="clear-both"/>
 
             { ! message.isMeSender ? (
-                <div className={ classes.partnerRow }>
+                <PartnerRow>
                     <div className="min-w-[35px] mr-3">
                         { ! isSameUserAndTimeLessThanFiveMin ? avatarMarkup : null }
                     </div>
-                    <div className={ classes.partnerMessageWrap }>
+                    <PartnerMessageWrap>
                         <MessageContent message={ message }/>
-                        { ! isSameUser ? (
-                            <time className={ classes.time }>
-                                { timeAgo( message.createdAt ) }
-                            </time>
-                        ) : null }
-                    </div>
-                </div>
+                        { ! isSameUser ? <Time>{ timeAgo( message.createdAt ) }</Time> : null }
+                    </PartnerMessageWrap>
+                </PartnerRow>
             ) : null }
 
         </div>

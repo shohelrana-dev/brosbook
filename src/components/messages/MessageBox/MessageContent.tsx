@@ -2,17 +2,21 @@ import React from 'react'
 import Reactions from "@components/messages/MessageBox/Reactions"
 import { Message } from "@interfaces/conversation.interfaces"
 import ImageLightbox from "@components/global/ImageLightbox"
-import moment from "moment";
+import moment from "moment"
+import tw, { styled } from "twin.macro"
+import { Box } from "@components/styles/Global.styles"
 
-const classes = {
-    text: ( isOwn: boolean, hasReaction: boolean ) => (
-        `box relative py-2 px-4 my-1 flex items-end gap-1 
-        ${ isOwn ? 'bg-theme-blue text-white' : 'bg-white text-gray-700' } 
-        ${ hasReaction ? 'mb-3' : 'mb-0' }`
-    ),
-    emoji: ( hasReaction: boolean ) => `relative pt-2 text-3xl flex items-end gap-1 text-gray-700 ${ hasReaction ? 'mb-3' : 'mb-0' }`,
-    image: 'relative max-w-[200px] mb-4 flex items-end gap-1 text-gray-700'
-}
+const TextMessage  = styled( Box )( ( { isOwn, hasReaction }: { isOwn: boolean, hasReaction: boolean } ) => [
+    tw`relative py-2 px-4 my-1 flex items-end gap-1`,
+    isOwn ? tw`bg-theme-blue text-white` : tw`bg-white text-gray-700`,
+    hasReaction ? tw`mb-3` : tw`mb-0`
+] )
+const EmojiMessage = styled.div( ( { hasReaction }: { hasReaction: boolean } ) => [
+    tw`relative pt-2 text-3xl flex items-end gap-1 text-gray-700`,
+    hasReaction ? tw`mb-3` : tw`mb-0`
+] )
+const ImageMessage = tw.div`relative max-w-[200px] mb-4 flex items-end gap-1 text-gray-700`
+const Time         = tw.time`text-[10px]`
 
 interface Props {
     message: Message
@@ -26,31 +30,31 @@ function MessageContent( { message }: Props ){
     switch ( type ) {
         case 'text':
             return (
-                <div className={ classes.text( isMeSender, hasReaction ) }>
+                <TextMessage hasReaction={ hasReaction } isOwn={ isMeSender }>
                     <Reactions message={ message }/>
                     { body }
-                    <p className="text-[10px]">{ moment( createdAt ).format( "h:mm a" ) }</p>
-                </div>
+                    <Time>{ moment( createdAt ).format( "h:mm a" ) }</Time>
+                </TextMessage>
             )
 
         case 'emoji':
             return (
-                <div className={ classes.emoji( hasReaction ) }>
+                <EmojiMessage hasReaction={ hasReaction }>
                     <Reactions message={ message }/>
                     { body }
-                    <p className="text-[10px]">{ moment( createdAt ).format( "h:mm a" ) }</p>
-                </div>
+                    <Time>{ moment( createdAt ).format( "h:mm a" ) }</Time>
+                </EmojiMessage>
             )
 
         case 'image':
             return (
-                <div className={ classes.image }>
+                <ImageMessage>
                     <Reactions message={ message }/>
                     <ImageLightbox image={ image } alt="message image" width={ 400 } height={ 400 }/>
-                    <p className="text-[10px]">{ moment( createdAt ).format( "h:mm a" ) }</p>
-                </div>
+                    <Time>{ moment( createdAt ).format( "h:mm a" ) }</Time>
+                </ImageMessage>
             )
-        
+
         default:
             return null
     }
