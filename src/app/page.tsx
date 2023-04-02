@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     title: `Home | ${ process.env.NEXT_PUBLIC_APP_NAME }`
 }
 
-function Page(){
+export default function Page(){
     return (
         <SidebarLayout>
             <div className="mt-5 mb-4">
@@ -18,5 +18,3 @@ function Page(){
         </SidebarLayout>
     )
 }
-
-export default Page

@@ -16,7 +16,7 @@ import CreatePostFormSkeleton from "@components/skeletons/CreatePostFormSkeleton
 
 export default function CreatePostForm(){
     //hooks
-    const { user, isAuthenticated, isChecked }                                             = useAuthState()
+    const { user, isAuthenticated }                                                        = useAuthState()
     const [createPost, { isLoading }]                                                      = useCreatePostMutation()
     const [body, setBody]                                                                  = useState<string>( '' )
     const { inputRef, selectedFile: selectedImage, removeSelectedFile, onChange, onClick } = useSelectFile()
@@ -46,8 +46,6 @@ export default function CreatePostForm(){
             toast.error( 'Post couldn\'t be saved.' )
         }
     }
-
-    if( ! isChecked ) return <CreatePostFormSkeleton/>
 
     if( ! isAuthenticated ) return null
 

@@ -1,8 +1,12 @@
+import '@assets/styles/app.css'
+import 'react-loading-skeleton/dist/skeleton.css'
 import { PropsWithChildren } from "react"
 import Providers from "./providers"
 import Navbar from "@components/navbar/Navbar"
 import { Metadata } from "next"
-import '@assets/styles/app.css'
+import { getCurrentUser } from "@services/index"
+import { cookies } from "next/headers"
+import PreLoader from "@components/global/PreLoader"
 
 const appName = process.env.NEXT_PUBLIC_APP_NAME || 'Brosbook'
 
@@ -27,11 +31,14 @@ export const metadata: Metadata = {
 }
 
 export default async function RootLayout( { children }: PropsWithChildren ){
+    const user = await getCurrentUser( cookies() )
+
     return (
         <html lang='eng'>
         <head/>
         <body className="bg-theme-gray">
         <Providers>
+            <PreLoader user={ user! }/>
             <Navbar/>
             { children }
         </Providers>

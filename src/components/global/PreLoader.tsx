@@ -1,22 +1,51 @@
 "use client"
-import React, { useRef } from 'react'
-import { store } from "@store/index"
+import { useEffect, useRef } from 'react'
+import { io } from "socket.io-client"
+import useUnauthorizedAlert from "@hooks/useUnauthorzedAlert"
+import { usePathname } from "next/navigation"
+import useAuthState from "@hooks/useAuthState"
 import { userLoggedIn } from "@slices/authSlice"
+import { store } from "@store/index"
 import { User } from "@interfaces/user.interfaces"
 
-interface Props {
-    user: User | null
-}
+export default function PreLoader( { user: preLoadedUser }: { user: User } ){
+    const loaded                    = useRef( false )
+    const { user, isAuthenticated } = useAuthState()
+    const unauthorizedAlert         = useUnauthorizedAlert()
+    const pathname                  = usePathname()
 
-export default function PreLoader( { user }: Props ){
-    const loaded = useRef( false )
-
-    if( ! loaded.current && user ){
-        store.dispatch( userLoggedIn( user ) )
+    if( ! loaded.current && preLoadedUser ){
+        store.dispatch( userLoggedIn( preLoadedUser ) )
         loaded.current = true
     }
 
-    console.log(store.getState())
+    useEffect( () => {
+        if( ! user?.id ) return
+
+        const socket = io( process.env.NEXT_PUBLIC_SERVER_BASE_URL! )
+
+        if( user && Object.keys( user ).length > 0 ){
+            socket.on( 'connect', () => {
+                socket.emit( 'connect_user', user )
+            } )
+        }
+
+        if( socket ) return () => {
+            socket.close()
+        }
+    }, [user] )
+
+
+    useEffect( () => {
+        if( ! isAuthenticated && ! pathname?.startsWith( '/auth/' ) ){
+            setTimeout( () => {
+                unauthorizedAlert( {
+                    title: `New to ${ process.env.NEXT_PUBLIC_APP_NAME }?`,
+                    message: 'Sign up now to get your own personalized timeline!'
+                } )
+            }, 3000 )
+        }
+    }, [isAuthenticated, pathname] )
 
     return null
 }
