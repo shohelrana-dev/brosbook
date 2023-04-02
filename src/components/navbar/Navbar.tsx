@@ -18,8 +18,8 @@ const LeftArea        = tw.div`mr-1 [button]:p-5`
 const RightArea       = tw.div`flex`
 
 export default function Navbar(){
-    const { isAuthenticated } = useAuthState()
-
+    const { isAuthenticated, user } = useAuthState()
+    console.log( user )
     if( ! isAuthenticated ) return null
 
     return (
