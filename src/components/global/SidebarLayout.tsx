@@ -3,7 +3,7 @@ import Sidebar from "@components/global/Sidebar"
 
 function SidebarLayout( { children }: PropsWithChildren ){
     return (
-        <main className="max-w-[920px] w-full mx-auto">
+        <div className="max-w-[920px] w-full mx-auto">
             <div className="w-full flex justify-center">
                 <div className="md:mx-5 w-full lg:w-8/12">
                     { children }
@@ -12,7 +12,7 @@ function SidebarLayout( { children }: PropsWithChildren ){
                     <Sidebar/>
                 </aside>
             </div>
-        </main>
+        </div>
     )
 }
 

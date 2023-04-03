@@ -1,21 +1,15 @@
 "use client"
-import React, { useMemo } from 'react'
+import React from 'react'
 import { BarLoader } from "react-spinners"
-import tw from "twin.macro";
-import useAuthState from "@hooks/useAuthState";
+import tw from "twin.macro"
 
-const Wrapper = tw.div`fixed left-0 w-full`
+const Wrapper = tw.div`absolute top-0 left-0 w-full`
+
 
 export default function PageLoader(){
-    const { isAuthenticated } = useAuthState()
-
-    const top = useMemo( () => {
-        if( isAuthenticated ) return 75
-        else return 0
-    }, [] )
 
     return (
-        <Wrapper style={ { top } }>
+        <Wrapper>
             <BarLoader
                 color="rgb(58,141,245)"
                 cssOverride={ { background: "#ddd", width: '100%' } }

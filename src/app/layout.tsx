@@ -40,7 +40,9 @@ export default async function RootLayout( { children }: PropsWithChildren ){
         <Providers>
             <PreLoader user={ user! }/>
             <Navbar/>
-            { children }
+            <main className="relative">
+                { children }
+            </main>
         </Providers>
         </body>
         </html>
