@@ -7,30 +7,22 @@ import { FaSignOutAlt as LogoutIcon } from "react-icons/fa"
 import useAuthState from "@hooks/useAuthState"
 import { useRouter } from "next/navigation"
 import { useConfirmAlert } from "react-use-confirm-alert"
-import { removeCookie } from "tiny-cookie";
-import { userLoggedOut } from "@slices/authSlice"
-import toast from "react-hot-toast"
-import { useDispatch } from "react-redux"
 
 export default function UserMenu(){
     const { user }     = useAuthState()
     const router       = useRouter()
-    const dispatch     = useDispatch()
     const confirmAlert = useConfirmAlert()
 
     async function handleLogout(){
-        await confirmAlert( {
+        const confirmed = await confirmAlert( {
             title: `Log out of ${ process.env.NEXT_PUBLIC_APP_NAME }?`,
             message: 'You can always log back in at any time. And you can switch another account.',
-            confirmButtonLabel: 'Log out',
-            onConfirm: async() => {
-                removeCookie( 'access_token' )
-                dispatch( userLoggedOut() )
-                toast.success( 'Logged out.' )
-
-                await router.replace( '/auth/login' )
-            }
+            confirmButtonLabel: 'Log out'
         } )
+
+        if( confirmed ){
+            router.push( '/auth/logout' )
+        }
     }
 
     return (

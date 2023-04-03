@@ -4,18 +4,22 @@ import { io } from "socket.io-client"
 import useUnauthorizedAlert from "@hooks/useUnauthorzedAlert"
 import { usePathname } from "next/navigation"
 import useAuthState from "@hooks/useAuthState"
-import { userLoggedIn } from "@slices/authSlice"
-import { store } from "@store/index"
+import { userLoggedIn, userLoggedOut } from "@slices/authSlice"
 import { User } from "@interfaces/user.interfaces"
+import { useDispatch } from "react-redux"
 
 export default function PreLoader( { user: preLoadedUser }: { user: User } ){
-    const loaded                    = useRef( false )
-    const { user, isAuthenticated } = useAuthState()
-    const unauthorizedAlert         = useUnauthorizedAlert()
-    const pathname                  = usePathname()
+    const loaded                               = useRef( false )
+    const { user, isAuthenticated, isChecked } = useAuthState()
+    const unauthorizedAlert                    = useUnauthorizedAlert()
+    const pathname                             = usePathname()
+    const dispatch                             = useDispatch()
 
     if( ! loaded.current && preLoadedUser ){
-        store.dispatch( userLoggedIn( preLoadedUser ) )
+        dispatch( userLoggedIn( preLoadedUser ) )
+        loaded.current = true
+    } else if( ! loaded.current ){
+        dispatch( userLoggedOut() )
         loaded.current = true
     }
 
@@ -37,7 +41,7 @@ export default function PreLoader( { user: preLoadedUser }: { user: User } ){
 
 
     useEffect( () => {
-        if( ! isAuthenticated && ! pathname?.startsWith( '/auth/' ) ){
+        if( isChecked && ! isAuthenticated && ! pathname?.startsWith( '/auth/' ) ){
             setTimeout( () => {
                 unauthorizedAlert( {
                     title: `New to ${ process.env.NEXT_PUBLIC_APP_NAME }?`,

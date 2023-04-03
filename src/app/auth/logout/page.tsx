@@ -4,9 +4,9 @@ import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
 import { useDispatch } from "react-redux"
 import { userLoggedOut } from "@slices/authSlice"
-import Loading from "@components/global/Loading"
 import { baseApi } from "@services/baseApi"
 import { removeCookie } from "tiny-cookie"
+import PageLoader from "@components/global/PageLoader"
 
 
 function LogoutPage(){
@@ -17,16 +17,16 @@ function LogoutPage(){
     useEffect( () => {
         removeCookie( 'access_token' )
         dispatch( userLoggedOut() )
-        toast.success( 'Logged out.' )
 
         setTimeout( () => {
             dispatch( baseApi.util.resetApiState() )
         }, 1000 )
 
         router.replace( '/auth/login' )
+        toast.success( 'Logged out.' )
     }, [dispatch, router] )
 
-    return <Loading/>
+    return <PageLoader/>
 }
 
 export default LogoutPage
