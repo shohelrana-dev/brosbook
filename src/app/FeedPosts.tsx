@@ -1,16 +1,19 @@
 "use client"
-import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
+import { useState } from "react"
 import { useGetFeedPostsQuery } from "@services/postsApi"
-import { Post } from "@interfaces/posts.interfaces"
 import PostsSkeleton from "@components/skeletons/PostsSkeleton"
 import Error from "@components/global/Error"
 import PostList from "@components/post/PostList"
+import { ErrorResponse } from "@interfaces/index.interfaces"
 
 export default function FeedPosts(){
     //hooks
-    const { isLoading, items: posts, hasMore, loadMore, isSuccess, isError, error } = useGetInfiniteListQuery<Post>(
-        useGetFeedPostsQuery
-    )
+    const [page, setPage] = useState<number>( 1 )
+    const queryResult     = useGetFeedPostsQuery( page )
+
+    const { isLoading, isSuccess, isError, data } = queryResult || {}
+    const { items: posts = [], nextPage }         = data || {}
+    const error                                   = queryResult.error as ErrorResponse || {}
 
     //decide content
     let content = null
@@ -19,9 +22,9 @@ export default function FeedPosts(){
     } else if( isSuccess && posts.length === 0 ){
         content = <p className="box text-center py-6">Your feed is empty.</p>
     } else if( isError ){
-        content = <Error message={ error?.data?.message }/>
+        content = <Error message={ error.message }/>
     } else if( isSuccess && posts.length > 0 ){
-        content = <PostList posts={ posts } loadMore={ loadMore } hasMore={ hasMore }/>
+        content = <PostList posts={ posts } loadMore={ () => setPage( nextPage! ) } hasMore={ !! nextPage }/>
     }
 
     return content

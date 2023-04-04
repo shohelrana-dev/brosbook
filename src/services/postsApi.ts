@@ -1,23 +1,28 @@
 import { Post } from "@interfaces/posts.interfaces"
 import { baseApi } from "@services/baseApi"
 import { ListResponse } from "@interfaces/index.interfaces"
+import listQueryExtraDefinitions from "@utils/listQueryExtraDefinitions"
+
+const postsPerPage = process.env.NEXT_PUBLIC_POSTS_PER_PAGE
 
 export const postsApi = baseApi.injectEndpoints( {
     endpoints: ( build ) => ( {
-        getFeedPosts: build.query<ListResponse<Post>, { page: number, limit?: number }>( {
-            query: ( params ) => ( {
+        getFeedPosts: build.query<ListResponse<Post>, number>( {
+            query: ( page ) => ( {
                 url: 'posts/feed',
-                params
+                params: { page, limit: postsPerPage }
             } ),
-            providesTags: ['Post']
+            providesTags: ['Post'],
+            ...listQueryExtraDefinitions
         } ),
 
-        getPosts: build.query<ListResponse<Post>, { userId?: string, page?: number, limit?: number }>( {
+        getPosts: build.query<ListResponse<Post>, { userId?: string, page: number }>( {
             query: ( params ) => ( {
                 url: 'posts',
-                params
+                params: { ...params, limit: postsPerPage }
             } ),
-            providesTags: ['Post']
+            providesTags: ['Post'],
+            ...listQueryExtraDefinitions
         } ),
 
         getPostById: build.query<Post, string>( {
