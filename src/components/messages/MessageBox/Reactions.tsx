@@ -4,7 +4,7 @@ import Image from "next/image"
 import { HiOutlineEmojiHappy as EmojiIcon } from "react-icons/hi"
 import { Popover, PopoverHandler, PopoverContent } from "@material-tailwind/react"
 import IconButton from "@components/global/IconButton"
-import { useSendReactionMutation } from "@services/conversationApi"
+import { useSendReactionMutation } from "@services/messagesApi"
 import { Message } from "@interfaces/conversation.interfaces"
 
 type ReactionsProps = {

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import MessageItem from "@components/messages/MessageBox/MessageItem"
-import { useGetMessagesQuery, useSeenAllMessagesMutation } from "@services/conversationApi"
+import { useGetMessagesQuery, useSeenAllMessagesMutation } from "@services/messagesApi"
 import Loading from "@components/global/Loading"
 import { Conversation, Message } from "@interfaces/conversation.interfaces"
 import { io } from "socket.io-client"

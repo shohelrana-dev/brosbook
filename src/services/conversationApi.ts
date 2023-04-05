@@ -37,39 +37,6 @@ export const conversationApi = baseApi.injectEndpoints( {
             invalidatesTags: ['Conversation']
         } ),
 
-        getMessages: build.query<ListResponse<Message>, { conversationId: string, page?: number, limit?: number }>( {
-            query: ( { conversationId, ...params } ) => ( {
-                url: `/conversations/${ conversationId }/messages`,
-                params
-            } ),
-            providesTags: ['Message']
-        } ),
-
-        sendMessage: build.mutation<Message, FormData>( {
-            query: ( formData ) => ( {
-                url: `/conversations/${ formData.get( 'conversationId' ) }/messages`,
-                method: "POST",
-                body: formData
-            } ),
-            invalidatesTags: ['Conversation']
-        } ),
-
-        sendReaction: build.mutation<Message, { messageId: string, conversationId: string, name: string }>( {
-            query: ( { conversationId, messageId, ...params } ) => ( {
-                url: `/conversations/${ conversationId }/messages/${ messageId }/reactions`,
-                method: "POST",
-                body: params
-            } )
-        } ),
-
-        seenAllMessages: build.mutation<Message, string>( {
-            query: ( conversationId ) => ( {
-                url: `/conversations/${ conversationId }/messages/seen_all`,
-                method: "POST"
-            } ),
-            invalidatesTags: ['Conversation']
-        } ),
-
         getConversationMediaList: build.query<ListResponse<Media>, { conversationId: string, page?: number, limit?: number }>( {
             query: ( { conversationId, ...params } ) => ( {
                 url: `/conversations/${ conversationId }/media`,
@@ -88,9 +55,5 @@ export const {
                  useLazyGetConversationByParticipantIdQuery,
                  useGetConversationByIdQuery,
                  useGetUnreadConversationsCountQuery,
-                 useGetMessagesQuery,
-                 useSendMessageMutation,
-                 useSendReactionMutation,
-                 useSeenAllMessagesMutation,
                  useGetConversationMediaListQuery
              } = conversationApi
