@@ -13,19 +13,18 @@ import useUnauthorizedAlert from "@hooks/useUnauthorzedAlert"
 
 interface PostBarProps {
     post: Post
-    setPost: ( post: Post ) => void
     isCommentsShow: boolean
     setIsCommentsShow: ( _: boolean ) => void
 }
 
-function PostBar( { post, setPost, setIsCommentsShow, isCommentsShow }: PostBarProps ){
+function PostBar( { post, setIsCommentsShow, isCommentsShow }: PostBarProps ){
     //hooks
     const [postLike]          = usePostLikeMutation()
     const [postUnlike]        = usePostUnlikeMutation()
     const { isAuthenticated } = useAuthState()
     const unauthorizedAlert   = useUnauthorizedAlert()
 
-    async function handlePostLike( event: MouseEvent<HTMLButtonElement> ){
+    function handlePostLike( event: MouseEvent<HTMLButtonElement> ){
         event.currentTarget.disabled = true
 
         if( ! isAuthenticated ){
@@ -36,23 +35,13 @@ function PostBar( { post, setPost, setIsCommentsShow, isCommentsShow }: PostBarP
             return
         }
 
-        try {
-            const likedPost = await postLike( post.id ).unwrap()
-            setPost( likedPost )
-        } catch ( err ) {
-            console.error( err )
-        }
+        postLike( post.id )
     }
 
-    async function handlePostUnlike( event: MouseEvent<HTMLButtonElement> ){
+    function handlePostUnlike( event: MouseEvent<HTMLButtonElement> ){
         event.currentTarget.disabled = true
 
-        try {
-            const unlikedPost = await postUnlike( post.id ).unwrap()
-            setPost( unlikedPost )
-        } catch ( err ) {
-            console.error( err )
-        }
+        postUnlike( post.id )
     }
 
     return (

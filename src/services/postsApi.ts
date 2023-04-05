@@ -54,7 +54,33 @@ export const postsApi = baseApi.injectEndpoints( {
                 url: `posts/${ postId }/like`,
                 method: 'POST'
             } ),
-            invalidatesTags: ['Post']
+            onQueryStarted: async( arg, { dispatch, queryFulfilled } ) => {
+                function findAndLike( draft: ListResponse<Post> ){
+                    const post = draft.items.find( ( p ) => p.id === arg )
+                    if( post ){
+                        post.likesCount += 1
+                        post.isViewerLiked = true
+                    }
+                }
+
+                // optimistic cache update
+                const patchResult1 = dispatch( baseApi.util.updateQueryData( "getFeedPosts", undefined, findAndLike ) )
+                const patchResult2 = dispatch( baseApi.util.updateQueryData( "getPosts", undefined, findAndLike ) )
+                const patchResult3 = dispatch( baseApi.util.updateQueryData( "getPostById", arg, ( draft: Post ) => {
+                    draft.likesCount += 1
+                    draft.isViewerLiked = true
+                } ) )
+
+                try {
+                    await queryFulfilled
+                } catch ( err ) {
+                    patchResult1.undo()
+                    patchResult2.undo()
+                    patchResult3.undo()
+                    throw err
+                }
+
+            }
         } ),
 
         postUnlike: build.mutation<Post, string>( {
@@ -62,8 +88,34 @@ export const postsApi = baseApi.injectEndpoints( {
                 url: `posts/${ postId }/unlike`,
                 method: 'POST'
             } ),
-            invalidatesTags: ['Post']
+            onQueryStarted: async( arg, { dispatch, queryFulfilled } ) => {
+                function findAndUnLike( draft: ListResponse<Post> ){
+                    const post = draft.items.find( ( p ) => p.id === arg )
+                    if( post ){
+                        post.likesCount -= 1
+                        post.isViewerLiked = false
+                    }
+                }
+
+                // optimistic cache update
+                const patchResult1 = dispatch( baseApi.util.updateQueryData( "getFeedPosts", undefined, findAndUnLike ) )
+                const patchResult2 = dispatch( baseApi.util.updateQueryData( "getPosts", undefined, findAndUnLike ) )
+                const patchResult3 = dispatch( baseApi.util.updateQueryData( "getPostById", arg, ( draft: Post ) => {
+                    draft.likesCount -= 1
+                    draft.isViewerLiked = false
+                } ) )
+
+                try {
+                    await queryFulfilled
+                } catch ( err ) {
+                    patchResult1.undo()
+                    patchResult2.undo()
+                    patchResult3.undo()
+                    throw err
+                }
+            }
         } ),
+
     } ),
 } )
 

@@ -8,7 +8,7 @@ export const store = configureStore( {
         [authSlice.name]: authSlice.reducer
     },
     devTools: process.env.NODE_ENV !== 'production',
-    middleware: ( getDefault ) => getDefault().concat( baseApi.middleware )
+    middleware: ( getDefault ) => getDefault().concat( [baseApi.middleware] )
 } )
 
 // Infer the `RootState` and `AppDispatch` interfaces from the store itself

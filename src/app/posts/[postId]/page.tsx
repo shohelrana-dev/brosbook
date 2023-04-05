@@ -1,8 +1,8 @@
-import PostCard from "@components/post/PostCard"
 import { getPostById } from "@services/index"
 import { cookies } from "next/headers"
 import { Metadata } from "next"
 import { notFound } from "next/navigation"
+import SinglePostPage from "./SinglePostPage"
 
 export const generateMetadata = async( { params }: Props ): Promise<Metadata> => {
     const post = await getPostById( params.postId, cookies() )
@@ -46,10 +46,10 @@ interface Props {
 
 export const revalidate = 0
 
-export default async function SinglePostPage( { params }: Props ){
+export default async function Page( { params }: Props ){
     const post = await getPostById( params.postId, cookies() )
 
     if( ! post ) return notFound()
 
-    return <PostCard post={ post! } isCommentsShow={ true }/>
+    return <SinglePostPage post={ post }/>
 }

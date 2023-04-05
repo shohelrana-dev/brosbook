@@ -19,10 +19,9 @@ import useUnauthorizedAlert from "@hooks/useUnauthorzedAlert"
 
 interface Props {
     post: Post
-    setPost: ( post: Post | null ) => void
 }
 
-function PostOptions( { post, setPost }: Props ){
+function PostOptions( { post }: Props ){
     const [follow]     = useFollowMutation()
     const [unfollow]   = useUnfollowMutation()
     const [deletePost] = useDeletePostMutation()
@@ -87,6 +86,12 @@ function PostOptions( { post, setPost }: Props ){
         }
     }
 
+    function handleHidePost(){
+        toggleModal()
+
+        //hide post
+    }
+
     function copyPostLinkToClipboard(){
         navigator.clipboard.writeText( `${ process.env.NEXT_PUBLIC_APP_URL }/posts/${ post.id }` ).then( () => {
             toast.success( 'Post link copied.' )
@@ -126,10 +131,7 @@ function PostOptions( { post, setPost }: Props ){
                         <CopyIcon size="18"/>
                         Copy link to post
                     </OptionButton>
-                    <OptionButton onClick={ () => {
-                        setPost( null )
-                        toggleModal()
-                    } }>
+                    <OptionButton onClick={ handleHidePost }>
                         <HideIcon size="18"/>
                         Hide
                     </OptionButton>
