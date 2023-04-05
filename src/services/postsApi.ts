@@ -1,3 +1,5 @@
+// noinspection TypeScriptValidateJSTypes
+
 import { Post } from "@interfaces/posts.interfaces"
 import { baseApi } from "@services/baseApi"
 import { ListResponse } from "@interfaces/index.interfaces"
@@ -64,9 +66,9 @@ export const postsApi = baseApi.injectEndpoints( {
                 }
 
                 // optimistic cache update
-                const patchResult1 = dispatch( baseApi.util.updateQueryData( "getFeedPosts", undefined, findAndLike ) )
-                const patchResult2 = dispatch( baseApi.util.updateQueryData( "getPosts", undefined, findAndLike ) )
-                const patchResult3 = dispatch( baseApi.util.updateQueryData( "getPostById", arg, ( draft: Post ) => {
+                const patchResult1 = dispatch( postsApi.util.updateQueryData( "getFeedPosts", undefined as any, findAndLike ) )
+                const patchResult2 = dispatch( postsApi.util.updateQueryData( "getPosts", undefined as any, findAndLike ) )
+                const patchResult3 = dispatch( postsApi.util.updateQueryData( "getPostById", arg, ( draft: Post ) => {
                     draft.likesCount += 1
                     draft.isViewerLiked = true
                 } ) )
@@ -98,9 +100,9 @@ export const postsApi = baseApi.injectEndpoints( {
                 }
 
                 // optimistic cache update
-                const patchResult1 = dispatch( baseApi.util.updateQueryData( "getFeedPosts", undefined, findAndUnLike ) )
-                const patchResult2 = dispatch( baseApi.util.updateQueryData( "getPosts", undefined, findAndUnLike ) )
-                const patchResult3 = dispatch( baseApi.util.updateQueryData( "getPostById", arg, ( draft: Post ) => {
+                const patchResult1 = dispatch( postsApi.util.updateQueryData( 'getFeedPosts', undefined as any, findAndUnLike ) )
+                const patchResult2 = dispatch( postsApi.util.updateQueryData( 'getPosts', undefined as any, findAndUnLike ) )
+                const patchResult3 = dispatch( postsApi.util.updateQueryData( 'getPostById', arg, ( draft: Post ) => {
                     draft.likesCount -= 1
                     draft.isViewerLiked = false
                 } ) )
