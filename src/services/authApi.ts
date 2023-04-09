@@ -19,8 +19,7 @@ export const authApi = baseApi.injectEndpoints( {
                 url: `/auth/signup`,
                 method: 'POST',
                 body: payload
-            } ),
-            invalidatesTags: ["User"]
+            } )
         } ),
 
         login: build.mutation<LoginResponse, CredentialPayload>( {
@@ -29,7 +28,7 @@ export const authApi = baseApi.injectEndpoints( {
                 method: 'POST',
                 body: credentials
             } ),
-            invalidatesTags: ["User"],
+            invalidatesTags: ["CurrentUser"],
             onQueryStarted: async( _, { dispatch, queryFulfilled } ) => {
                 try {
                     const { data }                           = await queryFulfilled
@@ -41,8 +40,8 @@ export const authApi = baseApi.injectEndpoints( {
                         expires: expires_in.endsWith( 'd' ) ? expires_in.toUpperCase() : expires_in,
                         path: '/'
                     } )
-                } catch ( e ) {
-                    console.log( e )
+                } catch ( err ) {
+                    throw err
                 }
             }
         } ),
@@ -53,7 +52,7 @@ export const authApi = baseApi.injectEndpoints( {
                 method: 'POST',
                 body: { token },
             } ),
-            invalidatesTags: ["User"],
+            invalidatesTags: ["CurrentUser"],
             onQueryStarted: async( arg, { dispatch, queryFulfilled } ) => {
                 try {
                     const { data }                           = await queryFulfilled
@@ -65,25 +64,25 @@ export const authApi = baseApi.injectEndpoints( {
                         expires: expires_in.endsWith( 'd' ) ? expires_in.toUpperCase() : expires_in,
                         path: '/'
                     } )
-                } catch ( e ) {
-                    console.log( e )
+                } catch ( err ) {
+                    throw err
                 }
             }
         } ),
 
         forgotPassword: build.mutation<{ message: string }, { email: string }>( {
-            query: ( payload ) => ( {
+            query: ( data ) => ( {
                 url: `/auth/forgot_password`,
                 method: 'POST',
-                body: payload
+                body: data
             } )
         } ),
 
         resetPassword: build.mutation<{ message: string }, ResetPassPayload>( {
-            query: ( { token, ...payload } ) => ( {
+            query: ( { token, ...data } ) => ( {
                 url: `/auth/reset_password/${ token }`,
                 method: 'POST',
-                body: payload
+                body: data
             } )
         } ),
 

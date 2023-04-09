@@ -1,10 +1,4 @@
 import React from 'react'
-import Loading from "@components/global/Loading"
+import PostsSkeleton from "@components/skeletons/PostsSkeleton"
 
-export default function PageLoading(){
-    return (
-        <div className="box text-center py-3 bg-white">
-            <Loading/>
-        </div>
-    )
-}
+export default PostsSkeleton

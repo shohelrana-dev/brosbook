@@ -15,11 +15,11 @@ export default function UserPostsPage( { params }: Props ){
     //hooks
     const [page, setPage] = useState<number>( 1 )
     const { data: user }  = useGetUserByUsernameQuery( params.username )
-    const queryResult     = useGetPostsQuery( { userId: user?.id, page }, { skip: ! user?.id } )
+    const postsQuery      = useGetPostsQuery( { userId: user?.id, page }, { skip: ! user?.id } )
 
-    const { isLoading, isSuccess, isError, data } = queryResult || {}
-    const { items: posts, nextPage }              = data || {}
-    const error                                   = queryResult.error as ErrorResponse || {}
+    const { isLoading, isSuccess, isError, data: postsData } = postsQuery || {}
+    const { items: posts, nextPage }                         = postsData || {}
+    const error                                              = postsQuery.error as ErrorResponse || {}
 
     //decide content
     let content = null
@@ -28,7 +28,7 @@ export default function UserPostsPage( { params }: Props ){
     } else if( isSuccess && posts?.length === 0 ){
         content = <p className="box text-center py-6">{ user?.fullName }'s haven't any post.</p>
     } else if( isError ){
-        content = <Error message={ error.message }/>
+        content = <Error message={ error.data?.message }/>
     } else if( isSuccess && posts && posts?.length > 0 ){
         content = (
             <PostList

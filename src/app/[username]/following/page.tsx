@@ -1,12 +1,12 @@
 "use client"
-import React from "react"
+import React, { useState } from "react"
 import { useGetFollowingsQuery, useGetUserByUsernameQuery } from "@services/usersApi"
-import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import { User } from "@interfaces/user.interfaces"
 import UserItem from "@components/global/UserItem"
-import InfiniteScroll from "react-infinite-scroller"
+import InfiniteScroll from "react-infinite-scroll-component"
 import UsersSkeleton from "@components/skeletons/UsersSkeleton"
 import Error from "@components/global/Error"
+import { ErrorResponse } from "@interfaces/index.interfaces"
 
 interface Props {
     params: { username: string }
@@ -14,18 +14,13 @@ interface Props {
 
 export default function FollowingPage( { params }: Props ){
     //hooks
-    const { data: user } = useGetUserByUsernameQuery( params.username )
-    const {
-              isLoading,
-              isSuccess,
-              isError,
-              items: followings,
-              error,
-              loadMore,
-              hasMore
-          }              = useGetInfiniteListQuery<User>(
-        useGetFollowingsQuery, { userId: user?.id! }
-    )
+    const [page, setPage] = useState( 1 )
+    const { data: user }  = useGetUserByUsernameQuery( params.username )
+    const followingsQuery = useGetFollowingsQuery( { userId: user?.id!, page }, { skip: ! user?.id } )
+
+    const { data: followersData, isLoading, isSuccess, isError } = followingsQuery || {}
+    const { items: followings = [], nextPage }                   = followersData || {}
+    const error                                                  = followingsQuery.error as ErrorResponse || {}
 
 
     //decide content
@@ -39,9 +34,10 @@ export default function FollowingPage( { params }: Props ){
     } else if( isSuccess && followings.length > 0 ){
         content = (
             <InfiniteScroll
-                loadMore={ loadMore }
-                hasMore={ hasMore }
+                next={ () => setPage( nextPage! ) }
+                hasMore={ !! nextPage }
                 loader={ <UsersSkeleton count={ 2 }/> }
+                dataLength={ followings.length }
             >
                 { followings.map( ( user: User ) => (
                     <div className="mb-2">

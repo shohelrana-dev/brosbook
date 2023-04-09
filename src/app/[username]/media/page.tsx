@@ -1,21 +1,24 @@
 "use client"
-import React from 'react'
+import React, { useState } from 'react'
 import { useGetMediaListQuery, useGetUserByUsernameQuery } from "@services/usersApi"
-import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import Loading from "@components/global/Loading"
 import ImageLightbox from "@components/global/ImageLightbox"
-import InfiniteScroll from "react-infinite-scroller"
+import InfiniteScroll from "react-infinite-scroll-component"
 import Error from "@components/global/Error"
+import { ErrorResponse } from "@interfaces/index.interfaces"
 
 interface Props {
     params: { username: string }
 }
 
 export default function MediaPage( { params }: Props ){
-    const { data: user }                                                                = useGetUserByUsernameQuery( params.username )
-    const { isLoading, isSuccess, isError, items: mediaList, error, loadMore, hasMore } = useGetInfiniteListQuery(
-        useGetMediaListQuery, { userId: user?.id }
-    )
+    const [page, setPage] = useState( 1 )
+    const { data: user }  = useGetUserByUsernameQuery( params.username )
+    const mediaListQuery  = useGetMediaListQuery( { userId: user?.id!, page }, { skip: ! user?.id } )
+
+    const { data: mediaListData, isLoading, isSuccess, isError } = mediaListQuery || {}
+    const { items: mediaList = [], nextPage }                    = mediaListData || {}
+    const error                                                  = mediaListQuery.error as ErrorResponse || {}
 
     //decide content
     let content = null
@@ -28,8 +31,9 @@ export default function MediaPage( { params }: Props ){
     } else if( isSuccess && mediaList.length > 0 ){
         content = (
             <InfiniteScroll
-                loadMore={ loadMore }
-                hasMore={ hasMore }
+                dataLength={ mediaList.length }
+                next={ () => setPage( nextPage! ) }
+                hasMore={ !! nextPage }
                 loader={ <Loading size={ 40 }/> }
             >
                 <ImageLightbox imageList={ mediaList } width={ 200 } height={ 200 } alt="Media"/>

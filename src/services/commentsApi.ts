@@ -2,14 +2,16 @@ import { ListResponse } from "@interfaces/index.interfaces"
 import { Comment } from "@interfaces/posts.interfaces"
 import { baseApi } from "@services/baseApi"
 
+const commentsPerPage = process.env.NEXT_PUBLIC_COMMENTS_PER_PAGE
+
 export const commentsApi = baseApi.injectEndpoints( {
     endpoints: ( build ) => ( {
-        getComments: build.query<ListResponse<Comment>, { postId: string, page: number, limit?: number }>( {
-            query: ( { postId, ...params } ) => ( {
+        getComments: build.query<ListResponse<Comment>, { postId: string, page: number }>( {
+            query: ( { postId, page } ) => ( {
                 url: `posts/${ postId }/comments`,
-                params
+                params: { page, limit: commentsPerPage }
             } ),
-            providesTags: ['Comment']
+            providesTags: ['Comments']
         } ),
 
         createComment: build.mutation<Comment, { postId: string, body: string }>( {
@@ -18,7 +20,7 @@ export const commentsApi = baseApi.injectEndpoints( {
                 method: 'POST',
                 body: formData
             } ),
-            invalidatesTags: ['Comment']
+            invalidatesTags: ['Comments']
         } ),
 
         deleteComment: build.mutation<Comment, { postId: string, commentId: string }>( {
@@ -26,7 +28,7 @@ export const commentsApi = baseApi.injectEndpoints( {
                 url: `posts/${ postId }/comments/${ commentId }`,
                 method: 'DELETE'
             } ),
-            invalidatesTags: ['Comment']
+            invalidatesTags: ['Comments']
         } ),
 
         likeComment: build.mutation<Comment, { postId: string, commentId: string }>( {
@@ -34,7 +36,7 @@ export const commentsApi = baseApi.injectEndpoints( {
                 url: `posts/${ postId }/comments/${ commentId }/like`,
                 method: 'POST'
             } ),
-            invalidatesTags: ['Comment']
+            invalidatesTags: ['Comments']
         } ),
 
         unlikeComment: build.mutation<Comment, { postId: string, commentId: string }>( {
@@ -42,7 +44,7 @@ export const commentsApi = baseApi.injectEndpoints( {
                 url: `posts/${ postId }/comments/${ commentId }/unlike`,
                 method: 'POST'
             } ),
-            invalidatesTags: ['Comment']
+            invalidatesTags: ['Comments']
         } ),
     } ),
 } )

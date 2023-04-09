@@ -1,14 +1,20 @@
 import React from 'react'
-import { Alert } from "@material-tailwind/react"
-import { BiErrorCircle as ErrorIcon } from "react-icons/bi"
+import { FiAlertCircle as ErrorIcon } from "react-icons/fi"
+import tw from "twin.macro"
 
-export default function Error( { message }: { message?: string } ){
+const Wrapper = tw.div`bg-[rgb(253, 237, 237)] flex gap-3 items-center p-3 rounded-md text-gray-900`
+
+export default function Error( { isError, message }: { message?: string, isError?: boolean } ){
+    if( ! message && typeof isError === "undefined" ){
+        return null
+    }
+
     return (
-        <Alert color="red" className="bg-red-400">
-            <div className="flex gap-3 items-center">
-                <ErrorIcon size={ 20 }/>
-                <p>{ message ? message : "An error has occured!" }</p>
+        <Wrapper>
+            <div>
+                <ErrorIcon size={ 20 } color={ "red" }/>
             </div>
-        </Alert>
+            <p>{ message ? message : "An error has occured!" }</p>
+        </Wrapper>
     )
 }

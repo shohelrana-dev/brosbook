@@ -1,18 +1,21 @@
 "use client"
-import React from "react"
+import React, { useState } from "react"
 import { useGetSuggestedUsersQuery } from "@services/usersApi"
-import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import { User } from "@interfaces/user.interfaces"
 import UserItem from "@components/global/UserItem"
-import InfiniteScroll from "react-infinite-scroller"
+import InfiniteScroll from "react-infinite-scroll-component"
 import UsersSkeleton from "@components/skeletons/UsersSkeleton"
 import Error from "@components/global/Error"
+import { ErrorResponse } from "@interfaces/index.interfaces"
 
 export default function SuggestionsPage(){
     //hooks
-    const { isLoading, items: users, loadMore, hasMore, isSuccess, isError, error } = useGetInfiniteListQuery<User>(
-        useGetSuggestedUsersQuery
-    )
+    const [page, setPage]     = useState( 1 )
+    const suggestedUsersQuery = useGetSuggestedUsersQuery( page )
+
+    const { data: suggestedUsersData, isLoading, isSuccess, isError } = suggestedUsersQuery || {}
+    const { items: users = [], nextPage }                             = suggestedUsersData || {}
+    const error                                                       = suggestedUsersQuery.error as ErrorResponse || {}
 
     //decide content
     let content = null
@@ -25,8 +28,9 @@ export default function SuggestionsPage(){
     } else if( isSuccess && users.length > 0 ){
         content = (
             <InfiniteScroll
-                loadMore={ loadMore }
-                hasMore={ hasMore }
+                dataLength={ users.length }
+                next={ () => setPage( nextPage! ) }
+                hasMore={ !! nextPage }
                 loader={ <UsersSkeleton/> }
             >
                 { users.map( ( user: User ) => (

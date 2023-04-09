@@ -1,113 +1,123 @@
 import { User } from "@interfaces/user.interfaces"
 import { baseApi } from "./baseApi"
-import { ListResponse } from "@interfaces/index.interfaces"
+import { ListResponse, Media } from "@interfaces/index.interfaces"
+
+const usersPerPage = process.env.NEXT_PUBLIC_USERS_PER_PAGE
+const mediaPerPage = process.env.NEXT_PUBLIC_MEDIA_PER_PAGE
 
 export const usersApi = baseApi.injectEndpoints( {
-    endpoints: ( build ) => ( {
-        getCurrentUser: build.query<User, void>( {
-            query: () => `/users/me`,
-            providesTags: ['User']
-        } ),
-
-        getUserById: build.query<User, string>( {
-            query: ( userId ) => `/users/${ userId }`,
-            providesTags: ['User']
-        } ),
-
-        getUserByUsername: build.query<User, string>( {
-            query: ( username ) => `/users/by/username/${ username }`,
-            providesTags: ['User']
-        } ),
-
-        getSuggestedUsers: build.query<ListResponse<User>, { page?: number, limit?: number }>( {
-            query: ( params ) => ( {
-                url: `/users/suggestions`,
-                params
+        endpoints: ( build ) => ( {
+            getCurrentUser: build.query<User, void>( {
+                query: () => `/users/me`,
+                providesTags: ['CurrentUser']
             } ),
-            providesTags: ['User']
-        } ),
 
-        searchUsers: build.query<ListResponse<User>, { key: string, page?: number, limit?: number }>( {
-            query: ( params ) => ( {
-                url: `/users/search`,
-                params
+            getUserById: build.query<User, string>( {
+                query: ( userId ) => `/users/${ userId }`,
+                providesTags: ['User']
             } ),
-            providesTags: ['User']
-        } ),
 
-        changeProfilePhoto: build.mutation<User, FormData>( {
-            query: ( payload ) => ( {
-                url: `/users/me/avatar`,
-                method: 'POST',
-                body: payload
+            getUserByUsername: build.query<User, string>( {
+                query: ( username ) => `/users/by/username/${ username }`,
+                providesTags: ['User']
             } ),
-            invalidatesTags: ['User']
-        } ),
 
-        changeCoverPhoto: build.mutation<User, FormData>( {
-            query: ( payload ) => ( {
-                url: `/users/me/cover_photo`,
-                method: 'POST',
-                body: payload
+            getSuggestedUsers: build.query<ListResponse<User>, number>( {
+                query: ( page ) => ( {
+                    url: `/users/suggestions`,
+                    params: { page, limit: usersPerPage }
+                } ),
+                providesTags: ['Users']
             } ),
-            invalidatesTags: ['User']
-        } ),
 
-        follow: build.mutation<User, string>( {
-            query: ( targetUserId ) => ( {
-                url: `/users/follow/${ targetUserId }`,
-                method: 'POST',
+            searchUsers: build.query<ListResponse<User>, { key: string, page?: number }>( {
+                query: ( params ) => ( {
+                    url: `/users/search`,
+                    params: { ...params, limit: usersPerPage }
+                } ),
+                providesTags: ['Users']
             } ),
-            invalidatesTags: ['User']
-        } ),
 
-        unfollow: build.mutation<User, string>( {
-            query: ( targetUserId ) => ( {
-                url: `/users/unfollow/${ targetUserId }`,
-                method: 'POST',
+            changeProfilePhoto: build.mutation<User, FormData>( {
+                query: ( data ) => ( {
+                    url: `/users/me/avatar`,
+                    method: 'POST',
+                    body: data
+                } ),
+                invalidatesTags: ['User']
             } ),
-            invalidatesTags: ['User']
-        } ),
 
-        getFollowers: build.query<ListResponse<User>, { userId: string, page?: number, limit?: number }>( {
-            query: ( { userId, ...params } ) => ( {
-                url: `/users/${ userId }/followers`,
-                params
+            changeCoverPhoto: build.mutation<User, FormData>( {
+                query: ( data ) => ( {
+                    url: `/users/me/cover_photo`,
+                    method: 'POST',
+                    body: data
+                } ),
+                invalidatesTags: ['User']
             } ),
-            providesTags: ['User']
-        } ),
 
-        getFollowersCount: build.query<{ count: number }, string>( {
-            query: ( userId ) => ( {
-                url: `/users/${ userId }/followers/count`
+            follow: build.mutation<User, string>( {
+                query: ( targetUserId ) => ( {
+                    url: `/users/follow/${ targetUserId }`,
+                    method: 'POST',
+                } ),
+                invalidatesTags: ( result, error, arg ) => ( [
+                    'Users',
+                    { type: 'User', id: arg }
+                ] )
             } ),
-            providesTags: ['User']
-        } ),
 
-        getFollowings: build.query<ListResponse<User>, { userId: string, page?: number, limit?: number }>( {
-            query: ( { userId, ...params } ) => ( {
-                url: `/users/${ userId }/followings`,
-                params
+            unfollow: build.mutation<User, string>( {
+                query: ( targetUserId ) => ( {
+                    url: `/users/unfollow/${ targetUserId }`,
+                    method: 'POST',
+                } ),
+                invalidatesTags: ( result, error, arg ) => ( [
+                    'Users',
+                    { type: 'User', id: arg }
+                ] )
             } ),
-            providesTags: ['User']
-        } ),
 
-        getFollowingsCount: build.query<{ count: number }, string>( {
-            query: ( userId ) => ( {
-                url: `/users/${ userId }/followers/count`
+            getFollowers: build.query<ListResponse<User>, { userId: string, page?: number }>( {
+                query: ( { userId, page } ) => ( {
+                    url: `/users/${ userId }/followers`,
+                    params: { page, limit: usersPerPage }
+                } ),
+                providesTags: ['Users']
             } ),
-            providesTags: ['User']
-        } ),
 
-        getMediaList: build.query<ListResponse<User>, { userId: string, page?: number, limit?: number }>( {
-            query: ( { userId, ...params } ) => ( {
-                url: `/users/${ userId }/media`,
-                params
+            getFollowersCount: build.query<{ count: number }, string>( {
+                query: ( userId ) => ( {
+                    url: `/users/${ userId }/followers/count`
+                } ),
+                providesTags: ['Users']
             } ),
-            providesTags: ['User']
+
+            getFollowings: build.query<ListResponse<User>, { userId: string, page?: number }>( {
+                query: ( { userId, page } ) => ( {
+                    url: `/users/${ userId }/followings`,
+                    params: { page, limit: usersPerPage }
+                } ),
+                providesTags: ['Users']
+            } ),
+
+            getFollowingsCount: build.query<{ count: number }, string>( {
+                query: ( userId ) => ( {
+                    url: `/users/${ userId }/followers/count`
+                } ),
+                providesTags: ['Users']
+            } ),
+
+            getMediaList: build.query<ListResponse<Media>, { userId: string, page?: number }>( {
+                query: ( { userId, page } ) => ( {
+                    url: `/users/${ userId }/media`,
+                    params: { page, limit: mediaPerPage }
+                } ),
+                providesTags: ['UserMedia']
+            } ),
         } ),
-    } ),
-} )
+    }
+)
 
 export const {
                  useGetCurrentUserQuery,

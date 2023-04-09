@@ -1,9 +1,11 @@
 import { Post } from "@interfaces/posts.interfaces"
 import { User } from "@interfaces/user.interfaces"
 
-export interface ErrorResponse{
-    message: string
-    statusCode: number
+export interface ErrorResponse {
+    data?: {
+        message: string
+        statusCode: number
+    }
 }
 
 export interface ListResponse<T> {

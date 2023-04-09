@@ -1,12 +1,12 @@
 "use client"
-import React from "react"
+import React, { useState } from "react"
 import { useGetFollowersQuery, useGetUserByUsernameQuery } from "@services/usersApi"
-import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import { User } from "@interfaces/user.interfaces"
 import UserItem from "@components/global/UserItem"
-import InfiniteScroll from "react-infinite-scroller"
+import InfiniteScroll from "react-infinite-scroll-component"
 import UsersSkeleton from "@components/skeletons/UsersSkeleton"
 import Error from "@components/global/Error"
+import { ErrorResponse } from "@interfaces/index.interfaces"
 
 interface Props {
     params: { username: string }
@@ -14,16 +14,13 @@ interface Props {
 
 export default function FollowersPage( { params }: Props ){
     //hooks
-    const { data: user } = useGetUserByUsernameQuery( params.username )
-    const {
-              isLoading,
-              isSuccess,
-              isError,
-              items: followers,
-              error,
-              loadMore,
-              hasMore
-          }              = useGetInfiniteListQuery<User>( useGetFollowersQuery, { userId: user?.id! } )
+    const [page, setPage] = useState( 1 )
+    const { data: user }  = useGetUserByUsernameQuery( params.username )
+    const followersQuery  = useGetFollowersQuery( { userId: user?.id!, page }, { skip: ! user?.id } )
+
+    const { data: followersData, isLoading, isSuccess, isError } = followersQuery || {}
+    const { items: followers = [], nextPage }                    = followersData || {}
+    const error                                                  = followersQuery.error as ErrorResponse || {}
 
     //decide content
     let content = null
@@ -32,13 +29,14 @@ export default function FollowersPage( { params }: Props ){
     } else if( isSuccess && followers.length === 0 ){
         content = <p className="text-center">{ user?.fullName }'s haven't follower.</p>
     } else if( isError ){
-        content = <Error message={ error?.data?.message }/>
+        content = <Error message={ error.data?.message }/>
     } else if( isSuccess && followers.length > 0 ){
         content = (
             <InfiniteScroll
-                loadMore={ loadMore }
-                hasMore={ hasMore }
+                next={ () => setPage( nextPage! ) }
+                hasMore={ !! nextPage }
                 loader={ <UsersSkeleton count={ 2 }/> }
+                dataLength={ followers.length }
             >
                 { followers.map( ( user: User ) => (
                     <div className="mb-2">

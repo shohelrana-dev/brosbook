@@ -1,15 +1,17 @@
 import { baseApi } from "./baseApi"
-import { Conversation, Message } from "@interfaces/conversation.interfaces"
+import { Message } from "@interfaces/conversation.interfaces"
 import { ListResponse } from "@interfaces/index.interfaces"
+
+const messagesPerPage = process.env.NEXT_PUBLIC_MESSAGES_PER_PAGE
 
 export const messagesApi = baseApi.injectEndpoints( {
     endpoints: ( build ) => ( {
-        getMessages: build.query<ListResponse<Message>, { conversationId: string, page?: number, limit?: number }>( {
-            query: ( { conversationId, ...params } ) => ( {
+        getMessages: build.query<ListResponse<Message>, { conversationId: string, page?: number }>( {
+            query: ( { conversationId, page } ) => ( {
                 url: `/conversations/${ conversationId }/messages`,
-                params
+                params: { page, limit: messagesPerPage }
             } ),
-            providesTags: ['Message']
+            providesTags: ['Messages']
         } ),
 
         sendMessage: build.mutation<Message, FormData>( {
@@ -18,14 +20,14 @@ export const messagesApi = baseApi.injectEndpoints( {
                 method: "POST",
                 body: formData
             } ),
-            invalidatesTags: ['Conversation']
+            invalidatesTags: ['Conversations']
         } ),
 
         sendReaction: build.mutation<Message, { messageId: string, conversationId: string, name: string }>( {
-            query: ( { conversationId, messageId, ...params } ) => ( {
+            query: ( { conversationId, messageId, ...data } ) => ( {
                 url: `/conversations/${ conversationId }/messages/${ messageId }/reactions`,
                 method: "POST",
-                body: params
+                body: data
             } )
         } ),
 
@@ -34,7 +36,7 @@ export const messagesApi = baseApi.injectEndpoints( {
                 url: `/conversations/${ conversationId }/messages/seen_all`,
                 method: "POST"
             } ),
-            invalidatesTags: ['Conversation']
+            invalidatesTags: ['Conversations']
         } )
     } ),
 } )

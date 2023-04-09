@@ -32,6 +32,6 @@ export const baseApi = createApi( {
 
         return result
     },
-    tagTypes: ['Post', 'User', 'Conversation', 'Message', 'Comment', 'Notification', 'Media'],
+    tagTypes: ['Posts', 'Post', 'CurrentUser', 'Users', 'User', 'Conversations', 'Conversation', 'Messages', 'Message', 'Comments', 'Comment', 'Notifications', 'Notification', 'UserMedia', 'ConversationMedia'],
     endpoints: () => ( {} )
 } )

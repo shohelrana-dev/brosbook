@@ -1,21 +1,23 @@
 import { baseApi } from "./baseApi"
-import { ListQueryParams, ListResponse, Notification } from "@interfaces/index.interfaces"
+import { ListResponse, Notification } from "@interfaces/index.interfaces"
+
+const notificationsPerPage = process.env.NEXT_PUBLIC_NOTIFICATIONS_PER_PAGE
 
 export const notificationsApi = baseApi.injectEndpoints( {
     endpoints: ( build ) => ( {
-        getNotifications: build.query<ListResponse<Notification>, ListQueryParams>( {
-            query: ( params ) => ( {
+        getNotifications: build.query<ListResponse<Notification>, number>( {
+            query: ( page ) => ( {
                 url: `/notifications`,
-                params
+                params: { page, limit: notificationsPerPage }
             } ),
-            providesTags: ['Notification']
+            providesTags: ['Notifications']
         } ),
 
         getUnreadNotificationsCount: build.query<{ count: number }, void>( {
             query: () => ( {
                 url: `/notifications/unread_count`
             } ),
-            providesTags: ['Notification']
+            providesTags: ['Notifications']
         } ),
 
         readAllNotification: build.mutation<Notification[], void>( {
@@ -23,7 +25,7 @@ export const notificationsApi = baseApi.injectEndpoints( {
                 url: `/notifications/read_all`,
                 method: 'PUT'
             } ),
-            invalidatesTags: ['Notification']
+            invalidatesTags: ['Notifications']
         } ),
 
     } ),

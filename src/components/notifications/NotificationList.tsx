@@ -1,30 +1,24 @@
 "use client"
-import React from 'react'
-import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
+import React, { useState } from 'react'
 import { useGetNotificationsQuery } from "@services/notificationsApi"
-import { Notification } from "@interfaces/index.interfaces"
+import { ErrorResponse, Notification } from "@interfaces/index.interfaces"
 import NotificationItem from "./NotificationItem"
 import useInfiniteScroll from "react-infinite-scroll-hook"
 import NotificationsSkeleton from "@components/skeletons/NotificationsSkeleton"
 import Error from "@components/global/Error"
 
 export default function NotificationList(){
-    const {
-              isLoading,
-              isSuccess,
-              isError,
-              items: notifications,
-              error,
-              loadMore,
-              hasMore
-          } = useGetInfiniteListQuery<Notification>(
-        useGetNotificationsQuery, { page: 1, limit: 10 }
-    )
+    const [page, setPage]    = useState( 1 )
+    const notificationsQuery = useGetNotificationsQuery( page )
+
+    const { data: notificationsData, isLoading, isSuccess, isError } = notificationsQuery || {}
+    const { items: notifications = [], nextPage }                    = notificationsData || {}
+    const error                                                      = notificationsQuery.error as ErrorResponse || {}
 
     const [moreLoadRef] = useInfiniteScroll( {
         loading: isLoading,
-        hasNextPage: hasMore,
-        onLoadMore: loadMore,
+        hasNextPage: !! nextPage,
+        onLoadMore: () => setPage( nextPage! ),
     } )
 
     //decide content
@@ -46,7 +40,7 @@ export default function NotificationList(){
             <h3 className="text-xl font-bold text-gray-900 ml-2 mb-1">Notifications</h3>
             { content }
 
-            { hasMore ? (
+            { !! nextPage ? (
                 <div ref={ moreLoadRef }>
                     <NotificationsSkeleton count={ 3 }/>
                 </div>

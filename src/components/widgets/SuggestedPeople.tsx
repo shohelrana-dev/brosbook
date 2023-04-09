@@ -2,24 +2,21 @@
 import React from 'react'
 import { User } from "@interfaces/user.interfaces"
 import { useGetSuggestedUsersQuery } from "@services/usersApi"
-import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import UserItem from "@components/global/UserItem"
 import Link from "next/link"
 import ButtonGray from "@components/global/ButtonGray"
 import UsersSkeleton from "@components/skeletons/UsersSkeleton"
 import useAuthState from "@hooks/useAuthState"
 import Error from "@components/global/Error"
+import { ErrorResponse } from "@interfaces/index.interfaces";
 
 export default function SuggestedPeople(){
     const { isAuthenticated } = useAuthState()
-    const {
-              isLoading,
-              items: users,
-              hasMore,
-              isSuccess,
-              isError,
-              error
-          }                   = useGetInfiniteListQuery<User>( useGetSuggestedUsersQuery )
+    const suggestedUsersQuery = useGetSuggestedUsersQuery( 1 )
+
+    const { isError, isLoading, isSuccess } = suggestedUsersQuery
+    const { items: users = [], nextPage }   = suggestedUsersQuery?.data || {}
+    const error                             = ( suggestedUsersQuery.error || {} ) as ErrorResponse
 
     if( ! isAuthenticated ) return null
 
@@ -42,7 +39,7 @@ export default function SuggestedPeople(){
             <h2 className="text-xl font-medium mb-5">Suggested People</h2>
             { content }
 
-            { hasMore ? (
+            { !! nextPage ? (
                 <Link href="/suggestions">
                     <ButtonGray>
                         Show More
