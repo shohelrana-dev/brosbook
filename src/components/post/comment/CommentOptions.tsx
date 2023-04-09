@@ -15,6 +15,7 @@ import { Comment, Post } from "@interfaces/posts.interfaces"
 import IconButton from "@components/global/IconButton"
 import OptionButton from "@components/global/OptionButton"
 import useUnauthorizedAlert from "@hooks/useUnauthorzedAlert"
+import { useModal } from "react-minimal-modal"
 
 interface Props {
     post: Post
@@ -23,38 +24,34 @@ interface Props {
 }
 
 export default function CommentOptions( { post, comment, setComment }: Props ){
-    const [follow]            = useFollowMutation()
-    const [unfollow]          = useUnfollowMutation()
-    const [deleteComment]     = useDeleteCommentMutation()
-    const [isVisible, setIsOpen] = useState( false )
+    const [follow]              = useFollowMutation()
+    const [unfollow]            = useUnfollowMutation()
+    const [deleteComment]       = useDeleteCommentMutation()
+    const { isVisible, toggle } = useModal()
 
     const { user: currentUser, isAuthenticated } = useAuthState()
-    const confirmAlert                                = useConfirmAlert()
+    const confirmAlert                           = useConfirmAlert()
     const [author, setAuthor]                    = useState<User>( comment.author )
     const unauthorizedAlert                      = useUnauthorizedAlert()
 
     const isCurrentUserAuthor = isAuthenticated && comment.author && ( comment.author.id === currentUser?.id || post.author.id === currentUser?.id )
 
-    function toggleOpen(){
-        setIsOpen( ! isVisible )
-    }
-
     async function handleDeleteComment(){
-        const isConfirm = await confirmAlert( {
+        await confirmAlert( {
             title: 'Delete Comment?',
             message: 'This can’t be undone and it will be removed permanently.',
-            confirmButtonLabel: 'Delete'
+            confirmButtonLabel: 'Delete',
+            onConfirm: async() => {
+                try {
+                    await deleteComment( { postId: comment.postId, commentId: comment.id } ).unwrap()
+                    setComment( null )
+                    toast.success( 'Comment deleted.' )
+                    toggle()
+                } catch ( err: any ) {
+                    toast.error( err?.data?.message || 'Comment deletion was failed.' )
+                }
+            }
         } )
-        if( ! isConfirm ) return
-
-        try {
-            await deleteComment( { postId: comment.postId, commentId: comment.id } ).unwrap()
-            setComment( null )
-            toast.success( 'Comment deleted.' )
-            toggleOpen()
-        } catch ( err: any ) {
-            toast.error( err?.data?.message || 'Comment deletion was failed.' )
-        }
     }
 
     async function handleFollow(){
@@ -71,7 +68,7 @@ export default function CommentOptions( { post, comment, setComment }: Props ){
 
             setAuthor( user )
             toast.success( `You followed @${ author.username }` )
-            toggleOpen()
+            toggle()
         } catch ( err: any ) {
             console.error( err )
         }
@@ -83,7 +80,7 @@ export default function CommentOptions( { post, comment, setComment }: Props ){
 
             setAuthor( user )
             toast.success( `You unfollowed @${ author.username }` )
-            toggleOpen()
+            toggle()
         } catch ( err ) {
             console.error( err )
         }
@@ -93,12 +90,12 @@ export default function CommentOptions( { post, comment, setComment }: Props ){
         <Popover placement="bottom-end" open={ isVisible }>
             <PopoverHandler>
                 <div>
-                    <IconButton className="ml-2" onClick={ toggleOpen }>
+                    <IconButton className="ml-2" onClick={ toggle }>
                         <ThreeDotsIcon size="18"/>
                     </IconButton>
                 </div>
             </PopoverHandler>
-            <PopoverContent className="p-0 rounded-2xl overflow-hidden" onBlur={ toggleOpen }>
+            <PopoverContent className="p-0 rounded-2xl overflow-hidden" onBlur={ toggle }>
                 <div className="min-w-[130px]">
                     { isCurrentUserAuthor ? (
                         <OptionButton onClick={ handleDeleteComment }>
@@ -120,7 +117,7 @@ export default function CommentOptions( { post, comment, setComment }: Props ){
                     ) }
                     <OptionButton onClick={ () => {
                         setComment( null )
-                        toggleOpen()
+                        toggle()
                     } }>
                         <HideIcon size="18"/>
                         Hide

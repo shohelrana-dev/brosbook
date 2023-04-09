@@ -9,7 +9,7 @@ import { Comment, Post } from "@interfaces/posts.interfaces"
 import { useLikeCommentMutation, useUnlikeCommentMutation } from "@services/commentsApi"
 import timeAgo from "@utils/timeAgo"
 import { motion } from "framer-motion"
-import CommentOptions from "@components/post/CommentOptions"
+import CommentOptions from "@components/post/comment/CommentOptions"
 import useAuthState from "@hooks/useAuthState"
 import useUnauthorizedAlert from "@hooks/useUnauthorzedAlert"
 
@@ -37,21 +37,27 @@ function CommentItem( props: Props ){
             return
         }
 
+        setLikeCount( likesCount + 1 )
+        setIsViewerLiked( true )
+
         try {
             await likeComment( { postId: comment?.postId!, commentId: comment?.id! } ).unwrap()
-            setIsViewerLiked( true )
-            setLikeCount( likesCount + 1 )
         } catch ( err ) {
+            setLikeCount( likesCount - 1 )
+            setIsViewerLiked( false )
             console.error( err )
         }
     }
 
     async function handleCommentUnlike(){
+        setIsViewerLiked( false )
+        setLikeCount( likesCount - 1 )
+
         try {
             await unlikeComment( { postId: comment?.postId!, commentId: comment?.id! } ).unwrap()
-            setIsViewerLiked( false )
-            setLikeCount( likesCount - 1 )
         } catch ( err ) {
+            setIsViewerLiked( true )
+            setLikeCount( likesCount + 1 )
             console.error( err )
         }
     }
