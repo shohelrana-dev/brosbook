@@ -1,6 +1,8 @@
 import { baseApi } from "./baseApi"
 import { Message } from "@interfaces/conversation.interfaces"
 import { ListResponse } from "@interfaces/index.interfaces"
+import { io } from "socket.io-client"
+import { RootState } from "@store/index"
 
 const messagesPerPage = process.env.NEXT_PUBLIC_MESSAGES_PER_PAGE
 
@@ -11,16 +13,48 @@ export const messagesApi = baseApi.injectEndpoints( {
                 url: `/conversations/${ conversationId }/messages`,
                 params: { page, limit: messagesPerPage }
             } ),
-            providesTags: ['Messages']
+            onCacheEntryAdded: async( arg, api ) => {
+                const { updateCachedData, cacheEntryRemoved, cacheDataLoaded, getState, dispatch } = api
+                const socket                                                                       = io( process.env.NEXT_PUBLIC_SERVER_BASE_URL! )
+                const currentUser                                                                  = ( getState() as RootState )?.auth?.user
+
+                try {
+                    await cacheDataLoaded
+
+                    const addNewMessage = ( message: Message ) => {
+                        message.isMeSender = message.sender.id === currentUser?.id
+
+                        updateCachedData( ( draft ) => {
+                            draft.items.unshift( message )
+                        } )
+                    }
+
+                    const updateMessage = ( message: Message ) => {
+                        message.isMeSender = message.sender.id === currentUser?.id
+
+                        updateCachedData( ( draft ) => {
+                            const index        = draft.items.findIndex( ( item ) => item.id === message.id )
+                            draft.items[index] = message
+                        } )
+                    }
+
+                    socket.on( `message.new.${ arg.conversationId }`, addNewMessage )
+                    socket.on( `message.update.${ arg.conversationId }`, updateMessage )
+                    socket.on( `message.seen.${ arg.conversationId }.${ currentUser?.id }`, updateMessage )
+                } catch ( err ) {
+                    await cacheEntryRemoved
+                    socket.close()
+                    throw err
+                }
+            }
         } ),
 
         sendMessage: build.mutation<Message, FormData>( {
-            query: ( formData ) => ( {
-                url: `/conversations/${ formData.get( 'conversationId' ) }/messages`,
+            query: ( data ) => ( {
+                url: `/conversations/${ data.get( 'conversationId' ) }/messages`,
                 method: "POST",
-                body: formData
-            } ),
-            invalidatesTags: ['Conversations']
+                body: data
+            } )
         } ),
 
         sendReaction: build.mutation<Message, { messageId: string, conversationId: string, name: string }>( {
@@ -35,8 +69,7 @@ export const messagesApi = baseApi.injectEndpoints( {
             query: ( conversationId ) => ( {
                 url: `/conversations/${ conversationId }/messages/seen_all`,
                 method: "POST"
-            } ),
-            invalidatesTags: ['Conversations']
+            } )
         } )
     } ),
 } )

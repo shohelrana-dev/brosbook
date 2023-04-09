@@ -19,6 +19,7 @@ export enum MessageType {
 export interface Message {
     id: string
     conversationId: string
+    conversation?: Conversation
     sender: User
     body?: string
     image?: Media

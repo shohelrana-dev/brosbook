@@ -3,13 +3,11 @@ import MessageItem from "@components/messages/MessageBox/MessageItem"
 import { useGetMessagesQuery, useSeenAllMessagesMutation } from "@services/messagesApi"
 import Loading from "@components/global/Loading"
 import { Conversation, Message } from "@interfaces/conversation.interfaces"
-import { io } from "socket.io-client"
-import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import useAuthState from "@hooks/useAuthState"
 import useInfiniteScroll from "react-infinite-scroll-hook"
 import ChatSkeleton from "@components/skeletons/ChatSkeleton"
 import Error from "@components/global/Error"
-import { ErrorResponse } from "@interfaces/index.interfaces";
+import { ErrorResponse } from "@interfaces/index.interfaces"
 
 interface Props {
     conversation: Conversation
@@ -20,10 +18,9 @@ export default function MessageList( { conversation }: Props ){
     const { user }          = useAuthState()
     const messageListRef    = useRef<HTMLDivElement>( null )
     const [page, setPage]   = useState( 1 )
-    const messagesQuery     = useGetMessagesQuery( {
-        conversationId: conversation?.id!,
-        page
-    }, { skip: ! conversation?.id } )
+    const messagesQuery     = useGetMessagesQuery(
+        { conversationId: conversation?.id!, page }, { skip: ! conversation?.id }
+    )
     const [seenAllMessages] = useSeenAllMessagesMutation()
 
     const { isLoading, isSuccess, isError, data: messagesData } = messagesQuery || {}
@@ -32,42 +29,10 @@ export default function MessageList( { conversation }: Props ){
     const participant                                           = conversation.user1.id === user?.id ? conversation.user2 : conversation.user1
 
     useEffect( () => {
-        if( ! conversation?.id || ! user?.id ) return
-
-        const socket = io( process.env.NEXT_PUBLIC_SERVER_BASE_URL! )
-
-        socket.on( 'connect', () => {
-            socket.on( `message.new.${ conversation.id }`, addMessage )
-
-            socket.on( `message.update.${ conversation.id }`, updateMessage )
-
-            socket.on( `message.seen.${ conversation.id }.${ user.id }`, updateMessage )
-        } )
-
-        if( socket ) return () => {
-            socket.close()
+        if( isSuccess ){
+            seenAllMessages( conversation.id )
         }
-    }, [conversation, user, participant] )
-
-    useEffect( () => {
-        seenAllMessages( conversation.id )
-    }, [messages] )
-
-    function addMessage( message: Message ){
-        message.isMeSender = user?.id === message.sender.id
-
-        //add message on cache
-
-        setTimeout( () => {
-            scrollToBottom()
-        }, 500 )
-    }
-
-    function updateMessage( message: Message ){
-        message.isMeSender = user?.id === message.sender.id
-
-        //update message on cache
-    }
+    }, [messages, isSuccess] )
 
     function scrollToBottom(){
         if( messageListRef && messageListRef.current ){

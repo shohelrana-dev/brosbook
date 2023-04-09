@@ -1,5 +1,5 @@
 import Avatar from "@components/global/Avatar"
-import { useGetConversationByIdQuery, useGetConversationMediaListQuery } from "@services/conversationApi"
+import { useGetConversationByIdQuery, useGetConversationMediaListQuery } from "@services/conversationsApi"
 import Loading from "@components/global/Loading"
 import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import InfiniteScroll from "react-infinite-scroller"

@@ -5,7 +5,7 @@ import Link from "next/link"
 import { io } from "socket.io-client"
 import { baseApi } from "@services/baseApi"
 import useAuthState from "@hooks/useAuthState"
-import { useGetUnreadConversationsCountQuery } from "@services/conversationApi"
+import { useGetUnreadConversationsCountQuery } from "@services/conversationsApi"
 import { useDispatch } from "react-redux"
 
 export default function MessagesNavLink(){

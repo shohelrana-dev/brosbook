@@ -1,17 +1,48 @@
 import { baseApi } from "./baseApi"
-import { Conversation } from "@interfaces/conversation.interfaces"
+import { Conversation, Message } from "@interfaces/conversation.interfaces"
 import { ListResponse, Media } from "@interfaces/index.interfaces"
+import { io } from "socket.io-client"
+import { RootState } from "@store/index"
 
 const conversationsPerPage = process.env.NEXT_PUBLIC_CONVERSATIONS_PER_PAGE
 
-export const conversationApi = baseApi.injectEndpoints( {
+export const conversationsApi = baseApi.injectEndpoints( {
     endpoints: ( build ) => ( {
         getConversations: build.query<ListResponse<Conversation>, number>( {
             query: ( page ) => ( {
                 url: `/conversations`,
                 params: { page, limit: conversationsPerPage }
             } ),
-            providesTags: ['Conversations']
+            providesTags: ['Conversations'],
+            onCacheEntryAdded: async( arg, api ) => {
+                const { cacheDataLoaded, cacheEntryRemoved, updateCachedData, getState, dispatch } = api
+                const socket                                                                       = io( process.env.NEXT_PUBLIC_SERVER_BASE_URL! )
+                const currentUser                                                                  = ( getState() as RootState )?.auth?.user
+
+                try {
+                    const { data: conversationData } = await cacheDataLoaded
+
+                    conversationData.items.map( ( { id } ) => {
+                        socket.on( `message.new.${ id }`, ( message: Message ) => {
+                            message.isMeSender = message.sender.id === currentUser?.id
+
+                            updateCachedData( ( draft ) => {
+                                const conversation = draft.items.find( ( c ) => c.id === message.conversation?.id )
+                                if( conversation?.id ){
+                                    conversation.lastMessage = message
+                                } else{
+                                    dispatch( conversationsApi.util.invalidateTags( ["Conversations"] ) )
+                                }
+                            } )
+                        } )
+                    } )
+
+                } catch ( err ) {
+                    await cacheEntryRemoved
+                    socket.close()
+                    throw err
+                }
+            }
         } ),
 
         getConversationById: build.query<Conversation, string>( {
@@ -61,4 +92,4 @@ export const {
                  useGetConversationByIdQuery,
                  useGetUnreadConversationsCountQuery,
                  useGetConversationMediaListQuery
-             } = conversationApi
+             } = conversationsApi

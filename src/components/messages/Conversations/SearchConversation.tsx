@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import BasicInput from "@components/global/BasicInput"
 import SearchUserList from "@components/global/SearchUserList"
 import { User } from "@interfaces/user.interfaces"
-import { useLazyGetConversationByParticipantIdQuery } from "@services/conversationApi"
+import { useLazyGetConversationByParticipantIdQuery } from "@services/conversationsApi"
 import { useRouter } from "next/navigation"
 import { useDebouncedCallback } from "use-debounce"
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Conversation } from "@interfaces/conversation.interfaces"
 import ConversationItem from "@components/messages/Conversations/ConversationItem"
-import { useGetConversationsQuery } from "@services/conversationApi"
+import { useGetConversationsQuery } from "@services/conversationsApi"
 import InfiniteScroll from 'react-infinite-scroll-component'
 import ConversationsSkeleton from "@components/skeletons/ConversationsSkeleton"
 import Error from "@components/global/Error"
