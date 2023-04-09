@@ -1,29 +1,25 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Conversation } from "@interfaces/conversation.interfaces"
 import ConversationItem from "@components/messages/Conversations/ConversationItem"
-import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import { useGetConversationsQuery } from "@services/conversationApi"
-import InfiniteScroll from 'react-infinite-scroller'
+import InfiniteScroll from 'react-infinite-scroll-component'
 import ConversationsSkeleton from "@components/skeletons/ConversationsSkeleton"
 import Error from "@components/global/Error"
 import tw from "twin.macro"
+import { ErrorResponse } from "@interfaces/index.interfaces"
 
 const Wrapper              = tw.div`h-full`
 const Heading              = tw.h2`text-lg font-medium mb-3`
+// @ts-ignore
 const StyledInfiniteScroll = tw( InfiniteScroll )`h-full overflow-y-auto scrollbar-hide`
 
 export default function ConversationList(){
-    const {
-              isLoading,
-              isSuccess,
-              isError,
-              items: conversations,
-              error,
-              hasMore,
-              loadMore
-          } = useGetInfiniteListQuery<Conversation>(
-        useGetConversationsQuery
-    )
+    const [page, setPage]    = useState( 1 )
+    const conversationsQuery = useGetConversationsQuery( page )
+
+    const { isLoading, isSuccess, isError, data: conversationsData } = conversationsQuery || {}
+    const { items: conversations = [], nextPage }                    = conversationsData || {}
+    const error                                                      = conversationsQuery.error as ErrorResponse || {}
 
     //decide content
     let content = null
@@ -36,8 +32,9 @@ export default function ConversationList(){
     } else if( isSuccess && conversations.length > 0 ){
         content = (
             <StyledInfiniteScroll
-                loadMore={ loadMore }
-                hasMore={ hasMore }
+                dataLength={ conversations.length }
+                next={ () => setPage( nextPage! ) }
+                hasMore={ !! nextPage }
                 loader={ <ConversationsSkeleton/> }
             >
                 { conversations && conversations.map( ( conversation: Conversation ) => (

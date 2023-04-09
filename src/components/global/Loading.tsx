@@ -8,7 +8,7 @@ interface LoadingProps {
     color?: string
 }
 
-function Loading( { color = "#36d7b7", loading = true, ...rest }: LoadingProps ){
+function Loading( { color = "rgb(58,141,245)", loading = true, ...rest }: LoadingProps ){
     if( ! loading ) return null
 
     return (

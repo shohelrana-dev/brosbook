@@ -1,7 +1,7 @@
 import SearchConversation from "@components/messages/Conversations/SearchConversation"
 import ConversationList from "@components/messages/Conversations/ConversationList"
 
-function Conversations(){
+export default function Conversations(){
     return (
         <>
             <h2 className="text-2xl font-medium mb-2">Chats</h2>
@@ -14,5 +14,3 @@ function Conversations(){
         </>
     )
 }
-
-export default Conversations

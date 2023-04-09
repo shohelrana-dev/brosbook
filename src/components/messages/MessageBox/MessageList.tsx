@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import MessageItem from "@components/messages/MessageBox/MessageItem"
 import { useGetMessagesQuery, useSeenAllMessagesMutation } from "@services/messagesApi"
 import Loading from "@components/global/Loading"
@@ -9,6 +9,7 @@ import useAuthState from "@hooks/useAuthState"
 import useInfiniteScroll from "react-infinite-scroll-hook"
 import ChatSkeleton from "@components/skeletons/ChatSkeleton"
 import Error from "@components/global/Error"
+import { ErrorResponse } from "@interfaces/index.interfaces";
 
 interface Props {
     conversation: Conversation
@@ -18,21 +19,17 @@ export default function MessageList( { conversation }: Props ){
     //hooks
     const { user }          = useAuthState()
     const messageListRef    = useRef<HTMLDivElement>( null )
-    const {
-              items: messages,
-              isLoading,
-              setItems: setMessages,
-              hasMore,
-              loadMore,
-              isSuccess,
-              isError,
-              error
-          }                 = useGetInfiniteListQuery<Message>(
-        useGetMessagesQuery, { conversationId: conversation?.id!, limit: 15 }
-    )
+    const [page, setPage]   = useState( 1 )
+    const messagesQuery     = useGetMessagesQuery( {
+        conversationId: conversation?.id!,
+        page
+    }, { skip: ! conversation?.id } )
     const [seenAllMessages] = useSeenAllMessagesMutation()
 
-    const participant = conversation.user1.id === user?.id ? conversation.user2 : conversation.user1
+    const { isLoading, isSuccess, isError, data: messagesData } = messagesQuery || {}
+    const { items: messages = [], nextPage }                    = messagesData || {}
+    const error                                                 = messagesQuery.error as ErrorResponse || {}
+    const participant                                           = conversation.user1.id === user?.id ? conversation.user2 : conversation.user1
 
     useEffect( () => {
         if( ! conversation?.id || ! user?.id ) return
@@ -59,9 +56,8 @@ export default function MessageList( { conversation }: Props ){
     function addMessage( message: Message ){
         message.isMeSender = user?.id === message.sender.id
 
-        setMessages( ( prevMessages: Message[] ) => {
-            return [message, ...prevMessages]
-        } )
+        //add message on cache
+
         setTimeout( () => {
             scrollToBottom()
         }, 500 )
@@ -70,13 +66,7 @@ export default function MessageList( { conversation }: Props ){
     function updateMessage( message: Message ){
         message.isMeSender = user?.id === message.sender.id
 
-        setMessages( ( prevMessages: Message[] ) => {
-            const index        = prevMessages.findIndex( ( msg ) => msg.id === message.id )
-            const newMessages  = [...prevMessages]
-            newMessages[index] = message
-
-            return newMessages
-        } )
+        //update message on cache
     }
 
     function scrollToBottom(){
@@ -88,8 +78,8 @@ export default function MessageList( { conversation }: Props ){
 
     const [moreLoadRef] = useInfiniteScroll( {
         loading: isLoading,
-        hasNextPage: hasMore,
-        onLoadMore: loadMore,
+        hasNextPage: !! nextPage,
+        onLoadMore: () => setPage( nextPage! )
     } )
 
     //decide content
@@ -118,7 +108,7 @@ export default function MessageList( { conversation }: Props ){
         <div ref={ messageListRef } className="h-full overflow-y-auto flex flex-col-reverse mb-[60px] scrollbar-hide">
             { content }
 
-            { hasMore ? (
+            { !! nextPage ? (
                 <div className="py-[60px]" ref={ moreLoadRef }>
                     <Loading size={ 50 }/>
                 </div>
