@@ -1,6 +1,7 @@
-import { http } from "@utils/axiosInstance"
-import { RequestCookies } from "next/dist/server/web/spec-extension/cookies"
+// @ts-ignore
 import { ReadonlyRequestCookies } from "next/dist/server/app-render"
+import { RequestCookies } from "next/dist/server/web/spec-extension/cookies"
+import { http } from "@utils/axiosInstance"
 import getAuthorizationConfig from "@utils/getAuthorizationConfig"
 import { User } from "@interfaces/user.interfaces"
 import { Post } from "@interfaces/posts.interfaces"

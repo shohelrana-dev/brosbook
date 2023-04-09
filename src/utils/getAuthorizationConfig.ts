@@ -1,3 +1,4 @@
+// @ts-ignore
 import {ReadonlyRequestCookies} from "next/dist/server/app-render"
 import {RequestCookies} from "next/dist/server/web/spec-extension/cookies"
 
