@@ -30,7 +30,7 @@ export default function MessageList( { conversation }: Props ){
     const lastMessage                                           = messages[0]
 
     useEffect( () => {
-        if( isSuccess && lastMessage?.isMeSender && ! lastMessage?.seenAt ){
+        if( isSuccess && ! lastMessage?.isMeSender && ! lastMessage?.seenAt ){
             seenAllMessages( conversation.id )
         }
     }, [messages, isSuccess, lastMessage?.isMeSender] )

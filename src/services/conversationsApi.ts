@@ -21,22 +21,26 @@ export const conversationsApi = baseApi.injectEndpoints( {
                 const rootState                                                                    = getState() as RootState
                 const currentUser                                                                  = rootState?.auth?.user
 
+                const updateConversationLastMessage = ( message: Message ) => {
+                    console.log( message )
+                    message.isMeSender = message.sender.id === currentUser?.id
+
+                    updateCachedData( ( draft ) => {
+                        const conversation = draft.items.find( ( c ) => c.id === message.conversation?.id )
+                        if( conversation?.id ){
+                            conversation.lastMessage = message
+                        } else{
+                            dispatch( conversationsApi.util.invalidateTags( ["Conversations"] ) )
+                        }
+                    } )
+                }
+
                 try {
                     const { data: conversationData } = await cacheDataLoaded
 
                     conversationData.items.map( ( { id } ) => {
-                        socket.on( `message.new.${ id }`, ( message: Message ) => {
-                            message.isMeSender = message.sender.id === currentUser?.id
-
-                            updateCachedData( ( draft ) => {
-                                const conversation = draft.items.find( ( c ) => c.id === message.conversation?.id )
-                                if( conversation?.id ){
-                                    conversation.lastMessage = message
-                                } else{
-                                    dispatch( conversationsApi.util.invalidateTags( ["Conversations"] ) )
-                                }
-                            } )
-                        } )
+                        socket.on( `message.new.${ id }`, updateConversationLastMessage )
+                        socket.on( `message.seen.${ id }`, updateConversationLastMessage )
                     } )
 
                 } catch ( err ) {

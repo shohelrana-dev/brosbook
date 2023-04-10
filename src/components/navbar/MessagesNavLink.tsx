@@ -1,39 +1,12 @@
-import React, { useEffect, useState } from 'react'
 import IconButton from "@components/global/IconButton"
 import { IoMailOutline as MessageIcon } from "react-icons/io5"
 import Link from "next/link"
-import { io } from "socket.io-client"
-import { baseApi } from "@services/baseApi"
-import useAuthState from "@hooks/useAuthState"
 import { useGetUnreadConversationsCountQuery } from "@services/conversationsApi"
-import { useDispatch } from "react-redux"
 
 export default function MessagesNavLink(){
-    const { user }                                                = useAuthState()
-    const dispatch                                                = useDispatch()
-    const { data: unreadConversations }                           = useGetUnreadConversationsCountQuery()
-    const [unreadConversationsCount, setUnreadConversationsCount] = useState<number>( unreadConversations?.count || 0 )
+    const { data: unreadConversationsData } = useGetUnreadConversationsCountQuery()
 
-    useEffect( () => {
-        setUnreadConversationsCount( unreadConversations?.count! )
-    }, [unreadConversations] )
-
-    useEffect( () => {
-        if( ! user?.id ) return
-
-        const socket = io( process.env.NEXT_PUBLIC_SERVER_BASE_URL! )
-
-        socket.on( 'connect', () => {
-            socket.on( `conversation.unread.count.${ user?.id }`, ( count ) => {
-                setUnreadConversationsCount( count )
-                dispatch( baseApi.util.invalidateTags( ['Conversation'] ) )
-            } )
-        } )
-
-        if( socket ) return () => {
-            socket.close()
-        }
-    }, [user] )
+    const { count: unreadConversationsCount } = unreadConversationsData || {}
 
     return (
         <Link href="/messages" className="block">
