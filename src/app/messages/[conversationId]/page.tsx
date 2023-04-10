@@ -13,6 +13,6 @@ interface Props {
     params: { conversationId: string }
 }
 
-export default function Page( { params }: Props ){
+export default async function Page( { params }: Props ){
     return <MessageBox conversationId={ params.conversationId }/>
 }
