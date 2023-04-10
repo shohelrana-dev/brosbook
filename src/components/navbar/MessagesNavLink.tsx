@@ -6,7 +6,7 @@ import { useGetUnreadConversationsCountQuery } from "@services/conversationsApi"
 export default function MessagesNavLink(){
     const { data: unreadConversationsData } = useGetUnreadConversationsCountQuery()
 
-    const { count: unreadConversationsCount } = unreadConversationsData || {}
+    const { count: unreadConversationsCount = 0 } = unreadConversationsData || {}
 
     return (
         <Link href="/messages" className="block">

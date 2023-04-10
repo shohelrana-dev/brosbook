@@ -1,6 +1,6 @@
 "use client"
-import React, { useState } from 'react'
-import { useGetNotificationsQuery } from "@services/notificationsApi"
+import React, { useEffect, useState } from 'react'
+import { useGetNotificationsQuery, useReadAllNotificationMutation } from "@services/notificationsApi"
 import { ErrorResponse, Notification } from "@interfaces/index.interfaces"
 import NotificationItem from "./NotificationItem"
 import useInfiniteScroll from "react-infinite-scroll-hook"
@@ -8,12 +8,21 @@ import NotificationsSkeleton from "@components/skeletons/NotificationsSkeleton"
 import Error from "@components/global/Error"
 
 export default function NotificationList(){
-    const [page, setPage]    = useState( 1 )
-    const notificationsQuery = useGetNotificationsQuery( page )
+    const [page, setPage]       = useState( 1 )
+    const notificationsQuery    = useGetNotificationsQuery( page )
+    const [readAllNotification] = useReadAllNotificationMutation()
 
     const { data: notificationsData, isLoading, isSuccess, isError } = notificationsQuery || {}
     const { items: notifications = [], nextPage }                    = notificationsData || {}
     const error                                                      = notificationsQuery.error as ErrorResponse || {}
+    const firstNotification                                          = notifications[0] || {}
+
+    useEffect( () => {
+        if( isSuccess && firstNotification.id && ! firstNotification.readAt ){
+            readAllNotification()
+        }
+    }, [isSuccess, firstNotification] )
+
 
     const [moreLoadRef] = useInfiniteScroll( {
         loading: isLoading,
