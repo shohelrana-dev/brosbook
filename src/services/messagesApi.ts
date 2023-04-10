@@ -4,19 +4,19 @@ import { ListResponse } from "@interfaces/index.interfaces"
 import { io } from "socket.io-client"
 import { RootState } from "@store/index"
 
+const socket          = io( process.env.NEXT_PUBLIC_SERVER_BASE_URL! )
 const messagesPerPage = process.env.NEXT_PUBLIC_MESSAGES_PER_PAGE
 
 export const messagesApi = baseApi.injectEndpoints( {
     endpoints: ( build ) => ( {
-        getMessages: build.query<ListResponse<Message>, { conversationId: string, page?: number }>( {
+        getMessages: build.query<ListResponse<Message>, { conversationId: string, page: number }>( {
             query: ( { conversationId, page } ) => ( {
                 url: `/conversations/${ conversationId }/messages`,
                 params: { page, limit: messagesPerPage }
             } ),
             onCacheEntryAdded: async( arg, api ) => {
-                const { updateCachedData, cacheEntryRemoved, cacheDataLoaded, getState, dispatch } = api
-                const socket                                                                       = io( process.env.NEXT_PUBLIC_SERVER_BASE_URL! )
-                const currentUser                                                                  = ( getState() as RootState )?.auth?.user
+                const { updateCachedData, cacheEntryRemoved, cacheDataLoaded, getState } = api
+                const currentUser                                                        = ( getState() as RootState )?.auth?.user
 
                 try {
                     await cacheDataLoaded
@@ -41,6 +41,7 @@ export const messagesApi = baseApi.injectEndpoints( {
                     socket.on( `message.new.${ arg.conversationId }`, addNewMessage )
                     socket.on( `message.update.${ arg.conversationId }`, updateMessage )
                     socket.on( `message.seen.${ arg.conversationId }.${ currentUser?.id }`, updateMessage )
+                    //socket.on( `message.seen.${ arg.conversationId }.${ participant.id }`, updateMessage )
                 } catch ( err ) {
                     await cacheEntryRemoved
                     socket.close()

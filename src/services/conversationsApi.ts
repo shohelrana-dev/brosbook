@@ -5,6 +5,7 @@ import { io } from "socket.io-client"
 import { RootState } from "@store/index"
 
 const conversationsPerPage = process.env.NEXT_PUBLIC_CONVERSATIONS_PER_PAGE
+const mediaPerPage         = process.env.NEXT_PUBLIC_MEDIA_PER_PAGE
 const socket               = io( process.env.NEXT_PUBLIC_SERVER_BASE_URL! )
 
 export const conversationsApi = baseApi.injectEndpoints( {
@@ -17,7 +18,8 @@ export const conversationsApi = baseApi.injectEndpoints( {
             providesTags: ['Conversations'],
             onCacheEntryAdded: async( arg, api ) => {
                 const { cacheDataLoaded, cacheEntryRemoved, updateCachedData, getState, dispatch } = api
-                const currentUser                                                                  = ( getState() as RootState )?.auth?.user
+                const rootState                                                                    = getState() as RootState
+                const currentUser                                                                  = rootState?.auth?.user
 
                 try {
                     const { data: conversationData } = await cacheDataLoaded
@@ -63,7 +65,8 @@ export const conversationsApi = baseApi.injectEndpoints( {
             query: () => ( `/conversations/unread_count` ),
             onCacheEntryAdded: async( arg, api ) => {
                 const { cacheDataLoaded, cacheEntryRemoved, updateCachedData, getState } = api
-                const currentUser                                                        = ( getState() as RootState )?.auth?.user
+                const rootState                                                          = getState() as RootState
+                const currentUser                                                        = rootState?.auth?.user
 
                 try {
                     await cacheDataLoaded
@@ -90,10 +93,10 @@ export const conversationsApi = baseApi.injectEndpoints( {
             invalidatesTags: ['Conversations']
         } ),
 
-        getConversationMediaList: build.query<ListResponse<Media>, { conversationId: string, page?: number, limit?: number }>( {
-            query: ( { conversationId, ...params } ) => ( {
+        getConversationMediaList: build.query<ListResponse<Media>, { conversationId: string, page: number }>( {
+            query: ( { conversationId, page } ) => ( {
                 url: `/conversations/${ conversationId }/media`,
-                params
+                params: { page, limit: mediaPerPage }
             } ),
             providesTags: ['ConversationMedia']
         } )
