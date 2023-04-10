@@ -5,6 +5,7 @@ import { io } from "socket.io-client"
 import { RootState } from "@store/index"
 
 const conversationsPerPage = process.env.NEXT_PUBLIC_CONVERSATIONS_PER_PAGE
+const socket               = io( process.env.NEXT_PUBLIC_SERVER_BASE_URL! )
 
 export const conversationsApi = baseApi.injectEndpoints( {
     endpoints: ( build ) => ( {
@@ -16,7 +17,6 @@ export const conversationsApi = baseApi.injectEndpoints( {
             providesTags: ['Conversations'],
             onCacheEntryAdded: async( arg, api ) => {
                 const { cacheDataLoaded, cacheEntryRemoved, updateCachedData, getState, dispatch } = api
-                const socket                                                                       = io( process.env.NEXT_PUBLIC_SERVER_BASE_URL! )
                 const currentUser                                                                  = ( getState() as RootState )?.auth?.user
 
                 try {
@@ -61,7 +61,24 @@ export const conversationsApi = baseApi.injectEndpoints( {
 
         getUnreadConversationsCount: build.query<{ count: number }, void>( {
             query: () => ( `/conversations/unread_count` ),
-            providesTags: ['Conversations']
+            onCacheEntryAdded: async( arg, api ) => {
+                const { cacheDataLoaded, cacheEntryRemoved, updateCachedData, getState } = api
+                const currentUser                                                        = ( getState() as RootState )?.auth?.user
+
+                try {
+                    await cacheDataLoaded
+
+                    socket.on( `conversation.unread.count.${ currentUser?.id }`, ( count: number ) => {
+                        updateCachedData( ( draft ) => {
+                            draft.count = count
+                        } )
+                    } )
+                } catch ( err ) {
+                    await cacheEntryRemoved
+                    socket.close()
+                    throw err
+                }
+            }
         } ),
 
         createConversation: build.mutation<Conversation, string>( {

@@ -27,12 +27,13 @@ export default function MessageList( { conversation }: Props ){
     const { items: messages = [], nextPage }                    = messagesData || {}
     const error                                                 = messagesQuery.error as ErrorResponse || {}
     const participant                                           = conversation.user1.id === user?.id ? conversation.user2 : conversation.user1
+    const lastMessage                                           = messages[0]
 
     useEffect( () => {
-        if( isSuccess ){
+        if( isSuccess && lastMessage?.isMeSender && ! lastMessage?.seenAt ){
             seenAllMessages( conversation.id )
         }
-    }, [messages, isSuccess] )
+    }, [messages, isSuccess, lastMessage?.isMeSender] )
 
     function scrollToBottom(){
         if( messageListRef && messageListRef.current ){
