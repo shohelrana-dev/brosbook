@@ -21,7 +21,7 @@ export const notificationsApi = baseApi.injectEndpoints( {
                 try {
                     await cacheDataLoaded
 
-                    socket.on( `notification.new.${ currentUser?.id }`, ( notification: Notification ) => {
+                    socket.on( `notification.new.${ currentUser?.id }`, ( notification ) => {
                         updateCachedData( ( draft ) => {
                             draft.items.unshift( notification )
                         } )
