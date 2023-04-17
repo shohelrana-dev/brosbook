@@ -1,6 +1,7 @@
 import { User } from "@interfaces/user.interfaces"
 import { baseApi } from "./baseApi"
 import { ListResponse, Media } from "@interfaces/index.interfaces"
+import { userLoggedIn } from "@slices/authSlice"
 
 const usersPerPage = process.env.NEXT_PUBLIC_USERS_PER_PAGE
 const mediaPerPage = process.env.NEXT_PUBLIC_MEDIA_PER_PAGE
@@ -9,7 +10,16 @@ export const usersApi = baseApi.injectEndpoints( {
         endpoints: ( build ) => ( {
             getCurrentUser: build.query<User, void>( {
                 query: () => `/users/me`,
-                providesTags: ['CurrentUser']
+                providesTags: ['CurrentUser'],
+                onQueryStarted: async( _, { dispatch, queryFulfilled } ) => {
+                    try {
+                        const { data } = await queryFulfilled
+
+                        dispatch( userLoggedIn( data ) )
+                    } catch ( err ) {
+                        throw err
+                    }
+                }
             } ),
 
             getUserById: build.query<User, string>( {
@@ -30,7 +40,7 @@ export const usersApi = baseApi.injectEndpoints( {
                 providesTags: ['Users']
             } ),
 
-            searchUsers: build.query<ListResponse<User>, { key: string, page?: number }>( {
+            searchUsers: build.query<ListResponse<User>, { q: string, page: number }>( {
                 query: ( params ) => ( {
                     url: `/users/search`,
                     params: { ...params, limit: usersPerPage }

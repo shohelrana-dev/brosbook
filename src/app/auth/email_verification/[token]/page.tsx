@@ -89,7 +89,7 @@ export default function EmailVerifyPage( { params }: Props ){
                 ) : (
                     <div className="flex flex-col items-center">
                         <p>Didn&apos;t receive the link email?</p>
-                        <Button onClick={ resendEmail } isLoading={ resendingLink } disabled={ ! email } size="sm">
+                        <Button onClick={ resendEmail } isLoading={ resendingLink } disabled={ ! email } size="sm" className="mt-2">
                             Resend email
                         </Button>
                     </div>

@@ -59,7 +59,7 @@ export default function RequiredPage(){
                     ) : (
                         <div className="flex flex-col items-center">
                             <p>Didn&apos;t receive the link email?</p>
-                            <Button onClick={ resendEmail } isLoading={ isLoading } size="sm">Resend email</Button>
+                            <Button onClick={ resendEmail } isLoading={ isLoading } size="sm" className="mt-2">Resend email</Button>
                         </div>
                     ) }
                 </div>
