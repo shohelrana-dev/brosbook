@@ -1,5 +1,5 @@
 "use client"
-import React, { PropsWithChildren, useMemo } from 'react'
+import React, {PropsWithChildren, useEffect, useMemo, useState} from 'react'
 import { usePathname } from "next/navigation"
 import Conversations from "@components/messages/Conversations"
 import useMediaQuery from "@hooks/useMediaQuery"
@@ -16,9 +16,12 @@ export const revalidate = 0
 export default function Layout( { children }: PropsWithChildren ){
     const pathname          = usePathname()
     const isDesktopOrLaptop = useMediaQuery( '(min-width: 1024px)' )
+    const [navbarHeight,setNavbarHeight ] = useState(72)
 
-    const navbarHeight = useMemo( () => {
-        return Number( document.querySelector( '#appNavbar' )?.clientHeight ) + 2
+    useEffect( () => {
+        if(typeof window !== "undefined"){
+            setNavbarHeight( Number( document.querySelector( '#appNavbar' )?.clientHeight ) + 2)
+        }
     }, [] )
 
     const conversationId = pathname?.replace( '/messages', '' )?.replace( '/', '' )

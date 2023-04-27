@@ -14,7 +14,6 @@ export const postsApi = baseApi.injectEndpoints( {
                 url: 'posts/feed',
                 params: { page, limit: postsPerPage }
             } ),
-            providesTags: ['Post'],
             ...listQueryExtraDefinitions
         } ),
 
@@ -23,15 +22,13 @@ export const postsApi = baseApi.injectEndpoints( {
                 url: 'posts',
                 params: { ...params, limit: postsPerPage }
             } ),
-            providesTags: ['Post'],
             ...listQueryExtraDefinitions
         } ),
 
         getPostById: build.query<Post, string>( {
             query: ( postId ) => ( {
                 url: `posts/${ postId }`
-            } ),
-            providesTags: ['Post']
+            } )
         } ),
 
         createPost: build.mutation<Post, FormData>( {
@@ -39,8 +36,7 @@ export const postsApi = baseApi.injectEndpoints( {
                 url: 'posts',
                 method: 'POST',
                 body: data
-            } ),
-            invalidatesTags: ['Posts']
+            } )
         } ),
 
         deletePost: build.mutation<Post, string>( {
@@ -48,7 +44,17 @@ export const postsApi = baseApi.injectEndpoints( {
                 url: `posts/${ id }`,
                 method: 'DELETE'
             } ),
-            invalidatesTags: ['Posts']
+            onQueryStarted:async (arg, {dispatch, queryFulfilled})=> {
+                try {
+                    await queryFulfilled
+
+                    dispatch( postsApi.util.updateQueryData( "getPosts", undefined as any,  (draft: ListResponse<Post> ) =>{
+                        draft.items = draft.items.filter((post) => post.id !== arg)
+                    } ) )
+                }catch (e) {
+                    console.log(e)
+                }
+            }
         } ),
 
         postLike: build.mutation<Post, string>( {

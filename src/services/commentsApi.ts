@@ -1,6 +1,7 @@
 import { ListResponse } from "@interfaces/index.interfaces"
 import { Comment } from "@interfaces/posts.interfaces"
 import { baseApi } from "@services/baseApi"
+import listQueryExtraDefinitions from "@utils/listQueryExtraDefinitions"
 
 const commentsPerPage = process.env.NEXT_PUBLIC_COMMENTS_PER_PAGE
 
@@ -11,7 +12,8 @@ export const commentsApi = baseApi.injectEndpoints( {
                 url: `posts/${ postId }/comments`,
                 params: { page, limit: commentsPerPage }
             } ),
-            providesTags: ['Comments']
+            providesTags: ['Comments'],
+            ...listQueryExtraDefinitions
         } ),
 
         createComment: build.mutation<Comment, { postId: string, body: string }>( {

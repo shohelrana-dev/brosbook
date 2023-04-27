@@ -3,6 +3,7 @@ import { Message } from "@interfaces/conversation.interfaces"
 import { ListResponse } from "@interfaces/index.interfaces"
 import { io } from "socket.io-client"
 import { RootState } from "@store/index"
+import listQueryExtraDefinitions from "@utils/listQueryExtraDefinitions"
 
 const socket          = io( process.env.NEXT_PUBLIC_SERVER_BASE_URL! )
 const messagesPerPage = process.env.NEXT_PUBLIC_MESSAGES_PER_PAGE
@@ -46,7 +47,8 @@ export const messagesApi = baseApi.injectEndpoints( {
                     socket.close()
                     throw err
                 }
-            }
+            },
+            ...listQueryExtraDefinitions
         } ),
 
         sendMessage: build.mutation<Message, FormData>( {

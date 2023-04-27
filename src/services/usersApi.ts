@@ -2,6 +2,7 @@ import { User } from "@interfaces/user.interfaces"
 import { baseApi } from "./baseApi"
 import { ListResponse, Media } from "@interfaces/index.interfaces"
 import { userLoggedIn } from "@slices/authSlice"
+import listQueryExtraDefinitions from "@utils/listQueryExtraDefinitions"
 
 const usersPerPage = process.env.NEXT_PUBLIC_USERS_PER_PAGE
 const mediaPerPage = process.env.NEXT_PUBLIC_MEDIA_PER_PAGE
@@ -37,7 +38,8 @@ export const usersApi = baseApi.injectEndpoints( {
                     url: `/users/suggestions`,
                     params: { page, limit: usersPerPage }
                 } ),
-                providesTags: ['Users']
+                providesTags: ['Users'],
+                ...listQueryExtraDefinitions
             } ),
 
             searchUsers: build.query<ListResponse<User>, { q: string, page: number }>( {
@@ -45,7 +47,8 @@ export const usersApi = baseApi.injectEndpoints( {
                     url: `/users/search`,
                     params: { ...params, limit: usersPerPage }
                 } ),
-                providesTags: ['Users']
+                providesTags: ['Users'],
+                ...listQueryExtraDefinitions
             } ),
 
             changeProfilePhoto: build.mutation<User, FormData>( {
@@ -93,7 +96,8 @@ export const usersApi = baseApi.injectEndpoints( {
                     url: `/users/${ userId }/followers`,
                     params: { page, limit: usersPerPage }
                 } ),
-                providesTags: ['Users']
+                providesTags: ['Users'],
+                ...listQueryExtraDefinitions
             } ),
 
             getFollowersCount: build.query<{ count: number }, string>( {
@@ -108,7 +112,8 @@ export const usersApi = baseApi.injectEndpoints( {
                     url: `/users/${ userId }/followings`,
                     params: { page, limit: usersPerPage }
                 } ),
-                providesTags: ['Users']
+                providesTags: ['Users'],
+                ...listQueryExtraDefinitions
             } ),
 
             getFollowingsCount: build.query<{ count: number }, string>( {
@@ -123,7 +128,8 @@ export const usersApi = baseApi.injectEndpoints( {
                     url: `/users/${ userId }/media`,
                     params: { page, limit: mediaPerPage }
                 } ),
-                providesTags: ['UserMedia']
+                providesTags: ['UserMedia'],
+                ...listQueryExtraDefinitions
             } ),
         } ),
     }

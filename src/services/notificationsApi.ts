@@ -2,6 +2,7 @@ import { baseApi } from "./baseApi"
 import { ListResponse, Notification } from "@interfaces/index.interfaces"
 import { RootState } from "@store/index"
 import { io } from "socket.io-client"
+import listQueryExtraDefinitions from "@utils/listQueryExtraDefinitions"
 
 const notificationsPerPage = process.env.NEXT_PUBLIC_NOTIFICATIONS_PER_PAGE
 const socket               = io( process.env.NEXT_PUBLIC_SERVER_BASE_URL! )
@@ -32,7 +33,8 @@ export const notificationsApi = baseApi.injectEndpoints( {
                     socket.close()
                     throw err
                 }
-            }
+            },
+            ...listQueryExtraDefinitions
         } ),
 
         getUnreadNotificationsCount: build.query<{ count: number }, void>( {

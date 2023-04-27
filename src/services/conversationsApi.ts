@@ -3,6 +3,7 @@ import { Conversation, Message } from "@interfaces/conversation.interfaces"
 import { ListResponse, Media } from "@interfaces/index.interfaces"
 import { io } from "socket.io-client"
 import { RootState } from "@store/index"
+import listQueryExtraDefinitions from "@utils/listQueryExtraDefinitions"
 
 const conversationsPerPage = process.env.NEXT_PUBLIC_CONVERSATIONS_PER_PAGE
 const mediaPerPage         = process.env.NEXT_PUBLIC_MEDIA_PER_PAGE
@@ -48,7 +49,8 @@ export const conversationsApi = baseApi.injectEndpoints( {
                     socket.close()
                     throw err
                 }
-            }
+            },
+            ...listQueryExtraDefinitions
         } ),
 
         getConversationById: build.query<Conversation, string>( {
@@ -102,7 +104,8 @@ export const conversationsApi = baseApi.injectEndpoints( {
                 url: `/conversations/${ conversationId }/media`,
                 params: { page, limit: mediaPerPage }
             } ),
-            providesTags: ['ConversationMedia']
+            providesTags: ['ConversationMedia'],
+            ...listQueryExtraDefinitions
         } )
 
     } ),

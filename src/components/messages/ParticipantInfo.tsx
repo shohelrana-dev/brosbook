@@ -1,11 +1,10 @@
 import Avatar from "@components/global/Avatar"
 import { useGetConversationByIdQuery, useGetConversationMediaListQuery } from "@services/conversationsApi"
 import Loading from "@components/global/Loading"
-import { useGetInfiniteListQuery } from "@hooks/useGetInfiniteListQuery"
 import InfiniteScroll from "react-infinite-scroller"
-import { Media } from "@interfaces/index.interfaces"
+import {ErrorResponse} from "@interfaces/index.interfaces"
 import ImageLightbox from "@components/global/ImageLightbox"
-import { useEffect, useRef } from "react"
+import {useEffect, useRef, useState} from "react"
 import tw, { styled } from "twin.macro"
 import { Box as BaseBox } from "@components/styles/Global.styles"
 
@@ -26,11 +25,15 @@ interface Props {
 }
 
 function ParticipantInfo( { conversationId }: Props ){
+    //hooks
+    const [page, setPage] = useState<number>( 1 )
+    const conversationMediaListQuery  = useGetConversationMediaListQuery({conversationId, page} )
+    const { isLoading:isMediaLoading, isSuccess, isError, data: listData } = conversationMediaListQuery || {}
     const { data: conversation, isLoading }                                  = useGetConversationByIdQuery( conversationId )
-    const { items: mediaList, isLoading: isMediaLoading, loadMore, hasMore } = useGetInfiniteListQuery<Media>(
-        useGetConversationMediaListQuery, { conversationId }
-    )
     const containerRef                                                       = useRef<HTMLDivElement>( null )
+
+    const { items: mediaList = [], nextPage }                    = listData || {}
+    const error                                              = conversationMediaListQuery.error as ErrorResponse || {}
 
     useEffect( () => {
         if( containerRef.current && containerRef.current.parentElement ){
@@ -83,8 +86,8 @@ function ParticipantInfo( { conversationId }: Props ){
                 { ( ! mediaList && isMediaLoading ) ? <Loading size={ 40 }/> : null }
                 <div>
                     <InfiniteScroll
-                        loadMore={ loadMore }
-                        hasMore={ hasMore }
+                        loadMore={ () => setPage(nextPage!) }
+                        hasMore={ !!nextPage }
                         loader={ <Loading size={ 40 }/> }
                     >
                         <ImageLightbox imageList={ mediaList } alt="Chat photo"/>

@@ -95,7 +95,7 @@ export default function ProfileSettingsPage(){
 
             <div className="flex flex-col">
                 <label htmlFor="birthdate" className="text-gray-800">Date of birth</label>
-                <DatePicker onChange={ ( value: Date ) => setFormData( { ...formData, birthdate: value } ) }
+                <DatePicker onChange={ ( value: any ) => setFormData( { ...formData, birthdate: value } ) }
                             value={ formData.birthdate } className="rounded-lg"/>
                 { errors?.birthdate ? (
                     <p className="font-medium text-red-600 text-[12px]">
