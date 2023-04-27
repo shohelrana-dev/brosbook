@@ -19,8 +19,8 @@ interface CommentListPost {
 function CommentList( { postId }: CommentListPost ){
     const [page, setPage]                        = useState( 1 )
     const { user: currentUser, isAuthenticated } = useAuthState()
-    const commentsQuery                          = useGetCommentsQuery( { postId, page } )
-    const { data: post }                         = useGetPostByIdQuery( postId )
+    const commentsQuery                                                = useGetCommentsQuery( { postId, page } )
+    const { data: post }        = useGetPostByIdQuery( postId )
     const [createComment]                        = useCreateCommentMutation()
 
     const [commentBody, setCommentBody] = useState( '' )

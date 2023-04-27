@@ -1,3 +1,6 @@
+import { shallowEqual } from "react-redux"
+
+
 const listQueryExtraDefinitions = {
     serializeQueryArgs: ( { endpointName }: any ) => {
         return endpointName
@@ -12,7 +15,7 @@ const listQueryExtraDefinitions = {
         if( currentArg?.page === 1 && previousArg?.page > 1 ){
             return false
         }
-        return currentArg !== previousArg
+        return !shallowEqual(currentArg, previousArg)
     }
 }
 

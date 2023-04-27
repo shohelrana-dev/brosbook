@@ -18,6 +18,7 @@ import LoadingOverlay from "@components/global/LoadingOverlay"
 import tw from 'twin.macro'
 import { Wrapper, Box, FooterBox, Heading, Icon } from "@components/styles/Auth.styles"
 import { Form } from "@components/styles/Global.styles"
+import {baseApi} from "@services/baseApi";
 
 const Forgotten = tw.small`block text-center mt-2 [a]:text-blue-500`
 
@@ -33,6 +34,7 @@ export default function Login(){
     useEffect( () => {
         if( isSuccess ){
             if( data?.user?.hasEmailVerified ){
+                dispatch(baseApi.util.resetApiState())
                 router.replace( params.get( 'redirect_to' ) ? params.get( 'redirect_to' )! : '/' )
                 toast.success( 'Logged in.' )
             } else{

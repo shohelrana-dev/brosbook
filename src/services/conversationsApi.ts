@@ -16,6 +16,7 @@ export const conversationsApi = baseApi.injectEndpoints( {
                 url: `/conversations`,
                 params: { page, limit: conversationsPerPage }
             } ),
+            providesTags: [{type: "Conversation", id: "LIST"}],
             onCacheEntryAdded: async( arg, api ) => {
                 const { cacheDataLoaded, cacheEntryRemoved, updateCachedData, getState, dispatch } = api
                 const rootState                                                                    = getState() as RootState
@@ -30,7 +31,7 @@ export const conversationsApi = baseApi.injectEndpoints( {
                         if( conversation?.id ){
                             conversation.lastMessage = message
                         } else{
-                            dispatch( conversationsApi.util.invalidateTags( ["Conversations"] ) )
+                            dispatch( conversationsApi.util.invalidateTags( [{type: "Conversation", id: "LIST"}] ) )
                         }
                     } )
                 }

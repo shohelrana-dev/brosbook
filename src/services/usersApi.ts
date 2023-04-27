@@ -38,7 +38,7 @@ export const usersApi = baseApi.injectEndpoints( {
                     url: `/users/suggestions`,
                     params: { page, limit: usersPerPage }
                 } ),
-                providesTags: ['Users'],
+                providesTags: [{type: "User", id: "LIST"}],
                 ...listQueryExtraDefinitions
             } ),
 
@@ -74,7 +74,7 @@ export const usersApi = baseApi.injectEndpoints( {
                     method: 'POST',
                 } ),
                 invalidatesTags: ( result, error, arg ) => ( [
-                    'Users',
+                    {type: "User", id: "LIST"},
                     { type: 'User', id: arg }
                 ] )
             } ),
@@ -85,7 +85,7 @@ export const usersApi = baseApi.injectEndpoints( {
                     method: 'POST',
                 } ),
                 invalidatesTags: ( result, error, arg ) => ( [
-                    'Users',
+                    {type: "User", id: "LIST"},
                     { type: 'User', id: arg }
                 ] )
             } ),
@@ -95,7 +95,7 @@ export const usersApi = baseApi.injectEndpoints( {
                     url: `/users/${ userId }/followers`,
                     params: { page, limit: usersPerPage }
                 } ),
-                providesTags: ['Users'],
+                providesTags: [{type: "User", id: "LIST"}],
                 ...listQueryExtraDefinitions
             } ),
 
@@ -103,7 +103,7 @@ export const usersApi = baseApi.injectEndpoints( {
                 query: ( userId ) => ( {
                     url: `/users/${ userId }/followers/count`
                 } ),
-                providesTags: ['Users']
+                providesTags: [{type: "User", id: "LIST"}]
             } ),
 
             getFollowings: build.query<ListResponse<User>, { userId: string, page?: number }>( {
@@ -111,7 +111,7 @@ export const usersApi = baseApi.injectEndpoints( {
                     url: `/users/${ userId }/followings`,
                     params: { page, limit: usersPerPage }
                 } ),
-                providesTags: ['Users'],
+                providesTags: [{type: "User", id: "LIST"}],
                 ...listQueryExtraDefinitions
             } ),
 
@@ -119,7 +119,7 @@ export const usersApi = baseApi.injectEndpoints( {
                 query: ( userId ) => ( {
                     url: `/users/${ userId }/followers/count`
                 } ),
-                providesTags: ['Users']
+                providesTags: [{type: "User", id: "LIST"}]
             } ),
 
             getMediaList: build.query<ListResponse<Media>, { userId: string, page?: number }>( {

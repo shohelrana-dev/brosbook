@@ -33,6 +33,6 @@ export const baseApi = createApi( {
         return result
     },
     keepUnusedDataFor: 300,
-    tagTypes: ['CurrentUser', 'Users', 'User', 'Comments', 'Comment', 'Conversations', 'UserMedia', 'ConversationMedia'],
+    tagTypes: ['CurrentUser', 'User', 'Comments', 'Conversation', 'UserMedia', 'ConversationMedia'],
     endpoints: () => ( {} )
 } )

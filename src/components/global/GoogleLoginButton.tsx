@@ -3,6 +3,8 @@ import { useRouter, useSearchParams } from "next/navigation"
 import toast from "react-hot-toast"
 import { GoogleLogin, CredentialResponse, GoogleOAuthProvider } from '@react-oauth/google'
 import { useLoginWithGoogleMutation } from "@services/authApi"
+import {baseApi} from "@services/baseApi"
+import {useDispatch} from "react-redux"
 
 interface Props {
     setIsLoading: ( isLoading: boolean ) => void
@@ -11,12 +13,14 @@ interface Props {
 function GoogleLoginButton( { setIsLoading }: Props ){
     //hooks
     const router                            = useRouter()
+    const dispatch                            = useDispatch()
     const params                            = useSearchParams()
     const [login, { isLoading, isSuccess }] = useLoginWithGoogleMutation()
 
     async function responseGoogle( response: CredentialResponse ){
         try {
             await login( response.credential! ).unwrap()
+            dispatch(baseApi.util.resetApiState())
             router.push( params.get( 'redirect_to' ) ? params.get( 'redirect_to' )! : '/' )
             toast.success( 'Logged in.' )
         } catch ( err: any ) {
