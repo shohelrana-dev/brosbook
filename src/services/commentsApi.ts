@@ -12,7 +12,9 @@ export const commentsApi = baseApi.injectEndpoints( {
                 url: `posts/${ postId }/comments`,
                 params: { page, limit: commentsPerPage }
             } ),
-            providesTags: ['Comments'],
+            providesTags: (result, error, arg) => [
+                { type: 'Comments', id: arg.postId }
+            ],
             ...listQueryExtraDefinitions
         } ),
 
@@ -22,7 +24,9 @@ export const commentsApi = baseApi.injectEndpoints( {
                 method: 'POST',
                 body: formData
             } ),
-            invalidatesTags: ['Comments']
+            invalidatesTags: (result, error, arg) => [
+                { type: 'Comments', id: arg.postId }
+            ]
         } ),
 
         deleteComment: build.mutation<Comment, { postId: string, commentId: string }>( {
@@ -30,7 +34,9 @@ export const commentsApi = baseApi.injectEndpoints( {
                 url: `posts/${ postId }/comments/${ commentId }`,
                 method: 'DELETE'
             } ),
-            invalidatesTags: ['Comments']
+            invalidatesTags: (result, error, arg) => [
+                { type: 'Comments', id: arg.postId }
+            ]
         } ),
 
         likeComment: build.mutation<Comment, { postId: string, commentId: string }>( {
@@ -38,7 +44,9 @@ export const commentsApi = baseApi.injectEndpoints( {
                 url: `posts/${ postId }/comments/${ commentId }/like`,
                 method: 'POST'
             } ),
-            invalidatesTags: ['Comments']
+            invalidatesTags: (result, error, arg) => [
+                { type: 'Comments', id: arg.postId }
+            ]
         } ),
 
         unlikeComment: build.mutation<Comment, { postId: string, commentId: string }>( {
@@ -46,7 +54,9 @@ export const commentsApi = baseApi.injectEndpoints( {
                 url: `posts/${ postId }/comments/${ commentId }/unlike`,
                 method: 'POST'
             } ),
-            invalidatesTags: ['Comments']
+            invalidatesTags: (result, error, arg) => [
+                { type: 'Comments', id: arg.postId }
+            ]
         } ),
     } ),
 } )
