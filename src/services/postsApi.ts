@@ -14,6 +14,7 @@ export const postsApi = baseApi.injectEndpoints( {
                 url: 'posts/feed',
                 params: { page, limit: postsPerPage }
             } ),
+            keepUnusedDataFor: 30,
             ...listQueryExtraDefinitions
         } ),
 

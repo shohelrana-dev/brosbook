@@ -16,7 +16,6 @@ export const conversationsApi = baseApi.injectEndpoints( {
                 url: `/conversations`,
                 params: { page, limit: conversationsPerPage }
             } ),
-            providesTags: ['Conversations'],
             onCacheEntryAdded: async( arg, api ) => {
                 const { cacheDataLoaded, cacheEntryRemoved, updateCachedData, getState, dispatch } = api
                 const rootState                                                                    = getState() as RootState
@@ -56,15 +55,13 @@ export const conversationsApi = baseApi.injectEndpoints( {
         getConversationById: build.query<Conversation, string>( {
             query: ( conversationId ) => ( {
                 url: `/conversations/${ conversationId }`,
-            } ),
-            providesTags: ['Conversation']
+            } )
         } ),
 
         getConversationByParticipantId: build.query<Conversation, string>( {
             query: ( participantId ) => ( {
                 url: `/conversations/by/participant_id/${ participantId }`
-            } ),
-            providesTags: ["Conversation"]
+            } )
         } ),
 
         getUnreadConversationsCount: build.query<{ count: number }, void>( {
@@ -96,7 +93,18 @@ export const conversationsApi = baseApi.injectEndpoints( {
                 method: 'PUT',
                 body: { participantId }
             } ),
-            invalidatesTags: ['Conversations']
+            onQueryStarted: async (arg, api) => {
+                try {
+                    const {data} = await api.queryFulfilled
+
+                    //@ts-ignore
+                    api.dispatch( conversationsApi.util.updateQueryData( "getConversations", undefined as any,  (draft: ListResponse<Conversation> ) =>{
+                        draft.items.unshift(data)
+                    } ) )
+                }catch (e) {
+                    console.log(e)
+                }
+            }
         } ),
 
         getConversationMediaList: build.query<ListResponse<Media>, { conversationId: string, page: number }>( {

@@ -27,8 +27,7 @@ export const accountApi = baseApi.injectEndpoints( {
                 url: `/account/password`,
                 method: 'PUT',
                 body: data
-            } ),
-            invalidatesTags: ['CurrentUser']
+            } )
         } ),
 
     } ),

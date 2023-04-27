@@ -25,12 +25,12 @@ export const usersApi = baseApi.injectEndpoints( {
 
             getUserById: build.query<User, string>( {
                 query: ( userId ) => `/users/${ userId }`,
-                providesTags: ['User']
+                providesTags: (result, error, arg, meta) => [{type: 'User', id: arg}]
             } ),
 
             getUserByUsername: build.query<User, string>( {
                 query: ( username ) => `/users/by/username/${ username }`,
-                providesTags: ['User']
+                providesTags: (result, error, arg, meta) => [{type: 'User', id: arg}]
             } ),
 
             getSuggestedUsers: build.query<ListResponse<User>, number>( {
@@ -47,7 +47,6 @@ export const usersApi = baseApi.injectEndpoints( {
                     url: `/users/search`,
                     params: { ...params, limit: usersPerPage }
                 } ),
-                providesTags: ['Users'],
                 ...listQueryExtraDefinitions
             } ),
 
@@ -57,7 +56,7 @@ export const usersApi = baseApi.injectEndpoints( {
                     method: 'POST',
                     body: data
                 } ),
-                invalidatesTags: ['User']
+                invalidatesTags: ['CurrentUser']
             } ),
 
             changeCoverPhoto: build.mutation<User, FormData>( {
@@ -66,7 +65,7 @@ export const usersApi = baseApi.injectEndpoints( {
                     method: 'POST',
                     body: data
                 } ),
-                invalidatesTags: ['User']
+                invalidatesTags: ['CurrentUser']
             } ),
 
             follow: build.mutation<User, string>( {
