@@ -53,7 +53,7 @@ function ConversationItem( { conversation }: SingleConversationProps ){
                         src={ avatar?.url }
                     />
                 </div>
-                <div>
+                <div className="w-full">
                     <NameWrapper>
                         <Name>{ fullName }</Name>
                         <Date>

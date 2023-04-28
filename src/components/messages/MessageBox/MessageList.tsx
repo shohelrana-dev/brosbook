@@ -48,8 +48,6 @@ export default function MessageList( { conversation }: Props ){
         onLoadMore: () => setPage( nextPage! )
     } )
 
-    console.log(messagesData)
-
     //decide content
     let content = null
     if( isLoading ){

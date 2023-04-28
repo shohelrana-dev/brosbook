@@ -23,7 +23,6 @@ export const conversationsApi = baseApi.injectEndpoints( {
                 const currentUser                                                                  = rootState?.auth?.user
 
                 const updateConversationLastMessage = ( message: Message ) => {
-                    console.log( message )
                     message.isMeSender = message.sender.id === currentUser?.id
 
                     updateCachedData( ( draft ) => {

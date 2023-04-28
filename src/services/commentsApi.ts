@@ -15,10 +15,7 @@ export const commentsApi = baseApi.injectEndpoints( {
             providesTags: (result, error, arg) => [
                 { type: 'Comments', id: arg.postId }
             ],
-            ...listQueryExtraDefinitions,
-            serializeQueryArgs: ({endpointName, queryArgs}) => {
-                return `${endpointName}("postId=${queryArgs.postId}")`
-            }
+            ...listQueryExtraDefinitions
         } ),
 
         createComment: build.mutation<Comment, { postId: string, body: string }>( {

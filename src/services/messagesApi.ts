@@ -41,7 +41,7 @@ export const messagesApi = baseApi.injectEndpoints( {
 
                     socket.on( `message.new.${ arg.conversationId }`, addNewMessage )
                     socket.on( `message.update.${ arg.conversationId }`, updateMessage )
-                    socket.on( `message.seen.${ arg.conversationId }.${ currentUser?.id }`, updateMessage )
+                    socket.on( `message.seen.${ arg.conversationId }`, updateMessage )
                 } catch ( err ) {
                     await cacheEntryRemoved
                     socket.close()
