@@ -7,6 +7,7 @@ import useAuthState from "@hooks/useAuthState"
 import { userLoggedIn, userLoggedOut } from "@slices/authSlice"
 import { User } from "@interfaces/user.interfaces"
 import { useDispatch } from "react-redux"
+import {removeCookie} from "tiny-cookie"
 
 export default function PreLoader( { user: preLoadedUser }: { user: User } ){
     const loaded                               = useRef( false )
@@ -19,6 +20,7 @@ export default function PreLoader( { user: preLoadedUser }: { user: User } ){
         dispatch( userLoggedIn( preLoadedUser ) )
         loaded.current = true
     } else if( ! loaded.current ){
+        removeCookie('access_token')
         dispatch( userLoggedOut() )
         loaded.current = true
     }
