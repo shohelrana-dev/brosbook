@@ -45,7 +45,7 @@ export default function MessageBox( { conversationId }: Props ){
                     <div className="mr-4">
                         <Avatar
                             src={ avatar?.url }
-                            online={ active === 1 }
+                            online={ active }
                             alt={ fullName }
                         />
                     </div>
@@ -56,7 +56,7 @@ export default function MessageBox( { conversationId }: Props ){
                             </Link>
                         </Name>
                         <Active>
-                            { active === 1 ? 'Active now' : 'Active ' + timeAgo( updatedAt! ) }
+                            { active ? 'Active now' : 'Active ' + timeAgo( updatedAt! ) }
                         </Active>
                     </div>
                 </div>

@@ -31,7 +31,7 @@ function MessageItem( { message, prevMessage, isLastMessage, participant }: Sing
 
     const avatarMarkup = (
         <Avatar
-            online={ message.sender.active === 1 }
+            online={ message.sender.active }
             alt={ message.sender.fullName }
             src={ message.sender.avatar.url }
             size="small"

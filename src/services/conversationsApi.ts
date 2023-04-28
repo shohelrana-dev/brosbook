@@ -91,7 +91,7 @@ export const conversationsApi = baseApi.injectEndpoints( {
         createConversation: build.mutation<Conversation, string>( {
             query: ( participantId ) => ( {
                 url: `/conversations`,
-                method: 'PUT',
+                method: 'POST',
                 body: { participantId }
             } ),
             onQueryStarted: async (arg, api) => {

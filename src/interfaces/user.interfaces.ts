@@ -10,7 +10,7 @@ export interface User {
     password?: string
     avatar: Media
     profile?: Profile
-    active: number
+    active: boolean
     hasEmailVerified: boolean
     isViewerFollow: boolean,
     createdAt: string

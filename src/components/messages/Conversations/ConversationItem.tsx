@@ -48,7 +48,7 @@ function ConversationItem( { conversation }: SingleConversationProps ){
             <Box>
                 <div>
                     <Avatar
-                        online={ active === 1 }
+                        online={ active }
                         alt={ fullName }
                         src={ avatar?.url }
                     />

@@ -66,7 +66,7 @@ export const notificationsApi = baseApi.injectEndpoints( {
         readAllNotification: build.mutation<Notification[], void>( {
             query: () => ( {
                 url: `/notifications/read_all`,
-                method: 'PUT'
+                method: 'PATCH'
             } )
         } ),
 

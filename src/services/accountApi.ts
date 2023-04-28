@@ -7,7 +7,7 @@ export const accountApi = baseApi.injectEndpoints( {
         updateProfile: build.mutation<User, ProfilePayload>( {
             query: ( data ) => ( {
                 url: `/account/profile`,
-                method: 'PUT',
+                method: 'PATCH',
                 body: data
             } ),
             invalidatesTags: ['CurrentUser']
@@ -16,7 +16,7 @@ export const accountApi = baseApi.injectEndpoints( {
         changeUsername: build.mutation<User, ChangeUsernamePayload>( {
             query: ( data ) => ( {
                 url: `/account/username`,
-                method: 'PUT',
+                method: 'PATCH',
                 body: data
             } ),
             invalidatesTags: ['CurrentUser']
@@ -25,7 +25,7 @@ export const accountApi = baseApi.injectEndpoints( {
         changePassword: build.mutation<User, ChangePasswordPayload>( {
             query: ( data ) => ( {
                 url: `/account/password`,
-                method: 'PUT',
+                method: 'PATCH',
                 body: data
             } )
         } ),
