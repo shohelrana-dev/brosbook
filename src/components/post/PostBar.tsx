@@ -35,13 +35,13 @@ function PostBar( { post, setIsCommentsShow, isCommentsShow }: PostBarProps ){
             return
         }
 
-        postLike( post.id )
+        postLike({ postId: post.id, authorId: post.author.id })
     }
 
     function handlePostUnlike( event: MouseEvent<HTMLButtonElement> ){
         event.currentTarget.disabled = true
 
-        postUnlike( post.id )
+        postUnlike({ postId: post.id, authorId: post.author.id })
     }
 
     return (

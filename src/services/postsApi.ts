@@ -18,7 +18,7 @@ export const postsApi = baseApi.injectEndpoints( {
             ...listQueryExtraDefinitions
         } ),
 
-        getPosts: build.query<ListResponse<Post>, { userId?: string, page: number }>( {
+        getPosts: build.query<ListResponse<Post>, { authorId?: string, page: number }>( {
             query: ( params ) => ( {
                 url: 'posts',
                 params: { ...params, limit: postsPerPage }
@@ -58,14 +58,14 @@ export const postsApi = baseApi.injectEndpoints( {
             }
         } ),
 
-        postLike: build.mutation<Post, string>( {
-            query: ( postId ) => ( {
+        postLike: build.mutation<Post, { postId: string, authorId: string }>( {
+            query: ({postId} ) => ( {
                 url: `posts/${ postId }/like`,
                 method: 'POST'
             } ),
-            onQueryStarted: async( arg, { dispatch, queryFulfilled } ) => {
+            onQueryStarted: async( arg, { dispatch, queryFulfilled, getState } ) => {
                 function findAndLike( draft: ListResponse<Post> ){
-                    const post = draft.items.find( ( p ) => p.id === arg )
+                    const post = draft.items.find( ( p ) => p.id === arg.postId )
                     if( post ){
                         post.likesCount += 1
                         post.isViewerLiked = true
@@ -74,8 +74,8 @@ export const postsApi = baseApi.injectEndpoints( {
 
                 // optimistic cache update
                 const patchResult1 = dispatch( postsApi.util.updateQueryData( "getFeedPosts", undefined as any, findAndLike ) )
-                const patchResult2 = dispatch( postsApi.util.updateQueryData( "getPosts", undefined as any, findAndLike ) )
-                const patchResult3 = dispatch( postsApi.util.updateQueryData( "getPostById", arg, ( draft: Post ) => {
+                const patchResult2 = dispatch( postsApi.util.updateQueryData( "getPosts", {authorId: arg.authorId} as any, findAndLike ) )
+                const patchResult3 = dispatch( postsApi.util.updateQueryData( "getPostById", arg.postId, ( draft: Post ) => {
                     draft.likesCount += 1
                     draft.isViewerLiked = true
                 } ) )
@@ -92,14 +92,14 @@ export const postsApi = baseApi.injectEndpoints( {
             }
         } ),
 
-        postUnlike: build.mutation<Post, string>( {
-            query: ( postId ) => ( {
+        postUnlike: build.mutation<Post, { postId: string, authorId: string }>( {
+            query: ({postId} ) => ( {
                 url: `posts/${ postId }/unlike`,
                 method: 'POST'
             } ),
             onQueryStarted: async( arg, { dispatch, queryFulfilled } ) => {
                 function findAndUnLike( draft: ListResponse<Post> ){
-                    const post = draft.items.find( ( p ) => p.id === arg )
+                    const post = draft.items.find( ( p ) => p.id === arg.postId )
                     if( post ){
                         post.likesCount -= 1
                         post.isViewerLiked = false
@@ -108,8 +108,8 @@ export const postsApi = baseApi.injectEndpoints( {
 
                 // optimistic cache update
                 const patchResult1 = dispatch( postsApi.util.updateQueryData( 'getFeedPosts', undefined as any, findAndUnLike ) )
-                const patchResult2 = dispatch( postsApi.util.updateQueryData( 'getPosts', undefined as any, findAndUnLike ) )
-                const patchResult3 = dispatch( postsApi.util.updateQueryData( 'getPostById', arg, ( draft: Post ) => {
+                const patchResult2 = dispatch( postsApi.util.updateQueryData( 'getPosts', {authorId: arg.authorId} as any, findAndUnLike ) )
+                const patchResult3 = dispatch( postsApi.util.updateQueryData( 'getPostById', arg.postId, ( draft: Post ) => {
                     draft.likesCount -= 1
                     draft.isViewerLiked = false
                 } ) )

@@ -15,7 +15,7 @@ export default function UserPostsPage( { params }: Props ){
     //hooks
     const [page, setPage] = useState<number>( 1 )
     const { data: user }  = useGetUserByUsernameQuery( params.username )
-    const postsQuery      = useGetPostsQuery( { userId: user?.id, page }, { skip: ! user?.id } )
+    const postsQuery      = useGetPostsQuery( { authorId: user?.id, page }, { skip: ! user?.id } )
 
     const { isLoading, isSuccess, isError, data: postsData } = postsQuery || {}
     const { items: posts, nextPage }                         = postsData || {}

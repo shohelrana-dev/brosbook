@@ -18,15 +18,16 @@ interface Props {
     post: Post
 }
 
-function CommentItem( props: Props ){
+export default function CommentItem({ post, comment }: Props){
     //hooks
-    const [comment, setComment]             = useState<Comment | null>( props.comment )
     const [likeComment]                     = useLikeCommentMutation()
     const [unlikeComment]                   = useUnlikeCommentMutation()
     const [isViewerLiked, setIsViewerLiked] = useState<boolean>( comment?.isViewerLiked! )
     const [likesCount, setLikeCount]        = useState<number>( comment?.likesCount || 0 )
-    const { isAuthenticated }               = useAuthState()
+    const { user:currentUser, isAuthenticated } = useAuthState()
     const unauthorizedAlert                 = useUnauthorizedAlert()
+
+    const isCurrentUserAuthor = isAuthenticated && comment.author && ( comment.author.id === currentUser?.id || post.author.id === currentUser?.id )
 
     async function handleCommentLike(){
         if( ! isAuthenticated ){
@@ -62,8 +63,6 @@ function CommentItem( props: Props ){
         }
     }
 
-    if( ! comment ) return null
-
     return (
         <div className="flex">
             <Link href={ `/${ comment.author.username }` } className="mt-3">
@@ -93,7 +92,7 @@ function CommentItem( props: Props ){
                             </div>
                         </div>
                     </div>
-                    <CommentOptions comment={ comment } setComment={ setComment } post={ props.post }/>
+                    <CommentOptions comment={ comment } isCurrentUserAuthor={ isCurrentUserAuthor }/>
                 </div>
 
                 <div className="flex items-center text-pink-500 relative">
@@ -124,5 +123,3 @@ function CommentItem( props: Props ){
         </div>
     )
 }
-
-export default CommentItem

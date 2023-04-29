@@ -8,7 +8,7 @@ import ButtonGray from "@components/global/ButtonGray"
 import UsersSkeleton from "@components/skeletons/UsersSkeleton"
 import useAuthState from "@hooks/useAuthState"
 import Error from "@components/global/Error"
-import { ErrorResponse } from "@interfaces/index.interfaces";
+import { ErrorResponse } from "@interfaces/index.interfaces"
 
 export default function SuggestedPeople(){
     const { isAuthenticated } = useAuthState()

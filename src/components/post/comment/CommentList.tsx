@@ -6,21 +6,20 @@ import BasicInput from "@components/global/BasicInput"
 import useAuthState from "@hooks/useAuthState"
 import ButtonGray from "@components/global/ButtonGray"
 import Loading from "@components/global/Loading"
-import { useGetPostByIdQuery } from "@services/postsApi"
 import Error from "@components/global/Error"
 import { ErrorResponse } from "@interfaces/index.interfaces"
 import IconButton from "@components/global/IconButton"
 import { MdSend as SendIcon } from "react-icons/md"
+import {Post} from "@interfaces/posts.interfaces"
 
-interface CommentListPost {
-    postId: string
+interface Props {
+    post: Post
 }
 
-function CommentList( { postId }: CommentListPost ){
+export default function CommentList( { post }: Props ){
     const [page, setPage]                        = useState( 1 )
     const { user: currentUser, isAuthenticated } = useAuthState()
-    const commentsQuery                                                = useGetCommentsQuery( { postId, page } )
-    const { data: post }        = useGetPostByIdQuery( postId )
+    const commentsQuery                          = useGetCommentsQuery( { postId: post.id, page } )
     const [createComment]                        = useCreateCommentMutation()
 
     const [commentBody, setCommentBody] = useState( '' )
@@ -34,7 +33,7 @@ function CommentList( { postId }: CommentListPost ){
         if( ! commentBody ) return
 
         try {
-            await createComment( { postId, body: commentBody } ).unwrap()
+            await createComment( { postId: post.id, body: commentBody } ).unwrap()
             setCommentBody( '' )
         } catch ( err ) {
             console.error( err )
@@ -50,7 +49,7 @@ function CommentList( { postId }: CommentListPost ){
     } else if( isError ){
         content = <Error message={ error.data?.message }/>
     } else if( isSuccess && comments.length > 0 ){
-        content = comments.map( ( comment ) => <CommentItem comment={ comment } post={ post! } key={ comment.id }/> )
+        content = comments.map( ( comment ) => <CommentItem comment={ comment } post={ post } key={ comment.id }/> )
     }
 
     return (
@@ -91,5 +90,3 @@ function CommentList( { postId }: CommentListPost ){
         </div>
     )
 }
-
-export default CommentList

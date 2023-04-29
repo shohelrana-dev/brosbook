@@ -69,7 +69,7 @@ const PostCard = ( props: PostCardProps ) => {
 
                 <PostBar post={ post } isCommentsShow={ isCommentsShow } setIsCommentsShow={ setIsCommentsShow }/>
 
-                { isCommentsShow ? <CommentList postId={ id }/> : null }
+                { isCommentsShow && <CommentList post={ post }/> }
 
             </div>
         </div>

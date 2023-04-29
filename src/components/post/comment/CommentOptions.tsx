@@ -18,23 +18,20 @@ import useUnauthorizedAlert from "@hooks/useUnauthorzedAlert"
 import { useModal } from "react-minimal-modal"
 
 interface Props {
-    post: Post
+    isCurrentUserAuthor: boolean
     comment: Comment
-    setComment: ( comment: Comment | null ) => void
 }
 
-export default function CommentOptions( { post, comment, setComment }: Props ){
+export default function CommentOptions( { comment, isCurrentUserAuthor }: Props ){
     const [follow]              = useFollowMutation()
     const [unfollow]            = useUnfollowMutation()
     const [deleteComment]       = useDeleteCommentMutation()
     const { isVisible, toggle } = useModal()
 
-    const { user: currentUser, isAuthenticated } = useAuthState()
+    const { isAuthenticated } = useAuthState()
     const confirmAlert                           = useConfirmAlert()
     const [author, setAuthor]                    = useState<User>( comment.author )
     const unauthorizedAlert                      = useUnauthorizedAlert()
-
-    const isCurrentUserAuthor = isAuthenticated && comment.author && ( comment.author.id === currentUser?.id || post.author.id === currentUser?.id )
 
     async function handleDeleteComment(){
         await confirmAlert( {
@@ -44,11 +41,10 @@ export default function CommentOptions( { post, comment, setComment }: Props ){
             onConfirm: async() => {
                 try {
                     await deleteComment( { postId: comment.postId, commentId: comment.id } ).unwrap()
-                    setComment( null )
                     toast.success( 'Comment deleted.' )
                     toggle()
                 } catch ( err: any ) {
-                    toast.error( err?.data?.message || 'Comment deletion was failed.' )
+                    toast.error( err?.data?.message || 'Failed to delete comment.' )
                 }
             }
         } )
@@ -86,6 +82,10 @@ export default function CommentOptions( { post, comment, setComment }: Props ){
         }
     }
 
+    function handleHideComment() {
+        toggle()
+    }
+
     return (
         <Popover placement="bottom-end" open={ isVisible }>
             <PopoverHandler>
@@ -115,10 +115,7 @@ export default function CommentOptions( { post, comment, setComment }: Props ){
                             </OptionButton>
                         )
                     ) }
-                    <OptionButton onClick={ () => {
-                        setComment( null )
-                        toggle()
-                    } }>
+                    <OptionButton onClick={ handleHideComment }>
                         <HideIcon size="18"/>
                         Hide
                     </OptionButton>
