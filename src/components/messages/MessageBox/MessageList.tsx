@@ -2,20 +2,20 @@ import React, { useEffect, useRef, useState } from 'react'
 import MessageItem from "@components/messages/MessageBox/MessageItem"
 import { useGetMessagesQuery, useSeenAllMessagesMutation } from "@services/messagesApi"
 import Loading from "@components/global/Loading"
-import { Conversation, Message } from "@interfaces/conversation.interfaces"
+import { Message } from "@interfaces/conversation.interfaces"
 import useAuthState from "@hooks/useAuthState"
 import useInfiniteScroll from "react-infinite-scroll-hook"
 import ChatSkeleton from "@components/skeletons/ChatSkeleton"
 import Error from "@components/global/Error"
 import { ErrorResponse } from "@interfaces/index.interfaces"
+import {useParams} from "next/navigation"
+import {useGetConversationByIdQuery} from "@services/conversationsApi"
 
-interface Props {
-    conversation: Conversation
-}
-
-export default function MessageList( { conversation }: Props ){
+export default function MessageList(){
     //hooks
     const { user }          = useAuthState()
+    const {conversationId} = useParams()
+    const {data: conversation} = useGetConversationByIdQuery(conversationId)
     const messageListRef    = useRef<HTMLDivElement>( null )
     const [page, setPage]   = useState( 1 )
     const messagesQuery     = useGetMessagesQuery(
@@ -26,12 +26,12 @@ export default function MessageList( { conversation }: Props ){
     const { isLoading, isSuccess, isError, data: messagesData } = messagesQuery || {}
     const { items: messages = [], nextPage }                    = messagesData || {}
     const error                                                 = messagesQuery.error as ErrorResponse || {}
-    const participant                                           = conversation.user1.id === user?.id ? conversation.user2 : conversation.user1
+    const participant                                           = conversation?.user1.id === user?.id ? conversation?.user2 : conversation?.user1
     const lastMessage                                           = messages[0]
 
     useEffect( () => {
         if( isSuccess && ! lastMessage?.isMeSender && ! lastMessage?.seenAt ){
-            seenAllMessages( conversation.id )
+            seenAllMessages( conversation?.id! )
         }
     }, [messages, isSuccess, lastMessage?.isMeSender] )
 
@@ -63,7 +63,7 @@ export default function MessageList( { conversation }: Props ){
             <MessageItem
                 key={ message.id }
                 message={ message }
-                participant={ participant }
+                participant={ participant! }
                 prevMessage={ index === 0 ? null : messages[index - 1] }
                 isLastMessage={ 0 === index }
             />

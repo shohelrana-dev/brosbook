@@ -37,7 +37,18 @@ export const postsApi = baseApi.injectEndpoints( {
                 url: 'posts',
                 method: 'POST',
                 body: data
-            } )
+            } ),
+            onQueryStarted: async( arg, { dispatch, queryFulfilled } ) => {
+                try {
+                    const {data} = await queryFulfilled
+
+                    dispatch( postsApi.util.updateQueryData( "getPosts", { authorId: data.author.id } as any,  (draft: ListResponse<Post>) => {
+                        draft.items.unshift(data)
+                    }) )
+                }catch (err) {
+                    throw err
+                }
+            }
         } ),
 
         deletePost: build.mutation<Post, string>( {
@@ -47,11 +58,11 @@ export const postsApi = baseApi.injectEndpoints( {
             } ),
             onQueryStarted:async (arg, {dispatch, queryFulfilled})=> {
                 try {
-                    await queryFulfilled
+                    const {data} = await queryFulfilled
 
-                    dispatch( postsApi.util.updateQueryData( "getPosts", undefined as any,  (draft: ListResponse<Post> ) =>{
+                    dispatch( postsApi.util.updateQueryData( "getPosts", { authorId: data.author.id } as any,  (draft: ListResponse<Post>) => {
                         draft.items = draft.items.filter((post) => post.id !== arg)
-                    } ) )
+                    }) )
                 }catch (e) {
                     console.log(e)
                 }
@@ -63,7 +74,7 @@ export const postsApi = baseApi.injectEndpoints( {
                 url: `posts/${ postId }/like`,
                 method: 'POST'
             } ),
-            onQueryStarted: async( arg, { dispatch, queryFulfilled, getState } ) => {
+            onQueryStarted: async( arg, { dispatch, queryFulfilled } ) => {
                 function findAndLike( draft: ListResponse<Post> ){
                     const post = draft.items.find( ( p ) => p.id === arg.postId )
                     if( post ){

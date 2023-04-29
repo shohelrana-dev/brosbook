@@ -3,16 +3,12 @@ import { getConversationById } from "@services/index"
 import { cookies } from "next/headers"
 import { Metadata } from "next"
 
-export const generateMetadata = async( { params }: Props ): Promise<Metadata> => {
+export const generateMetadata = async( { params }: { params: { conversationId: string }} ): Promise<Metadata> => {
     const conversation = await getConversationById( params.conversationId, cookies() )
 
     return { title: conversation?.participant.fullName }
 }
 
-interface Props {
-    params: { conversationId: string }
-}
-
-export default async function Page( { params }: Props ){
-    return <MessageBox conversationId={ params.conversationId }/>
+export default async function Page(){
+    return <MessageBox/>
 }

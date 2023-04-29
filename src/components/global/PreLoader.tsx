@@ -20,9 +20,9 @@ export default function PreLoader( { user: preLoadedUser }: { user: User } ){
         dispatch( userLoggedIn( preLoadedUser ) )
         loaded.current = true
     } else if( ! loaded.current ){
-        setTimeout(() => {
+        if(typeof window !== 'undefined'){
             removeCookie('access_token')
-        }, 2000)
+        }
         dispatch( userLoggedOut() )
         loaded.current = true
     }

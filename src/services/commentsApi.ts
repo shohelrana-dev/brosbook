@@ -1,5 +1,7 @@
+// noinspection TypeScriptValidateJSTypes
+
 import { ListResponse } from "@interfaces/index.interfaces"
-import { Comment } from "@interfaces/posts.interfaces"
+import {Comment} from "@interfaces/posts.interfaces"
 import { baseApi } from "@services/baseApi"
 import listQueryExtraDefinitions from "@utils/listQueryExtraDefinitions"
 
@@ -44,9 +46,23 @@ export const commentsApi = baseApi.injectEndpoints( {
                 url: `posts/${ postId }/comments/${ commentId }/like`,
                 method: 'POST'
             } ),
-            invalidatesTags: (result, error, arg) => [
-                { type: 'Comments', id: arg.postId }
-            ]
+            onQueryStarted: async( arg, { dispatch, queryFulfilled, getState } ) => {
+                // optimistic cache update
+                const patchResult = dispatch( commentsApi.util.updateQueryData( "getComments", {postId: arg.postId} as any, (draft: ListResponse<Comment>) => {
+                    const comment = draft.items.find( ( c ) => c.id === arg.commentId )
+                    if( comment ){
+                        comment.likesCount += 1
+                        comment.isViewerLiked = true
+                    }
+                } ) )
+
+                try {
+                    await queryFulfilled
+                } catch ( err ) {
+                    patchResult.undo()
+                    throw err
+                }
+            }
         } ),
 
         unlikeComment: build.mutation<Comment, { postId: string, commentId: string }>( {
@@ -54,9 +70,23 @@ export const commentsApi = baseApi.injectEndpoints( {
                 url: `posts/${ postId }/comments/${ commentId }/unlike`,
                 method: 'POST'
             } ),
-            invalidatesTags: (result, error, arg) => [
-                { type: 'Comments', id: arg.postId }
-            ]
+            onQueryStarted: async( arg, { dispatch, queryFulfilled, getState } ) => {
+                // optimistic cache update
+                const patchResult = dispatch( commentsApi.util.updateQueryData( "getComments", {postId: arg.postId} as any, (draft: ListResponse<Comment>) => {
+                    const comment = draft.items.find( ( c ) => c.id === arg.commentId )
+                    if( comment ){
+                        comment.likesCount -= 1
+                        comment.isViewerLiked = false
+                    }
+                } ) )
+
+                try {
+                    await queryFulfilled
+                } catch ( err ) {
+                    patchResult.undo()
+                    throw err
+                }
+            }
         } ),
     } ),
 } )

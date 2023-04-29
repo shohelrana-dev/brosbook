@@ -40,7 +40,7 @@ export default function CommentOptions( { comment, isCurrentUserAuthor }: Props 
             confirmButtonLabel: 'Delete',
             onConfirm: async() => {
                 try {
-                    await deleteComment( { postId: comment.postId, commentId: comment.id } ).unwrap()
+                    await deleteComment( { postId: comment.post?.id!, commentId: comment.id } ).unwrap()
                     toast.success( 'Comment deleted.' )
                     toggle()
                 } catch ( err: any ) {

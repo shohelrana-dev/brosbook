@@ -38,7 +38,6 @@ export const usersApi = baseApi.injectEndpoints( {
                     url: `/users/suggestions`,
                     params: { page, limit: usersPerPage }
                 } ),
-                providesTags: [{type: "User", id: "LIST"}],
                 ...listQueryExtraDefinitions
             } ),
 

@@ -54,7 +54,7 @@ export default function CommentList( { post }: Props ){
 
     return (
         <div className="mt-2">
-            { isAuthenticated ? (
+            { isAuthenticated && (
                 <form onSubmit={ handleSaveComment } className="mb-2 flex items-center">
                     <div className="mt-[-4px]">
                         <Avatar src={ currentUser?.avatar?.url } online size="small"/>
@@ -77,11 +77,11 @@ export default function CommentList( { post }: Props ){
                         </div>
                     </div>
                 </form>
-            ) : null }
+            ) }
 
             { content }
 
-            { !! nextPage ? (
+            { nextPage ? (
                 <ButtonGray isLoading={ isLoading } onClick={ () => setPage( nextPage! ) }>
                     See more comments
                 </ButtonGray>

@@ -42,7 +42,7 @@ export default function Layout( { children }: PropsWithChildren ){
 
             { conversationId && isDesktopOrLaptop && ! pathname?.endsWith( '/info' ) ? (
                 <div className="w-1/4 p-2 md:p-5 h-full border-l-2 border-gray-200">
-                    <ParticipantInfo conversationId={ conversationId }/>
+                    <ParticipantInfo/>
                 </div>
             ) : null }
         </Wrapper>

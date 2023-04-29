@@ -1,4 +1,3 @@
-import React, { useState } from 'react'
 import Link from "next/link"
 import { BsHeartFill as LikeIcon } from "react-icons/bs"
 import { BsHeart as OutlinedLikeIcon } from "react-icons/bs"
@@ -22,60 +21,41 @@ export default function CommentItem({ post, comment }: Props){
     //hooks
     const [likeComment]                     = useLikeCommentMutation()
     const [unlikeComment]                   = useUnlikeCommentMutation()
-    const [isViewerLiked, setIsViewerLiked] = useState<boolean>( comment?.isViewerLiked! )
-    const [likesCount, setLikeCount]        = useState<number>( comment?.likesCount || 0 )
     const { user:currentUser, isAuthenticated } = useAuthState()
     const unauthorizedAlert                 = useUnauthorizedAlert()
 
-    const isCurrentUserAuthor = isAuthenticated && comment.author && ( comment.author.id === currentUser?.id || post.author.id === currentUser?.id )
+    const {id, body, isViewerLiked, likesCount, author, createdAt} = comment
+    const isCurrentUserAuthor = isAuthenticated && author && ( author.id === currentUser?.id || post.author.id === currentUser?.id )
 
     async function handleCommentLike(){
         if( ! isAuthenticated ){
             unauthorizedAlert( {
                 title: 'Like a Comment to share the love.',
-                message: `Join ${ process.env.NEXT_PUBLIC_APP_NAME } now to let ${ comment?.author.fullName } know you like their Post and Comment.`
+                message: `Join ${ process.env.NEXT_PUBLIC_APP_NAME } now to let ${ author.fullName } know you like their Post and Comment.`
             } )
             return
         }
 
-        setLikeCount( likesCount + 1 )
-        setIsViewerLiked( true )
-
-        try {
-            await likeComment( { postId: comment?.postId!, commentId: comment?.id! } ).unwrap()
-        } catch ( err ) {
-            setLikeCount( likesCount - 1 )
-            setIsViewerLiked( false )
-            console.error( err )
-        }
+        likeComment( { postId: post.id, commentId: id } )
     }
 
     async function handleCommentUnlike(){
-        setIsViewerLiked( false )
-        setLikeCount( likesCount - 1 )
-
-        try {
-            await unlikeComment( { postId: comment?.postId!, commentId: comment?.id! } ).unwrap()
-        } catch ( err ) {
-            setIsViewerLiked( true )
-            setLikeCount( likesCount + 1 )
-            console.error( err )
-        }
+        unlikeComment( { postId: post.id, commentId: id } )
     }
 
     return (
         <div className="flex">
-            <Link href={ `/${ comment.author.username }` } className="mt-3">
-                <Avatar src={ comment.author.avatar?.url } size="small"/>
+            <Link href={ `/${ author.username }` } className="mt-3">
+                <Avatar src={ author.avatar?.url } size="small"/>
             </Link>
             <div>
                 <div className="flex items-center">
                     <div className="ml-2 mt-1 py-2 px-4 rounded-xl bg-theme-gray relative">
-                        <Link href={ `/${ comment.author.username }` } className="flex flex-wrap">
+                        <Link href={ `/${ author.username }` } className="flex flex-wrap">
                             <h3 className="text-xs font-medium">
-                                { comment.author.fullName }
+                                { author.fullName }
                             </h3>
-                            <p className="text-xs ml-1 text-gray-500">@{ comment.author.username }</p>
+                            <p className="text-xs ml-1 text-gray-500">@{ author.username }</p>
                         </Link>
 
                         <div>
@@ -87,7 +67,7 @@ export default function CommentItem({ post, comment }: Props){
                                     expanded={ false }
                                     truncatedEndingComponent={ "... " }
                                 >
-                                    { comment.body }
+                                    { body }
                                 </ShowMoreText>
                             </div>
                         </div>
@@ -116,7 +96,7 @@ export default function CommentItem({ post, comment }: Props){
                     </motion.button>
                     <p>{ likesCount }</p>
                     <p className="text-xs ml-5">
-                        { timeAgo( comment.createdAt ) }
+                        { timeAgo( createdAt ) }
                     </p>
                 </div>
             </div>

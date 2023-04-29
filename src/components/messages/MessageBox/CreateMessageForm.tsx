@@ -1,5 +1,5 @@
 import React, { FormEvent, useState } from 'react'
-import { Conversation, MessageType } from "@interfaces/conversation.interfaces"
+import { MessageType } from "@interfaces/conversation.interfaces"
 import useSelectFile from "@hooks/useSelectFile"
 import { RiGalleryLine as GalleryIcon } from "react-icons/ri"
 import { BsHeartFill as LikeIcon } from "react-icons/bs"
@@ -12,13 +12,13 @@ import { Popover, PopoverContent, PopoverHandler } from "@material-tailwind/reac
 //@ts-ignore
 import { isOneEmoji, isMultipleEmoji } from 'is-emojis'
 import { RxCross2 as CancelIcon } from "react-icons/rx"
+import {useParams} from "next/navigation"
+import {useGetConversationByIdQuery} from "@services/conversationsApi"
 
-interface Props {
-    conversation: Conversation
-}
-
-export default function CreateMessageForm( { conversation }: Props ){
+export default function CreateMessageForm( ){
     //hooks
+    const {conversationId} = useParams()
+    const {data: conversation} = useGetConversationByIdQuery(conversationId)
     const [sendMessage, { isLoading }]                                      = useSendMessageMutation()
     const { inputRef, onClick, onChange, removeSelectedFile, selectedFile } = useSelectFile()
     const [messageText, setMessageText]                                     = useState<string>( '' )

@@ -7,6 +7,8 @@ import ImageLightbox from "@components/global/ImageLightbox"
 import {useEffect, useRef, useState} from "react"
 import tw, { styled } from "twin.macro"
 import { Box as BaseBox } from "@components/styles/Global.styles"
+import {useParams} from "next/navigation"
+import Error from "@components/global/Error"
 
 const Wrapper  = tw.div`h-full overflow-y-auto scrollbar-hide`
 const Box      = tw( BaseBox )`p-5 mb-3`
@@ -18,18 +20,15 @@ const Heading  = tw.h3`text-base font-medium mb-3`
 const InfoItem = styled.div( ( { last }: { last?: boolean } ) => [
     tw`pb-2 mb-2`,
     ! last && tw`border-b border-gray-200`
-] );
+] )
 
-interface Props {
-    conversationId: string
-}
-
-function ParticipantInfo( { conversationId }: Props ){
+function ParticipantInfo(  ){
     //hooks
+    const {conversationId} = useParams()
+    const { data: conversation } = useGetConversationByIdQuery( conversationId )
     const [page, setPage] = useState<number>( 1 )
     const conversationMediaListQuery  = useGetConversationMediaListQuery({conversationId, page} )
-    const { isLoading:isMediaLoading, isSuccess, isError, data: listData } = conversationMediaListQuery || {}
-    const { data: conversation, isLoading }                                  = useGetConversationByIdQuery( conversationId )
+    const { isLoading, isSuccess, isError, data: listData } = conversationMediaListQuery || {}
     const containerRef                                                       = useRef<HTMLDivElement>( null )
 
     const { items: mediaList = [], nextPage }                    = listData || {}
@@ -43,12 +42,30 @@ function ParticipantInfo( { conversationId }: Props ){
 
     const participant = conversation?.participant
 
-    if( isLoading ) return <Loading/>
-
     if( ! participant ) return null
 
     const { fullName, avatar, email, active } = participant
     const { bio, phone, location }            = participant.profile || {}
+
+    //decide content
+    let content = null
+    if( isLoading ){
+        content = <Loading size={ 40 }/>
+    } else if( isSuccess && mediaList.length === 0 ){
+        content = <p className="text-center py-6">No media files.</p>
+    } else if( isError ){
+        content = <Error message={ error.data?.message }/>
+    } else if( isSuccess && mediaList.length > 0 ){
+        content = (
+                <InfiniteScroll
+                    loadMore={ () => setPage(nextPage!) }
+                    hasMore={ !!nextPage }
+                    loader={ <Loading size={ 40 }/> }
+                >
+                    <ImageLightbox imageList={ mediaList } alt="Chat photo"/>
+                </InfiniteScroll>
+        )
+    }
 
     return (
         <Wrapper ref={ containerRef }>
@@ -83,19 +100,8 @@ function ParticipantInfo( { conversationId }: Props ){
 
             <Box>
                 <Heading>Shared Media</Heading>
-                { ( ! mediaList && isMediaLoading ) ? <Loading size={ 40 }/> : null }
-                <div>
-                    <InfiniteScroll
-                        loadMore={ () => setPage(nextPage!) }
-                        hasMore={ !!nextPage }
-                        loader={ <Loading size={ 40 }/> }
-                    >
-                        <ImageLightbox imageList={ mediaList } alt="Chat photo"/>
-                    </InfiniteScroll>
-                    { ( ! isLoading && mediaList?.length < 1 ) ? (
-                        <p className="text-center py-6">No media files.</p>
-                    ) : null }
-                </div>
+
+                <div>{ content }</div>
             </Box>
 
         </Wrapper>

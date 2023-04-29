@@ -6,13 +6,14 @@ import MessageList from "@components/messages/MessageBox/MessageList"
 import CreateMessageForm from "@components/messages/MessageBox/CreateMessageForm"
 import timeAgo from "@utils/timeAgo"
 import Loading from "@components/global/Loading"
-import { useGetConversationByIdQuery } from "@services/conversationsApi"
+import { useGetConversationByIdQuery} from "@services/conversationsApi"
 import IconButton from "@components/global/IconButton"
 import { BiInfoCircle as InfoIcon } from "react-icons/bi"
 import Modal, { useModal } from "react-minimal-modal"
 import ParticipantInfo from "@components/messages/ParticipantInfo"
-import tw from "twin.macro";
+import tw from "twin.macro"
 import { Box as BaseBox } from "@components/styles/Global.styles"
+import {useParams} from "next/navigation"
 
 const Wrapper     = tw.div`flex flex-col relative h-full`
 const StyledModal = tw( Modal )`max-h-[85vh] bg-theme-gray overflow-hidden !p-0`
@@ -20,12 +21,9 @@ const Box         = tw( BaseBox )`py-3 px-4 lg:px-6 flex justify-between`
 const Name        = tw.h3`font-medium text-gray-800`
 const Active      = tw.p`text-gray-500 text-sm`
 
-interface Props {
-    conversationId: string
-}
-
-export default function MessageBox( { conversationId }: Props ){
+export default function MessageBox(){
     //hooks
+    const {conversationId} = useParams()
     const { data: conversation, isLoading } = useGetConversationByIdQuery( conversationId )
     const { isVisible, toggle }             = useModal()
 
@@ -36,7 +34,7 @@ export default function MessageBox( { conversationId }: Props ){
     return (
         <Wrapper>
             <StyledModal visible={ isVisible } toggle={ toggle } hideIcon>
-                <ParticipantInfo conversationId={ conversationId }/>
+                <ParticipantInfo/>
             </StyledModal>
 
             {/*User top bar*/ }
@@ -68,10 +66,10 @@ export default function MessageBox( { conversationId }: Props ){
             </Box>
 
             {/*Messages*/ }
-            <MessageList conversation={ conversation! }/>
+            <MessageList/>
 
             {/*message form*/ }
-            <CreateMessageForm conversation={ conversation! }/>
+            <CreateMessageForm/>
 
         </Wrapper>
     )
