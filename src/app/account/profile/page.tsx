@@ -1,4 +1,6 @@
 "use client"
+import 'react-date-picker/dist/DatePicker.css'
+import 'react-calendar/dist/Calendar.css'
 import { useEffect } from "react"
 import DatePicker from 'react-date-picker'
 import { ProfilePayload } from "@interfaces/account.interfaces"
@@ -90,13 +92,13 @@ export default function ProfileSettingsPage(){
                 value={ formData.location }
                 error={ errors?.location }
                 onChange={ onChange }
-                helpText="Your address."
+                helpText="Your full address."
             />
 
             <div className="flex flex-col">
-                <label htmlFor="birthdate" className="text-gray-800">Date of birth</label>
+                <label htmlFor="birthdate" className="text-gray-800 mb-2">Date of birth</label>
                 <DatePicker onChange={ ( value: any ) => setFormData( { ...formData, birthdate: value } ) }
-                            value={ formData.birthdate } className="rounded-lg"/>
+                            value={ formData.birthdate } format={"dd-MM-y"} maxDate={new Date()} className="!rounded-lg"/>
                 { errors?.birthdate ? (
                     <p className="font-medium text-red-600 text-[12px]">
                         { errors?.birthdate }

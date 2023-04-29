@@ -20,11 +20,7 @@ function Reactions( { message }: ReactionsProps ){
     const defaultReactions = ['love', 'smile', 'wow', 'sad', 'angry', 'like']
 
     async function handleSubmitReaction( name: string ){
-        try {
-            await sendReaction( { name, conversationId: message.conversationId, messageId: message.id } ).unwrap()
-        } catch ( err ) {
-            console.log( err )
-        }
+        sendReaction( { name, conversationId: message.conversation?.id!, messageId: message.id } )
     }
 
     function toggleOpen(){

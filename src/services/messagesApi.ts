@@ -1,9 +1,12 @@
+// noinspection TypeScriptValidateJSTypes
+
 import { baseApi } from "./baseApi"
 import { Message } from "@interfaces/conversation.interfaces"
-import { ListResponse } from "@interfaces/index.interfaces"
+import {ListResponse, Media} from "@interfaces/index.interfaces"
 import { io } from "socket.io-client"
 import { RootState } from "@store/index"
 import listQueryExtraDefinitions from "@utils/listQueryExtraDefinitions"
+import {conversationsApi} from "@services/conversationsApi"
 
 const socket          = io( process.env.NEXT_PUBLIC_SERVER_BASE_URL! )
 const messagesPerPage = process.env.NEXT_PUBLIC_MESSAGES_PER_PAGE
@@ -16,7 +19,7 @@ export const messagesApi = baseApi.injectEndpoints( {
                 params: { page, limit: messagesPerPage }
             } ),
             onCacheEntryAdded: async( arg, api ) => {
-                const { updateCachedData, cacheEntryRemoved, cacheDataLoaded, getState } = api
+                const { updateCachedData, cacheEntryRemoved, cacheDataLoaded, getState, dispatch } = api
                 const currentUser                                                        = ( getState() as RootState )?.auth?.user
 
                 try {
@@ -28,6 +31,13 @@ export const messagesApi = baseApi.injectEndpoints( {
                         updateCachedData( ( draft ) => {
                             draft.items.unshift( message )
                         } )
+
+                        //console.log(conversationsApi.endpoints.getConversationMediaList.select({conversationId: message.conversation?.id})(getState()))
+                        if(message.image){
+                            dispatch(conversationsApi.util.updateQueryData('getConversationMediaList', {conversationId: message.conversation?.id} as any, (draft: ListResponse<Media>) => {
+                                draft.items.unshift(message.image!)
+                            }))
+                        }
                     }
 
                     const updateMessage = ( message: Message ) => {
