@@ -1,12 +1,13 @@
 // noinspection TypeScriptValidateJSTypes
 
 import { baseApi } from "./baseApi"
-import { Message } from "@interfaces/conversation.interfaces"
+import {Message, MessageType} from "@interfaces/conversation.interfaces"
 import {ListResponse, Media} from "@interfaces/index.interfaces"
 import { io } from "socket.io-client"
 import { RootState } from "@store/index"
 import listQueryExtraDefinitions from "@utils/listQueryExtraDefinitions"
 import {conversationsApi} from "@services/conversationsApi"
+import {Post} from "@interfaces/posts.interfaces";
 
 const socket          = io( process.env.NEXT_PUBLIC_SERVER_BASE_URL! )
 const messagesPerPage = process.env.NEXT_PUBLIC_MESSAGES_PER_PAGE
@@ -29,10 +30,12 @@ export const messagesApi = baseApi.injectEndpoints( {
                         message.isMeSender = message.sender.id === currentUser?.id
 
                         updateCachedData( ( draft ) => {
+                            if(message.isMeSender){
+                                draft.items.shift()
+                            }
                             draft.items.unshift( message )
                         } )
 
-                        //console.log(conversationsApi.endpoints.getConversationMediaList.select({conversationId: message.conversation?.id})(getState()))
                         if(message.image){
                             dispatch(conversationsApi.util.updateQueryData('getConversationMediaList', {conversationId: message.conversation?.id} as any, (draft: ListResponse<Media>) => {
                                 draft.items.unshift(message.image!)
@@ -61,12 +64,39 @@ export const messagesApi = baseApi.injectEndpoints( {
             ...listQueryExtraDefinitions
         } ),
 
-        sendMessage: build.mutation<Message, FormData>( {
-            query: ( data ) => ( {
-                url: `/conversations/${ data.get( 'conversationId' ) }/messages`,
-                method: "POST",
-                body: data
-            } )
+        sendMessage: build.mutation<Message, {conversationId: string, data: {type: MessageType, body?: string, image?: Blob}}>( {
+            query: ({conversationId, data} ) => {
+                const body = new FormData()
+                body.append('type', data.type)
+                body.append('body', data.body!)
+                body.append('image', data.image!)
+
+                return {
+                    url: `/conversations/${ conversationId }/messages`,
+                    method: "POST",
+                    body,
+                }
+            },
+            onQueryStarted: async (arg, {dispatch, queryFulfilled, getState}) => {
+                const currentUser = (getState() as RootState).auth.user
+
+                //optimistic cache update
+                const patchResult = dispatch( messagesApi.util.updateQueryData( "getMessages", {conversationId: arg.conversationId} as any, ( draft: ListResponse<Message> ) => {
+                    draft.items.unshift({
+                        ...arg.data as any,
+                        image: arg.data.image ? {url: URL.createObjectURL(arg.data.image)} as Media : undefined,
+                        sender: currentUser,
+                        isMeSender: true
+                    })
+                } ) )
+
+                try {
+                    await queryFulfilled
+                }catch (err){
+                    patchResult.undo()
+                    throw err
+                }
+            }
         } ),
 
         sendReaction: build.mutation<Message, { messageId: string, conversationId: string, name: string }>( {

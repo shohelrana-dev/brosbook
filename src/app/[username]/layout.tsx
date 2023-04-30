@@ -20,6 +20,7 @@ import {
 } from "@services/index"
 import { Metadata } from "next"
 import { notFound } from "next/navigation"
+import {TbDiscountCheckFilled as BlueBadgeIcon} from "react-icons/tb";
 
 export const generateMetadata = async( { params }: Props ): Promise<Metadata> => {
     const user = await getUserByUsername( params.username, cookies() )
@@ -109,11 +110,16 @@ export default async function ProfileLayout( { children, params }: Props ){
 
                     <div className="px-3 sm:px-6">
                         <div>
-                            <h2 className="text:lg md:text-xl font-bold">{ user?.fullName }</h2>
+                            <div className="flex items-center">
+                                <h2 className="text:lg md:text-xl font-bold">
+                                    { user?.fullName }
+                                </h2>
+                                <BlueBadgeIcon color="rgb(58,141,245)" size={20} className="ml-[1px] mt-[2px]"/>
+                            </div>
                             <p className="text-gray-600 mb-2">@{ user?.username }</p>
                             <div>{ user?.profile?.bio }</div>
                         </div>
-                        <ul className="mt-4">
+                        <ul className="mt-3">
                             { user?.profile?.location && (
                                 <li className="text-gray-600 inline-block mr-3 mb-1">
                                     <GoLocation className="inline-block text-lg"/>&nbsp;
@@ -139,17 +145,17 @@ export default async function ProfileLayout( { children, params }: Props ){
                             } ) }
                             </li>
                         </ul>
-                        <ul className="mt-4">
+                        <ul className="mt-3">
                             <li className="text-gray-600 inline-block mr-3">
                                 <Link href={ `/${ user.username }/following` }>
-                                    <strong className="text-gray-900">
+                                    <strong className="text-gray-900 text-[16px]">
                                         { followingsCount?.count }
                                     </strong> Following
                                 </Link>
                             </li>
                             <li className="text-gray-600 inline-block mr-3">
                                 <Link href={ `/${ user.username }/followers` }>
-                                    <strong className="text-gray-900">
+                                    <strong className="text-gray-900 text-[16px]">
                                         { followersCount?.count }
                                     </strong> Followers
                                 </Link>

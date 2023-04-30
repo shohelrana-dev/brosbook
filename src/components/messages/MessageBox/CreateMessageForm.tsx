@@ -26,50 +26,30 @@ export default function CreateMessageForm( ){
     async function submitForm( event: FormEvent<HTMLFormElement> ){
         event.preventDefault()
 
-        if( messageText ){
-            try {
-                const formData = new FormData()
-                formData.append( 'conversationId', conversation?.id! )
-                formData.append( 'body', messageText )
-                formData.append( 'type', isMultipleEmoji( messageText ) ? MessageType.EMOJI : MessageType.TEXT )
+        const conversationId = conversation?.id!
+        const body = messageText
+        const type = isMultipleEmoji( messageText ) ? MessageType.EMOJI : (selectedFile ? MessageType.IMAGE : MessageType.TEXT)
+        const image = selectedFile
 
-                setMessageText( '' )
+        setMessageText( '' )
+        removeSelectedFile()
 
-                await sendMessage( formData ).unwrap()
-            } catch ( err ) {
-                console.log( err )
-            }
-        }
-
-        if( selectedFile ){
-            try {
-                const formData = new FormData()
-                formData.append( 'conversationId', conversation?.id! )
-                formData.append( 'image', selectedFile )
-                formData.append( 'type', MessageType.IMAGE )
-
-                await sendMessage( formData ).unwrap()
-
-                removeSelectedFile()
-            } catch ( err ) {
-                console.log( err )
-            }
-        }
+        sendMessage( {
+            conversationId,
+            data: {type, body, image}
+        } )
     }
 
     async function clickLoveHandle(){
         const love = '❤️'
 
-        try {
-            const formData = new FormData()
-            formData.append( 'conversationId', conversation?.id! )
-            formData.append( 'body', love )
-            formData.append( 'type', MessageType.EMOJI )
-
-            await sendMessage( formData ).unwrap()
-        } catch ( err ) {
-            console.log( err )
-        }
+            await sendMessage( {
+                conversationId: conversation?.id!,
+                data: {
+                    type: MessageType.EMOJI,
+                    body: love
+                }
+            } )
     }
 
     async function onEmojiClick( emojiData: EmojiClickData ){

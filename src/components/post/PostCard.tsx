@@ -10,6 +10,7 @@ import ImageLightbox from '@components/global/ImageLightbox'
 import PostBar from "@components/post/PostBar"
 import PostOptions from "@components/post/PostOptions"
 import nl2br from 'react-nl2br'
+import {TbDiscountCheckFilled as BlueBadgeIcon} from 'react-icons/tb'
 
 
 interface PostCardProps {
@@ -22,10 +23,10 @@ const PostCard = ( props: PostCardProps ) => {
     const [isCommentsShow, setIsCommentsShow] = useState<boolean>( Boolean( props.isCommentsShow ) )
 
     const { post }                               = props
-    const { id, author, body, createdAt, image } = post || {}
+    const { author, body, createdAt, image } = post || {}
 
     return (
-        <div className="box p-6 mb-4">
+        <div className="box p-5 mb-4">
             <div className="flex">
                 <Link href={ `/${ author.username }` }>
                     <Avatar src={ author.avatar.url }/>
@@ -33,10 +34,11 @@ const PostCard = ( props: PostCardProps ) => {
                 <div className="ml-4 w-full">
                     <div className="flex justify-between">
                         <Link href={ `/${ author.username }` }>
-                            <h3 className="text-base font-medium flex flex-wrap mb-3 items-center">
-                                <p>{ author.fullName }</p>
+                            <div className="text-base font-medium flex flex-wrap mb-3 items-center">
+                                <h3 className="mr-[2px]">{ author.fullName }</h3>
+                                <BlueBadgeIcon color="rgb(58,141,245)" size={18} className="mt-[3px]"/>
                                 <p className="ml-2 text-gray-600 text-xs lg:text-sm font-normal">@{ author.username }</p>
-                            </h3>
+                            </div>
                         </Link>
                         <PostOptions post={ post }/>
                     </div>

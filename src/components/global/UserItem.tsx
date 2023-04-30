@@ -6,6 +6,7 @@ import FollowButton from "@components/global/FollowButton"
 import TextOverflow from 'react-text-overflow'
 import useAuthState from "@hooks/useAuthState"
 import classNames from "classnames"
+import {TbDiscountCheckFilled as BlueBadgeIcon} from "react-icons/tb"
 
 interface Props {
     user: User
@@ -27,8 +28,9 @@ export default function UserItem( { user, hideFollowButton = false, className }:
                     <div className="flex justify-between w-full">
                         <div className="flex items-center">
                             <Link href={ `/${ user.username }` } className="block">
-                                <h3 className="text-sm font-medium">
+                                <h3 className="text-sm font-medium flex items-center">
                                     <TextOverflow text={ user.fullName }/>
+                                    <BlueBadgeIcon color="rgb(58,141,245)" size={16} className="ml-[1px]"/>
                                 </h3>
                                 <h4 className="text-xs text-gray-700">
                                     <TextOverflow text={ `@${ user.username }` }/>

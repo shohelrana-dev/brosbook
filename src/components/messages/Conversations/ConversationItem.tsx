@@ -8,6 +8,7 @@ import TextOverflow from 'react-text-overflow'
 import Image from "next/image"
 import tw, { styled } from "twin.macro"
 import { Box as BaseBox } from "@components/styles/Global.styles"
+import {IoCheckmarkCircleOutline as TickIcon} from "react-icons/io5";
 
 const Box            = tw( BaseBox )`block cursor-pointer py-2 px-3 flex mb-3 w-full flex-grow gap-3`
 const Name           = tw.h3`font-medium text-gray-900`
@@ -64,13 +65,15 @@ function ConversationItem( { conversation }: SingleConversationProps ){
                         <MessageText bold={ ! isLastMessageSenderMe && ! lastMessage?.seenAt }>
                             { messageBody ? <TextOverflow text={ messageBody }/> : null }
                         </MessageText>
-                        { isLastMessageSenderMe && lastMessage?.seenAt ?
-                            <StyledImage
-                                src={ avatar.url }
-                                alt={ fullName }
-                                width={ 15 }
-                                height={ 15 }
-                            /> : null }
+                        { isLastMessageSenderMe && (
+                            lastMessage?.seenAt ?
+                                <StyledImage
+                                    src={ avatar.url }
+                                    alt={ fullName }
+                                    width={ 15 }
+                                    height={ 15 }
+                                /> :  <TickIcon size={ 17 }/>
+                        ) }
                     </MessageWrapper>
                 </div>
             </Box>

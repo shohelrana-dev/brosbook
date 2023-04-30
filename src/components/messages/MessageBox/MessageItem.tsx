@@ -5,6 +5,7 @@ import MessageContent from "@components/messages/MessageBox/MessageContent"
 import timeAgo from "@utils/timeAgo"
 import moment from "moment/moment"
 import { IoCheckmarkCircleOutline as TickIcon } from "react-icons/io5"
+import { BsCircle as CircleIcon } from "react-icons/bs"
 import Image from "next/image"
 import { User } from "@interfaces/user.interfaces"
 import tw from "twin.macro"
@@ -51,20 +52,20 @@ function MessageItem( { message, prevMessage, isLastMessage, participant }: Sing
                                         <Image
                                             src={ participant?.avatar.url }
                                             alt={ "User photo" }
-                                            width={ 16 }
-                                            height={ 16 }
+                                            width={ 15 }
+                                            height={ 15 }
                                             className="h-[16px] object-cover rounded-full"
                                         />
                                     ) : (
                                         <p className="text-gray-600">
-                                            <TickIcon size={ 18 }/>
+                                            {message.createdAt ? <TickIcon size={ 17 }/> : <CircleIcon size={14}/>}
                                         </p>
                                     )
                                 ) : null }
                             </div>
                         </Flex>
                         <div className="flex justify-between">
-                            { ! isSameUserAndTimeLessThanFiveMin ?
+                            { ! isSameUserAndTimeLessThanFiveMin && message.createdAt ?
                                 <Time>{ timeAgo( message.createdAt ) }</Time> : null }
                         </div>
                     </OwnMessageWrap>
@@ -80,7 +81,7 @@ function MessageItem( { message, prevMessage, isLastMessage, participant }: Sing
                     </div>
                     <PartnerMessageWrap>
                         <MessageContent message={ message }/>
-                        { ! isSameUser ? <Time>{ timeAgo( message.createdAt ) }</Time> : null }
+                        { ! isSameUser && message.createdAt ? <Time>{ timeAgo( message.createdAt ) }</Time> : null }
                     </PartnerMessageWrap>
                 </PartnerRow>
             ) : null }
