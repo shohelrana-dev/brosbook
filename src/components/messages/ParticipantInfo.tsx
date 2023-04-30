@@ -1,14 +1,14 @@
 import Avatar from "@components/global/Avatar"
 import { useGetConversationByIdQuery, useGetConversationMediaListQuery } from "@services/conversationsApi"
 import Loading from "@components/global/Loading"
-import InfiniteScroll from "react-infinite-scroller"
 import {ErrorResponse} from "@interfaces/index.interfaces"
 import ImageLightbox from "@components/global/ImageLightbox"
-import {useEffect, useRef, useState} from "react"
+import React, {useEffect, useRef, useState} from "react"
 import tw, { styled } from "twin.macro"
 import { Box as BaseBox } from "@components/styles/Global.styles"
 import {useParams} from "next/navigation"
 import Error from "@components/global/Error"
+import useInfiniteScroll from "react-infinite-scroll-hook"
 
 const Wrapper  = tw.div`h-full overflow-y-auto scrollbar-hide`
 const Box      = tw( BaseBox )`p-5 mb-3`
@@ -22,7 +22,7 @@ const InfoItem = styled.div( ( { last }: { last?: boolean } ) => [
     ! last && tw`border-b border-gray-200`
 ] )
 
-function ParticipantInfo(  ){
+export default function ParticipantInfo(  ){
     //hooks
     const {conversationId} = useParams()
     const { data: conversation } = useGetConversationByIdQuery( conversationId )
@@ -40,6 +40,12 @@ function ParticipantInfo(  ){
         }
     }, [] )
 
+    const [moreLoadRef] = useInfiniteScroll( {
+        loading: isLoading,
+        hasNextPage: !! nextPage,
+        onLoadMore: () => setPage( nextPage! )
+    } )
+
     const participant = conversation?.participant
 
     if( ! participant ) return null
@@ -47,24 +53,16 @@ function ParticipantInfo(  ){
     const { fullName, avatar, email, active } = participant
     const { bio, phone, location }            = participant.profile || {}
 
-    //decide content
-    let content = null
+    //decide listContent
+    let listContent = null
     if( isLoading ){
-        content = <Loading size={ 40 }/>
+        listContent = <Loading size={ 40 }/>
     } else if( isSuccess && mediaList.length === 0 ){
-        content = <p className="text-center py-6">No media files.</p>
+        listContent = <p className="text-center py-4">No media files.</p>
     } else if( isError ){
-        content = <Error message={ error.data?.message }/>
+        listContent = <Error message={ error.data?.message }/>
     } else if( isSuccess && mediaList.length > 0 ){
-        content = (
-                <InfiniteScroll
-                    loadMore={ () => setPage(nextPage!) }
-                    hasMore={ !!nextPage }
-                    loader={ <Loading size={ 40 }/> }
-                >
-                    <ImageLightbox imageList={ mediaList } alt="Chat photo"/>
-                </InfiniteScroll>
-        )
+        listContent = <ImageLightbox imageList={ mediaList } alt="Chat photo"/>
     }
 
     return (
@@ -101,11 +99,15 @@ function ParticipantInfo(  ){
             <Box>
                 <Heading>Shared Media</Heading>
 
-                <div>{ content }</div>
+                <div>{ listContent }</div>
+
+                { nextPage ? (
+                    <div className="py-4" ref={ moreLoadRef }>
+                        <Loading size={ 40 }/>
+                    </div>
+                ) : null }
             </Box>
 
         </Wrapper>
     )
 }
-
-export default ParticipantInfo

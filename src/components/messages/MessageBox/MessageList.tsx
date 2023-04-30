@@ -35,6 +35,10 @@ export default function MessageList(){
         }
     }, [messages, isSuccess, lastMessage?.isMeSender] )
 
+    useEffect(() => {
+        scrollToBottom()
+    }, [lastMessage])
+
     function scrollToBottom(){
         if( messageListRef && messageListRef.current ){
             const element     = messageListRef.current
@@ -53,29 +57,31 @@ export default function MessageList(){
     if( isLoading ){
         content = <ChatSkeleton/>
     } else if( isSuccess && messages?.length === 0 ){
-        content = <div className="h-full flex justify-center items-center">
+        content = (
+        <div className="h-full flex justify-center items-center">
             <h4 className="text-gray-700 text-lg">No messages</h4>
         </div>
+        )
     } else if( isError ){
         content = <Error message={ error?.data?.message }/>
     } else if( isSuccess && messages.length > 0 ){
         content = messages.map( ( message: Message, index: number ) => (
-            <MessageItem
-                key={ message.id }
-                message={ message }
-                participant={ participant! }
-                prevMessage={ index === 0 ? null : messages[index - 1] }
-                isLastMessage={ 0 === index }
-            />
-        ) )
+                <MessageItem
+                    key={ message.id }
+                    message={ message }
+                    participant={ participant! }
+                    prevMessage={ index === 0 ? null : messages[index - 1] }
+                    isLastMessage={ 0 === index }
+                />
+            ) )
     }
 
     return (
-        <div ref={ messageListRef } className="h-full overflow-y-auto flex flex-col-reverse mb-[60px] scrollbar-hide">
+        <div ref={ messageListRef } className="h-full overflow-y-auto flex flex-col-reverse mb-[60px] scrollbar-hide pt-2">
             { content }
 
-            { !! nextPage ? (
-                <div className="py-[60px]" ref={ moreLoadRef }>
+            { nextPage ? (
+                <div className="py-4" ref={ moreLoadRef }>
                     <Loading size={ 50 }/>
                 </div>
             ) : null }
