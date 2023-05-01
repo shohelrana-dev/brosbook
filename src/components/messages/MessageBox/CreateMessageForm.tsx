@@ -25,14 +25,15 @@ export default function CreateMessageForm( ){
 
     async function submitForm( event: FormEvent<HTMLFormElement> ){
         event.preventDefault()
+        if(!messageText && !selectedFile) return
+
+        setMessageText( '' )
+        removeSelectedFile()
 
         const conversationId = conversation?.id!
         const body = messageText
         const type = isMultipleEmoji( messageText ) ? MessageType.EMOJI : (selectedFile ? MessageType.IMAGE : MessageType.TEXT)
         const image = selectedFile
-
-        setMessageText( '' )
-        removeSelectedFile()
 
         sendMessage( {
             conversationId,
@@ -59,7 +60,7 @@ export default function CreateMessageForm( ){
     if( ! conversation ) return null
 
     return (
-        <div className="absolute left-0 bottom-0 w-full">
+        <div className="sticky left-0 bottom-4 w-full">
             <form onSubmit={ submitForm }
                   className="flex items-center w-full rounded-2xl broder-2 border-gray-100 bg-white px-2">
                 { ! selectedFile ? (

@@ -3,14 +3,16 @@ import ConversationList from "@components/messages/Conversations/ConversationLis
 
 export default function Conversations(){
     return (
-        <>
-            <h2 className="text-2xl font-medium mb-2">Chats</h2>
+        <div id="conversations-wrapper" className="h-full overflow-y-auto scrollbar-hide">
+            <div className="sticky top-0 left-0 bg-theme-gray z-50">
+                <h2 className="text-2xl font-medium mb-2">Chats</h2>
 
-            {/*Search user*/ }
-            <SearchConversation/>
+                <SearchConversation/>
 
-            {/*Conversation List*/ }
+                <h3 className="text-lg font-medium mb-3">Recent chats</h3>
+            </div>
+
             <ConversationList/>
-        </>
+        </div>
     )
 }

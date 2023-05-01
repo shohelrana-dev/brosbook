@@ -1,18 +1,20 @@
 import React from 'react'
 import { PuffLoader } from "react-spinners"
+import classNames from "classnames"
 
 interface LoadingProps {
     loading?: boolean,
     size?: number | string
     className?: string
+    wrapperClassName?: string
     color?: string
 }
 
-function Loading( { color = "rgb(58,141,245)", loading = true, ...rest }: LoadingProps ){
-    if( ! loading ) return null
+function Loading( { color = "rgb(58,141,245)", className, wrapperClassName, loading = true, ...rest }: LoadingProps ){
+    if( typeof loading === 'boolean' && !loading ) return null
 
     return (
-        <div className="flex justify-center my-2">
+        <div className={classNames('flex justify-center my-2', wrapperClassName)}>
             <PuffLoader color={ color }  { ...rest }/>
         </div>
     )

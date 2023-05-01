@@ -15,9 +15,9 @@ import tw from "twin.macro"
 import { Box as BaseBox } from "@components/styles/Global.styles"
 import {useParams} from "next/navigation"
 
-const Wrapper     = tw.div`flex flex-col relative h-full`
+const Wrapper     = tw.div`h-full`
 const StyledModal = tw( Modal )`max-h-[85vh] bg-theme-gray overflow-hidden !p-0`
-const Box         = tw( BaseBox )`py-3 px-4 lg:px-6 flex justify-between`
+const Header      = tw( BaseBox )`sticky top-0 left-0 z-50 py-3 px-4 lg:px-6 flex justify-between`
 const Name        = tw.h3`font-medium text-gray-800`
 const Active      = tw.p`text-gray-500 text-sm`
 
@@ -38,7 +38,7 @@ export default function MessageBox(){
             </StyledModal>
 
             {/*User top bar*/ }
-            <Box>
+            <Header>
                 <div className="flex">
                     <div className="mr-4">
                         <Avatar
@@ -63,14 +63,13 @@ export default function MessageBox(){
                         <InfoIcon size={ 25 }/>
                     </IconButton>
                 </div>
-            </Box>
+            </Header>
 
             {/*Messages*/ }
             <MessageList/>
 
             {/*message form*/ }
             <CreateMessageForm/>
-
         </Wrapper>
     )
 }

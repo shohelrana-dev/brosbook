@@ -31,7 +31,8 @@ export default function SearchConversation(){
         } catch ( e ) {
             console.log( e )
             confirmAlert({
-                title: `Do you want to create a new conversation with ${user.fullName}?`,
+                title: 'Create conversation?',
+                message: `Do you want to create a new conversation with ${user.fullName}?`,
                 confirmButtonLabel: "Create",
                 onConfirm: async () => {
                     try {

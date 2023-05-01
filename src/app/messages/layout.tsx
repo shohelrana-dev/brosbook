@@ -35,8 +35,7 @@ export default function Layout( { children }: PropsWithChildren ){
                 </div>
             ) : null }
 
-            <div
-                className={ classNames( 'w-full lg:w-1/2 p-2 md:p-5 h-full', { 'hidden': ! isDesktopOrLaptop && ! conversationId } ) }>
+            <div className={ classNames( 'w-full lg:w-1/2 p-2 md:p-5 h-full', { 'hidden': ! isDesktopOrLaptop && ! conversationId } ) }>
                 { children }
             </div>
 

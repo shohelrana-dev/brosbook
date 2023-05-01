@@ -4,12 +4,15 @@ import { useGetMessagesQuery, useSeenAllMessagesMutation } from "@services/messa
 import Loading from "@components/global/Loading"
 import { Message } from "@interfaces/conversation.interfaces"
 import useAuthState from "@hooks/useAuthState"
-import useInfiniteScroll from "react-infinite-scroll-hook"
 import ChatSkeleton from "@components/skeletons/ChatSkeleton"
 import Error from "@components/global/Error"
 import { ErrorResponse } from "@interfaces/index.interfaces"
 import {useParams} from "next/navigation"
 import {useGetConversationByIdQuery} from "@services/conversationsApi"
+import InfiniteScroll from "react-infinite-scroll-component"
+import tw from "twin.macro"
+
+const Wrapper = tw.div`relative flex flex-col-reverse h-[calc(100%-110px)] overflow-y-auto pt-2 scrollbar-hide`
 
 export default function MessageList(){
     //hooks
@@ -46,12 +49,6 @@ export default function MessageList(){
         }
     }
 
-    const [moreLoadRef] = useInfiniteScroll( {
-        loading: isLoading,
-        hasNextPage: !! nextPage,
-        onLoadMore: () => setPage( nextPage! )
-    } )
-
     //decide content
     let content = null
     if( isLoading ){
@@ -65,26 +62,32 @@ export default function MessageList(){
     } else if( isError ){
         content = <Error message={ error?.data?.message }/>
     } else if( isSuccess && messages.length > 0 ){
-        content = messages.map( ( message: Message, index: number ) => (
-                <MessageItem
-                    key={ message.id }
-                    message={ message }
-                    participant={ participant! }
-                    prevMessage={ index === 0 ? null : messages[index - 1] }
-                    isLastMessage={ 0 === index }
-                />
-            ) )
+        content = (
+            <InfiniteScroll
+                next={() => setPage(nextPage!)}
+                hasMore={!!nextPage}
+                loader={<Loading size={ 50 } wrapperClassName={"py-3"}/>}
+                dataLength={messages.length}
+                scrollableTarget="message-list"
+                className="flex flex-col-reverse"
+                inverse={true}
+            >
+                { messages.map((message: Message, index: number) => (
+                    <MessageItem
+                        key={message.id}
+                        message={message}
+                        participant={participant!}
+                        prevMessage={index === 0 ? null : messages[index - 1]}
+                        isLastMessage={0 === index}
+                    />
+                )) }
+            </InfiniteScroll>
+        )
     }
 
     return (
-        <div ref={ messageListRef } className="h-full overflow-y-auto flex flex-col-reverse mb-[60px] scrollbar-hide pt-2">
+        <Wrapper id="message-list" ref={ messageListRef }>
             { content }
-
-            { nextPage ? (
-                <div className="py-4" ref={ moreLoadRef }>
-                    <Loading size={ 50 }/>
-                </div>
-            ) : null }
-        </div>
+        </Wrapper>
     )
 }

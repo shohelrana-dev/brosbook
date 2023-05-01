@@ -1,5 +1,5 @@
 import { baseApi } from "./baseApi"
-import { Conversation, Message } from "@interfaces/conversation.interfaces"
+import { Conversation } from "@interfaces/conversation.interfaces"
 import { ListResponse, Media } from "@interfaces/index.interfaces"
 import { io } from "socket.io-client"
 import { RootState } from "@store/index"
@@ -17,38 +17,6 @@ export const conversationsApi = baseApi.injectEndpoints( {
                 params: { page, limit: conversationsPerPage }
             } ),
             providesTags: [{type: "Conversation", id: "LIST"}],
-            onCacheEntryAdded: async( arg, api ) => {
-                const { cacheDataLoaded, cacheEntryRemoved, updateCachedData, getState, dispatch } = api
-                const rootState                                                                    = getState() as RootState
-                const currentUser                                                                  = rootState?.auth?.user
-
-                const updateConversationLastMessage = ( message: Message ) => {
-                    message.isMeSender = message.sender.id === currentUser?.id
-
-                    updateCachedData( ( draft ) => {
-                        const conversation = draft.items.find( ( c ) => c.id === message.conversation?.id )
-                        if( conversation?.id ){
-                            conversation.lastMessage = message
-                        } else{
-                            dispatch( conversationsApi.util.invalidateTags( [{type: "Conversation", id: "LIST"}] ) )
-                        }
-                    } )
-                }
-
-                try {
-                    const { data: conversationData } = await cacheDataLoaded
-
-                    conversationData.items.map( ( { id } ) => {
-                        socket.on( `message.new.${ id }`, updateConversationLastMessage )
-                        socket.on( `message.seen.${ id }`, updateConversationLastMessage )
-                    } )
-
-                } catch ( err ) {
-                    await cacheEntryRemoved
-                    socket.close()
-                    throw err
-                }
-            },
             ...listQueryExtraDefinitions
         } ),
 
