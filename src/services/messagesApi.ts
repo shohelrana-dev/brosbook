@@ -1,14 +1,13 @@
 // noinspection TypeScriptValidateJSTypes
 
 import { baseApi } from "./baseApi"
-import {Conversation, Message, MessageType} from "@interfaces/conversation.interfaces"
-import {ListResponse, Media} from "@interfaces/index.interfaces"
-import { io } from "socket.io-client"
+import { Message, MessageType } from "@interfaces/conversation.interfaces"
+import { ListResponse, Media } from "@interfaces/index.interfaces"
 import { RootState } from "@store/index"
 import listQueryExtraDefinitions from "@utils/listQueryExtraDefinitions"
-import {conversationsApi} from "@services/conversationsApi"
+import { conversationsApi } from "@services/conversationsApi"
+import { initSocket } from "@utils/socket"
 
-const socket          = io( process.env.NEXT_PUBLIC_SERVER_BASE_URL! )
 const messagesPerPage = process.env.NEXT_PUBLIC_MESSAGES_PER_PAGE
 
 export const messagesApi = baseApi.injectEndpoints( {
@@ -18,80 +17,63 @@ export const messagesApi = baseApi.injectEndpoints( {
                 url: `/conversations/${ conversationId }/messages`,
                 params: { page, limit: messagesPerPage }
             } ),
-            onCacheEntryAdded: async( arg, api ) => {
+            ...listQueryExtraDefinitions,
+            onCacheEntryAdded: async ( arg, api ) => {
                 const { updateCachedData, cacheEntryRemoved, cacheDataLoaded, getState, dispatch } = api
-                const currentUser                                                        = ( getState() as RootState )?.auth?.user
+                const currentUser                                                                  = ( getState() as RootState ).auth.user
+                const socket                                                                       = initSocket()
 
                 try {
                     await cacheDataLoaded
 
-                    const updateConversationLastMessage = (message: Message) => {
-                        dispatch(conversationsApi.util.updateQueryData('getConversations', undefined as any, (draft: ListResponse<Conversation>) => {
-                            const conversation = draft.items.find( ( c ) => c.id === message.conversation?.id )
-                            if( conversation?.id ){
-                                conversation.lastMessage = message
-
-                                const index  = draft.items.indexOf(conversation)
-                                if(index !== 0 && index !== -1){
-                                    draft.items.unshift(draft.items.splice(index, 1)[0])
-                                }
-                            } else{
-                                dispatch( conversationsApi.util.invalidateTags( [{type: "Conversation", id: "LIST"}] ) )
-                            }
-                        }))
-                    }
-
-                    const handleNewMessageEvent = ( message: Message ) => {
+                    const newMessageListener = ( data: Message ) => {
+                        const message      = { ...data }
                         message.isMeSender = message.sender.id === currentUser?.id
 
                         updateCachedData( ( draft ) => {
-                            if(message.isMeSender){
+                            if ( message.isMeSender ) {
                                 draft.items.shift()
                             }
                             draft.items.unshift( message )
                         } )
 
                         //update conversation media list
-                        if(message.image){
-                            dispatch(conversationsApi.util.updateQueryData('getConversationMediaList', {conversationId: message.conversation?.id} as any, (draft: ListResponse<Media>) => {
-                                draft.items.unshift(message.image!)
-                            }))
+                        if ( message.image ) {
+                            dispatch( conversationsApi.util.updateQueryData( 'getConversationMediaList', { conversationId: message.conversation?.id } as any, ( draft: ListResponse<Media> ) => {
+                                draft.items.unshift( message.image! )
+                            } ) )
                         }
-
-                        //update conversation last message on conversations
-                        updateConversationLastMessage(message)
                     }
 
-                    const handleUpdateMessageEvent = ( message: Message ) => {
+                    const updateMessageListener = ( data: Message ) => {
+                        const message      = { ...data }
                         message.isMeSender = message.sender.id === currentUser?.id
 
                         updateCachedData( ( draft ) => {
                             const index        = draft.items.findIndex( ( item ) => item.id === message.id )
                             draft.items[index] = message
                         } )
-
-                        //update conversation last message on conversations
-                        updateConversationLastMessage(message)
                     }
 
-                    socket.on( `message.new.${ arg.conversationId }`, handleNewMessageEvent )
-                    socket.on( `message.update.${ arg.conversationId }`, handleUpdateMessageEvent )
-                    socket.on( `message.seen.${ arg.conversationId }`, handleUpdateMessageEvent )
+                    socket.on( `message.new`, newMessageListener )
+                    socket.on( `message.update`, updateMessageListener )
+                    socket.on( `message.seen`, updateMessageListener )
                 } catch ( err ) {
                     await cacheEntryRemoved
-                    socket.close()
                     throw err
                 }
-            },
-            ...listQueryExtraDefinitions
+            }
         } ),
 
-        sendMessage: build.mutation<Message, {conversationId: string, data: {type: MessageType, body?: string, image?: Blob}}>( {
-            query: ({conversationId, data} ) => {
+        sendMessage: build.mutation<Message, {
+            conversationId: string,
+            data: { type: MessageType, body?: string, image?: Blob }
+        }>( {
+            query: ( { conversationId, data } ) => {
                 const body = new FormData()
-                body.append('type', data.type)
-                if(data.body) body.append('body', data.body)
-                if(data.image) body.append('image', data.image)
+                body.append( 'type', data.type )
+                if ( data.body ) body.append( 'body', data.body )
+                if ( data.image ) body.append( 'image', data.image )
 
                 return {
                     url: `/conversations/${ conversationId }/messages`,
@@ -99,23 +81,23 @@ export const messagesApi = baseApi.injectEndpoints( {
                     body,
                 }
             },
-            onQueryStarted: async (arg, {dispatch, queryFulfilled, getState}) => {
-                const currentUser = (getState() as RootState).auth.user
+            onQueryStarted: async ( arg, { dispatch, queryFulfilled, getState } ) => {
+                const currentUser = ( getState() as RootState ).auth.user
 
                 //optimistic cache update
-                const patchResult = dispatch( messagesApi.util.updateQueryData( "getMessages", {conversationId: arg.conversationId} as any, ( draft: ListResponse<Message> ) => {
-                    draft.items.unshift({
+                const patchResult = dispatch( messagesApi.util.updateQueryData( "getMessages", { conversationId: arg.conversationId } as any, ( draft ) => {
+                    draft.items.unshift( {
                         ...arg.data as any,
                         id: Date.now(),
-                        image: arg.data.image ? {url: URL.createObjectURL(arg.data.image)} as Media : undefined,
+                        image: arg.data.image ? { url: URL.createObjectURL( arg.data.image ) } as Media : undefined,
                         sender: currentUser,
                         isMeSender: true
-                    })
+                    } )
                 } ) )
 
                 try {
                     await queryFulfilled
-                }catch (err){
+                } catch ( err ) {
                     patchResult.undo()
                     throw err
                 }
@@ -130,9 +112,9 @@ export const messagesApi = baseApi.injectEndpoints( {
             } )
         } ),
 
-        seenAllMessages: build.mutation<Message, string>( {
+        seenMessages: build.mutation<Message, string>( {
             query: ( conversationId ) => ( {
-                url: `/conversations/${ conversationId }/messages/seen_all`,
+                url: `/conversations/${ conversationId }/messages/seen`,
                 method: "POST"
             } )
         } )
@@ -143,5 +125,5 @@ export const {
                  useGetMessagesQuery,
                  useSendMessageMutation,
                  useSendReactionMutation,
-                 useSeenAllMessagesMutation
+                 useSeenMessagesMutation
              } = messagesApi

@@ -1,13 +1,12 @@
 import { baseApi } from "./baseApi"
-import { Conversation } from "@interfaces/conversation.interfaces"
+import { Conversation, Message } from "@interfaces/conversation.interfaces"
 import { ListResponse, Media } from "@interfaces/index.interfaces"
-import { io } from "socket.io-client"
 import { RootState } from "@store/index"
 import listQueryExtraDefinitions from "@utils/listQueryExtraDefinitions"
+import { initSocket } from "@utils/socket"
 
 const conversationsPerPage = process.env.NEXT_PUBLIC_CONVERSATIONS_PER_PAGE
 const mediaPerPage         = process.env.NEXT_PUBLIC_MEDIA_PER_PAGE
-const socket               = io( process.env.NEXT_PUBLIC_SERVER_BASE_URL! )
 
 export const conversationsApi = baseApi.injectEndpoints( {
     endpoints: ( build ) => ( {
@@ -16,8 +15,66 @@ export const conversationsApi = baseApi.injectEndpoints( {
                 url: `/conversations`,
                 params: { page, limit: conversationsPerPage }
             } ),
-            providesTags: [{type: "Conversation", id: "LIST"}],
-            ...listQueryExtraDefinitions
+            providesTags: [{ type: "Conversation", id: "LIST" }],
+            ...listQueryExtraDefinitions,
+            onCacheEntryAdded: async ( arg, api ) => {
+                const { updateCachedData, cacheEntryRemoved, cacheDataLoaded, getState } = api
+                const currentUser                                                        = ( getState() as RootState )?.auth?.user
+                const socket                                                             = initSocket()
+
+                try {
+                    await cacheDataLoaded
+
+                    //update conversation last message on conversations
+                    const newMessageListener = ( data: Message ) => {
+                        const message      = { ...data }
+                        message.isMeSender = message.sender.id === currentUser?.id
+
+                        updateCachedData( ( draft ) => {
+                            const conversation = draft.items.find( ( c ) => c.id === message.conversation?.id )
+
+                            if ( conversation?.id ) {
+                                //update last message
+                                conversation.lastMessage = message
+                                if ( !message.isMeSender ) {
+                                    conversation.unreadMessagesCount += 1
+                                }
+
+                                //bring the conversation at top
+                                const index = draft.items.indexOf( conversation )
+                                if ( index > 0 ) {
+                                    draft.items.splice( index, 1 )
+                                    draft.items.unshift( conversation )
+                                }
+                            } else if ( message.conversation ) {
+                                message.conversation.lastMessage = message
+                                draft.items.unshift( message.conversation )
+                            }
+                        } )
+                    }
+
+                    //update conversation last message on conversations
+                    const seenMessageListener = ( data: Message ) => {
+                        const message      = { ...data }
+                        message.isMeSender = message.sender.id === currentUser?.id
+
+                        updateCachedData( ( draft ) => {
+                            const conversation = draft.items.find( ( c ) => c.id === message.conversation?.id )
+
+                            if ( conversation?.id ) {
+                                conversation.lastMessage         = message
+                                conversation.unreadMessagesCount = 0
+                            }
+                        } )
+                    }
+
+                    socket.on( `message.new`, newMessageListener )
+                    socket.on( `message.seen`, seenMessageListener )
+                } catch ( err ) {
+                    await cacheEntryRemoved
+                    throw err
+                }
+            }
         } ),
 
         getConversationById: build.query<Conversation, string>( {
@@ -34,10 +91,11 @@ export const conversationsApi = baseApi.injectEndpoints( {
 
         getUnreadConversationsCount: build.query<{ count: number }, void>( {
             query: () => ( `/conversations/unread_count` ),
-            onCacheEntryAdded: async( arg, api ) => {
+            onCacheEntryAdded: async ( arg, api ) => {
                 const { cacheDataLoaded, cacheEntryRemoved, updateCachedData, getState } = api
                 const rootState                                                          = getState() as RootState
                 const currentUser                                                        = rootState?.auth?.user
+                const socket                                                             = initSocket()
 
                 try {
                     await cacheDataLoaded
@@ -49,7 +107,6 @@ export const conversationsApi = baseApi.injectEndpoints( {
                     } )
                 } catch ( err ) {
                     await cacheEntryRemoved
-                    socket.close()
                     throw err
                 }
             }
@@ -61,16 +118,16 @@ export const conversationsApi = baseApi.injectEndpoints( {
                 method: 'POST',
                 body: { participantId }
             } ),
-            onQueryStarted: async (arg, api) => {
+            onQueryStarted: async ( arg, api ) => {
                 try {
-                    const {data} = await api.queryFulfilled
+                    const { data } = await api.queryFulfilled
 
                     //@ts-ignore
-                    api.dispatch( conversationsApi.util.updateQueryData( "getConversations", undefined as any,  (draft: ListResponse<Conversation> ) =>{
-                        draft.items.unshift(data)
+                    api.dispatch( conversationsApi.util.updateQueryData( "getConversations", undefined as any, ( draft: ListResponse<Conversation> ) => {
+                        draft.items.unshift( data )
                     } ) )
-                }catch (e) {
-                    console.log(e)
+                } catch ( e ) {
+                    console.log( e )
                 }
             }
         } ),

@@ -1,11 +1,10 @@
 import { baseApi } from "./baseApi"
 import { ListResponse, Notification } from "@interfaces/index.interfaces"
 import { RootState } from "@store/index"
-import { io } from "socket.io-client"
 import listQueryExtraDefinitions from "@utils/listQueryExtraDefinitions"
+import { initSocket } from "@utils/socket"
 
 const notificationsPerPage = process.env.NEXT_PUBLIC_NOTIFICATIONS_PER_PAGE
-const socket               = io( process.env.NEXT_PUBLIC_SERVER_BASE_URL! )
 
 export const notificationsApi = baseApi.injectEndpoints( {
     endpoints: ( build ) => ( {
@@ -14,10 +13,11 @@ export const notificationsApi = baseApi.injectEndpoints( {
                 url: `/notifications`,
                 params: { page, limit: notificationsPerPage }
             } ),
-            onCacheEntryAdded: async( arg, api ) => {
+            onCacheEntryAdded: async ( arg, api ) => {
                 const { cacheDataLoaded, cacheEntryRemoved, updateCachedData, getState } = api
                 const rootState                                                          = getState() as RootState
                 const currentUser                                                        = rootState?.auth?.user
+                const socket                                                             = initSocket()
 
                 try {
                     await cacheDataLoaded
@@ -30,7 +30,6 @@ export const notificationsApi = baseApi.injectEndpoints( {
 
                 } catch ( err ) {
                     await cacheEntryRemoved
-                    socket.close()
                     throw err
                 }
             },
@@ -41,10 +40,11 @@ export const notificationsApi = baseApi.injectEndpoints( {
             query: () => ( {
                 url: `/notifications/unread_count`
             } ),
-            onCacheEntryAdded: async( arg, api ) => {
+            onCacheEntryAdded: async ( arg, api ) => {
                 const { cacheDataLoaded, cacheEntryRemoved, updateCachedData, getState } = api
                 const rootState                                                          = getState() as RootState
                 const currentUser                                                        = rootState?.auth?.user
+                const socket                                                             = initSocket()
 
                 try {
                     await cacheDataLoaded
@@ -57,7 +57,6 @@ export const notificationsApi = baseApi.injectEndpoints( {
 
                 } catch ( err ) {
                     await cacheEntryRemoved
-                    socket.close()
                     throw err
                 }
             }

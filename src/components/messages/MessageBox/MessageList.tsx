@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import MessageItem from "@components/messages/MessageBox/MessageItem"
-import { useGetMessagesQuery, useSeenAllMessagesMutation } from "@services/messagesApi"
+import { useGetMessagesQuery, useSeenMessagesMutation } from "@services/messagesApi"
 import Loading from "@components/global/Loading"
 import { Message } from "@interfaces/conversation.interfaces"
 import useAuthState from "@hooks/useAuthState"
@@ -24,7 +24,7 @@ export default function MessageList(){
     const messagesQuery     = useGetMessagesQuery(
         { conversationId: conversation?.id!, page }, { skip: ! conversation?.id }
     )
-    const [seenAllMessages] = useSeenAllMessagesMutation()
+    const [seenMessages] = useSeenMessagesMutation()
 
     const { isLoading, isSuccess, isError, data: messagesData } = messagesQuery || {}
     const { items: messages = [], nextPage }                    = messagesData || {}
@@ -34,7 +34,7 @@ export default function MessageList(){
 
     useEffect( () => {
         if( isSuccess && ! lastMessage?.isMeSender && ! lastMessage?.seenAt ){
-            seenAllMessages( conversation?.id! )
+            seenMessages( conversation?.id! )
         }
     }, [messages, isSuccess, lastMessage?.isMeSender] )
 

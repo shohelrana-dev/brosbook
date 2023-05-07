@@ -3,7 +3,7 @@
  */
 
 const nextConfig = {
-    reactStrictMode: true,
+    reactStrictMode: false,
     swcMinify: false,
     images: {
         domains: [
@@ -11,9 +11,6 @@ const nextConfig = {
             'brosbook-api.onrender.com',
             'res.cloudinary.com'
         ]
-    },
-    experimental: {
-        appDir: true
     }
 }
 

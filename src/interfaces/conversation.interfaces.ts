@@ -7,6 +7,7 @@ export interface Conversation {
     user1: User
     user2: User
     participant: User
+    unreadMessagesCount: number
 }
 
 export enum MessageType {
