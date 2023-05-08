@@ -14,17 +14,17 @@ interface FollowButtonProps {
     user: User
 }
 
-export default function FollowButton( props: FollowButtonProps ){
+export default function FollowButton( props: FollowButtonProps ) {
     //hooks
-    const [user, setUser]     = useState<User>( props.user )
-    const [follow]            = useFollowMutation()
-    const [unfollow]          = useUnfollowMutation()
-    const { isAuthenticated } = useAuthState()
-    const confirmAlert        = useConfirmAlert()
-    const unauthorizedAlert   = useUnauthorizedAlert()
+    const [user, setUser]         = useState<User>( props.user )
+    const [follow, { isLoading }] = useFollowMutation()
+    const [unfollow]              = useUnfollowMutation()
+    const { isAuthenticated }     = useAuthState()
+    const confirmAlert            = useConfirmAlert()
+    const unauthorizedAlert       = useUnauthorizedAlert()
 
-    async function handleFollowClick(){
-        if( ! isAuthenticated ){
+    async function handleFollowClick() {
+        if ( !isAuthenticated ) {
             unauthorizedAlert( {
                 title: `Follow ${ user.fullName } to see what they share on ${ process.env.NEXT_PUBLIC_APP_NAME }.`,
                 message: `Sign up so you never miss their Posts.`
@@ -43,12 +43,12 @@ export default function FollowButton( props: FollowButtonProps ){
         }
     }
 
-    async function handleUnfollowClick(){
+    async function handleUnfollowClick() {
         await confirmAlert( {
             title: `Unfollow ${ user.username }?`,
             message: 'Their Posts will no longer show up in your home timeline. You can still view their profile.',
             confirmButtonLabel: 'Unfollow',
-            onConfirm: async() => {
+            onConfirm: async () => {
                 try {
                     await unfollow( user.id ).unwrap()
 
@@ -71,7 +71,7 @@ export default function FollowButton( props: FollowButtonProps ){
                     </ButtonOutline>
                 </>
             ) : (
-                <Button onClick={ handleFollowClick } size="sm" className="mt-0">
+                <Button onClick={ handleFollowClick } isLoading={ isLoading } size="sm" className="mt-0">
                     Follow
                 </Button>
             ) }
