@@ -10,25 +10,25 @@ import useAuthState from "@hooks/useAuthState"
 import Error from "@components/global/Error"
 import { ErrorResponse } from "@interfaces/index.interfaces"
 
-export default function SuggestedPeople(){
+export default function SuggestedPeople() {
     const { isAuthenticated } = useAuthState()
-    const suggestedUsersQuery = useGetSuggestedUsersQuery( 1 )
+    const suggestedUsersQuery = useGetSuggestedUsersQuery( { page: 1, limit: 6 } )
 
     const { isError, isLoading, isSuccess } = suggestedUsersQuery
     const { items: users = [], nextPage }   = suggestedUsersQuery?.data || {}
     const error                             = ( suggestedUsersQuery.error || {} ) as ErrorResponse
 
-    if( ! isAuthenticated ) return null
+    if ( !isAuthenticated ) return null
 
     //decide render content
     let content = null
-    if( isLoading ){
+    if ( isLoading ) {
         content = <UsersSkeleton/>
-    } else if( isSuccess && users.length === 0 ){
+    } else if ( isSuccess && users.length === 0 ) {
         content = <p>No suggestions</p>
-    } else if( isError ){
+    } else if ( isError ) {
         content = <Error message={ error?.data?.message }/>
-    } else if( isSuccess && users.length > 0 ){
+    } else if ( isSuccess && users.length > 0 ) {
         content = users.map( ( user: User ) => (
             <UserItem user={ user } key={ user.id }/>
         ) )
@@ -39,7 +39,7 @@ export default function SuggestedPeople(){
             <h2 className="text-xl font-medium mb-5">Suggested People</h2>
             { content }
 
-            { !! nextPage ? (
+            { !!nextPage ? (
                 <Link href="/suggestions">
                     <ButtonGray>
                         Show More

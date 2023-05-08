@@ -4,15 +4,16 @@ import { ListResponse, Media } from "@interfaces/index.interfaces"
 import { userLoggedIn } from "@slices/authSlice"
 import listQueryExtraDefinitions from "@utils/listQueryExtraDefinitions"
 
-const usersPerPage = process.env.NEXT_PUBLIC_USERS_PER_PAGE
-const mediaPerPage = process.env.NEXT_PUBLIC_MEDIA_PER_PAGE
+const usersPerPage       = process.env.NEXT_PUBLIC_USERS_PER_PAGE
+const suggestionsPerPage = process.env.NEXT_PUBLIC_SUGGESTIONS_PER_PAGE
+const mediaPerPage       = process.env.NEXT_PUBLIC_MEDIA_PER_PAGE
 
 export const usersApi = baseApi.injectEndpoints( {
         endpoints: ( build ) => ( {
             getCurrentUser: build.query<User, void>( {
                 query: () => `/users/me`,
                 providesTags: ['CurrentUser'],
-                onQueryStarted: async( _, { dispatch, queryFulfilled } ) => {
+                onQueryStarted: async ( _, { dispatch, queryFulfilled } ) => {
                     try {
                         const { data } = await queryFulfilled
 
@@ -25,18 +26,18 @@ export const usersApi = baseApi.injectEndpoints( {
 
             getUserById: build.query<User, string>( {
                 query: ( userId ) => `/users/${ userId }`,
-                providesTags: (result, error, arg, meta) => [{type: 'User', id: arg}]
+                providesTags: ( result, error, arg, meta ) => [{ type: 'User', id: arg }]
             } ),
 
             getUserByUsername: build.query<User, string>( {
                 query: ( username ) => `/users/by/username/${ username }`,
-                providesTags: (result, error, arg, meta) => [{type: 'User', id: arg}]
+                providesTags: ( result, error, arg ) => [{ type: 'User', id: arg }]
             } ),
 
-            getSuggestedUsers: build.query<ListResponse<User>, number>( {
-                query: ( page ) => ( {
+            getSuggestedUsers: build.query<ListResponse<User>, { page: number, limit?: number }>( {
+                query: ( { page, limit } ) => ( {
                     url: `/users/suggestions`,
-                    params: { page, limit: usersPerPage }
+                    params: { page, limit: limit ?? suggestionsPerPage }
                 } ),
                 ...listQueryExtraDefinitions
             } ),
@@ -73,7 +74,7 @@ export const usersApi = baseApi.injectEndpoints( {
                     method: 'POST',
                 } ),
                 invalidatesTags: ( result, error, arg ) => ( [
-                    {type: "User", id: "LIST"},
+                    { type: "User", id: "LIST" },
                     { type: 'User', id: arg }
                 ] )
             } ),
@@ -84,7 +85,7 @@ export const usersApi = baseApi.injectEndpoints( {
                     method: 'POST',
                 } ),
                 invalidatesTags: ( result, error, arg ) => ( [
-                    {type: "User", id: "LIST"},
+                    { type: "User", id: "LIST" },
                     { type: 'User', id: arg }
                 ] )
             } ),
@@ -94,7 +95,7 @@ export const usersApi = baseApi.injectEndpoints( {
                     url: `/users/${ userId }/followers`,
                     params: { page, limit: usersPerPage }
                 } ),
-                providesTags: [{type: "User", id: "LIST"}],
+                providesTags: [{ type: "User", id: "LIST" }],
                 ...listQueryExtraDefinitions
             } ),
 
@@ -102,7 +103,7 @@ export const usersApi = baseApi.injectEndpoints( {
                 query: ( userId ) => ( {
                     url: `/users/${ userId }/followers/count`
                 } ),
-                providesTags: [{type: "User", id: "LIST"}]
+                providesTags: [{ type: "User", id: "LIST" }]
             } ),
 
             getFollowings: build.query<ListResponse<User>, { userId: string, page?: number }>( {
@@ -110,7 +111,7 @@ export const usersApi = baseApi.injectEndpoints( {
                     url: `/users/${ userId }/followings`,
                     params: { page, limit: usersPerPage }
                 } ),
-                providesTags: [{type: "User", id: "LIST"}],
+                providesTags: [{ type: "User", id: "LIST" }],
                 ...listQueryExtraDefinitions
             } ),
 
@@ -118,7 +119,7 @@ export const usersApi = baseApi.injectEndpoints( {
                 query: ( userId ) => ( {
                     url: `/users/${ userId }/followers/count`
                 } ),
-                providesTags: [{type: "User", id: "LIST"}]
+                providesTags: [{ type: "User", id: "LIST" }]
             } ),
 
             getMediaList: build.query<ListResponse<Media>, { userId: string, page?: number }>( {

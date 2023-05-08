@@ -11,12 +11,12 @@ import { ErrorResponse } from "@interfaces/index.interfaces"
 export default function SuggestionsPage(){
     //hooks
     const [page, setPage]     = useState( 1 )
-    const suggestedUsersQuery = useGetSuggestedUsersQuery( page )
+    const suggestedUsersQuery = useGetSuggestedUsersQuery( { page } )
 
     const { data: suggestedUsersData, isLoading, isSuccess, isError } = suggestedUsersQuery || {}
     const { items: users = [], nextPage }                             = suggestedUsersData || {}
     const error                                                       = suggestedUsersQuery.error as ErrorResponse || {}
-
+    console.log(suggestedUsersData, page)
     //decide content
     let content = null
     if( isLoading ){

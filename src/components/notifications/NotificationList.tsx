@@ -7,7 +7,7 @@ import useInfiniteScroll from "react-infinite-scroll-hook"
 import NotificationsSkeleton from "@components/skeletons/NotificationsSkeleton"
 import Error from "@components/global/Error"
 
-export default function NotificationList(){
+export default function NotificationList() {
     const [page, setPage]       = useState( 1 )
     const notificationsQuery    = useGetNotificationsQuery( page )
     const [readAllNotification] = useReadAllNotificationMutation()
@@ -18,7 +18,7 @@ export default function NotificationList(){
     const firstNotification                                          = notifications[0] || {}
 
     useEffect( () => {
-        if( isSuccess && firstNotification.id && ! firstNotification.readAt ){
+        if ( isSuccess && firstNotification.id && !firstNotification.readAt ) {
             readAllNotification()
         }
     }, [isSuccess, firstNotification] )
@@ -26,19 +26,19 @@ export default function NotificationList(){
 
     const [moreLoadRef] = useInfiniteScroll( {
         loading: isLoading,
-        hasNextPage: !! nextPage,
+        hasNextPage: !!nextPage,
         onLoadMore: () => setPage( nextPage! ),
     } )
 
     //decide content
     let content = null
-    if( isLoading ){
+    if ( isLoading ) {
         content = <NotificationsSkeleton/>
-    } else if( isSuccess && notifications.length === 0 ){
+    } else if ( isSuccess && notifications.length === 0 ) {
         content = <p className="ml-2">No notifications</p>
-    } else if( isError ){
+    } else if ( isError ) {
         content = <Error message={ error?.data?.message }/>
-    } else if( isSuccess && notifications.length > 0 ){
+    } else if ( isSuccess && notifications.length > 0 ) {
         content = notifications.map( ( notification: Notification ) => (
             <NotificationItem key={ notification.id } notification={ notification }/>
         ) )
@@ -49,7 +49,7 @@ export default function NotificationList(){
             <h3 className="text-xl font-bold text-gray-900 ml-2 mb-1">Notifications</h3>
             { content }
 
-            { !! nextPage ? (
+            { nextPage ? (
                 <div ref={ moreLoadRef }>
                     <NotificationsSkeleton count={ 3 }/>
                 </div>
