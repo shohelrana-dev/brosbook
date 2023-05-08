@@ -37,8 +37,8 @@ export default function FollowButton( props: FollowButtonProps ) {
 
             setUser( { ...user, isViewerFollow: true } )
             toast.success( `You followed @${ user.username }` )
-        } catch ( err ) {
-            toast.error( 'Something went wrong, Please try again.' )
+        } catch ( err: any ) {
+            toast.error( err?.data?.message || 'Something went wrong, Please try again.' )
             console.error( err )
         }
     }
@@ -54,8 +54,8 @@ export default function FollowButton( props: FollowButtonProps ) {
 
                     setUser( { ...user, isViewerFollow: false } )
                     toast.success( `You unfollowed @${ user.username }` )
-                } catch ( err ) {
-                    toast.error( 'Something went wrong, Please try again.' )
+                } catch ( err: any ) {
+                    toast.error( err?.data?.message || 'Something went wrong, Please try again.' )
                     console.error( err )
                 }
             }
