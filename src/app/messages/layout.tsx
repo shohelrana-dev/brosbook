@@ -1,6 +1,6 @@
 "use client"
-import React, {PropsWithChildren, useEffect, useMemo, useState} from 'react'
-import { usePathname } from "next/navigation"
+import React, { PropsWithChildren, useEffect, useMemo, useState } from 'react'
+import { useParams, usePathname } from "next/navigation"
 import Conversations from "@components/messages/Conversations"
 import useMediaQuery from "@hooks/useMediaQuery"
 import ParticipantInfo from "@components/messages/ParticipantInfo"
@@ -13,18 +13,17 @@ const Wrapper = styled.div( ( { navbarHeight }: { navbarHeight: number } ) =>
 
 export const revalidate = 0
 
-export default function Layout( { children }: PropsWithChildren ){
-    const pathname          = usePathname()
-    const isDesktopOrLaptop = useMediaQuery( '(min-width: 1024px)' )
-    const [navbarHeight,setNavbarHeight ] = useState(72)
+export default function Layout( { children }: PropsWithChildren ) {
+    const pathname                        = usePathname()
+    const isDesktopOrLaptop               = useMediaQuery( '(min-width: 1024px)' )
+    const [navbarHeight, setNavbarHeight] = useState( 72 )
+    const {conversationId}                          = useParams()
 
     useEffect( () => {
-        if(typeof window !== "undefined"){
-            setNavbarHeight( Number( document.querySelector( '#appNavbar' )?.clientHeight ) + 2)
+        if ( typeof window !== "undefined" ) {
+            setNavbarHeight( Number( document.querySelector( '#appNavbar' )?.clientHeight ) + 2 )
         }
     }, [] )
-
-    const conversationId = pathname?.replace( '/messages', '' )?.replace( '/', '' )
 
     return (
         <Wrapper navbarHeight={ navbarHeight! }>
@@ -35,11 +34,12 @@ export default function Layout( { children }: PropsWithChildren ){
                 </div>
             ) : null }
 
-            <div className={ classNames( 'w-full lg:w-1/2 p-2 md:p-5 h-full', { 'hidden': ! isDesktopOrLaptop && ! conversationId } ) }>
+            <div
+                className={ classNames( 'w-full lg:w-1/2 p-2 md:p-5 h-full', { 'hidden': !isDesktopOrLaptop && !conversationId } ) }>
                 { children }
             </div>
 
-            { conversationId && isDesktopOrLaptop && ! pathname?.endsWith( '/info' ) ? (
+            { conversationId && isDesktopOrLaptop ? (
                 <div className="w-1/4 p-2 md:p-5 h-full border-l-2 border-gray-200">
                     <ParticipantInfo/>
                 </div>
