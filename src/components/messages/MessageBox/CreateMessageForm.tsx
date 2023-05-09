@@ -60,7 +60,7 @@ export default function CreateMessageForm( ){
     if( ! conversation ) return null
 
     return (
-        <div className="sticky left-0 bottom-4 w-full">
+        <div className="absolute left-0 bottom-0 w-full">
             <form onSubmit={ submitForm }
                   className="flex items-center w-full rounded-2xl broder-2 border-gray-100 bg-white px-2">
                 { ! selectedFile ? (

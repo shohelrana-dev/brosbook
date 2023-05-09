@@ -12,7 +12,7 @@ import {useGetConversationByIdQuery} from "@services/conversationsApi"
 import InfiniteScroll from "react-infinite-scroll-component"
 import tw from "twin.macro"
 
-const Wrapper = tw.div`relative flex flex-col-reverse h-[calc(100%-110px)] overflow-y-auto pt-2 scrollbar-hide`
+const Wrapper = tw.div`relative flex flex-col-reverse h-[calc(100%-126px)] overflow-y-auto pt-2 scrollbar-hide`
 
 export default function MessageList(){
     //hooks

@@ -15,7 +15,7 @@ import tw from "twin.macro"
 import { Box as BaseBox } from "@components/styles/Global.styles"
 import {useParams} from "next/navigation"
 
-const Wrapper     = tw.div`h-full`
+const Wrapper     = tw.div`h-full relative`
 const StyledModal = tw( Modal )`max-h-[85vh] bg-theme-gray overflow-hidden !p-0`
 const Header      = tw( BaseBox )`sticky top-0 left-0 z-50 py-3 px-4 lg:px-6 flex justify-between`
 const Name        = tw.h3`font-medium text-gray-800`
