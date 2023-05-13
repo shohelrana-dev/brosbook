@@ -8,14 +8,17 @@ interface AvatarProps extends ImgHTMLAttributes<HTMLImageElement> {
     size?: 'small' | 'medium' | 'large'
 }
 
-function Avatar( { online, size, src, className }: AvatarProps ){
+function Avatar( { online, size = 'medium', src, className }: AvatarProps ){
 
-    let width  = 45
-    let height = 45
+    let width
+    let height
     if( size === 'small' ){
         width  = 35
         height = 35
-    } else if( size === 'large' ){
+    } else if( size === 'medium' ){
+         width  = 45
+         height = 45
+    }else if( size === 'large' ){
         width  = 60
         height = 60
     }

@@ -16,7 +16,7 @@ export default function SuggestionsPage(){
     const { data: suggestedUsersData, isLoading, isSuccess, isError } = suggestedUsersQuery || {}
     const { items: users = [], nextPage }                             = suggestedUsersData || {}
     const error                                                       = suggestedUsersQuery.error as ErrorResponse || {}
-    console.log(suggestedUsersData, page)
+
     //decide content
     let content = null
     if( isLoading ){
