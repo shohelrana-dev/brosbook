@@ -1,5 +1,5 @@
 "use client"
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Swiper, SwiperSlide } from "swiper/react"
 import { Pagination, Navigation } from "swiper"
 import "swiper/css"
@@ -14,17 +14,26 @@ import FollowButton from "@components/global/FollowButton"
 import TextOverflow from "react-text-overflow"
 import Loading from "@components/global/Loading"
 import useMediaQuery from "@hooks/useMediaQuery"
+import Link from "next/link"
+import { motion } from "framer-motion"
 
 export default function SlidesSuggestions() {
-    const { isAuthenticated } = useAuthState()
-    const suggestedUsersQuery = useGetSuggestedUsersQuery( { page: 1, limit: 6 } )
-    const isMobileDevice      = useMediaQuery( '(max-width: 768px)' )
+    const { isAuthenticated }     = useAuthState()
+    const suggestedUsersQuery     = useGetSuggestedUsersQuery( { page: 1, limit: 12 } )
+    const isMobileDevice          = useMediaQuery( '(max-width: 768px)' )
+    const [isTimeUp, setIsTimeUp] = useState( false )
 
     const { isError, isLoading, isSuccess } = suggestedUsersQuery
     const { items: users = [] }             = suggestedUsersQuery?.data || {}
     const error                             = ( suggestedUsersQuery.error || {} ) as ErrorResponse
 
-    if ( !isAuthenticated || !isMobileDevice ) return null
+    useEffect( () => {
+        setTimeout( () => {
+            setIsTimeUp( true )
+        }, 2000 )
+    }, [] )
+
+    if ( !isAuthenticated || !isMobileDevice || !isTimeUp ) return null
 
     //decide render content
     let content = null
@@ -38,11 +47,13 @@ export default function SlidesSuggestions() {
         content = users.map( ( user: User ) => (
             <SwiperSlide key={ user.id }>
                 <div className="flex items-center justify-center flex-col box p-3">
-                    <Avatar src={ user.avatar.url } className="mb-2"/>
-                    <h4 className="font-bold text-gray-900 text-base">
-                        <TextOverflow text={ user.fullName }/>
-                    </h4>
-                    <p className="text-gray-700 mb-3">@{ user.username }</p>
+                    <Link href={ `/${ user.username }` } className="flex items-center justify-center flex-col">
+                        <Avatar src={ user.avatar.url }/>
+                        <h4 className="font-bold text-gray-900 text-sm mt-2">
+                            <TextOverflow text={ user.fullName }/>
+                        </h4>
+                        <p className="text-gray-700 mb-3 text-xs">@{ user.username }</p>
+                    </Link>
                     <FollowButton user={ user }/>
                 </div>
             </SwiperSlide>
@@ -50,7 +61,15 @@ export default function SlidesSuggestions() {
     }
 
     return (
-        <div className="mt-1 mb-2 p-2">
+        <motion.div
+            className="mt-1 mb-2 p-2"
+            initial={{
+                opacity: 0.2
+            }}
+            animate={{
+                opacity: 1
+            }}
+        >
             <h3 className="text-gray-900 text-lg font-bold mb-2">Who to follow</h3>
             <Swiper
                 slidesPerView={ 3 }
@@ -60,6 +79,6 @@ export default function SlidesSuggestions() {
             >
                 { content }
             </Swiper>
-        </div>
+        </motion.div>
     )
 }
