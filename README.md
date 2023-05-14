@@ -6,7 +6,7 @@
 1. ReactJS
 2. NextJS 13
 3. Typescript
-4. RTQ Query
+4. RTK Query
 5. SocketIo client
 
 #### Backend
