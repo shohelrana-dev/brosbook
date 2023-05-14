@@ -30,7 +30,7 @@ export default function SlidesSuggestions() {
     useEffect( () => {
         setTimeout( () => {
             setIsTimeUp( true )
-        }, 2000 )
+        }, 10000 )
     }, [] )
 
     if ( !isAuthenticated || !isMobileDevice || !isTimeUp ) return null
