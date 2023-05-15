@@ -9,19 +9,22 @@ import toast from "react-hot-toast"
 
 import OptionButton from "@components/global/OptionButton"
 import { useFollowMutation, useUnfollowMutation } from "@services/usersApi"
-import { useDeletePostMutation } from "@services/postsApi"
+import { postsApi, useDeletePostMutation } from "@services/postsApi"
 import useAuthState from "@hooks/useAuthState"
 import { useConfirmAlert } from "react-use-confirm-alert"
 import { Post } from "@interfaces/posts.interfaces"
 import { User } from "@interfaces/user.interfaces"
 import IconButton from "@components/global/IconButton"
 import useUnauthorizedAlert from "@hooks/useUnauthorzedAlert"
+import { useDispatch } from "react-redux";
+import { ListResponse } from "@interfaces/index.interfaces";
+import { usePathname } from "next/navigation";
 
 interface Props {
     post: Post
 }
 
-function PostOptions( { post }: Props ){
+function PostOptions( { post }: Props ) {
     const [follow]     = useFollowMutation()
     const [unfollow]   = useUnfollowMutation()
     const [deletePost] = useDeletePostMutation()
@@ -31,19 +34,21 @@ function PostOptions( { post }: Props ){
     const [isVisible, setIsOpen]                 = useState( false )
     const confirmAlert                           = useConfirmAlert()
     const unauthorizedAlert                      = useUnauthorizedAlert()
+    const dispatch                               = useDispatch()
+    const pathname                               = usePathname()
 
     const isCurrentUserAuthor = isAuthenticated && author && author.id === currentUser?.id
 
-    function toggleModal(){
-        setIsOpen( ! isVisible )
+    function toggleModal() {
+        setIsOpen( !isVisible )
     }
 
-    async function handleDeletePostClick(){
+    async function handleDeletePostClick() {
         await confirmAlert( {
             title: 'Delete Post?',
             message: 'This can’t be undone and it will be removed from your profile',
             confirmButtonLabel: 'Delete',
-            onConfirm: async() => {
+            onConfirm: async () => {
                 try {
                     await deletePost( post.id ).unwrap()
                     toast.success( 'Post deleted.' )
@@ -54,8 +59,8 @@ function PostOptions( { post }: Props ){
         } )
     }
 
-    async function handleFollowClick(){
-        if( ! isAuthenticated ){
+    async function handleFollowClick() {
+        if ( !isAuthenticated ) {
             unauthorizedAlert( {
                 title: `Follow ${ author.fullName } to see what they share on ${ process.env.NEXT_PUBLIC_APP_NAME }.`,
                 message: `Sign up so you never miss their Posts.`
@@ -74,7 +79,7 @@ function PostOptions( { post }: Props ){
         }
     }
 
-    async function handleUnfollowClick(){
+    async function handleUnfollowClick() {
         try {
             const user = await unfollow( author.id ).unwrap()
 
@@ -86,13 +91,22 @@ function PostOptions( { post }: Props ){
         }
     }
 
-    function handleHidePost(){
+    function handleHidePost() {
         toggleModal()
 
         //hide post
+        const removePostFromDraft = ( draft: ListResponse<Post> ) => {
+            if ( draft?.items && draft.items.length > 0 ) {
+                draft.items = draft.items.filter( ( p ) => p.id !== post.id )
+            }
+        }
+        //@ts-ignore
+        dispatch( postsApi.util.updateQueryData( 'getPosts', { authorId: post.author.id } as any, removePostFromDraft ) )
+        //@ts-ignore
+        dispatch( postsApi.util.updateQueryData( 'getFeedPosts', undefined as any, removePostFromDraft ) )
     }
 
-    function copyPostLinkToClipboard(){
+    function copyPostLinkToClipboard() {
         navigator.clipboard.writeText( `${ process.env.NEXT_PUBLIC_APP_URL }/posts/${ post.id }` ).then( () => {
             toast.success( 'Post link copied.' )
         } )
@@ -131,10 +145,12 @@ function PostOptions( { post }: Props ){
                         <CopyIcon size="18"/>
                         Copy link to post
                     </OptionButton>
-                    <OptionButton onClick={ handleHidePost }>
-                        <HideIcon size="18"/>
-                        Hide
-                    </OptionButton>
+                    { !pathname?.startsWith( '/posts/' ) && (
+                        <OptionButton onClick={ handleHidePost }>
+                            <HideIcon size="18"/>
+                            Hide
+                        </OptionButton>
+                    ) }
                 </div>
             </PopoverContent>
         </Popover>
