@@ -13,18 +13,19 @@ import useAuthState from "@hooks/useAuthState"
 import Modal, { useModal } from "react-minimal-modal"
 import useSelectFile from "@hooks/useSelectFile"
 import { Media } from "@interfaces/index.interfaces"
+import ButtonOutline from "@components/global/ButtonOutline";
 
 type Props = { user: User }
 
-export default function CoverPhoto( { user }: Props ){
+export default function CoverPhoto( { user }: Props ) {
     const { user: currentUser }                                                            = useAuthState()
     const [changeCoverPhoto, { isLoading }]                                                = useChangeCoverPhotoMutation()
     const [coverPhoto, setCoverPhoto]                                                      = useState<Media | undefined>( user.profile?.coverPhoto )
     const { inputRef, selectedFile: selectedPhoto, removeSelectedFile, onClick, onChange } = useSelectFile()
     const { isVisible, toggle }                                                            = useModal()
 
-    async function handleSubmit(){
-        if( ! selectedPhoto ) return
+    async function handleSubmit() {
+        if ( !selectedPhoto ) return
 
         try {
             const formData = new FormData()
@@ -40,12 +41,11 @@ export default function CoverPhoto( { user }: Props ){
         }
     }
 
-    function fileInputChangeHandle( event: ChangeEvent<HTMLInputElement> ){
+    function fileInputChangeHandle( event: ChangeEvent<HTMLInputElement> ) {
         onChange( event )
-        toggle()
     }
 
-    if( user.id !== currentUser?.id ){
+    if ( user.id !== currentUser?.id ) {
         return (
             <div className="flex-none">
                 { coverPhoto ? (
@@ -81,33 +81,36 @@ export default function CoverPhoto( { user }: Props ){
                 ) }
             </div>
 
-            <IconButton className="!absolute p-5 right-3 bottom-3 bg-gray-600 hover:bg-gray-700" onClick={ onClick }>
+            <IconButton className="!absolute p-5 right-3 bottom-3 bg-gray-600 hover:bg-gray-700" onClick={ () => {
+                onClick()
+                toggle()
+            } }>
                 <TbCameraPlus fontSize={ 25 } color="#fff"/>
             </IconButton>
 
             <Modal
                 visible={ isVisible }
                 toggle={ toggle }
-                title="New cover photo"
                 className="max-w-[625px] !p-3 max-h-screen"
             >
                 <>
-                    <div className="p-4 bg-gray-100 max-h-[75vh] overflow-hidden">
+                    <h3 className="text-xl font-medium text-gray-900 text-center">Choose cover photo</h3>
+                    <div className="relative h-[250px] w-full overflow-hidden my-5">
                         { selectedPhoto ? (
-                            <div>
-                                <Image
-                                    src={ URL.createObjectURL( selectedPhoto ) }
-                                    alt="Cover photo"
-                                    width={ 570 }
-                                    height={ 400 }
-                                />
-                            </div>
+                            <Image
+                                src={ URL.createObjectURL( selectedPhoto ) }
+                                alt="Cover photo"
+                                fill={ true }
+                            />
                         ) : null }
                     </div>
-                    <div className="text-right mt-3">
-                        <Button size="md" isLoading={ isLoading } className="mt-0" onClick={ handleSubmit }>
+                    <div className="mt-3">
+                        <Button size="md" isLoading={ isLoading } className="mt-0" fullWidth onClick={ handleSubmit }>
                             Save
                         </Button>
+                        <ButtonOutline size="md" className="mt-3" fullWidth onClick={ onClick }>
+                            Change Photo
+                        </ButtonOutline>
                     </div>
                 </>
             </Modal>

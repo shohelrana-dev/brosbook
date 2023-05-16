@@ -12,18 +12,19 @@ import useAuthState from "@hooks/useAuthState"
 import Modal, { useModal } from "react-minimal-modal"
 import useSelectFile from "@hooks/useSelectFile"
 import { Media } from "@interfaces/index.interfaces"
+import ButtonOutline from "@components/global/ButtonOutline";
 
 type Props = { user: User }
 
-export default function ProfilePhoto( { user }: Props ){
+export default function ProfilePhoto( { user }: Props ) {
     const { user: currentUser }                                                            = useAuthState()
     const [changeProfilePhoto, { isLoading }]                                              = useChangeProfilePhotoMutation()
     const [avatar, setAvatar]                                                              = useState<Media | undefined>( user.avatar )
     const { onChange, onClick, inputRef, selectedFile: selectedPhoto, removeSelectedFile } = useSelectFile()
     const { isVisible, toggle }                                                            = useModal()
 
-    async function handleSubmit(){
-        if( ! selectedPhoto ) return
+    async function handleSubmit() {
+        if ( !selectedPhoto ) return
 
         try {
             const formData = new FormData()
@@ -40,12 +41,11 @@ export default function ProfilePhoto( { user }: Props ){
         }
     }
 
-    function handleInputChange( event: ChangeEvent<HTMLInputElement> ){
+    function handleInputChange( event: ChangeEvent<HTMLInputElement> ) {
         onChange( event )
-        toggle()
     }
 
-    if( user.id !== currentUser?.id ){
+    if ( user.id !== currentUser?.id ) {
         return (
             <ImageLightbox
                 image={ avatar }
@@ -68,33 +68,46 @@ export default function ProfilePhoto( { user }: Props ){
                 height={ 130 }
             />
 
-            <IconButton className="!absolute p-3 right-3 bottom-0 bg-gray-600 hover:bg-gray-700" onClick={ onClick }>
+            <IconButton className="!absolute p-3 right-3 bottom-0 bg-gray-600 hover:bg-gray-700" onClick={ () => {
+                onClick()
+                toggle()
+            } }>
                 <TbCameraPlus fontSize={ 20 } color="#fff"/>
             </IconButton>
 
             <Modal
                 visible={ isVisible }
                 toggle={ toggle }
-                title="New profile photo"
                 className="max-w-[625px] !p-3"
             >
                 <>
-                    <div className="p-4 bg-gray-100 max-h-[75vh] overflow-hidden">
-                        { selectedPhoto ? (
-                            <div>
+                    <div className="text-center mb-3 max-w-[450px] m-auto">
+                        <h4 className="text-2xl font-medium mb-2 text-gray-900">Looking good!</h4>
+                        <p className="text-gray-800">
+                            This photo will be added to your profile. It will also be seen by hosts or guest, so be sure
+                            it
+                            doesn’t include any personal or sensitive info.
+                        </p>
+                    </div>
+                    <div className="flex justify-center items-center my-5">
+                        <div
+                            className="relative p-4 overflow-hidden h-[200px] w-[200px] rounded-full">
+                            { selectedPhoto ? (
                                 <Image
                                     src={ URL.createObjectURL( selectedPhoto ) }
-                                    alt="User profile photo"
-                                    width={ 570 }
-                                    height={ 400 }
+                                    alt="Avatar"
+                                    fill={ true }
                                 />
-                            </div>
-                        ) : null }
+                            ) : null }
+                        </div>
                     </div>
-                    <div className="text-right mt-3">
-                        <Button size="md" isLoading={ isLoading } className="mt-0" onClick={ handleSubmit }>
+                    <div className="mt-3">
+                        <Button size="md" isLoading={ isLoading } fullWidth onClick={ handleSubmit }>
                             Save
                         </Button>
+                        <ButtonOutline size="md" className="mt-3" fullWidth onClick={ onClick }>
+                            Change Photo
+                        </ButtonOutline>
                     </div>
                 </>
             </Modal>
