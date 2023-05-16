@@ -11,7 +11,7 @@ import AnimatedInput from "@components/global/AnimatedInput"
 import Modal, { useModal } from "react-minimal-modal"
 import useAuthState from "@hooks/useAuthState"
 import tw from "twin.macro"
-import { Form } from "@components/styles/Global.styles";
+import { Form } from "@components/styles/Global.styles"
 
 const ButtonWrapper = tw.div`text-right`
 const Link          = tw( BaseLink )`text-blue-600 text-xs block`

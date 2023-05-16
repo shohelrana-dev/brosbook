@@ -20,7 +20,7 @@ export default function ForgotPassword(){
     const { formData, onChange, onSubmit, errors }   = useForm<{ email: string }>( forgotPassword )
 
     useEffect( () => {
-        if( isSuccess ) toast.success( 'A reset password link has been sent to your email.' )
+        if( isSuccess ) toast.success( 'An email has been sent to your email to reset your password.' )
     }, [isSuccess] )
 
 
