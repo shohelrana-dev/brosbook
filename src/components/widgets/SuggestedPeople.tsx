@@ -36,13 +36,13 @@ export default function SuggestedPeople() {
 
     return (
         <div className="box p-5">
-            <h2 className="text-xl font-medium mb-5">Suggested People</h2>
+            <h2 className="text-xl font-medium mb-5">Suggestions for you</h2>
             { content }
 
             { !!nextPage ? (
                 <Link href="/suggestions">
                     <ButtonGray>
-                        Show More
+                        See More
                     </ButtonGray>
                 </Link>
             ) : null }

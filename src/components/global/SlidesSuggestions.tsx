@@ -63,14 +63,17 @@ export default function SlidesSuggestions() {
     return (
         <motion.div
             className="mt-1 mb-2 p-2"
-            initial={{
+            initial={ {
                 opacity: 0.2
-            }}
-            animate={{
+            } }
+            animate={ {
                 opacity: 1
-            }}
+            } }
         >
-            <h3 className="text-gray-900 text-lg font-bold mb-2">Who to follow</h3>
+            <div className="flex justify-between items-center">
+                <h3 className="text-gray-900 text-lg font-bold mb-2">Suggested for you</h3>
+                <Link href="/suggestions" className="text-blue-600 hover:font-bold">See all</Link>
+            </div>
             <Swiper
                 slidesPerView={ 3 }
                 spaceBetween={ 10 }
