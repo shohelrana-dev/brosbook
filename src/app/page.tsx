@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     description: 'A social media platform developed by Shohel Rana'
 }
 
-export default function Page(){
+export default function Page() {
     return (
         <SidebarLayout>
             <div className="mt-5 mb-4">

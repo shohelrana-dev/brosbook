@@ -9,6 +9,7 @@ const nextConfig = {
         domains: [
             'localhost',
             'brosbook-api.onrender.com',
+            'brosbook-api.adaptable.app',
             'res.cloudinary.com'
         ]
     }

@@ -1,20 +1,19 @@
 // noinspection TypeScriptValidateJSTypes
 
 import { ListResponse } from "@interfaces/index.interfaces"
-import {Comment} from "@interfaces/posts.interfaces"
+import { Comment } from "@interfaces/posts.interfaces"
 import { baseApi } from "@services/baseApi"
 import listQueryExtraDefinitions from "@utils/listQueryExtraDefinitions"
-
-const commentsPerPage = process.env.NEXT_PUBLIC_COMMENTS_PER_PAGE
+import { COMMENTS_PER_PAGE } from "@utils/constants"
 
 export const commentsApi = baseApi.injectEndpoints( {
     endpoints: ( build ) => ( {
         getComments: build.query<ListResponse<Comment>, { postId: string, page: number }>( {
             query: ( { postId, page } ) => ( {
                 url: `posts/${ postId }/comments`,
-                params: { page, limit: commentsPerPage }
+                params: { page, limit: COMMENTS_PER_PAGE }
             } ),
-            providesTags: (result, error, arg) => [
+            providesTags: ( result, error, arg ) => [
                 { type: 'Comments', id: arg.postId }
             ],
             ...listQueryExtraDefinitions
@@ -26,7 +25,7 @@ export const commentsApi = baseApi.injectEndpoints( {
                 method: 'POST',
                 body: formData
             } ),
-            invalidatesTags: (result, error, arg) => [
+            invalidatesTags: ( result, error, arg ) => [
                 { type: 'Comments', id: arg.postId }
             ]
         } ),
@@ -36,7 +35,7 @@ export const commentsApi = baseApi.injectEndpoints( {
                 url: `posts/${ postId }/comments/${ commentId }`,
                 method: 'DELETE'
             } ),
-            invalidatesTags: (result, error, arg) => [
+            invalidatesTags: ( result, error, arg ) => [
                 { type: 'Comments', id: arg.postId }
             ]
         } ),
@@ -46,11 +45,11 @@ export const commentsApi = baseApi.injectEndpoints( {
                 url: `posts/${ postId }/comments/${ commentId }/like`,
                 method: 'POST'
             } ),
-            onQueryStarted: async( arg, { dispatch, queryFulfilled, getState } ) => {
+            onQueryStarted: async ( arg, { dispatch, queryFulfilled, getState } ) => {
                 // optimistic cache update
-                const patchResult = dispatch( commentsApi.util.updateQueryData( "getComments", {postId: arg.postId} as any, (draft: ListResponse<Comment>) => {
+                const patchResult = dispatch( commentsApi.util.updateQueryData( "getComments", { postId: arg.postId } as any, ( draft: ListResponse<Comment> ) => {
                     const comment = draft.items.find( ( c ) => c.id === arg.commentId )
-                    if( comment ){
+                    if ( comment ) {
                         comment.likesCount += 1
                         comment.isViewerLiked = true
                     }
@@ -70,11 +69,11 @@ export const commentsApi = baseApi.injectEndpoints( {
                 url: `posts/${ postId }/comments/${ commentId }/unlike`,
                 method: 'POST'
             } ),
-            onQueryStarted: async( arg, { dispatch, queryFulfilled, getState } ) => {
+            onQueryStarted: async ( arg, { dispatch, queryFulfilled, getState } ) => {
                 // optimistic cache update
-                const patchResult = dispatch( commentsApi.util.updateQueryData( "getComments", {postId: arg.postId} as any, (draft: ListResponse<Comment>) => {
+                const patchResult = dispatch( commentsApi.util.updateQueryData( "getComments", { postId: arg.postId } as any, ( draft: ListResponse<Comment> ) => {
                     const comment = draft.items.find( ( c ) => c.id === arg.commentId )
-                    if( comment ){
+                    if ( comment ) {
                         comment.likesCount -= 1
                         comment.isViewerLiked = false
                     }

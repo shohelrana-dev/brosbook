@@ -3,15 +3,14 @@ import { ListResponse, Notification } from "@interfaces/index.interfaces"
 import { RootState } from "@store/index"
 import listQueryExtraDefinitions from "@utils/listQueryExtraDefinitions"
 import { initSocket } from "@utils/socket"
-
-const notificationsPerPage = process.env.NEXT_PUBLIC_NOTIFICATIONS_PER_PAGE
+import { NOTIFICATIONS_PER_PAGE } from "@utils/constants"
 
 export const notificationsApi = baseApi.injectEndpoints( {
     endpoints: ( build ) => ( {
         getNotifications: build.query<ListResponse<Notification>, number>( {
             query: ( page ) => ( {
                 url: `/notifications`,
-                params: { page, limit: notificationsPerPage }
+                params: { page, limit: NOTIFICATIONS_PER_PAGE }
             } ),
             onCacheEntryAdded: async ( arg, api ) => {
                 const { cacheDataLoaded, cacheEntryRemoved, updateCachedData, getState } = api

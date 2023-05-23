@@ -7,15 +7,14 @@ import { RootState } from "@store/index"
 import listQueryExtraDefinitions from "@utils/listQueryExtraDefinitions"
 import { conversationsApi } from "@services/conversationsApi"
 import { initSocket } from "@utils/socket"
-
-const messagesPerPage = process.env.NEXT_PUBLIC_MESSAGES_PER_PAGE
+import { MESSAGES_PER_PAGE } from "@utils/constants"
 
 export const messagesApi = baseApi.injectEndpoints( {
     endpoints: ( build ) => ( {
         getMessages: build.query<ListResponse<Message>, { conversationId: string, page: number }>( {
             query: ( { conversationId, page } ) => ( {
                 url: `/conversations/${ conversationId }/messages`,
-                params: { page, limit: messagesPerPage }
+                params: { page, limit: MESSAGES_PER_PAGE }
             } ),
             ...listQueryExtraDefinitions,
             onCacheEntryAdded: async ( arg, api ) => {

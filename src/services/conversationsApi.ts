@@ -4,16 +4,14 @@ import { ListResponse, Media } from "@interfaces/index.interfaces"
 import { RootState } from "@store/index"
 import listQueryExtraDefinitions from "@utils/listQueryExtraDefinitions"
 import { initSocket } from "@utils/socket"
-
-const conversationsPerPage = process.env.NEXT_PUBLIC_CONVERSATIONS_PER_PAGE
-const mediaPerPage         = process.env.NEXT_PUBLIC_MEDIA_PER_PAGE
+import { CONVERSATIONS_PER_PAGE, MEDIA_PER_PAGE } from "@utils/constants"
 
 export const conversationsApi = baseApi.injectEndpoints( {
     endpoints: ( build ) => ( {
         getConversations: build.query<ListResponse<Conversation>, number>( {
             query: ( page ) => ( {
                 url: `/conversations`,
-                params: { page, limit: conversationsPerPage }
+                params: { page, limit: CONVERSATIONS_PER_PAGE }
             } ),
             providesTags: [{ type: "Conversation", id: "LIST" }],
             ...listQueryExtraDefinitions,
@@ -135,7 +133,7 @@ export const conversationsApi = baseApi.injectEndpoints( {
         getConversationMediaList: build.query<ListResponse<Media>, { conversationId: string, page: number }>( {
             query: ( { conversationId, page } ) => ( {
                 url: `/conversations/${ conversationId }/media`,
-                params: { page, limit: mediaPerPage }
+                params: { page, limit: MEDIA_PER_PAGE }
             } ),
             providesTags: ['ConversationMedia'],
             ...listQueryExtraDefinitions
