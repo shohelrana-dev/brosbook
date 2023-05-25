@@ -20,12 +20,12 @@ import {
 } from "@services/index"
 import { Metadata } from "next"
 import { notFound } from "next/navigation"
-import {TbDiscountCheckFilled as BlueBadgeIcon} from "react-icons/tb";
+import { TbDiscountCheckFilled as BlueBadgeIcon } from "react-icons/tb";
 
-export const generateMetadata = async( { params }: Props ): Promise<Metadata> => {
+export const generateMetadata = async ( { params }: Props ): Promise<Metadata> => {
     const user = await getUserByUsername( params.username, cookies() )
 
-    if( ! user ) return {
+    if ( !user ) return {
         title: 'User not found'
     }
 
@@ -38,12 +38,19 @@ export const generateMetadata = async( { params }: Props ): Promise<Metadata> =>
         title,
         description,
         keywords: [user.fullName, user.username, 'posts', 'profile', 'interests', 'contact', process.env.NEXT_PUBLIC_APP_NAME!],
+        openGraph: {
+            type: 'profile',
+            url: url,
+            title: title,
+            description: description!,
+            images: image!
+        },
+        twitter: {
+            title: title,
+            description: description!,
+            images: image!
+        },
         other: {
-            "og:type": 'profile',
-            "og:url": url,
-            "og:title": title,
-            "og:description": description!,
-            "og:image": image!,
             "og:image:alt": user.fullName,
             "profile:first_name": user.firstName,
             "profile:last_name": user.lastName,
@@ -63,12 +70,12 @@ interface Props {
 
 export const revalidate = 0
 
-export default async function ProfileLayout( { children, params }: Props ){
+export default async function ProfileLayout( { children, params }: Props ) {
     const nextCookies = cookies()
 
     const user = await getUserByUsername( params.username, nextCookies )
 
-    if( ! user ) return notFound()
+    if ( !user ) return notFound()
 
     const [currentUser, followersCount, followingsCount] = await Promise.all(
         [getCurrentUser( nextCookies ), getFollowersCount( user.id ), getFollowingsCount( user.id )]
@@ -114,7 +121,7 @@ export default async function ProfileLayout( { children, params }: Props ){
                                 <h2 className="text:lg md:text-xl font-bold">
                                     { user?.fullName }
                                 </h2>
-                                <BlueBadgeIcon color="rgb(58,141,245)" size={20} className="ml-[1px] mt-[2px]"/>
+                                <BlueBadgeIcon color="rgb(58,141,245)" size={ 20 } className="ml-[1px] mt-[2px]"/>
                             </div>
                             <p className="text-gray-600 mb-2">@{ user?.username }</p>
                             <div>{ user?.profile?.bio }</div>

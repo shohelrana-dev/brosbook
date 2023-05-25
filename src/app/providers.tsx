@@ -7,7 +7,7 @@ import { UnauthorizedPopupProvider } from "@hooks/useUnauthorzedAlert"
 import { ThemeProvider } from "@material-tailwind/react"
 import { ConfirmAlertProvider } from "react-use-confirm-alert"
 
-export default function Providers( { children }: { children: ReactNode } ){
+export default function Providers( { children }: { children: ReactNode } ) {
     return (
         <Provider store={ store }>
             <ThemeProvider>

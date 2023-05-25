@@ -3,6 +3,6 @@
 .vscode
 node_modules
 
-.env.local
+.env
 *yarn.lock
 *yarn-error.log

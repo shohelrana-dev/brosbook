@@ -15,11 +15,11 @@ export const metadata: Metadata = {
         default: appName,
         template: `%s | ${ appName }`,
     },
+    description: `Welcome to ${ appName }. Make your own timeline.`,
     keywords: [process.env.NEXT_PUBLIC_APP_NAME!, 'social media'],
     colorScheme: "light",
     themeColor: "#FFFFFF",
     applicationName: appName,
-    description: `Welcome to ${ appName }. Make your own timeline.`,
     viewport: {
         width: 'device-width',
         initialScale: 1.0,
@@ -27,7 +27,12 @@ export const metadata: Metadata = {
         maximumScale: 1.0
     },
     icons: '/favicon.png',
-    creator: "Shohel Rana"
+    creator: "Shohel Rana",
+    openGraph: {
+        title: process.env.NEXT_PUBLIC_APP_NAME,
+        description: 'A social media platform developed by Shohel Rana',
+        images: '/favicon.png'
+    }
 }
 
 export default async function RootLayout( { children }: PropsWithChildren ){
