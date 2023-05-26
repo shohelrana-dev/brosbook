@@ -47,10 +47,6 @@ export default function Navbar() {
                             <Link href="/auth/login">
                                 <Button size="sm">Login</Button>
                             </Link>
-                            &nbsp;
-                            <Link href="/auth/signup">
-                                <ButtonOutline size="sm">Signup</ButtonOutline>
-                            </Link>
                         </>
                     ) }
                 </RightArea>

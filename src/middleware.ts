@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import isAuthenticated from "@utils/isAuthenticated"
 
-export async function middleware(request: NextRequest) {
+/*export async function middleware(request: NextRequest) {
     const currentPathname = request.nextUrl.pathname
     const isUserAuthorized = isAuthenticated(request.cookies)
     const protectedPaths = ['/messages', '/notifications', '/suggestions', '/account', '/account/profile', '/auth/logout']
@@ -31,4 +31,4 @@ export async function middleware(request: NextRequest) {
     }
 
     return NextResponse.next()
-}
+}*/

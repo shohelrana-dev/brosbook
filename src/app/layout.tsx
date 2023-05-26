@@ -17,6 +17,7 @@ export const metadata: Metadata = {
     },
     description: `Welcome to ${ appName }. Make your own timeline.`,
     keywords: [process.env.NEXT_PUBLIC_APP_NAME!, 'social media'],
+    metadataBase: new URL( process.env.NEXT_PUBLIC_APP_URL! ),
     colorScheme: "light",
     themeColor: "#FFFFFF",
     applicationName: appName,
@@ -40,7 +41,7 @@ export const metadata: Metadata = {
     }
 }
 
-export default async function RootLayout( { children }: PropsWithChildren ){
+export default async function RootLayout( { children }: PropsWithChildren ) {
     const user = await getCurrentUser( cookies() )
 
     return (
