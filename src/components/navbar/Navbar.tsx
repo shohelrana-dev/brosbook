@@ -11,16 +11,16 @@ import UserMenu from "@components/navbar/UserMenu"
 import useAuthState from "@hooks/useAuthState"
 import tw from "twin.macro"
 import { Container } from "@components/styles/Global.styles"
+import Button from "@components/global/Button"
+import ButtonOutline from "@components/global/ButtonOutline"
 
 const StyledNavbar    = tw( BaseNavbar )`relative bg-white z-10 mx-auto px-4 lg:px-8 py-2 lg:py-4 z-20`
 const StyledContainer = tw( Container )`mx-auto flex items-center justify-between text-blue-gray-900`
 const LeftArea        = tw.div`mr-1 [button]:p-5`
-const RightArea       = tw.div`flex`
+const RightArea       = tw.div`flex items-center`
 
-export default function Navbar(){
+export default function Navbar() {
     const { isAuthenticated } = useAuthState()
-
-    if( ! isAuthenticated ) return null
 
     return (
         <StyledNavbar id="appNavbar" fullWidth>
@@ -35,9 +35,24 @@ export default function Navbar(){
 
                 <RightArea>
                     <ExpandableSearch/>
-                    <NotificationsNavLink/>
-                    <MessagesNavLink/>
-                    <UserMenu/>
+                    { isAuthenticated ? (
+                        <>
+                            <NotificationsNavLink/>
+                            <MessagesNavLink/>
+                            <UserMenu/>
+                        </>
+                    ) : (
+                        <>
+                            &nbsp;
+                            <Link href="/auth/login">
+                                <Button size="sm">Login</Button>
+                            </Link>
+                            &nbsp;
+                            <Link href="/auth/signup">
+                                <ButtonOutline size="sm">Signup</ButtonOutline>
+                            </Link>
+                        </>
+                    ) }
                 </RightArea>
             </StyledContainer>
         </StyledNavbar>
