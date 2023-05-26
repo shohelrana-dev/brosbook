@@ -1,5 +1,3 @@
-// @ts-ignore
-import { ReadonlyRequestCookies } from "next/dist/server/app-render"
 import { RequestCookies } from "next/dist/server/web/spec-extension/cookies"
 import { http } from "@utils/axiosInstance"
 import getAuthorizationConfig from "@utils/getAuthorizationConfig"
@@ -7,8 +5,9 @@ import { User } from "@interfaces/user.interfaces"
 import { Post } from "@interfaces/posts.interfaces"
 import { ListResponse } from "@interfaces/index.interfaces"
 import { Conversation } from "@interfaces/conversation.interfaces"
+import { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies"
 
-export async function getCurrentUser( cookies: RequestCookies | ReadonlyRequestCookies ){
+export async function getCurrentUser( cookies: RequestCookies | ReadonlyRequestCookies ) {
     try {
         const config = getAuthorizationConfig( cookies )
         const res    = await http.get<User>( `/users/me`, config )
@@ -19,7 +18,7 @@ export async function getCurrentUser( cookies: RequestCookies | ReadonlyRequestC
     }
 }
 
-export async function getUserByUsername( username: string, cookies: RequestCookies | ReadonlyRequestCookies ){
+export async function getUserByUsername( username: string, cookies: RequestCookies | ReadonlyRequestCookies ) {
     try {
         const config = getAuthorizationConfig( cookies )
         const res    = await http.get<User>( `/users/by/username/${ username }`, config )
@@ -30,7 +29,7 @@ export async function getUserByUsername( username: string, cookies: RequestCooki
     }
 }
 
-export async function getFollowersCount( userId: string ){
+export async function getFollowersCount( userId: string ) {
     try {
         const res = await http.get<{ count: number }>( `/users/${ userId }/followers/count` )
 
@@ -40,7 +39,7 @@ export async function getFollowersCount( userId: string ){
     }
 }
 
-export async function getFollowingsCount( userId: string ){
+export async function getFollowingsCount( userId: string ) {
     try {
         const res = await http.get<{ count: number }>( `/users/${ userId }/followings/count` )
 
@@ -50,7 +49,7 @@ export async function getFollowingsCount( userId: string ){
     }
 }
 
-export async function getPostById( postId: string, cookies: RequestCookies | ReadonlyRequestCookies ){
+export async function getPostById( postId: string, cookies: RequestCookies | ReadonlyRequestCookies ) {
     try {
         const config = getAuthorizationConfig( cookies )
         const res    = await http.get<Post>( `/posts/${ postId }`, config )
@@ -61,7 +60,7 @@ export async function getPostById( postId: string, cookies: RequestCookies | Rea
     }
 }
 
-export async function getPostsByAuthorId( authorId: string, cookies: RequestCookies | ReadonlyRequestCookies ){
+export async function getPostsByAuthorId( authorId: string, cookies: RequestCookies | ReadonlyRequestCookies ) {
     try {
         const config = getAuthorizationConfig( cookies )
         const res    = await http.get<ListResponse<Post>>( `/posts?userId=${ authorId }`, config )
@@ -72,7 +71,7 @@ export async function getPostsByAuthorId( authorId: string, cookies: RequestCook
     }
 }
 
-export async function getConversationById( conversationId: string, cookies: RequestCookies | ReadonlyRequestCookies ){
+export async function getConversationById( conversationId: string, cookies: RequestCookies | ReadonlyRequestCookies ) {
     try {
         const config = getAuthorizationConfig( cookies )
         const res    = await http.get<Conversation>( `/conversations/${ conversationId }`, config )
@@ -83,7 +82,7 @@ export async function getConversationById( conversationId: string, cookies: Requ
     }
 }
 
-export async function getConversations( cookies: RequestCookies | ReadonlyRequestCookies ){
+export async function getConversations( cookies: RequestCookies | ReadonlyRequestCookies ) {
     try {
         const config = getAuthorizationConfig( cookies )
         const res    = await http.get<ListResponse<Conversation>>( `/conversations `, config )
