@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server'
 import isAuthenticated from "@utils/isAuthenticated"
 
 export async function middleware( request: NextRequest ) {
-    const currentPathname  = request.nextUrl.pathname
+    /*const currentPathname  = request.nextUrl.pathname
     const isUserAuthorized = await isAuthenticated( request.cookies )
     const protectedPaths   = ['/messages', '/notifications', '/suggestions', '/account', '/account/profile', '/auth/logout']
     const guestPaths       = ['/auth/login', '/auth/signup', '/auth/email_verification']
@@ -28,7 +28,7 @@ export async function middleware( request: NextRequest ) {
         } else if ( isProtectedPath ) {
             return NextResponse.redirect( new URL( `/auth/login?redirect_to=${ currentPathname }`, request.url ) )
         }
-    }
+    }*/
 
     return NextResponse.next()
 }
