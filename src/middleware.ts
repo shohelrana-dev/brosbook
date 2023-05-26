@@ -2,6 +2,10 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import isAuthenticated from "@utils/isAuthenticated"
 
+export async function middleware(request: NextRequest) {
+    NextResponse.next()
+}
+
 /*export async function middleware(request: NextRequest) {
     const currentPathname = request.nextUrl.pathname
     const isUserAuthorized = isAuthenticated(request.cookies)
