@@ -10,10 +10,10 @@ import Image from "next/image"
 import { User } from "@interfaces/user.interfaces"
 import placeholderCoverPhoto from "@assets/images/placeholder-cover-photo.png"
 import useAuthState from "@hooks/useAuthState"
-import Modal, { useModal } from "react-minimal-modal"
+import Modal from "react-minimal-modal"
 import useSelectFile from "@hooks/useSelectFile"
 import { Media } from "@interfaces/index.interfaces"
-import ButtonOutline from "@components/global/ButtonOutline";
+import ButtonOutline from "@components/global/ButtonOutline"
 
 type Props = { user: User }
 
@@ -22,7 +22,6 @@ export default function CoverPhoto( { user }: Props ) {
     const [changeCoverPhoto, { isLoading }]                                                = useChangeCoverPhotoMutation()
     const [coverPhoto, setCoverPhoto]                                                      = useState<Media | undefined>( user.profile?.coverPhoto )
     const { inputRef, selectedFile: selectedPhoto, removeSelectedFile, onClick, onChange } = useSelectFile()
-    const { isVisible, toggle }                                                            = useModal()
 
     async function handleSubmit() {
         if ( !selectedPhoto ) return
@@ -31,7 +30,7 @@ export default function CoverPhoto( { user }: Props ) {
             const formData = new FormData()
             formData.append( 'coverPhoto', selectedPhoto )
             const data = await changeCoverPhoto( formData ).unwrap()
-            toggle()
+
             removeSelectedFile()
             setCoverPhoto( data.profile?.coverPhoto )
             toast.success( 'Cover photo saved.' )
@@ -81,16 +80,13 @@ export default function CoverPhoto( { user }: Props ) {
                 ) }
             </div>
 
-            <IconButton className="!absolute p-5 right-3 bottom-3 bg-gray-600 hover:bg-gray-700" onClick={ () => {
-                onClick()
-                toggle()
-            } }>
+            <IconButton className="!absolute p-5 right-3 bottom-3 bg-gray-600 hover:bg-gray-700" onClick={ onClick }>
                 <TbCameraPlus fontSize={ 25 } color="#fff"/>
             </IconButton>
 
             <Modal
-                visible={ isVisible }
-                toggle={ toggle }
+                visible={ !!selectedPhoto }
+                toggle={ removeSelectedFile }
                 className="max-w-[625px] !p-3 max-h-screen"
             >
                 <>

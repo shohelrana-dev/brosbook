@@ -7,12 +7,12 @@ import UsersSkeleton from "@components/skeletons/UsersSkeleton"
 
 interface Props {
     onUserClick: ( user: User ) => void
-    searchKey: string
+    searchText: string
     wrapperClassname?: string
 }
 
-export default function SearchUserList( { onUserClick, searchKey, wrapperClassname }: Props ){
-    const { data, isLoading, isSuccess } = useSearchUsersQuery( { q: searchKey, page: 1 }, { skip: ! searchKey } )
+export default function SearchUserList( { onUserClick, searchText, wrapperClassname }: Props ){
+    const { data, isLoading, isSuccess } = useSearchUsersQuery( { q: searchText, page: 1 }, { skip: ! searchText } )
 
     const users = data?.items || []
 
@@ -27,7 +27,7 @@ export default function SearchUserList( { onUserClick, searchKey, wrapperClassna
                 </div>
             ) ) : null }
 
-            { ( ! searchKey ) ? (
+            { ( ! searchText ) ? (
                 <p className="text-gray-800 pb-4">
                     Try searching for people, topics.
                 </p>

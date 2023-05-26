@@ -6,39 +6,33 @@ import classNames from "classnames"
 import { User } from "@interfaces/user.interfaces"
 import { useRouter } from "next/navigation"
 import SearchUserList from "@components/global/SearchUserList"
-import { useDebouncedCallback } from "use-debounce"
-import delay from "delay";
+import { useDebounce } from "use-debounce"
+import delay from "delay"
 
-export default function ExpandableSearch(){
-    const [expanded, setExpanded]   = useState<boolean>( false )
-    const [searchKey, setSearchKey] = useState<string>( '' )
-    const router                    = useRouter()
-    const inputRef                  = useRef<HTMLInputElement>()
+export default function ExpandableSearch() {
+    const [expanded, setExpanded]     = useState<boolean>( false )
+    const [searchText, setSearchText] = useState<string>( '' )
+    const [dSearchText]               = useDebounce<string>( searchText, 1000 )
+    const router                      = useRouter()
+    const inputRef                    = useRef<HTMLInputElement>()
 
     useEffect( () => {
-        if( expanded ){
+        if ( expanded ) {
             inputRef.current?.focus()
-        } else{
-            setSearchKey( '' )
+        } else {
+            setSearchText( '' )
             inputRef.current?.blur()
         }
     }, [expanded] )
 
-    const handleInputChange = useDebouncedCallback(
-        ( value ) => {
-            setSearchKey( value )
-        },
-        500,
-    )
-
-    async function toggleExpand(){
-        if( expanded ){
-            await delay( 300 )
+    async function toggleExpand() {
+        if ( expanded ) {
+            await delay( 200 )
         }
-        setExpanded( ! expanded )
+        setExpanded( !expanded )
     }
 
-    async function onUserClick( user: User ){
+    async function onUserClick( user: User ) {
         try {
             router.push( `/${ user.username }` )
         } catch ( e ) {
@@ -51,8 +45,8 @@ export default function ExpandableSearch(){
     return (
         <div className="relative rounded-3xl flex-none">
             <BasicInput
-                onChange={ ( e ) => handleInputChange( e.target.value ) }
-                value={ searchKey }
+                onChange={ ( e ) => setSearchText( e.target.value ) }
+                value={ searchText }
                 inputRef={ inputRef }
                 onBlur={ toggleExpand }
                 className="!rounded-3xl z-10 !bg-transparent"
@@ -69,7 +63,7 @@ export default function ExpandableSearch(){
                 </IconButton>
             </div>
 
-            { expanded ? <SearchUserList onUserClick={ onUserClick } searchKey={ searchKey }/> : null }
+            { expanded ? <SearchUserList onUserClick={ onUserClick } searchText={ dSearchText }/> : null }
         </div>
     )
 }

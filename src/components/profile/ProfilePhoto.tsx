@@ -9,10 +9,10 @@ import ImageLightbox from "@components/global/ImageLightbox"
 import Image from "next/image"
 import { User } from "@interfaces/user.interfaces"
 import useAuthState from "@hooks/useAuthState"
-import Modal, { useModal } from "react-minimal-modal"
+import Modal from "react-minimal-modal"
 import useSelectFile from "@hooks/useSelectFile"
 import { Media } from "@interfaces/index.interfaces"
-import ButtonOutline from "@components/global/ButtonOutline";
+import ButtonOutline from "@components/global/ButtonOutline"
 
 type Props = { user: User }
 
@@ -21,7 +21,6 @@ export default function ProfilePhoto( { user }: Props ) {
     const [changeProfilePhoto, { isLoading }]                                              = useChangeProfilePhotoMutation()
     const [avatar, setAvatar]                                                              = useState<Media | undefined>( user.avatar )
     const { onChange, onClick, inputRef, selectedFile: selectedPhoto, removeSelectedFile } = useSelectFile()
-    const { isVisible, toggle }                                                            = useModal()
 
     async function handleSubmit() {
         if ( !selectedPhoto ) return
@@ -31,7 +30,6 @@ export default function ProfilePhoto( { user }: Props ) {
             formData.append( 'avatar', selectedPhoto )
             const data = await changeProfilePhoto( formData ).unwrap()
 
-            toggle()
             removeSelectedFile()
             setAvatar( data.avatar )
             toast.success( 'Profile photo saved.' )
@@ -68,16 +66,13 @@ export default function ProfilePhoto( { user }: Props ) {
                 height={ 130 }
             />
 
-            <IconButton className="!absolute p-3 right-3 bottom-0 bg-gray-600 hover:bg-gray-700" onClick={ () => {
-                onClick()
-                toggle()
-            } }>
+            <IconButton className="!absolute p-3 right-3 bottom-0 bg-gray-600 hover:bg-gray-700" onClick={ onClick }>
                 <TbCameraPlus fontSize={ 20 } color="#fff"/>
             </IconButton>
 
             <Modal
-                visible={ isVisible }
-                toggle={ toggle }
+                visible={ !!selectedPhoto }
+                toggle={ removeSelectedFile }
                 className="max-w-[625px] !p-3"
             >
                 <>

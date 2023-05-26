@@ -32,6 +32,11 @@ export const metadata: Metadata = {
         title: process.env.NEXT_PUBLIC_APP_NAME,
         description: 'A social media platform developed by Shohel Rana',
         images: '/favicon.png'
+    },
+    twitter: {
+        title: process.env.NEXT_PUBLIC_APP_NAME,
+        description: 'A social media platform developed by Shohel Rana',
+        images: '/favicon.png'
     }
 }
 
