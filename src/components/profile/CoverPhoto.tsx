@@ -1,10 +1,9 @@
 "use client"
 import React, { ChangeEvent, useState } from 'react'
-import IconButton from "@components/global/IconButton"
+import { IconButton } from '@mui/material'
 import { TbCameraPlus } from "react-icons/tb"
 import { useChangeCoverPhotoMutation } from "@services/usersApi"
 import toast from "react-hot-toast"
-import Button from "@components/global/Button"
 import ImageLightbox from "@components/global/ImageLightbox"
 import Image from "next/image"
 import { User } from "@interfaces/user.interfaces"
@@ -13,7 +12,8 @@ import useAuthState from "@hooks/useAuthState"
 import Modal from "react-minimal-modal"
 import useSelectFile from "@hooks/useSelectFile"
 import { Media } from "@interfaces/index.interfaces"
-import ButtonOutline from "@components/global/ButtonOutline"
+import { LoadingButton } from '@mui/lab'
+import { Button } from '@mui/material'
 
 type Props = { user: User }
 
@@ -80,7 +80,7 @@ export default function CoverPhoto( { user }: Props ) {
                 ) }
             </div>
 
-            <IconButton className="!absolute p-5 right-3 bottom-3 bg-gray-600 hover:bg-gray-700" onClick={ onClick }>
+            <IconButton className="!absolute right-3 bottom-3 bg-gray-600 hover:bg-gray-700" onClick={ onClick }>
                 <TbCameraPlus fontSize={ 25 } color="#fff"/>
             </IconButton>
 
@@ -101,12 +101,12 @@ export default function CoverPhoto( { user }: Props ) {
                         ) : null }
                     </div>
                     <div className="mt-3">
-                        <Button size="md" isLoading={ isLoading } className="mt-0" fullWidth onClick={ handleSubmit }>
+                        <LoadingButton variant="contained" size="large" loading={ isLoading } className="mt-0" fullWidth onClick={ handleSubmit }>
                             Save
-                        </Button>
-                        <ButtonOutline size="md" className="mt-3" fullWidth onClick={ onClick }>
+                        </LoadingButton>
+                        <Button variant="outlined" size="large" className="mt-3" fullWidth onClick={ onClick }>
                             Change Photo
-                        </ButtonOutline>
+                        </Button>
                     </div>
                 </>
             </Modal>

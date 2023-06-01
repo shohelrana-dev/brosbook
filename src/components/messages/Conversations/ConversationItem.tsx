@@ -19,7 +19,7 @@ const MessageText    = styled.p( ( { bold }: { bold: boolean } ) => [
     tw`text-sm text-gray-700`,
     bold && tw`!font-bold !text-gray-900`
 ] )
-const StyledImage    = tw( Image )`rounded-full h-[15px]`
+const StyledImage    = tw( Image )`rounded-full h-[15px] w-[15px]`
 
 interface Props {
     conversation: Conversation
@@ -73,7 +73,7 @@ export default function ConversationItem( { conversation }: Props ) {
                                 /> : <TickIcon size={17}/>
                         ) : (
                             unreadMessagesCount ? (
-                                <p className="bg-theme-blue text-white rounded-full w-[18px] h-[18px] flex justify-center items-center text-xs font-bold">
+                                <p className="bg-theme-green text-white rounded-full w-[18px] h-[18px] flex justify-center items-center text-xs font-bold">
                                     {unreadMessagesCount}
                                 </p>
                             ) : null

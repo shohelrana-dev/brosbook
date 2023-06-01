@@ -6,34 +6,40 @@ import MessageList from "@components/messages/MessageBox/MessageList"
 import CreateMessageForm from "@components/messages/MessageBox/CreateMessageForm"
 import timeAgo from "@utils/timeAgo"
 import Loading from "@components/global/Loading"
-import { useGetConversationByIdQuery} from "@services/conversationsApi"
-import IconButton from "@components/global/IconButton"
+import { useGetConversationByIdQuery } from "@services/conversationsApi"
+import { IconButton } from '@mui/material'
 import { BiInfoCircle as InfoIcon } from "react-icons/bi"
 import Modal, { useModal } from "react-minimal-modal"
 import ParticipantInfo from "@components/messages/ParticipantInfo"
 import tw from "twin.macro"
 import { Box as BaseBox } from "@components/styles/Global.styles"
-import {useParams} from "next/navigation"
+import { useParams } from "next/navigation"
+import { RxCross1 as CrossIcon } from "react-icons/rx"
 
 const Wrapper     = tw.div`h-full relative`
-const StyledModal = tw( Modal )`max-h-[85vh] bg-theme-gray overflow-hidden !p-0`
-const Header      = tw( BaseBox )`sticky top-0 left-0 z-50 py-3 px-4 lg:px-6 flex justify-between`
+const StyledModal = tw(Modal)`max-h-[85vh] bg-theme-gray overflow-hidden !p-0`
+const Header      = tw(BaseBox)`sticky top-0 left-0 z-50 py-3 px-4 lg:px-6 flex justify-between`
 const Name        = tw.h3`font-medium text-gray-800`
 const Active      = tw.p`text-gray-500 text-sm`
 
-export default function MessageBox(){
+export default function MessageBox() {
     //hooks
-    const {conversationId} = useParams()
-    const { data: conversation, isLoading } = useGetConversationByIdQuery( conversationId )
+    const { conversationId }                = useParams()
+    const { data: conversation, isLoading } = useGetConversationByIdQuery(conversationId)
     const { isVisible, toggle }             = useModal()
 
-    if( isLoading ) return <Loading/>
+    if ( isLoading ) return <Loading/>
 
     const { fullName, active, avatar, username, updatedAt } = conversation?.participant || {}
 
     return (
         <Wrapper>
             <StyledModal visible={ isVisible } toggle={ toggle } hideIcon>
+                <div className="relative">
+                    <IconButton className="absolute top-1 right-1" onClick={toggle}>
+                        <CrossIcon size={18}/>
+                    </IconButton>
+                </div>
                 <ParticipantInfo/>
             </StyledModal>
 
@@ -54,7 +60,7 @@ export default function MessageBox(){
                             </Link>
                         </Name>
                         <Active>
-                            { active ? 'Active now' : 'Active ' + timeAgo( updatedAt! ) }
+                            { active ? 'Active now' : 'Active ' + timeAgo(updatedAt!) }
                         </Active>
                     </div>
                 </div>

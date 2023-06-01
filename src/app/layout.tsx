@@ -27,17 +27,16 @@ export const metadata: Metadata = {
         minimumScale: 1.0,
         maximumScale: 1.0
     },
-    icons: '/favicon.png',
     creator: "Shohel Rana",
     openGraph: {
         title: process.env.NEXT_PUBLIC_APP_NAME,
         description: 'A social media platform developed by Shohel Rana',
-        images: '/favicon.png'
+        images: '/titled-logo.png'
     },
     twitter: {
         title: process.env.NEXT_PUBLIC_APP_NAME,
         description: 'A social media platform developed by Shohel Rana',
-        images: '/favicon.png'
+        images: '/titled-logo.png'
     }
 }
 

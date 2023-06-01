@@ -1,7 +1,7 @@
 "use client"
 import React from 'react'
 import Link from "next/link"
-import ButtonGray from "@components/global/ButtonGray"
+import { Button } from "@mui/material"
 import useAuthState from "@hooks/useAuthState"
 
 function NewUserMessage(){
@@ -15,9 +15,9 @@ function NewUserMessage(){
             <p className="text-gray-800">Sign up now to get your own personalized timeline!</p>
 
             <Link href="/auth/signup">
-                <ButtonGray>
+                <Button>
                     Goto Signup page
-                </ButtonGray>
+                </Button>
             </Link>
         </div>
     )

@@ -4,50 +4,49 @@ import { MdPublic } from "react-icons/md"
 import { HiPhotograph } from "react-icons/hi"
 import { RxCross2 as CancelIcon } from "react-icons/rx"
 import toast from "react-hot-toast"
+import { LoadingButton } from "@mui/lab"
+import { IconButton } from '@mui/material'
 
 import Avatar from "@components/global/Avatar"
 import { useCreatePostMutation } from "@services/postsApi"
 import BasicInput from "@components/global/BasicInput"
-import Button from "@components/global/Button"
 import useAuthState from "@hooks/useAuthState"
-import IconButton from "@components/global/IconButton"
 import useSelectFile from "@hooks/useSelectFile"
-import CreatePostFormSkeleton from "@components/skeletons/CreatePostFormSkeleton"
 
-export default function CreatePostForm(){
+export default function CreatePostForm() {
     //hooks
     const { user, isAuthenticated }                                                        = useAuthState()
-    const [createPost, { isLoading }]                                                      = useCreatePostMutation()
-    const [body, setBody]                                                                  = useState<string>( '' )
+    const [ createPost, { isLoading } ]                                                    = useCreatePostMutation()
+    const [ body, setBody ]                                                                = useState<string>('')
     const { inputRef, selectedFile: selectedImage, removeSelectedFile, onChange, onClick } = useSelectFile()
 
-    async function submitForm( event: FormEvent ){
+    async function submitForm( event: FormEvent ) {
         event.preventDefault()
 
-        if( ! body && ! selectedImage ) return
+        if ( !body && !selectedImage ) return
 
         const formData = new FormData()
-        if( body ){
-            formData.append( 'body', body )
+        if ( body ) {
+            formData.append('body', body)
         }
-        if( selectedImage ){
-            formData.append( 'image', selectedImage )
+        if ( selectedImage ) {
+            formData.append('image', selectedImage)
         }
 
         try {
-            await createPost( formData ).unwrap()
-            toast.success( 'Post published.' )
-            if( body ) setBody( '' )
-            if( selectedImage ){
+            await createPost(formData).unwrap()
+            toast.success('Post published.')
+            if ( body ) setBody('')
+            if ( selectedImage ) {
                 removeSelectedFile()
             }
         } catch ( err: any ) {
-            console.error( err )
-            toast.error( 'Post couldn\'t be saved.' )
+            console.error(err)
+            toast.error('Post couldn\'t be saved.')
         }
     }
 
-    if( ! isAuthenticated ) return null
+    if ( !isAuthenticated ) return null
 
     return (
         <div className="relative box p-6 mb-4">
@@ -69,7 +68,7 @@ export default function CreatePostForm(){
                     textarea
                     labelHide
                     label="What's your mind?"
-                    onChange={ ( e ) => setBody( e.target.value ) }
+                    onChange={ ( e ) => setBody(e.target.value) }
                     value={ body }
                 />
                 <input
@@ -89,19 +88,17 @@ export default function CreatePostForm(){
                                 <CancelIcon size={ 15 }/>
                             </IconButton>
                         </div>
-                        <img className="rounded-2xl" src={ URL.createObjectURL( selectedImage ) } alt="post image"/>
+                        <img className="rounded-2xl" src={ URL.createObjectURL(selectedImage) } alt="post image"/>
                     </div> ) : null }
 
                 <div className="flex mt-4 justify-between items-center">
-                    <IconButton className="text-theme-blue p-6" onClick={ onClick }>
+                    <IconButton className="text-theme-green p-3" onClick={ onClick }>
                         <HiPhotograph fontSize={ 30 }/>
                     </IconButton>
-                    <div>
-                        <Button type="submit" isLoading={ isLoading } size="sm"
-                                disabled={ isLoading || ( ! body && ! selectedImage ) }>
-                            Publish Post
-                        </Button>
-                    </div>
+                    <LoadingButton variant="contained" type="submit" loading={ isLoading }
+                                   disabled={ isLoading || ( !body && !selectedImage ) }>
+                        Publish Post
+                    </LoadingButton>
                 </div>
             </form>
         </div>

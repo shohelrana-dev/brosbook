@@ -1,41 +1,33 @@
 "use client"
-import React from 'react'
 import Link from "next/link"
-import { Navbar as BaseNavbar } from "@material-tailwind/react"
-import { AiOutlineHome as HomeIcon } from "react-icons/ai"
-import IconButton from "@components/global/IconButton"
 import ExpandableSearch from "@components/navbar/ExpandableSearch"
 import NotificationsNavLink from "@components/navbar/NotificationsNavLink"
 import MessagesNavLink from "@components/navbar/MessagesNavLink"
 import UserMenu from "@components/navbar/UserMenu"
 import useAuthState from "@hooks/useAuthState"
+import Image from "next/image"
+import logo from "@assets/images/logo.png"
+import {Button, AppBar, IconButton, Box} from "@mui/material"
 import tw from "twin.macro"
-import { Container } from "@components/styles/Global.styles"
-import Button from "@components/global/Button"
-import ButtonOutline from "@components/global/ButtonOutline"
+import {Container} from "@components/styles/Global.styles"
 
-const StyledNavbar    = tw( BaseNavbar )`relative bg-white z-10 mx-auto px-4 lg:px-8 py-2 lg:py-4 z-20`
-const StyledContainer = tw( Container )`mx-auto flex items-center justify-between text-blue-gray-900`
-const LeftArea        = tw.div`mr-1 [button]:p-5`
-const RightArea       = tw.div`flex items-center`
+const StyledContainer = tw(Container)`mx-auto flex items-center justify-between text-blue-gray-900`
 
 export default function Navbar() {
-    const { isAuthenticated } = useAuthState()
+    const {isAuthenticated} = useAuthState()
 
     return (
-        <StyledNavbar id="appNavbar" fullWidth>
+        <AppBar id="appNavbar" variant="outlined" color="default" position="static" sx={{background: "#fff", padding: '6px 0'}}>
             <StyledContainer>
-                <LeftArea>
-                    <Link href="/">
-                        <IconButton>
-                            <HomeIcon size={ 27 }/>
-                        </IconButton>
-                    </Link>
-                </LeftArea>
-
-                <RightArea>
+                <Link href="/">
+                    <IconButton>
+                        <Image src={logo} alt={'Brosbook logo'} width={31} height={40}/>
+                    </IconButton>
+                </Link>
+                <Box sx={{flexGrow: 1}}/>
+                <Box sx={{display: 'flex'}}>
                     <ExpandableSearch/>
-                    { isAuthenticated ? (
+                    {isAuthenticated ? (
                         <>
                             <NotificationsNavLink/>
                             <MessagesNavLink/>
@@ -45,12 +37,13 @@ export default function Navbar() {
                         <>
                             &nbsp;
                             <Link href="/auth/login">
-                                <Button size="sm">Login</Button>
+                                <Button variant="contained">Login</Button>
                             </Link>
                         </>
-                    ) }
-                </RightArea>
+                    )}
+                </Box>
             </StyledContainer>
-        </StyledNavbar>
+        </AppBar>
     )
+
 }

@@ -2,12 +2,12 @@
 import React, { useState } from 'react'
 import { User } from "@interfaces/user.interfaces"
 import { useFollowMutation, useUnfollowMutation } from "@services/usersApi"
-import Button from "@components/global/Button"
-import ButtonOutline from "@components/global/ButtonOutline"
 import { useConfirmAlert } from "react-use-confirm-alert"
 import toast from "react-hot-toast"
 import useUnauthorizedAlert from "@hooks/useUnauthorzedAlert"
 import useAuthState from "@hooks/useAuthState"
+import { Button } from "@mui/material"
+import LoadingButton from "@mui/lab/LoadingButton"
 
 
 interface FollowButtonProps {
@@ -66,14 +66,14 @@ export default function FollowButton( props: FollowButtonProps ) {
         <>
             { user.isViewerFollow ? (
                 <>
-                    <ButtonOutline onClick={ handleUnfollowClick } size='sm' className="mt-0">
+                    <Button variant="outlined" onClick={ handleUnfollowClick } size='small' className="mt-0">
                         Unfollow
-                    </ButtonOutline>
+                    </Button>
                 </>
             ) : (
-                <Button onClick={ handleFollowClick } isLoading={ isLoading } size="sm" className="mt-0">
+                <LoadingButton variant="contained" onClick={ handleFollowClick } loading={ isLoading } size="small" className="mt-0">
                     Follow
-                </Button>
+                </LoadingButton>
             ) }
         </>
     )

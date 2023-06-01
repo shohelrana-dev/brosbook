@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react'
-import ButtonOutline from "@components/global/ButtonOutline"
 import PasswordInput from "@components/global/PasswordInput"
 import BaseLink from "next/link"
-import Button from "@components/global/Button"
 import { useChangeUsernameMutation } from "@services/accountApi"
 import { ChangeUsernamePayload } from "@interfaces/account.interfaces"
 import toast from "react-hot-toast"
@@ -12,6 +10,8 @@ import Modal, { useModal } from "react-minimal-modal"
 import useAuthState from "@hooks/useAuthState"
 import tw from "twin.macro"
 import { Form } from "@components/styles/Global.styles"
+import {Button} from "@mui/material"
+import { LoadingButton } from '@mui/lab'
 
 const ButtonWrapper = tw.div`text-right`
 const Link          = tw( BaseLink )`text-blue-600 text-xs block`
@@ -44,9 +44,11 @@ export default function ChangeUsernameModal(){
 
     return (
         <>
-            <ButtonOutline onClick={ toggle } type="button" size="sm">
-                Change
-            </ButtonOutline>
+            <div>
+                <Button variant="outlined" onClick={ toggle } size="small">
+                    Change
+                </Button>
+            </div>
 
             <Modal
                 visible={ isVisible }
@@ -75,9 +77,9 @@ export default function ChangeUsernameModal(){
                     </div>
 
                     <ButtonWrapper>
-                        <Button type="submit" isLoading={ isLoading }>
+                        <LoadingButton variant='contained' type="submit" loading={ isLoading }>
                             Update
-                        </Button>
+                        </LoadingButton>
                     </ButtonWrapper>
                 </Form>
             </Modal>

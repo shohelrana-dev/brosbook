@@ -1,10 +1,9 @@
-import ButtonOutline from "@components/global/ButtonOutline"
-import Button from "@components/global/Button"
 import React, { createContext, PropsWithChildren, useContext, useState } from "react"
 import { BiLogInCircle as LoginIcon } from "react-icons/bi"
 import Link from "next/link"
 import Modal, { useModal } from "react-minimal-modal"
 import { usePathname } from "next/navigation"
+import { Button } from "@mui/material"
 
 export interface Options {
     title: string
@@ -40,12 +39,14 @@ export function UnauthorizedPopupProvider( { children }: PropsWithChildren ){
                             { options?.message }
                         </p>
                     </div>
-                    <Link onClick={ toggle } href={ `/auth/login?redirect_to=${ pathname }` } className="mb-3 w-full">
-                        <Button size="md" className="w-full">Log in</Button>
-                    </Link>
-                    <Link onClick={ toggle } href="/auth/signup" className="w-full">
-                        <ButtonOutline size="md" className="w-full">Sign up</ButtonOutline>
-                    </Link>
+                    <div className="w-full mt-4">
+                        <Link onClick={ toggle } href={ `/auth/login?redirect_to=${ pathname }` } className="mb-3 w-full inline-block">
+                            <Button variant="contained" size="large" fullWidth>Log in</Button>
+                        </Link>
+                        <Link onClick={ toggle } href="/auth/signup" className="w-full inline-block">
+                            <Button variant="outlined" size="large" fullWidth>Sign up</Button>
+                        </Link>
+                    </div>
                 </div>
             </Modal>
         </UnauthorizedPopupContext.Provider>

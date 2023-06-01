@@ -1,98 +1,121 @@
-import React, { FormEvent, useState } from 'react'
+import React, { FormEvent, useState, useRef } from 'react'
 import { MessageType } from "@interfaces/conversation.interfaces"
 import useSelectFile from "@hooks/useSelectFile"
 import { RiGalleryLine as GalleryIcon } from "react-icons/ri"
 import { BsHeartFill as LikeIcon } from "react-icons/bs"
 import { MdSend as SendIcon } from "react-icons/md"
-import IconButton from "@components/global/IconButton"
+import { IconButton } from '@mui/material'
 import { useSendMessageMutation } from "@services/messagesApi"
 import EmojiPicker, { EmojiClickData, EmojiStyle } from "emoji-picker-react"
 import { HiOutlineEmojiHappy as EmojiIcon } from "react-icons/hi"
-import { Popover, PopoverContent, PopoverHandler } from "@material-tailwind/react"
+import { Popover } from "@mui/material"
 //@ts-ignore
 import { isOneEmoji, isMultipleEmoji } from 'is-emojis'
 import { RxCross2 as CancelIcon } from "react-icons/rx"
-import {useParams} from "next/navigation"
-import {useGetConversationByIdQuery} from "@services/conversationsApi"
+import { useParams } from "next/navigation"
+import classNames from "classnames"
+import { useGetConversationByIdQuery } from "@services/conversationsApi"
+import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state"
 
-export default function CreateMessageForm( ){
+export default function CreateMessageForm() {
     //hooks
-    const {conversationId} = useParams()
-    const {data: conversation} = useGetConversationByIdQuery(conversationId)
-    const [sendMessage, { isLoading }]                                      = useSendMessageMutation()
+    const { conversationId }                                                = useParams()
+    const { data: conversation }                                            = useGetConversationByIdQuery(conversationId)
+    const [ sendMessage, { isLoading } ]                                    = useSendMessageMutation()
     const { inputRef, onClick, onChange, removeSelectedFile, selectedFile } = useSelectFile()
-    const [messageText, setMessageText]                                     = useState<string>( '' )
+    const textInputRef                                                      = useRef<HTMLInputElement | null>(null)
+    const [ isFocused, setIsFocused ]                                       = useState(false)
+    const [ messageText, setMessageText ]                                   = useState('')
 
-    async function submitForm( event: FormEvent<HTMLFormElement> ){
+    async function submitForm( event: FormEvent<HTMLFormElement> ) {
         event.preventDefault()
-        if(!messageText && !selectedFile) return
+        if ( !messageText && !selectedFile ) return
 
-        setMessageText( '' )
+        setMessageText('')
         removeSelectedFile()
 
         const conversationId = conversation?.id!
-        const body = messageText
-        const type = isMultipleEmoji( messageText ) ? MessageType.EMOJI : (selectedFile ? MessageType.IMAGE : MessageType.TEXT)
-        const image = selectedFile
+        const body           = messageText
+        const type           = isMultipleEmoji(messageText) ? MessageType.EMOJI : ( selectedFile ? MessageType.IMAGE : MessageType.TEXT )
+        const image          = selectedFile
 
-        sendMessage( {
+        sendMessage({
             conversationId,
-            data: {type, body, image}
-        } )
+            data: { type, body, image }
+        })
     }
 
-    async function clickLoveHandle(){
+    async function clickLoveHandle() {
         const love = '❤️'
 
-            await sendMessage( {
-                conversationId: conversation?.id!,
-                data: {
-                    type: MessageType.EMOJI,
-                    body: love
-                }
-            } )
+        await sendMessage({
+            conversationId: conversation?.id!,
+            data: {
+                type: MessageType.EMOJI,
+                body: love
+            }
+        })
     }
 
-    async function onEmojiClick( emojiData: EmojiClickData ){
-        setMessageText( `${ messageText }${ emojiData.emoji }` )
+    async function onEmojiClick( emojiData: EmojiClickData ) {
+        setMessageText(`${ messageText }${ emojiData.emoji }`)
     }
 
-    if( ! conversation ) return null
+    if ( !conversation ) return null
 
     return (
         <div className="absolute left-0 bottom-0 w-full">
-            <form onSubmit={ submitForm }
-                  className="flex items-center w-full rounded-2xl broder-2 border-gray-100 bg-white px-2">
-                { ! selectedFile ? (
+            <form
+                onSubmit={ submitForm }
+                className={ classNames("flex items-center w-full rounded-2xl bg-white px-2 border-2 border-solid border-gray-200", {
+                    "border-theme-light-green": isFocused
+                }) }
+                onClick={ () => textInputRef.current?.focus() }
+                onBlur={ () => textInputRef.current?.blur() }
+            >
+                { !selectedFile ? (
                     <>
-                        <IconButton className="px-2 text-theme-blue">
+                        <IconButton className="p-2 text-theme-green">
                             <input ref={ inputRef } onChange={ onChange } type="file" name="file" accept="image/*"
                                    hidden/>
                             <GalleryIcon onClick={ onClick } fontSize={ 17 }/>
                         </IconButton>
-                        <Popover>
-                            <PopoverHandler>
-                                <div className="mr-1 text-theme-blue">
-                                    <IconButton type="button">
-                                        <EmojiIcon fontSize={ 20 }/>
-                                    </IconButton>
+
+                        <PopupState variant="popover">
+                            { ( popupState ) => (
+                                <div>
+                                    <div className="mr-1">
+                                        <IconButton type="button" { ...bindTrigger(popupState) }>
+                                            <EmojiIcon fontSize={ 20 } className="text-theme-green"/>
+                                        </IconButton>
+                                    </div>
+                                    <Popover
+                                        { ...bindPopover(popupState) }
+                                        anchorOrigin={ {
+                                            vertical: 'top',
+                                            horizontal: 'center',
+                                        } }
+                                        transformOrigin={ {
+                                            vertical: 'top',
+                                            horizontal: 'center',
+                                        } }
+                                    >
+                                        <EmojiPicker
+                                            onEmojiClick={ onEmojiClick }
+                                            autoFocusSearch={ false }
+                                            skinTonesDisabled
+                                            emojiStyle={ EmojiStyle.FACEBOOK }
+                                        />
+                                    </Popover>
                                 </div>
-                            </PopoverHandler>
-                            <PopoverContent className="p-0 rounded-full z-20">
-                                <EmojiPicker
-                                    onEmojiClick={ onEmojiClick }
-                                    autoFocusSearch={ false }
-                                    skinTonesDisabled
-                                    emojiStyle={ EmojiStyle.FACEBOOK }
-                                />
-                            </PopoverContent>
-                        </Popover>
+                            ) }
+                        </PopupState>
                     </>
                 ) : null }
                 <div className="w-full relative">
                     { selectedFile && (
                         <div className="max-w-[190px] flex justify-center mx-3 mb-1 relative rounded-2xl">
-                            <img src={ URL.createObjectURL( selectedFile ) } alt="Thumb" className="rounded-2xl"/>
+                            <img src={ URL.createObjectURL(selectedFile) } alt="Thumb" className="rounded-2xl"/>
                             <div onClick={ removeSelectedFile } className="absolute right-1 top-1">
                                 <IconButton
                                     className="bg-black text-white hover:bg-gray-900 hover:text-white z-50 rounded-full">
@@ -102,19 +125,22 @@ export default function CreateMessageForm( ){
                         </div>
                     ) }
                     <input
-                        disabled={ !! selectedFile }
+                        ref={ textInputRef }
+                        disabled={ !!selectedFile }
                         className="w-full bg-transparent hover:border-none focus:border-none focus:outline-none p-3"
                         placeholder="Start a new message"
-                        onChange={ ( e ) => setMessageText( e.target.value ) }
+                        onChange={ ( e ) => setMessageText(e.target.value) }
                         value={ messageText }
+                        onFocus={ () => setIsFocused(true) }
+                        onBlur={ () => setIsFocused(false) }
                     />
                 </div>
-                <IconButton onClick={ clickLoveHandle } className="px-3" disabled={ isLoading }>
+                <IconButton onClick={ clickLoveHandle } disabled={ isLoading }>
                     <LikeIcon fontSize="medium" color="#FF1493" className="mt-[2px]"/>
                 </IconButton>
 
-                <IconButton type="submit" className="text-theme-blue bg-transparent px-4 disabled:text-blue-400"
-                            disabled={ isLoading || ( ! messageText && ! selectedFile ) }>
+                <IconButton type="submit" className="text-theme-green bg-transparent disabled:text-blue-400"
+                            disabled={ isLoading || ( !messageText && !selectedFile ) }>
                     <SendIcon fontSize={ 20 } className="ml-1"/>
                 </IconButton>
             </form>

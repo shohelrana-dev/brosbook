@@ -16,7 +16,8 @@ module.exports = withMT({
     },
     extend: {
       colors: {
-        "theme-blue": 'rgb(58,141,245)',
+        "theme-green": '#159615',
+        "theme-light-green": '#14CB15',
         "theme-gray": '#F1F6FB',
         blue: {
           100: '#cce4f6',
@@ -38,6 +39,10 @@ module.exports = withMT({
         kanit: ['Kanit', 'sans-serif']
       },
     },
+  },
+  corePlugins: {
+    // Remove the Tailwind CSS preflight styles so it can use Material UI's preflight instead (CssBaseline).
+    preflight: false,
   },
   plugins: [
     require('tailwind-scrollbar-hide')

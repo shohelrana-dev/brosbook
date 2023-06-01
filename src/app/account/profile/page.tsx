@@ -4,43 +4,43 @@ import 'react-calendar/dist/Calendar.css'
 import { useEffect } from "react"
 import DatePicker from 'react-date-picker'
 import { ProfilePayload } from "@interfaces/account.interfaces"
-import Button from '@components/global/Button'
 import { useUpdateProfileMutation } from '@services/accountApi'
 import BasicInput from "@components/global/BasicInput"
-import { Radio } from "@material-tailwind/react"
 import useAuthState from "@hooks/useAuthState"
 import Loading from "@components/global/Loading"
 import { useForm } from "@hooks/useForm"
 import toast from "react-hot-toast"
 import { useGetUserByIdQuery } from "@services/usersApi"
+import { FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@mui/material'
+import { LoadingButton } from '@mui/lab'
 
-export default function ProfileSettingsPage(){
+export default function ProfileSettingsPage() {
     //hooks
     const { user: currentUser }                                              = useAuthState()
-    const { data: user, isLoading: isUserLoading }                           = useGetUserByIdQuery( currentUser?.id! )
-    const [updateProfile, { isLoading, isSuccess }]                          = useUpdateProfileMutation()
-    const { formData, onChange, onSubmit, errors, setFormData, clearErrors } = useForm<ProfilePayload>( updateProfile )
+    const { data: user, isLoading: isUserLoading }                           = useGetUserByIdQuery(currentUser?.id!)
+    const [ updateProfile, { isLoading, isSuccess } ]                        = useUpdateProfileMutation()
+    const { formData, onChange, onSubmit, errors, setFormData, clearErrors } = useForm<ProfilePayload>(updateProfile)
 
-    useEffect( () => {
-        setFormData( {
+    useEffect(() => {
+        setFormData({
             firstName: user?.firstName || '',
             lastName: user?.lastName || '',
-            birthdate: user?.profile?.birthdate ? new Date( user?.profile?.birthdate! ) : undefined,
+            birthdate: user?.profile?.birthdate ? new Date(user?.profile?.birthdate!) : undefined,
             bio: user?.profile?.bio || '',
             gender: user?.profile?.gender || '',
             phone: user?.profile?.phone || '',
             location: user?.profile?.location! || ''
-        } )
-    }, [user] )
+        })
+    }, [ user ])
 
-    useEffect( () => {
-        if( isSuccess ){
-            toast.success( 'Profile updated.' )
+    useEffect(() => {
+        if ( isSuccess ) {
+            toast.success('Profile updated.')
             clearErrors()
         }
-    }, [isLoading, isSuccess] )
+    }, [ isLoading, isSuccess ])
 
-    if( isUserLoading ){
+    if ( isUserLoading ) {
         return <Loading/>
     }
 
@@ -97,8 +97,9 @@ export default function ProfileSettingsPage(){
 
             <div className="flex flex-col">
                 <label htmlFor="birthdate" className="text-gray-800 mb-2">Date of birth</label>
-                <DatePicker onChange={ ( value: any ) => setFormData( { ...formData, birthdate: value } ) }
-                            value={ formData.birthdate } format={"dd-MM-y"} maxDate={new Date()} className="!rounded-lg"/>
+                <DatePicker onChange={ ( value: any ) => setFormData({ ...formData, birthdate: value }) }
+                            value={ formData.birthdate } format={ "dd-MM-y" } maxDate={ new Date() }
+                            className="!rounded-lg"/>
                 { errors?.birthdate ? (
                     <p className="font-medium text-red-600 text-[12px]">
                         { errors?.birthdate }
@@ -107,25 +108,17 @@ export default function ProfileSettingsPage(){
             </div>
 
             <div className="my-5">
-                <h4 className="mb-2 text-lg">Gender</h4>
-                <div className="flex justify-between max-w-[100px]">
-                    <Radio
-                        id="male"
-                        name="male"
-                        label="Male"
-                        onChange={ ( e ) => setFormData( { ...formData, gender: 'male' } ) }
-                        checked={ formData.gender === 'male' }
-                    />
-                </div>
-                <div className="flex mt-3 justify-between max-w-[100px]">
-                    <Radio
-                        id="female"
-                        label="female"
-                        name="male"
-                        onChange={ ( e ) => setFormData( { ...formData, gender: 'female' } ) }
-                        checked={ formData.gender === 'female' }
-                    />
-                </div>
+                <FormControl onChange={ ( e: any ) => setFormData({ ...formData, gender: e.target.value }) }>
+                    <FormLabel id="gender" sx={ { color: '#000' } }>Gender</FormLabel>
+                    <RadioGroup
+                        aria-labelledby="gender"
+                        value={ formData?.gender }
+                        name="gender"
+                    >
+                        <FormControlLabel value="female" control={ <Radio/> } label="Female"/>
+                        <FormControlLabel value="male" control={ <Radio/> } label="Male"/>
+                    </RadioGroup>
+                </FormControl>
                 { errors?.gender ? (
                     <p className="font-medium text-red-600 text-[12px]">
                         { errors?.gender }
@@ -133,9 +126,9 @@ export default function ProfileSettingsPage(){
                 ) : null }
             </div>
 
-            <Button type="submit" isLoading={ isLoading } className="w-32">
+            <LoadingButton variant='contained' type="submit" loading={ isLoading } className="w-32">
                 Update
-            </Button>
+            </LoadingButton>
 
         </form>
     )

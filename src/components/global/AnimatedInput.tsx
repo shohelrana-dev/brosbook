@@ -1,39 +1,26 @@
-import React from 'react'
-import { Input, InputProps } from "@material-tailwind/react"
-import classNames from "classnames"
+import { FormControl, InputLabel, OutlinedInput, OutlinedInputProps, FormHelperText } from "@mui/material"
 
-export interface AnimatedInputProps extends Omit<InputProps, 'error'> {
+export interface AnimatedInputProps extends Omit<OutlinedInputProps, 'error' | 'fullWidth' | 'id'> {
     error?: string
     wrapperClassname?: string
 }
 
-function AnimatedInput( props: AnimatedInputProps ){
+export default function AnimatedInput( props: AnimatedInputProps ) {
+    let { label, name, error, wrapperClassname = '', ...rest } = props
 
-    let { label, name, size = 'lg', error, wrapperClassname = '', className = '', ...rest } = props
-
-    name      = name ? name : ( label as string ).toLowerCase().replace( ' ', '' )
-    className = classNames( className, 'bg-gray-50 focus:bg-white' )
+    name = name ? name : ( label as string ).toLowerCase().replace(' ', '')
 
     return (
-        <div className={ wrapperClassname }>
-            {/*@ts-ignore*/ }
-            <Input
-                labelProps={ { className: `duration-500` } }
-                className={ className } name={ name }
+        <FormControl variant="outlined" size="small" fullWidth error={ !!error } className={ wrapperClassname }>
+            <InputLabel htmlFor={ name }>{ label }</InputLabel>
+            <OutlinedInput
                 label={ label }
-                size={ size }
-                error={ !! error }
+                name={ name }
+                id={ name }
+                error={ !!error }
                 { ...rest }
             />
-            { error ? (
-                <span className="flex items-center">
-                    <p className="font-medium text-red-600 text-[12px]">
-                        { error }
-                    </p>
-                </span>
-            ) : null }
-        </div>
+            { error ? <FormHelperText error>{ error }</FormHelperText> : null }
+        </FormControl>
     )
 }
-
-export default AnimatedInput

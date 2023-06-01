@@ -10,8 +10,12 @@ import ImageLightbox from '@components/global/ImageLightbox'
 import PostBar from "@components/post/PostBar"
 import PostOptions from "@components/post/PostOptions"
 import nl2br from 'react-nl2br'
-import {TbDiscountCheckFilled as BlueBadgeIcon} from 'react-icons/tb'
+import { TbDiscountCheckFilled as BlueBadgeIcon } from 'react-icons/tb'
+import Linkify from "linkify-react"
+import tw from "twin.macro"
 
+
+const Body = tw.div`mb-1 mt-2 [a]:(text-blue-500 underline)`
 
 interface PostCardProps {
     post: Post
@@ -20,9 +24,9 @@ interface PostCardProps {
 
 const PostCard = ( props: PostCardProps ) => {
     //hooks
-    const [isCommentsShow, setIsCommentsShow] = useState<boolean>( Boolean( props.isCommentsShow ) )
+    const [ isCommentsShow, setIsCommentsShow ] = useState<boolean>(Boolean(props.isCommentsShow))
 
-    const { post }                               = props
+    const { post }                           = props
     const { author, body, createdAt, image } = post || {}
 
     return (
@@ -36,7 +40,7 @@ const PostCard = ( props: PostCardProps ) => {
                         <Link href={ `/${ author.username }` }>
                             <div className="text-base font-medium flex flex-wrap mb-3 items-center">
                                 <h3 className="mr-[2px]">{ author.fullName }</h3>
-                                <BlueBadgeIcon color="rgb(58,141,245)" size={18} className="mt-[3px]"/>
+                                <BlueBadgeIcon color="rgb(58,141,245)" size={ 18 } className="mt-[3px]"/>
                                 <p className="ml-2 text-gray-600 text-xs lg:text-sm font-normal">@{ author.username }</p>
                             </div>
                         </Link>
@@ -44,14 +48,14 @@ const PostCard = ( props: PostCardProps ) => {
                     </div>
 
                     <p className="text-gray-500 font-medium text-xs mt-[-8px]">
-                        { timeAgo( createdAt ) }
+                        { timeAgo(createdAt) }
                     </p>
 
                 </div>
             </div>
             <div>
                 { body ? (
-                    <div className="mb-1 mt-2">
+                    <Body>
                         <ShowMoreText
                             lines={ 5 }
                             more={ <span className="text-blue-600">See more</span> }
@@ -59,9 +63,11 @@ const PostCard = ( props: PostCardProps ) => {
                             expanded={ false }
                             truncatedEndingComponent={ "... " }
                         >
-                            { nl2br( body ) }
+                            <Linkify>
+                                { nl2br(body) }
+                            </Linkify>
                         </ShowMoreText>
-                    </div>
+                    </Body>
                 ) : null }
                 { image ? (
                     <div className="my-3">

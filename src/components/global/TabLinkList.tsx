@@ -1,32 +1,36 @@
 "use client"
 import React from 'react'
 import { usePathname } from "next/navigation"
+import { Box, Tab } from "@mui/material"
+import { TabContext, TabList } from '@mui/lab'
 import Link from "next/link"
-import classNames from "classnames"
 
 interface TabLinkListProps {
     links: { label: string, pathname: string }[]
 }
 
-function TabLinkList( props: TabLinkListProps ){
-    const pathname = usePathname()
-
-    const className = 'inline-block py-2 px-3 sm:px-4 rounded mr-4 border-0 border-b-4 hover:text-theme-blue'
+export default function TabLinkList( { links }: TabLinkListProps ) {
+    const currentPathname = usePathname()
 
     return (
-        <div className="mt-5">
-            { props.links.map( link => (
-                <Link
-                    key={ link.pathname }
-                    href={ link.pathname }
-                    className={ classNames( className, pathname === link.pathname ? 'border-theme-blue text-theme-blue' : 'text-gray-600 border-transparent' ) }
-                >
-                    { link.label }
-                </Link>
-            ) ) }
-            <hr/>
-        </div>
+        <Box sx={ { width: '100%', typography: 'body1' } }>
+            <TabContext value={ currentPathname }>
+                <Box sx={ { borderBottom: 1, borderColor: 'divider' } }>
+                    <TabList aria-label="Tab links">
+                        { links.map(( { label, pathname } ) => (
+                            <Tab
+                                label={
+                                    <Link href={ pathname }>
+                                        { label }
+                                    </Link>
+                                }
+                                value={ pathname }
+                                sx={ { textTransform: 'inherit' } }
+                            />
+                        )) }
+                    </TabList>
+                </Box>
+            </TabContext>
+        </Box>
     )
 }
-
-export default TabLinkList

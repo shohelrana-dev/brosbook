@@ -4,13 +4,13 @@ import CommentItem from "@components/post/comment/CommentItem"
 import { useCreateCommentMutation, useGetCommentsQuery } from "@services/commentsApi"
 import BasicInput from "@components/global/BasicInput"
 import useAuthState from "@hooks/useAuthState"
-import ButtonGray from "@components/global/ButtonGray"
 import Loading from "@components/global/Loading"
 import Error from "@components/global/Error"
 import { ErrorResponse } from "@interfaces/index.interfaces"
-import IconButton from "@components/global/IconButton"
+import { IconButton } from '@mui/material'
 import { MdSend as SendIcon } from "react-icons/md"
 import {Post} from "@interfaces/posts.interfaces"
+import { Button } from '@mui/material'
 
 interface Props {
     post: Post
@@ -70,7 +70,7 @@ export default function CommentList( { post }: Props ){
                         />
                         <div className="absolute top-[3px] right-[8px]">
                             <IconButton type="submit"
-                                        className="text-theme-blue bg-transparent px-4 disabled:text-blue-400"
+                                        className="text-theme-green bg-transparent px-4 disabled:text-blue-400"
                                         disabled={ isLoading || ! commentBody }>
                                 <SendIcon fontSize={ 20 } className="ml-1"/>
                             </IconButton>
@@ -82,9 +82,15 @@ export default function CommentList( { post }: Props ){
             { content }
 
             { nextPage ? (
-                <ButtonGray isLoading={ isLoading } onClick={ () => setPage( nextPage! ) }>
-                    See more comments
-                </ButtonGray>
+                <div className="mt-3">
+                    {isLoading ? (
+                        <Loading size={35}/>
+                    ):(
+                        <Button onClick={ () => setPage( nextPage! ) }>
+                            See more comments
+                        </Button>
+                    )}
+                </div>
             ) : null }
 
         </div>

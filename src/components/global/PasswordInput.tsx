@@ -2,8 +2,9 @@ import React, { useState } from 'react'
 import {AiOutlineEye as VisibleEyeIcon} from "react-icons/ai"
 import {AiOutlineEyeInvisible as InvisibleEyeIcon} from "react-icons/ai"
 import AnimatedInput, { AnimatedInputProps } from "@components/global/AnimatedInput"
+import { InputAdornment, IconButton } from "@mui/material"
 
-function PasswordInput(props: AnimatedInputProps) {
+export default function PasswordInput(props: AnimatedInputProps) {
     const [showPassword, setShowPassword] = useState(false)
 
     const handleClickShowPassword = () => {
@@ -15,14 +16,18 @@ function PasswordInput(props: AnimatedInputProps) {
     }
 
     const passwordEyeIcon = (
-        <button type="button" className="icon p-1 mt-[-4px]" onClick={handleClickShowPassword}>
-            {showPassword ? <InvisibleEyeIcon size={20} /> : <VisibleEyeIcon size={20} />}
-        </button>
+        <InputAdornment position="end">
+            <IconButton
+                aria-label="toggle password visibility"
+                onClick={handleClickShowPassword}
+                edge="end"
+            >
+                {showPassword ? <InvisibleEyeIcon size={20} /> : <VisibleEyeIcon size={20} />}
+            </IconButton>
+        </InputAdornment>
     )
 
     return (
-        <AnimatedInput {...props} type={showPassword ? 'text' : 'password'} icon={passwordEyeIcon}/>
+        <AnimatedInput {...props} type={showPassword ? 'text' : 'password'} endAdornment={passwordEyeIcon}/>
     )
 }
-
-export default PasswordInput

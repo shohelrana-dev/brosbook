@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { BiSearch as SearchIcon } from "react-icons/bi"
-import IconButton from "@components/global/IconButton"
+import { IconButton } from '@mui/material'
 import BasicInput from "@components/global/BasicInput"
 import classNames from "classnames"
 import { User } from "@interfaces/user.interfaces"
@@ -49,7 +49,7 @@ export default function ExpandableSearch() {
                 value={ searchText }
                 inputRef={ inputRef }
                 onBlur={ toggleExpand }
-                className="!rounded-3xl z-10 !bg-transparent"
+                className="!rounded-3xl z-10 !bg-transparent mt-1"
                 wrapperClassname={ inputWrapperClassname }
                 type="text"
                 label="Search"

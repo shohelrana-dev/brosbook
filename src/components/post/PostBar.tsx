@@ -5,7 +5,7 @@ import { FaRegComment as CommentIcon } from "react-icons/fa"
 import { Post } from "@interfaces/posts.interfaces"
 import { usePostLikeMutation, usePostUnlikeMutation } from "@services/postsApi"
 import { motion, AnimatePresence } from "framer-motion"
-import IconButton from "@components/global/IconButton"
+import { IconButton } from '@mui/material'
 import PostShare from "@components/post/PostShare"
 import useAuthState from "@hooks/useAuthState"
 import useUnauthorizedAlert from "@hooks/useUnauthorzedAlert"
@@ -45,13 +45,13 @@ function PostBar( { post, setIsCommentsShow, isCommentsShow }: PostBarProps ){
     }
 
     return (
-        <div className="flex mt-2 border-t-2 border-b-2 border-gray-100 py-1 border-solid justify-around">
+        <div className="flex mt-2 border-t-2 border-b-2 border-gray-100 py-1 border-solid border-l-0 border-r-0 justify-around">
             <div className="flex items-center relative">
                 <AnimatePresence>
                     <>
                         <motion.button
-                            onClick={ handlePostUnlike }
                             className="icon"
+                            onClick={ handlePostUnlike }
                             initial={ { scale: 0 } }
                             animate={ { scale: post.isViewerLiked ? 1 : 0 } }
                             transition={ { duration: 0.1 } }
@@ -59,8 +59,8 @@ function PostBar( { post, setIsCommentsShow, isCommentsShow }: PostBarProps ){
                             <LikeIcon fontSize="medium" color="#FF1493"/>
                         </motion.button>
                         <motion.button
+                            className="icon"
                             onClick={ handlePostLike }
-                            className="icon absolute"
                             initial={ { scale: 0 } }
                             animate={ { scale: ! post.isViewerLiked ? 1 : 0 } }
                             transition={ { duration: 0.1 } }

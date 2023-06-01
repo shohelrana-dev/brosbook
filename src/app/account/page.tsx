@@ -2,10 +2,10 @@
 import React from 'react'
 import useAuthState from "@hooks/useAuthState"
 import Loading from "@components/global/Loading"
-import ButtonOutline from "@components/global/ButtonOutline"
 import ChangePasswordModal from "@components/account/ChangePasswordModal"
 import ChangeUsernameModal from "@components/account/ChangeUsernameModal"
 import TextOverflow from 'react-text-overflow'
+import { Button } from '@mui/material'
 
 export default function GeneralSettingsPage(){
     const { user, isAuthenticated } = useAuthState()
@@ -28,9 +28,11 @@ export default function GeneralSettingsPage(){
                                 text={ `${ user?.email } ${ ! user?.hasEmailVerified ? 'Not verified!' : '' }` }/>
                         </p>
                     </div>
-                    <ButtonOutline disabled size="sm">
-                        Change
-                    </ButtonOutline>
+                    <div>
+                        <Button variant="outlined" disabled size="small">
+                            Change
+                        </Button>
+                    </div>
                 </div>
                 <div className="flex justify-between mt-5">
                     <div className="mr-1">

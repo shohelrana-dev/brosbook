@@ -1,10 +1,8 @@
 "use client"
 import React, { useEffect, useState } from 'react'
 import GoogleLoginButton from "@components/global/GoogleLoginButton"
-import Divider from "@components/global/Divider"
 import AnimatedInput from "@components/global/AnimatedInput"
 import PasswordInput from "@components/global/PasswordInput"
-import Button from "@components/global/Button"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useSignupMutation } from "@services/authApi"
@@ -18,6 +16,7 @@ import LoadingOverlay from "@components/global/LoadingOverlay"
 import tw from "twin.macro"
 import { Box, FooterBox, Heading, Wrapper } from "@components/styles/Auth.styles"
 import { Form } from "@components/styles/Global.styles"
+import { Button, Divider } from '@mui/material'
 
 const Policy = tw.p`text-center text-gray-600 text-xs mt-3`
 
@@ -45,7 +44,7 @@ export default function Signup(){
 
                 <GoogleLoginButton setIsLoading={ setIsLoadingLoginWithGoogle }/>
 
-                <Divider>OR</Divider>
+                <Divider className="!my-5">OR</Divider>
 
                 <Form method="post" onSubmit={ onSubmit }>
                     <AnimatedInput
@@ -85,7 +84,7 @@ export default function Signup(){
                     />
                     { formData.password ? <PasswordStrengthBar password={ formData.password }/> : null }
 
-                    <Button type="submit">
+                    <Button variant="contained" type="submit">
                         Sign Up
                     </Button>
                 </Form>

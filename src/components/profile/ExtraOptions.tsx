@@ -1,44 +1,52 @@
 "use client"
-import { Popover, PopoverContent, PopoverHandler } from "@material-tailwind/react"
-import IconButton from "@components/global/IconButton"
+import { IconButton } from '@mui/material'
 import { BsThreeDots as ThreeDotsIcon } from "react-icons/bs"
-import React, { useState } from "react"
 import toast from "react-hot-toast"
 import { RiLink as LinkIcon } from "react-icons/ri"
 import { User } from "@interfaces/user.interfaces"
 import OptionButton from "@components/global/OptionButton"
+import { Popover } from "@mui/material"
+import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state"
 
-export default function ExtraOptions( { user }: { user: User } ){
-    const [isVisible, setIsOpen] = useState( false )
-
-    function toggleOpen(){
-        setIsOpen( ! isVisible )
-    }
-
-    function copyProfileLinkToClipboard(){
-        navigator.clipboard.writeText( `${ process.env.NEXT_PUBLIC_APP_URL }/${ user.username }` ).then( () => {
-            toast.success( 'Profile link copied.' )
-            toggleOpen()
-        } )
+export default function ExtraOptions( { user }: { user: User } ) {
+    function copyProfileLinkToClipboard() {
+        navigator.clipboard.writeText(`${ process.env.NEXT_PUBLIC_APP_URL }/${ user.username }`).then(() => {
+            toast.success('Profile link copied.')
+        })
     }
 
     return (
-        <Popover placement="bottom" open={ isVisible }>
-            <PopoverHandler>
-                <div>
-                    <IconButton className="ml-2 border-2 border-gray-200 block z-10" onClick={ toggleOpen }>
-                        <ThreeDotsIcon size="18"/>
-                    </IconButton>
-                </div>
-            </PopoverHandler>
-            <PopoverContent className="font-[inherit] p-0 rounded-2xl block relative block" onBlur={ toggleOpen }>
-                <div>
-                    <OptionButton className="z-50" onClick={ copyProfileLinkToClipboard }>
-                        <LinkIcon size="18"/>
-                        Copy link to profile
-                    </OptionButton>
-                </div>
-            </PopoverContent>
-        </Popover>
-    )
+        <PopupState variant="popover">
+            { ( popupState ) => (
+                <>
+                    <div>
+                        <IconButton { ...bindTrigger(popupState) }>
+                            <ThreeDotsIcon size="18"/>
+                        </IconButton>
+                    </div>
+                    <Popover
+                        { ...bindPopover(popupState) }
+                        anchorOrigin={ {
+                            vertical: 'bottom',
+                            horizontal: 'center',
+                        } }
+                        transformOrigin={ {
+                            vertical: 'top',
+                            horizontal: 'right',
+                        } }
+                    >
+                        <div>
+                            <OptionButton className="z-50" onClick={ () => {
+                                copyProfileLinkToClipboard()
+                                popupState.setOpen(false)
+                            } }>
+                                <LinkIcon size="18" className="mr-2"/>
+                                Copy link to profile
+                            </OptionButton>
+                        </div>
+                    </Popover>
+                </>
+            ) }
+        </PopupState>
+    );
 }

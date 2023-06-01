@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react'
-import ButtonOutline from "@components/global/ButtonOutline"
 import PasswordInput from "@components/global/PasswordInput"
-import Button from "@components/global/Button"
 import { useChangePasswordMutation } from "@services/accountApi"
 import { ChangePasswordPayload } from "@interfaces/account.interfaces"
 import toast from "react-hot-toast"
@@ -10,6 +8,8 @@ import Modal, { useModal } from "react-minimal-modal"
 import { Form } from "@components/styles/Global.styles"
 import tw from "twin.macro"
 import BaseLink from "next/link"
+import { LoadingButton } from '@mui/lab'
+import { Button } from '@mui/material'
 
 const ButtonWrapper = tw.div`text-right [button[type=submit]]:mt-4`
 const Link          = tw( BaseLink )`text-blue-600 text-xs block`
@@ -32,9 +32,11 @@ export default function ChangePasswordModal(){
 
     return (
         <>
-            <ButtonOutline onClick={ toggle } type="button" size="sm">
-                Change
-            </ButtonOutline>
+            <div>
+                <Button variant='outlined' onClick={ toggle } size="small">
+                    Change
+                </Button>                                                   
+            </div>
 
             <Modal visible={ isVisible } toggle={ toggle } title="Update your password">
                 <Form onSubmit={ onSubmit }>
@@ -66,9 +68,9 @@ export default function ChangePasswordModal(){
                     />
 
                     <ButtonWrapper>
-                        <Button type="submit" isLoading={ isLoading }>
+                        <LoadingButton variant="contained" type="submit" loading={ isLoading }>
                             Update
-                        </Button>
+                        </LoadingButton>
                     </ButtonWrapper>
                 </Form>
             </Modal>

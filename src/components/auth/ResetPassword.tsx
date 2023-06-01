@@ -2,7 +2,6 @@
 import React, { useEffect } from 'react'
 import { FiLock } from "react-icons/fi"
 import PasswordInput from "@components/global/PasswordInput"
-import Button from "@components/global/Button"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useResetPasswordMutation } from "@services/authApi"
@@ -11,6 +10,7 @@ import { ResetPassPayload } from "@interfaces/auth.interfaces"
 import toast from "react-hot-toast"
 import { Box, Describe, FooterBox, Heading, Icon, Wrapper } from "@components/styles/Auth.styles"
 import { Form } from "@components/styles/Global.styles"
+import { LoadingButton } from '@mui/lab'
 
 export default function ResetPassword( { token }: { token: string } ){
     //hooks
@@ -57,9 +57,9 @@ export default function ResetPassword( { token }: { token: string } ){
                         error={ errors.confirmPassword }
                         onChange={ onChange }
                     />
-                    <Button type="submit" isLoading={ isLoading || isSuccess }>
+                    <LoadingButton variant="contained" type="submit" loading={ isLoading || isSuccess }>
                         Reset
-                    </Button>
+                    </LoadingButton>
                 </Form>
             </Box>
 

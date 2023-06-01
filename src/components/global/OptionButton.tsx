@@ -1,12 +1,19 @@
-import React from 'react'
-import ButtonGray, { ButtonGrayProps } from "@components/global/ButtonGray"
-import classNames from "classnames"
+"use client"
+import { Button, ButtonProps } from "@mui/material"
 
-export default function OptionButton( { children, className = '', size = "md", ...rest }: ButtonGrayProps ){
-    className = classNames( 'rounded-none w-full flex gap-2 items-center bg-transparent mt-0 px-4', className )
+export default function OptionButton( { children, sx, fullWidth = true, ...rest }: ButtonProps ) {
     return (
-        <ButtonGray size={ size } className={ className } { ...rest }>
+        <Button
+            fullWidth={ fullWidth }
+            sx={ {
+                borderRadius: '9px',
+                justifyContent: 'left',
+                color: '#000',
+                '&:hover': { background: '#F7F7F7' }, ...sx
+            } }
+            { ...rest }
+        >
             { children }
-        </ButtonGray>
+        </Button>
     )
 }

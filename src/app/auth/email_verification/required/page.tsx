@@ -10,7 +10,7 @@ import { useResendVerificationLinkMutation } from "@services/authApi"
 import Loading from "@components/global/Loading"
 import { useSelector } from "react-redux"
 import { selectAuthState } from "@slices/authSlice"
-import Button from "@components/global/Button"
+import { LoadingButton } from '@mui/lab'
 
 export default function RequiredPage(){
     const router                                                            = useRouter()
@@ -59,7 +59,9 @@ export default function RequiredPage(){
                     ) : (
                         <div className="flex flex-col items-center">
                             <p>Didn&apos;t receive the link email?</p>
-                            <Button onClick={ resendEmail } isLoading={ isLoading } size="sm" className="mt-2">Resend email</Button>
+                            <LoadingButton variant="contained" onClick={ resendEmail } loading={ isLoading } className="mt-2">
+                                Resend email
+                            </LoadingButton>
                         </div>
                     ) }
                 </div>

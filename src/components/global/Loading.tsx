@@ -10,7 +10,7 @@ interface LoadingProps {
     color?: string
 }
 
-function Loading( { color = "rgb(58,141,245)", className, wrapperClassName, loading = true, ...rest }: LoadingProps ){
+export default function Loading( { color = "#14CB15", className, wrapperClassName, loading = true, ...rest }: LoadingProps ){
     if( typeof loading === 'boolean' && !loading ) return null
 
     return (
@@ -19,5 +19,3 @@ function Loading( { color = "rgb(58,141,245)", className, wrapperClassName, load
         </div>
     )
 }
-
-export default Loading
