@@ -54,7 +54,7 @@ function MessageItem( { message, prevMessage, isLastMessage, participant }: Sing
                                             alt={ "User photo" }
                                             width={ 15 }
                                             height={ 15 }
-                                            className="h-[16px] object-cover rounded-full"
+                                            className="h-[16px] w-[16px] object-cover rounded-full"
                                         />
                                     ) : (
                                         <p className="text-gray-600">

@@ -1,4 +1,4 @@
-import {createTheme} from "@mui/material"
+import { createTheme } from "@mui/material/styles"
 
 const theme = createTheme({
     palette: {
@@ -7,15 +7,18 @@ const theme = createTheme({
         },
     },
     typography: {
-        fontFamily: ['Kanit', 'sans-serif'].join(','),
-        fontSize: 15
+        allVariants: {
+            fontFamily: "'Kanit', sans-serif",
+            fontSize: 15
+        }
     },
     components: {
         MuiButton: {
             styleOverrides: {
                 root: {
                     borderRadius: '20px',
-                    textTransform: 'inherit'
+                    textTransform: 'inherit',
+                    fontFamily: "'Kanit', sans-serif"
                 }
             }
         },
