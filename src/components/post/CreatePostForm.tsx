@@ -92,7 +92,7 @@ export default function CreatePostForm() {
                     </div> ) : null }
 
                 <div className="flex mt-4 justify-between items-center">
-                    <IconButton className="text-theme-green p-3" onClick={ onClick }>
+                    <IconButton className="!text-theme-green p-3" onClick={ onClick }>
                         <HiPhotograph fontSize={ 30 }/>
                     </IconButton>
                     <LoadingButton variant="contained" type="submit" loading={ isLoading }
