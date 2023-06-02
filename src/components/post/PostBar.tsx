@@ -17,77 +17,86 @@ interface PostBarProps {
     setIsCommentsShow: ( _: boolean ) => void
 }
 
-function PostBar( { post, setIsCommentsShow, isCommentsShow }: PostBarProps ){
+function PostBar( { post, setIsCommentsShow, isCommentsShow }: PostBarProps ) {
     //hooks
-    const [postLike]          = usePostLikeMutation()
-    const [postUnlike]        = usePostUnlikeMutation()
+    const [ postLike ]        = usePostLikeMutation()
+    const [ postUnlike ]      = usePostUnlikeMutation()
     const { isAuthenticated } = useAuthState()
     const unauthorizedAlert   = useUnauthorizedAlert()
 
-    function handlePostLike( event: MouseEvent<HTMLButtonElement> ){
+    const { author, id, isViewerLiked, commentsCount, likesCount } = post
+
+    function handlePostLike( event: MouseEvent<HTMLButtonElement> ) {
         event.currentTarget.disabled = true
 
-        if( ! isAuthenticated ){
-            unauthorizedAlert( {
+        if ( !isAuthenticated ) {
+            unauthorizedAlert({
                 title: 'Like a Post to share the love.',
-                message: `Join ${ process.env.NEXT_PUBLIC_APP_NAME } now to let ${ post.author.fullName } know you like their Post.`
-            } )
+                message: `Join ${ process.env.NEXT_PUBLIC_APP_NAME } now to let ${ author.fullName } know you like their Post.`
+            })
             return
         }
 
-        postLike({ postId: post.id, authorId: post.author.id })
+        postLike({ postId: id, authorId: author.id })
     }
 
-    function handlePostUnlike( event: MouseEvent<HTMLButtonElement> ){
+    function handlePostUnlike( event: MouseEvent<HTMLButtonElement> ) {
         event.currentTarget.disabled = true
 
-        postUnlike({ postId: post.id, authorId: post.author.id })
+        postUnlike({ postId: id, authorId: author.id })
     }
 
     return (
-        <div className="flex mt-2 border-t-2 border-b-2 border-gray-100 py-1 border-solid border-l-0 border-r-0 justify-around">
+        <div
+            className="flex mt-2 border-t-2 border-b-2 border-gray-100 py-1 border-solid border-l-0 border-r-0 justify-around">
             <div className="flex items-center relative">
                 <AnimatePresence>
-                    <>
-                        <motion.button
-                            className="icon"
+                    { isViewerLiked ? (
+                        <motion.span
                             onClick={ handlePostUnlike }
                             initial={ { scale: 0 } }
-                            animate={ { scale: post.isViewerLiked ? 1 : 0 } }
+                            animate={ { scale: isViewerLiked ? 1 : 0 } }
                             transition={ { duration: 0.1 } }
                         >
-                            <LikeIcon fontSize="medium" color="#FF1493"/>
-                        </motion.button>
-                        <motion.button
-                            className="icon"
+                            <IconButton>
+                                <LikeIcon fontSize="medium" color="#FF1493"/>
+                            </IconButton>
+                        </motion.span>
+                    ) : null }
+                </AnimatePresence>
+                <AnimatePresence>
+                    { !isViewerLiked ? (
+                        <motion.span
                             onClick={ handlePostLike }
                             initial={ { scale: 0 } }
-                            animate={ { scale: ! post.isViewerLiked ? 1 : 0 } }
+                            animate={ { scale: !isViewerLiked ? 1 : 0 } }
                             transition={ { duration: 0.1 } }
                         >
-                            <OutlinedLikeIcon fontSize="medium"/>
-                        </motion.button>
-                        <motion.p
-                            key={ post.likesCount }
-                            initial={ { y: -10, opacity: 0 } }
-                            animate={ { y: 0, opacity: 1 } }
-                            transition={ { duration: 0.3 } }
-                            className="text-gray-600">
-                            { post.likesCount }
-                        </motion.p>
-                    </>
+                            <IconButton>
+                                <OutlinedLikeIcon fontSize="medium"/>
+                            </IconButton>
+                        </motion.span>
+                    ) : null }
+                </AnimatePresence>
+                <AnimatePresence>
+                    <motion.p
+                        key={ likesCount }
+                        initial={ { y: -10, opacity: 0 } }
+                        animate={ { y: 0, opacity: 1 } }
+                        transition={ { duration: 0.3 } }
+                        className="text-gray-600">
+                        { likesCount }
+                    </motion.p>
                 </AnimatePresence>
             </div>
             <div className="flex items-center">
-                <IconButton onClick={ () => setIsCommentsShow( ! isCommentsShow ) }>
+                <IconButton onClick={ () => setIsCommentsShow(!isCommentsShow) }>
                     <CommentIcon size="18"/>
                 </IconButton>
-                <p className="text-gray-600">{ post.commentsCount }</p>
+                <p className="text-gray-600">{ commentsCount }</p>
             </div>
 
             <PostShare post={ post }/>
         </div>
     )
 }
-
-export default PostBar
