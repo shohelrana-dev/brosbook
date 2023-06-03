@@ -17,7 +17,7 @@ interface PostBarProps {
     setIsCommentsShow: ( _: boolean ) => void
 }
 
-function PostBar( { post, setIsCommentsShow, isCommentsShow }: PostBarProps ) {
+export default function PostBar( { post, setIsCommentsShow, isCommentsShow }: PostBarProps ) {
     //hooks
     const [ postLike ]        = usePostLikeMutation()
     const [ postUnlike ]      = usePostUnlikeMutation()

@@ -5,6 +5,9 @@ const theme = createTheme({
         primary: {
             main: '#159615',
         },
+        themeGreen: '#159615',
+        themeLightGreen: '#14CB15',
+        themeGray: '#F1F6FB'
     },
     typography: {
         allVariants: {
