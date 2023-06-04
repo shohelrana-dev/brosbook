@@ -31,7 +31,7 @@ export default function UserMenu() {
             { ( popupState ) => (
                 <>
                     <div className="rounded-full ml-2 cursor-pointer"  { ...bindTrigger(popupState) }>
-                        <Avatar src={ user?.avatar?.url } size="small" className="border-2 border-theme-green"/>
+                        <Avatar src={ user?.avatar?.url } size="small" className="border-2 border-solid border-theme-green"/>
                     </div>
                     <Popover
                         { ...bindPopover(popupState) }
@@ -45,7 +45,7 @@ export default function UserMenu() {
                         } }
                     >
                         <div className="mb-2 border-b-2 border-gray-100">
-                            <Link href={ `/${ user?.username }` }>
+                            <Link href={ `/${ user?.username }` } onClick={ () => popupState.setOpen(false) }>
                                 <OptionButton>
                                     <div className="py-1 flex gap-[12px]">
                                         <Avatar src={ user?.avatar?.url } size="small"/>
@@ -60,13 +60,16 @@ export default function UserMenu() {
 
                         <Divider className="mb-1"/>
 
-                        <Link href="/account">
+                        <Link href="/account" onClick={ () => popupState.setOpen(false) }>
                             <OptionButton>
                                 <SettingIcon className="inline-block mr-2" size={ 20 }/>
                                 Settings
                             </OptionButton>
                         </Link>
-                        <OptionButton onClick={ handleLogout }>
+                        <OptionButton onClick={ () => {
+                            handleLogout()
+                            popupState.setOpen(false)
+                        } }>
                             <LogoutIcon className="inline-block mr-2" size={ 20 }/>
                             Logout
                         </OptionButton>

@@ -118,7 +118,13 @@ export default function CreateMessageForm() {
                             <img src={ URL.createObjectURL(selectedFile) } alt="Thumb" className="rounded-2xl"/>
                             <div onClick={ removeSelectedFile } className="absolute right-1 top-1">
                                 <IconButton
-                                    className="bg-black text-white hover:bg-gray-900 hover:text-white z-50 rounded-full">
+                                    sx={ {
+                                        zIndex: 20,
+                                        background: "#000",
+                                        color: '#fff',
+                                        '&:hover': { background: 'rgba(0, 0, 0, 0.7)' }
+                                    } }
+                                >
                                     <CancelIcon size={ 15 }/>
                                 </IconButton>
                             </div>

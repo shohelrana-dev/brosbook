@@ -36,8 +36,15 @@ export default function MessageBox() {
         <Wrapper>
             <StyledModal visible={ isVisible } toggle={ toggle } hideIcon>
                 <div className="relative">
-                    <IconButton className="absolute top-1 right-1" onClick={toggle}>
-                        <CrossIcon size={18}/>
+                    <IconButton
+                        sx={ {
+                            position: 'absolute',
+                            top: '8px',
+                            right: '8px'
+                        } }
+                        onClick={ toggle }
+                    >
+                        <CrossIcon size={ 18 }/>
                     </IconButton>
                 </div>
                 <ParticipantInfo/>

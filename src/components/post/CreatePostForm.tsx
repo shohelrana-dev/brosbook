@@ -84,7 +84,13 @@ export default function CreatePostForm() {
                         className="relative max-w-sm m-auto border-3 border-solid border-gray-300 rounded-2xl">
                         <div onClick={ removeSelectedFile } className="absolute right-1 top-1">
                             <IconButton
-                                className="bg-black text-white hover:bg-gray-900 hover:text-white z-50 rounded-full">
+                                sx={ {
+                                    zIndex: 20,
+                                    background: "#000",
+                                    color: '#fff',
+                                    '&:hover': { background: 'rgba(0, 0, 0, 0.7)' }
+                                } }
+                            >
                                 <CancelIcon size={ 15 }/>
                             </IconButton>
                         </div>
@@ -92,7 +98,8 @@ export default function CreatePostForm() {
                     </div> ) : null }
 
                 <div className="flex mt-4 justify-between items-center">
-                    <IconButton sx={ { padding: '10px', color: (theme) => theme.palette.themeGreen } } onClick={ onClick }>
+                    <IconButton sx={ { padding: '10px', color: ( theme ) => theme.palette.themeGreen } }
+                                onClick={ onClick }>
                         <HiPhotograph fontSize={ 30 }/>
                     </IconButton>
                     <LoadingButton variant="contained" type="submit" loading={ isLoading }
