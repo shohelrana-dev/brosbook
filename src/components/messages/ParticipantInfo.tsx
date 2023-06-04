@@ -19,7 +19,7 @@ const Label    = tw.p`text-gray-600 mb-0.5`
 const Heading  = tw.h3`text-base font-medium mb-3`
 const InfoItem = styled.div( ( { last }: { last?: boolean } ) => [
     tw`pb-2 mb-2`,
-    ! last && tw`border-b border-gray-200`
+    ! last && tw`border-0 border-b-2 border-solid border-gray-200`
 ] )
 
 export default function ParticipantInfo(  ){

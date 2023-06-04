@@ -31,7 +31,7 @@ export default function UserMenu() {
             { ( popupState ) => (
                 <>
                     <div className="rounded-full ml-2 cursor-pointer"  { ...bindTrigger(popupState) }>
-                        <Avatar src={ user?.avatar?.url } size="small" className="border-2 border-solid border-theme-green"/>
+                        <Avatar src={ user?.avatar?.url } size="small"/>
                     </div>
                     <Popover
                         { ...bindPopover(popupState) }
@@ -44,7 +44,7 @@ export default function UserMenu() {
                             horizontal: 'right',
                         } }
                     >
-                        <div className="mb-2 border-b-2 border-gray-100">
+                        <div className="mb-2">
                             <Link href={ `/${ user?.username }` } onClick={ () => popupState.setOpen(false) }>
                                 <OptionButton>
                                     <div className="py-1 flex gap-[12px]">

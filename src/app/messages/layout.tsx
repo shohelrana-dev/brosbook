@@ -29,7 +29,7 @@ export default function Layout( { children }: PropsWithChildren ) {
         <Wrapper navbarHeight={ navbarHeight! }>
 
             { pathname === '/messages' || isDesktopOrLaptop ? (
-                <div className="w-full lg:w-1/4 p-2 md:p-5 lg:border-r-2 border-gray-200 h-full">
+                <div className="w-full h-full lg:w-1/4 p-2 md:p-5 lg:border-0 lg:border-solid lg:border-r-2 lg:border-gray-200">
                     <Conversations/>
                 </div>
             ) : null }
@@ -40,7 +40,7 @@ export default function Layout( { children }: PropsWithChildren ) {
             </div>
 
             { conversationId && isDesktopOrLaptop ? (
-                <div className="w-1/4 p-2 md:p-5 h-full border-l-2 border-gray-200">
+                <div className="w-1/4 p-2 md:p-5 h-full lg:border-0 lg:border-solid lg:border-l-2 lg:border-gray-200">
                     <ParticipantInfo/>
                 </div>
             ) : null }
