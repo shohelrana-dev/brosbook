@@ -4,7 +4,7 @@ import CommentItem from "@components/post/comment/CommentItem"
 import { useCreateCommentMutation, useGetCommentsQuery } from "@services/commentsApi"
 import BasicInput from "@components/global/BasicInput"
 import useAuthState from "@hooks/useAuthState"
-import Loading from "@components/global/Loading"
+import Loader from "@components/global/Loader"
 import Error from "@components/global/Error"
 import { ErrorResponse } from "@interfaces/index.interfaces"
 import { IconButton } from '@mui/material'
@@ -43,7 +43,7 @@ export default function CommentList( { post }: Props ){
     //decide content
     let content = null
     if( isLoading ){
-        content = <Loading size={ 35 }/>
+        content = <Loader size={ 35 }/>
     } else if( isSuccess && comments.length === 0 ){
         content = <p className="mt-3">No comments</p>
     } else if( isError ){
@@ -84,7 +84,7 @@ export default function CommentList( { post }: Props ){
             { nextPage ? (
                 <div className="mt-3">
                     {isLoading ? (
-                        <Loading size={35}/>
+                        <Loader size={35}/>
                     ):(
                         <Button onClick={ () => setPage( nextPage! ) }>
                             See more comments

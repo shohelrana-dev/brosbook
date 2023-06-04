@@ -12,7 +12,7 @@ import { User } from "@interfaces/user.interfaces"
 import Avatar from "@components/global/Avatar"
 import FollowButton from "@components/global/FollowButton"
 import TextOverflow from "react-text-overflow"
-import Loading from "@components/global/Loading"
+import Loader from "@components/global/Loader"
 import useMediaQuery from "@hooks/useMediaQuery"
 import Link from "next/link"
 import { motion } from "framer-motion"
@@ -38,7 +38,7 @@ export default function SlidesSuggestions() {
     //decide render content
     let content = null
     if ( isLoading ) {
-        content = <Loading/>
+        content = <Loader/>
     } else if ( isSuccess && users.length === 0 ) {
         content = <p>No suggestions</p>
     } else if ( isError ) {

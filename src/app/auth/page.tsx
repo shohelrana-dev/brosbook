@@ -1,7 +1,7 @@
 "use client"
 import { useRouter }      from "next/navigation"
 import { useEffect }      from "react"
-import Loading from "@components/global/Loading"
+import Loader from "@components/global/Loader"
 
 function AuthPage() {
     const router = useRouter()
@@ -10,7 +10,7 @@ function AuthPage() {
         router.push( '/auth/login' )
     }, [router] )
 
-    return <Loading/>
+    return <Loader/>
 }
 
 export default AuthPage

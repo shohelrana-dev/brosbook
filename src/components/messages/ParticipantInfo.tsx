@@ -1,6 +1,6 @@
 import Avatar from "@components/global/Avatar"
 import { useGetConversationByIdQuery, useGetConversationMediaListQuery } from "@services/conversationsApi"
-import Loading from "@components/global/Loading"
+import Loader from "@components/global/Loader"
 import {ErrorResponse} from "@interfaces/index.interfaces"
 import ImageLightbox from "@components/global/ImageLightbox"
 import React, {useEffect, useRef, useState} from "react"
@@ -56,7 +56,7 @@ export default function ParticipantInfo(  ){
     //decide listContent
     let listContent = null
     if( isLoading ){
-        listContent = <Loading size={ 40 }/>
+        listContent = <Loader size={ 40 }/>
     } else if( isSuccess && mediaList.length === 0 ){
         listContent = <p className="text-center py-4">No media files.</p>
     } else if( isError ){
@@ -103,7 +103,7 @@ export default function ParticipantInfo(  ){
 
                 { nextPage ? (
                     <div className="py-4" ref={ moreLoadRef }>
-                        <Loading size={ 40 }/>
+                        <Loader size={ 40 }/>
                     </div>
                 ) : null }
             </Box>

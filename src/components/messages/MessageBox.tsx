@@ -5,7 +5,7 @@ import Avatar from "@components/global/Avatar"
 import MessageList from "@components/messages/MessageBox/MessageList"
 import CreateMessageForm from "@components/messages/MessageBox/CreateMessageForm"
 import timeAgo from "@utils/timeAgo"
-import Loading from "@components/global/Loading"
+import Loader from "@components/global/Loader"
 import { useGetConversationByIdQuery } from "@services/conversationsApi"
 import { IconButton } from '@mui/material'
 import { BiInfoCircle as InfoIcon } from "react-icons/bi"
@@ -28,7 +28,7 @@ export default function MessageBox() {
     const { data: conversation, isLoading } = useGetConversationByIdQuery(conversationId)
     const { isVisible, toggle }             = useModal()
 
-    if ( isLoading ) return <Loading/>
+    if ( isLoading ) return <Loader/>
 
     const { fullName, active, avatar, username, updatedAt } = conversation?.participant || {}
 

@@ -7,7 +7,7 @@ import { ProfilePayload } from "@interfaces/account.interfaces"
 import { useUpdateProfileMutation } from '@services/accountApi'
 import BasicInput from "@components/global/BasicInput"
 import useAuthState from "@hooks/useAuthState"
-import Loading from "@components/global/Loading"
+import Loader from "@components/global/Loader"
 import { useForm } from "@hooks/useForm"
 import toast from "react-hot-toast"
 import { useGetUserByIdQuery } from "@services/usersApi"
@@ -41,7 +41,7 @@ export default function ProfileSettingsPage() {
     }, [ isLoading, isSuccess ])
 
     if ( isUserLoading ) {
-        return <Loading/>
+        return <Loader/>
     }
 
     return (

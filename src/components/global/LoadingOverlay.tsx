@@ -1,5 +1,5 @@
 import React from 'react'
-import Loading from "@components/global/Loading"
+import Loader from "@components/global/Loader"
 import { motion, AnimatePresence } from "framer-motion"
 import tw from "twin.macro"
 
@@ -15,7 +15,7 @@ export default function LoadingOverlay( { isLoading }: { isLoading: boolean } ){
                     exit={ { opacity: 0 } }
                     transition={ { duration: 0.2 } }
                 >
-                    <Loading color="rgb(58,141,245)"/>
+                    <Loader loading={isLoading}/>
                 </LoadingWrapper>
             ) : null }
         </AnimatePresence>

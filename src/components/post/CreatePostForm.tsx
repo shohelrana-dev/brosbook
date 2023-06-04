@@ -6,7 +6,6 @@ import { RxCross2 as CancelIcon } from "react-icons/rx"
 import toast from "react-hot-toast"
 import { LoadingButton } from "@mui/lab"
 import { IconButton } from '@mui/material'
-import { useTheme } from '@mui/material/styles'
 
 import Avatar from "@components/global/Avatar"
 import { useCreatePostMutation } from "@services/postsApi"
@@ -20,7 +19,6 @@ export default function CreatePostForm() {
     const [ createPost, { isLoading } ]                                                    = useCreatePostMutation()
     const [ body, setBody ]                                                                = useState<string>('')
     const { inputRef, selectedFile: selectedImage, removeSelectedFile, onChange, onClick } = useSelectFile()
-    const theme                                                                            = useTheme()
 
     async function submitForm( event: FormEvent ) {
         event.preventDefault()
@@ -94,7 +92,7 @@ export default function CreatePostForm() {
                     </div> ) : null }
 
                 <div className="flex mt-4 justify-between items-center">
-                    <IconButton sx={ { padding: '10px', color: theme.palette.themeGreen } } onClick={ onClick }>
+                    <IconButton sx={ { padding: '10px', color: (theme) => theme.palette.themeGreen } } onClick={ onClick }>
                         <HiPhotograph fontSize={ 30 }/>
                     </IconButton>
                     <LoadingButton variant="contained" type="submit" loading={ isLoading }

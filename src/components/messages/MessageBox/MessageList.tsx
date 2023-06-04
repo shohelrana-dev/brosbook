@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import MessageItem from "@components/messages/MessageBox/MessageItem"
 import { useGetMessagesQuery, useSeenMessagesMutation } from "@services/messagesApi"
-import Loading from "@components/global/Loading"
+import Loader from "@components/global/Loader"
 import { Message } from "@interfaces/conversation.interfaces"
 import useAuthState from "@hooks/useAuthState"
 import ChatSkeleton from "@components/skeletons/ChatSkeleton"
@@ -66,7 +66,7 @@ export default function MessageList(){
             <InfiniteScroll
                 next={() => setPage(nextPage!)}
                 hasMore={!!nextPage}
-                loader={<Loading size={ 50 } wrapperClassName={"py-3"}/>}
+                loader={<Loader size={ 50 } wrapperClassName={"py-3"}/>}
                 dataLength={messages.length}
                 scrollableTarget="message-list"
                 className="flex flex-col-reverse"

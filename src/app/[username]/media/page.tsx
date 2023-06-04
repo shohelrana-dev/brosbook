@@ -1,7 +1,7 @@
 "use client"
 import React, { useState } from 'react'
 import { useGetMediaListQuery, useGetUserByUsernameQuery } from "@services/usersApi"
-import Loading from "@components/global/Loading"
+import Loader from "@components/global/Loader"
 import ImageLightbox from "@components/global/ImageLightbox"
 import InfiniteScroll from "react-infinite-scroll-component"
 import Error from "@components/global/Error"
@@ -23,7 +23,7 @@ export default function MediaPage( { params }: Props ){
     //decide content
     let content = null
     if( isLoading ){
-        content = <div className="py-3"><Loading size={ 50 }/></div>
+        content = <div className="py-3"><Loader size={ 50 }/></div>
     } else if( isSuccess && mediaList.length === 0 ){
         content = <p className="text-center py-3">{ user?.fullName } haven't media.</p>
     } else if( isError ){
@@ -34,7 +34,7 @@ export default function MediaPage( { params }: Props ){
                 dataLength={ mediaList.length }
                 next={ () => setPage( nextPage! ) }
                 hasMore={ !! nextPage }
-                loader={ <Loading size={ 40 }/> }
+                loader={ <Loader size={ 40 }/> }
             >
                 <ImageLightbox imageList={ mediaList } width={ 200 } height={ 200 } alt="Media"/>
             </InfiniteScroll>

@@ -1,7 +1,7 @@
 "use client"
 import React from 'react'
 import useAuthState from "@hooks/useAuthState"
-import Loading from "@components/global/Loading"
+import Loader from "@components/global/Loader"
 import ChangePasswordModal from "@components/account/ChangePasswordModal"
 import ChangeUsernameModal from "@components/account/ChangeUsernameModal"
 import TextOverflow from 'react-text-overflow'
@@ -10,7 +10,7 @@ import { Button } from '@mui/material'
 export default function GeneralSettingsPage(){
     const { user, isAuthenticated } = useAuthState()
 
-    if( ! isAuthenticated ) return <Loading/>
+    if( ! isAuthenticated ) return <Loader/>
 
     return (
         <div className="p-4">

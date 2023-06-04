@@ -33,6 +33,16 @@ const theme = createTheme({
                     border: '1px solid #dddddd5c',
                 }
             }
+        },
+        MuiFormHelperText: {
+            styleOverrides: {
+                root: {
+                    '&.Mui-error': {
+                        margin: 0,
+                        fontSize: '13px'
+                    }
+                }
+            }
         }
     },
 })

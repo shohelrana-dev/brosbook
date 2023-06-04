@@ -1,10 +1,10 @@
 import React from 'react'
-import Loading from "@components/global/Loading"
+import Loader from "@components/global/Loader"
 
 export default function PageLoading(){
     return (
         <div className="box text-center py-3 bg-white">
-            <Loading/>
+            <Loader/>
         </div>
     )
 }

@@ -2,7 +2,7 @@
 import toast from "react-hot-toast"
 import useAsyncEffect from "use-async-effect"
 import {useResendVerificationLinkMutation, useVerifyEmailMutation} from "@services/authApi"
-import Loading from "@components/global/Loading"
+import Loader from "@components/global/Loader"
 import {ImCheckmark as CheckmarkIcon} from "react-icons/im"
 import {ImCross as CrossIcon} from "react-icons/im"
 import Link from "next/link"
@@ -117,5 +117,5 @@ export default function EmailVerifyPage({params}: Props) {
         )
     }
 
-    return <Loading/>
+    return <Loader/>
 }
