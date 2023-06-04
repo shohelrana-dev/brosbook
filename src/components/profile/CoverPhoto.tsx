@@ -19,8 +19,8 @@ type Props = { user: User }
 
 export default function CoverPhoto( { user }: Props ) {
     const { user: currentUser }                                                            = useAuthState()
-    const [changeCoverPhoto, { isLoading }]                                                = useChangeCoverPhotoMutation()
-    const [coverPhoto, setCoverPhoto]                                                      = useState<Media | undefined>( user.profile?.coverPhoto )
+    const [ changeCoverPhoto, { isLoading } ]                                              = useChangeCoverPhotoMutation()
+    const [ coverPhoto, setCoverPhoto ]                                                    = useState<Media | undefined>(user.profile?.coverPhoto)
     const { inputRef, selectedFile: selectedPhoto, removeSelectedFile, onClick, onChange } = useSelectFile()
 
     async function handleSubmit() {
@@ -28,20 +28,20 @@ export default function CoverPhoto( { user }: Props ) {
 
         try {
             const formData = new FormData()
-            formData.append( 'coverPhoto', selectedPhoto )
-            const data = await changeCoverPhoto( formData ).unwrap()
+            formData.append('coverPhoto', selectedPhoto)
+            const data = await changeCoverPhoto(formData).unwrap()
 
             removeSelectedFile()
-            setCoverPhoto( data.profile?.coverPhoto )
-            toast.success( 'Cover photo saved.' )
+            setCoverPhoto(data.profile?.coverPhoto)
+            toast.success('Cover photo saved.')
         } catch ( err: any ) {
-            console.error( err )
-            toast.error( err?.data?.message || 'Something went wrong!, Please try again.' )
+            console.error(err)
+            toast.error(err?.data?.message || 'Something went wrong!, Please try again.')
         }
     }
 
     function fileInputChangeHandle( event: ChangeEvent<HTMLInputElement> ) {
-        onChange( event )
+        onChange(event)
     }
 
     if ( user.id !== currentUser?.id ) {
@@ -80,7 +80,16 @@ export default function CoverPhoto( { user }: Props ) {
                 ) }
             </div>
 
-            <IconButton className="!absolute right-3 bottom-3 bg-gray-600 hover:bg-gray-700" onClick={ onClick }>
+            <IconButton
+                onClick={ onClick }
+                sx={ {
+                    position: 'absolute',
+                    bottom: 0,
+                    right: '8px',
+                    background: 'rgba(0, 0, 0, 0.9)',
+                    '&:hover': { background: 'rgba(0, 0, 0, 0.7)' }
+                } }
+            >
                 <TbCameraPlus fontSize={ 25 } color="#fff"/>
             </IconButton>
 
@@ -94,14 +103,15 @@ export default function CoverPhoto( { user }: Props ) {
                     <div className="relative h-[250px] w-full overflow-hidden my-5">
                         { selectedPhoto ? (
                             <Image
-                                src={ URL.createObjectURL( selectedPhoto ) }
+                                src={ URL.createObjectURL(selectedPhoto) }
                                 alt="Cover photo"
                                 fill={ true }
                             />
                         ) : null }
                     </div>
                     <div className="mt-3">
-                        <LoadingButton variant="contained" size="large" loading={ isLoading } className="mt-0" fullWidth onClick={ handleSubmit }>
+                        <LoadingButton variant="contained" size="large" loading={ isLoading } className="mt-0" fullWidth
+                                       onClick={ handleSubmit }>
                             Save
                         </LoadingButton>
                         <Button variant="outlined" size="large" className="mt-3" fullWidth onClick={ onClick }>

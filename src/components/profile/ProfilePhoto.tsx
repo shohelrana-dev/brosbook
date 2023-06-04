@@ -1,29 +1,29 @@
 "use client"
-import React, {ChangeEvent, useState} from 'react'
+import React, { ChangeEvent, useState } from 'react'
 import { IconButton } from '@mui/material'
-import {TbCameraPlus} from "react-icons/tb"
-import {useChangeProfilePhotoMutation} from "@services/usersApi"
+import { TbCameraPlus } from "react-icons/tb"
+import { useChangeProfilePhotoMutation } from "@services/usersApi"
 import toast from "react-hot-toast"
 import ImageLightbox from "@components/global/ImageLightbox"
 import Image from "next/image"
-import {User} from "@interfaces/user.interfaces"
+import { User } from "@interfaces/user.interfaces"
 import useAuthState from "@hooks/useAuthState"
 import Modal from "react-minimal-modal"
 import useSelectFile from "@hooks/useSelectFile"
-import {Media} from "@interfaces/index.interfaces"
-import {LoadingButton} from "@mui/lab"
-import {Button} from "@mui/material"
+import { Media } from "@interfaces/index.interfaces"
+import { LoadingButton } from "@mui/lab"
+import { Button } from "@mui/material"
 
 type Props = { user: User }
 
-export default function ProfilePhoto({user}: Props) {
-    const {user: currentUser} = useAuthState()
-    const [changeProfilePhoto, {isLoading}] = useChangeProfilePhotoMutation()
-    const [avatar, setAvatar] = useState<Media | undefined>(user.avatar)
-    const {onChange, onClick, inputRef, selectedFile: selectedPhoto, removeSelectedFile} = useSelectFile()
+export default function ProfilePhoto( { user }: Props ) {
+    const { user: currentUser }                                                            = useAuthState()
+    const [ changeProfilePhoto, { isLoading } ]                                            = useChangeProfilePhotoMutation()
+    const [ avatar, setAvatar ]                                                            = useState<Media | undefined>(user.avatar)
+    const { onChange, onClick, inputRef, selectedFile: selectedPhoto, removeSelectedFile } = useSelectFile()
 
     async function handleSubmit() {
-        if (!selectedPhoto) return
+        if ( !selectedPhoto ) return
 
         try {
             const formData = new FormData()
@@ -33,46 +33,55 @@ export default function ProfilePhoto({user}: Props) {
             removeSelectedFile()
             setAvatar(data.avatar)
             toast.success('Profile photo saved.')
-        } catch (err: any) {
+        } catch ( err: any ) {
             console.error(err)
             toast.error(err?.data?.message || 'Something went wrong!, Please try again.')
         }
     }
 
-    function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
+    function handleInputChange( event: ChangeEvent<HTMLInputElement> ) {
         onChange(event)
     }
 
-    if (user.id !== currentUser?.id) {
+    if ( user.id !== currentUser?.id ) {
         return (
             <ImageLightbox
-                image={avatar}
+                image={ avatar }
                 className="rounded-full w-[130px] h-[130px] mt-[-80px] border-4 border-white object-cover"
                 alt="User profile photo"
-                width={130}
-                height={130}
+                width={ 130 }
+                height={ 130 }
             />
         )
     }
 
     return (
         <div className="relative">
-            <input hidden name="photo" type="file" accept="image/*" onChange={handleInputChange} ref={inputRef}/>
+            <input hidden name="photo" type="file" accept="image/*" onChange={ handleInputChange } ref={ inputRef }/>
             <ImageLightbox
-                image={avatar}
+                image={ avatar }
                 className="rounded-full w-[130px] h-[130px] mt-[-80px] border-4 border-white object-cover"
                 alt="User profile photo"
-                width={130}
-                height={130}
+                width={ 130 }
+                height={ 130 }
             />
 
-            <IconButton className="!absolute right-3 bottom-0 bg-gray-600 hover:bg-gray-700" onClick={onClick}>
-                <TbCameraPlus fontSize={20} color="#fff"/>
+            <IconButton
+                onClick={ onClick }
+                sx={ {
+                    position: 'absolute',
+                    bottom: 0,
+                    right: '8px',
+                    background: 'rgba(0, 0, 0, 0.9)',
+                    '&:hover': { background: 'rgba(0, 0, 0, 0.7)' }
+                } }
+            >
+                <TbCameraPlus fontSize={ 20 } color="#fff"/>
             </IconButton>
 
             <Modal
-                visible={!!selectedPhoto}
-                toggle={removeSelectedFile}
+                visible={ !!selectedPhoto }
+                toggle={ removeSelectedFile }
                 className="max-w-[625px] !p-3"
             >
                 <>
@@ -87,20 +96,21 @@ export default function ProfilePhoto({user}: Props) {
                     <div className="flex justify-center items-center my-5">
                         <div
                             className="relative p-4 overflow-hidden h-[200px] w-[200px] rounded-full">
-                            {selectedPhoto ? (
+                            { selectedPhoto ? (
                                 <Image
-                                    src={URL.createObjectURL(selectedPhoto)}
+                                    src={ URL.createObjectURL(selectedPhoto) }
                                     alt="Avatar"
-                                    fill={true}
+                                    fill={ true }
                                 />
-                            ) : null}
+                            ) : null }
                         </div>
                     </div>
                     <div className="mt-3">
-                        <LoadingButton variant="contained" fullWidth size="large" loading={isLoading} onClick={handleSubmit}>
+                        <LoadingButton variant="contained" fullWidth size="large" loading={ isLoading }
+                                       onClick={ handleSubmit }>
                             Save
                         </LoadingButton>
-                        <Button variant="outlined" fullWidth className="mt-3" size="large" onClick={onClick}>
+                        <Button variant="outlined" fullWidth className="mt-3" size="large" onClick={ onClick }>
                             Change Photo
                         </Button>
                     </div>
