@@ -76,7 +76,7 @@ export default function PostBar( { post, setIsCommentsShow, isCommentsShow }: Po
                     animate={ { y: 0, opacity: 1 } }
                     exit={ { opacity: 0, y: 20 } }
                     transition={ { duration: 0.3 } }
-                    className="text-gray-600 mb-1"
+                    className="text-gray-600"
                 >
                     { likesCount }
                 </motion.p>
@@ -85,7 +85,7 @@ export default function PostBar( { post, setIsCommentsShow, isCommentsShow }: Po
                 <IconButton onClick={ () => setIsCommentsShow(!isCommentsShow) }>
                     <CommentIcon size="18"/>
                 </IconButton>
-                <p className="text-gray-600 mb-1">{ commentsCount }</p>
+                <p className="text-gray-600">{ commentsCount }</p>
             </div>
 
             <PostShare post={ post }/>
