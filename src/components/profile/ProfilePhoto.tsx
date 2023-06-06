@@ -106,11 +106,10 @@ export default function ProfilePhoto( { user }: Props ) {
                         </div>
                     </div>
                     <div className="mt-3">
-                        <LoadingButton variant="contained" fullWidth size="large" loading={ isLoading }
-                                       onClick={ handleSubmit }>
+                        <LoadingButton variant="contained" fullWidth size="large" loading={ isLoading } onClick={ handleSubmit }>
                             Save
                         </LoadingButton>
-                        <Button variant="outlined" fullWidth className="mt-3" size="large" onClick={ onClick }>
+                        <Button variant="outlined" fullWidth  sx={{ marginTop: '12px' }} size="large" onClick={ onClick }>
                             Change Photo
                         </Button>
                     </div>

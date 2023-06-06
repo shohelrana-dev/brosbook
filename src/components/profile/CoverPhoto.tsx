@@ -110,11 +110,10 @@ export default function CoverPhoto( { user }: Props ) {
                         ) : null }
                     </div>
                     <div className="mt-3">
-                        <LoadingButton variant="contained" size="large" loading={ isLoading } className="mt-0" fullWidth
-                                       onClick={ handleSubmit }>
+                        <LoadingButton variant="contained" size="large" loading={ isLoading } fullWidth onClick={ handleSubmit }>
                             Save
                         </LoadingButton>
-                        <Button variant="outlined" size="large" className="mt-3" fullWidth onClick={ onClick }>
+                        <Button variant="outlined" size="large" sx={{ marginTop: '12px' }} fullWidth onClick={ onClick }>
                             Change Photo
                         </Button>
                     </div>
