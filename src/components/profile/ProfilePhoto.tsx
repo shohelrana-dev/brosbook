@@ -70,8 +70,8 @@ export default function ProfilePhoto( { user }: Props ) {
                 onClick={ onClick }
                 sx={ {
                     position: 'absolute',
-                    bottom: 0,
-                    right: '8px',
+                    bottom:'8px',
+                    right: '10px',
                     background: 'rgba(0, 0, 0, 0.9)',
                     '&:hover': { background: 'rgba(0, 0, 0, 0.7)' }
                 } }
