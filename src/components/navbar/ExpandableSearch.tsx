@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { BiSearch as SearchIcon } from "react-icons/bi"
-import { IconButton } from '@mui/material'
+import { IconButton, Tooltip } from '@mui/material'
 import BasicInput from "@components/global/BasicInput"
 import classNames from "classnames"
 import { User } from "@interfaces/user.interfaces"
@@ -10,42 +10,42 @@ import { useDebounce } from "use-debounce"
 import delay from "delay"
 
 export default function ExpandableSearch() {
-    const [expanded, setExpanded]     = useState<boolean>( false )
-    const [searchText, setSearchText] = useState<string>( '' )
-    const [dSearchText]               = useDebounce<string>( searchText, 1000 )
-    const router                      = useRouter()
-    const inputRef                    = useRef<HTMLInputElement>()
+    const [ expanded, setExpanded ]     = useState<boolean>(false)
+    const [ searchText, setSearchText ] = useState<string>('')
+    const [ dSearchText ]               = useDebounce<string>(searchText, 1000)
+    const router                        = useRouter()
+    const inputRef                      = useRef<HTMLInputElement>()
 
-    useEffect( () => {
+    useEffect(() => {
         if ( expanded ) {
             inputRef.current?.focus()
         } else {
-            setSearchText( '' )
+            setSearchText('')
             inputRef.current?.blur()
         }
-    }, [expanded] )
+    }, [ expanded ])
 
     async function toggleExpand() {
         if ( expanded ) {
-            await delay( 200 )
+            await delay(200)
         }
-        setExpanded( !expanded )
+        setExpanded(!expanded)
     }
 
     async function onUserClick( user: User ) {
         try {
-            router.push( `/${ user.username }` )
+            router.push(`/${ user.username }`)
         } catch ( e ) {
-            console.log( e )
+            console.log(e)
         }
     }
 
-    const inputWrapperClassname = classNames( '!mb-0 w-[50px] duration-300 transition-all opacity-0 float-right', { "w-full opacity-100": expanded } )
+    const inputWrapperClassname = classNames('!mb-0 w-[50px] duration-300 transition-all opacity-0 float-right', { "w-full opacity-100": expanded })
 
     return (
         <div className="relative rounded-3xl flex-none">
             <BasicInput
-                onChange={ ( e ) => setSearchText( e.target.value ) }
+                onChange={ ( e ) => setSearchText(e.target.value) }
                 value={ searchText }
                 inputRef={ inputRef }
                 onBlur={ toggleExpand }
@@ -58,9 +58,11 @@ export default function ExpandableSearch() {
             />
 
             <div className="absolute right-1 top-1">
-                <IconButton onClick={ toggleExpand } disabled={ expanded }>
-                    <SearchIcon size={ 18 } className="text-gray-700"/>
-                </IconButton>
+                <Tooltip title="Search">
+                    <IconButton onClick={ toggleExpand } disabled={ expanded }>
+                        <SearchIcon size={ 18 } className="text-gray-700"/>
+                    </IconButton>
+                </Tooltip>
             </div>
 
             { expanded ? <SearchUserList onUserClick={ onUserClick } searchText={ dSearchText }/> : null }

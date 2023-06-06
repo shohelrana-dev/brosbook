@@ -1,4 +1,4 @@
-import { IconButton, Badge, Popover, Box } from '@mui/material'
+import { IconButton, Badge, Popover, Box, Tooltip } from '@mui/material'
 import { IoNotificationsOutline as NotificationIcon } from "react-icons/io5"
 import NotificationList from "@components/notifications/NotificationList"
 import { useGetUnreadNotificationsCountQuery } from "@services/notificationsApi"
@@ -14,11 +14,13 @@ export default function NotificationsNavLink() {
             { ( popupState ) => (
                 <>
                     <div>
-                        <IconButton {...bindTrigger(popupState)}>
-                            <Badge badgeContent={ unreadNotificationsCount } color="error">
-                                <NotificationIcon size={ 25 } className="text-gray-700"/>
-                            </Badge>
-                        </IconButton>
+                        <Tooltip title="Notifications">
+                            <IconButton { ...bindTrigger(popupState) }>
+                                <Badge badgeContent={ unreadNotificationsCount } color="error">
+                                    <NotificationIcon size={ 25 } className="text-gray-700"/>
+                                </Badge>
+                            </IconButton>
+                        </Tooltip>
                     </div>
                     <Popover
                         { ...bindPopover(popupState) }

@@ -5,7 +5,7 @@ import { FaSignOutAlt as LogoutIcon } from "react-icons/fa"
 import useAuthState from "@hooks/useAuthState"
 import { useRouter } from "next/navigation"
 import { useConfirmAlert } from "react-use-confirm-alert"
-import { Popover, Divider } from "@mui/material"
+import { Popover, Divider, Tooltip } from "@mui/material"
 import OptionButton from "@components/global/OptionButton"
 import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state"
 
@@ -30,9 +30,11 @@ export default function UserMenu() {
         <PopupState variant="popover">
             { ( popupState ) => (
                 <>
-                    <div className="rounded-full ml-2 cursor-pointer"  { ...bindTrigger(popupState) }>
-                        <Avatar src={ user?.avatar?.url } size="small"/>
-                    </div>
+                    <Tooltip title="Profile">
+                        <div className="rounded-full ml-2 cursor-pointer"  { ...bindTrigger(popupState) }>
+                            <Avatar src={ user?.avatar?.url } size="small"/>
+                        </div>
+                    </Tooltip>
                     <Popover
                         { ...bindPopover(popupState) }
                         anchorOrigin={ {

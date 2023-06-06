@@ -17,7 +17,6 @@
     "@emotion/react": "^11.11.0",
     "@emotion/server": "^11.10.0",
     "@emotion/styled": "^11.11.0",
-    "@material-tailwind/react": "^2.0.1",
     "@mui/lab": "^5.0.0-alpha.132",
     "@mui/material": "^5.13.3",
     "@react-aria/ssr": "^3.6.0",
