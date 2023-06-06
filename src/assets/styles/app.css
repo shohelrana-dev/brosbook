@@ -45,6 +45,10 @@ img {
     width: 100%;
 }
 
+button, input, textarea {
+    font-family: 'Kanit', sans-serif !important;
+}
+
 @media only screen and (max-width: 767px) {
     body {
         font-size: 14px;
