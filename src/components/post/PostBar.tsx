@@ -4,7 +4,7 @@ import { BsHeart as OutlinedLikeIcon } from "react-icons/bs"
 import { FaRegComment as CommentIcon } from "react-icons/fa"
 import { Post } from "@interfaces/posts.interfaces"
 import { usePostLikeMutation, usePostUnlikeMutation } from "@services/postsApi"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion } from "framer-motion"
 import { IconButton } from '@mui/material'
 import PostShare from "@components/post/PostShare"
 import useAuthState from "@hooks/useAuthState"
@@ -50,50 +50,42 @@ export default function PostBar( { post, setIsCommentsShow, isCommentsShow }: Po
         <div
             className="flex mt-2 border-t-2 border-b-2 border-gray-100 py-1 border-solid border-l-0 border-r-0 justify-around">
             <div className="flex items-center relative">
-                <AnimatePresence>
-                    { isViewerLiked ? (
-                        <motion.span
-                            onClick={ handlePostUnlike }
-                            initial={ { scale: 0 } }
-                            animate={ { scale: isViewerLiked ? 1 : 0 } }
-                            transition={ { duration: 0.1 } }
-                        >
-                            <IconButton>
-                                <LikeIcon fontSize="medium" color="#FF1493"/>
-                            </IconButton>
-                        </motion.span>
-                    ) : null }
-                </AnimatePresence>
-                <AnimatePresence>
-                    { !isViewerLiked ? (
-                        <motion.span
-                            onClick={ handlePostLike }
-                            initial={ { scale: 0 } }
-                            animate={ { scale: !isViewerLiked ? 1 : 0 } }
-                            transition={ { duration: 0.1 } }
-                        >
-                            <IconButton>
-                                <OutlinedLikeIcon fontSize="medium"/>
-                            </IconButton>
-                        </motion.span>
-                    ) : null }
-                </AnimatePresence>
-                <AnimatePresence>
-                    <motion.p
-                        key={ likesCount }
-                        initial={ { y: -10, opacity: 0 } }
-                        animate={ { y: 0, opacity: 1 } }
-                        transition={ { duration: 0.3 } }
-                        className="text-gray-600">
-                        { likesCount }
-                    </motion.p>
-                </AnimatePresence>
+                <motion.button
+                    className="icon"
+                    onClick={ handlePostUnlike }
+                    initial={ { scale: 0 } }
+                    animate={ { scale: isViewerLiked ? 1 : 0 } }
+                    transition={ { duration: 0.1 } }
+                >
+                    <LikeIcon fontSize="medium" color="#FF1493"/>
+                </motion.button>
+
+                <motion.button
+                    className="icon absolute left-0"
+                    onClick={ handlePostLike }
+                    initial={ { scale: 0 } }
+                    animate={ { scale: !isViewerLiked ? 1 : 0 } }
+                    transition={ { duration: 0.1 } }
+                >
+                    <OutlinedLikeIcon fontSize="medium"/>
+                </motion.button>
+
+                <motion.p
+                    key={ likesCount }
+                    initial={ { y: -20, opacity: 0 } }
+                    animate={ { y: 0, opacity: 1 } }
+                    exit={ { opacity: 0, y: 20 } }
+                    transition={ { duration: 0.3 } }
+                    className="text-gray-600 mb-1"
+                >
+                    { likesCount }
+                </motion.p>
             </div>
             <div className="flex items-center">
                 <IconButton onClick={ () => setIsCommentsShow(!isCommentsShow) }>
                     <CommentIcon size="18"/>
                 </IconButton>
-                <p className="text-gray-600">{ commentsCount }</p>
+                <p className="text-gray-600 mb-1">{ commentsCount }</p>
             </div>
 
             <PostShare post={ post }/>

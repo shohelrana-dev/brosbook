@@ -1,19 +1,11 @@
-const withMT = require("@material-tailwind/react/utils/withMT")
-
 /** @type {import('tailwindcss').Config} */
-module.exports = withMT({
+
+module.exports = {
   mode: 'jit',
   content: [
     "./src/**/*.{js,ts,jsx,tsx}"
   ],
   theme: {
-    colors: {
-      blue: 'rgb(58,141,245)',
-      "gray-light": '#F1F6FB'
-    },
-    container: {
-      center: true,
-    },
     extend: {
       colors: {
         "theme-green": '#159615',
@@ -47,4 +39,4 @@ module.exports = withMT({
   plugins: [
     require('tailwind-scrollbar-hide')
   ]
-})
+}

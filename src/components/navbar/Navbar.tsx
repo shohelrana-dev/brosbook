@@ -11,13 +11,15 @@ import titledLogo from "@assets/images/titled-logo.png"
 import { Button, AppBar, IconButton, Box } from "@mui/material"
 import tw from "twin.macro"
 import { Container } from "@components/styles/Global.styles"
-import useMediaQuery from "@hooks/useMediaQuery";
+import useMediaQuery from "@hooks/useMediaQuery"
+import { usePathname } from "next/navigation"
 
-const StyledContainer = tw(Container)`mx-auto flex items-center justify-between text-blue-gray-900`
+const StyledContainer = tw(Container)`mx-auto flex items-center justify-between text-gray-900`
 
 export default function Navbar() {
     const isSmallDevice       = useMediaQuery('(max-width: 767px)')
     const { isAuthenticated } = useAuthState()
+    const pathname            = usePathname()
 
     return (
         <AppBar id="appNavbar" variant="outlined" color="default" position="static"
@@ -44,7 +46,7 @@ export default function Navbar() {
                     ) : (
                         <>
                             &nbsp;
-                            <Link href="/auth/login">
+                            <Link href={ `/auth/login?redirect_to=${ pathname }` }>
                                 <Button variant="contained">Login</Button>
                             </Link>
                         </>
