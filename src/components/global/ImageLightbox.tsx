@@ -18,7 +18,7 @@ interface Props extends Omit<ImageProps, "src"> {
 }
 
 export default function ImageLightbox( { image, imageList, className, ...rest }: Props ){
-    className = classNames( 'cursor-pointer', className )
+    className = classNames( 'cursor-pointer h-auto', className )
 
     if( ! image && ( ! imageList || imageList.length < 1 ) ) return null
 

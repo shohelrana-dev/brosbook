@@ -53,7 +53,12 @@ export default function MessageContent( { message }: Props ) {
             return (
                 <ImageMessage>
                     <Reactions message={ message }/>
-                    <ImageLightbox image={ image } alt="message image" width={ 200 } height={ 150 }/>
+                    <ImageLightbox
+                        image={ image }
+                        width="300"
+                        height="200"
+                        alt="message image"
+                    />
                     <Time>{ moment(createdAt).format("h:mm a") }</Time>
                 </ImageMessage>
             )

@@ -32,7 +32,7 @@ export default function UserMenu() {
                 <>
                     <Tooltip title="Profile">
                         <div className="rounded-full ml-2 cursor-pointer"  { ...bindTrigger(popupState) }>
-                            <Avatar src={ user?.avatar?.url } size="small"/>
+                            <Avatar src={ user?.avatar?.url } size="small" className="border-solid border-2 border-theme-green"/>
                         </div>
                     </Tooltip>
                     <Popover
@@ -50,7 +50,7 @@ export default function UserMenu() {
                             <Link href={ `/${ user?.username }` } onClick={ () => popupState.setOpen(false) }>
                                 <OptionButton>
                                     <div className="py-1 flex flex-wrap gap-[12px] items-center">
-                                        <Avatar src={ user?.avatar?.url } size="small"/>
+                                        <Avatar src={ user?.avatar?.url } size="medium"/>
                                         <div>
                                             <p>{ user?.fullName }</p>
                                             <p className="text-xs text-left text-gray-800">Your profile</p>

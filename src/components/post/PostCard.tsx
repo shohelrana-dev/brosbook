@@ -22,7 +22,7 @@ interface PostCardProps {
     isCommentsShow?: boolean
 }
 
-const PostCard = ( props: PostCardProps ) => {
+export default function PostCard ( props: PostCardProps ) {
     //hooks
     const [ isCommentsShow, setIsCommentsShow ] = useState<boolean>(Boolean(props.isCommentsShow))
 
@@ -71,7 +71,12 @@ const PostCard = ( props: PostCardProps ) => {
                 ) : null }
                 { image ? (
                     <div className="my-3">
-                        <ImageLightbox image={ image } width={ 550 } height={ 340 } alt="Post image"/>
+                        <ImageLightbox
+                            image={ image }
+                            alt="Post image"
+                            width="550"
+                            height="400"
+                        />
                     </div>
                 ) : null }
 
@@ -83,5 +88,3 @@ const PostCard = ( props: PostCardProps ) => {
         </div>
     )
 }
-
-export default PostCard
