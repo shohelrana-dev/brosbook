@@ -133,7 +133,7 @@ export default function CreateMessageForm() {
                     <input
                         ref={ textInputRef }
                         disabled={ !!selectedFile }
-                        className="w-full bg-transparent hover:border-none focus:border-none focus:outline-none p-3"
+                        className="w-full bg-transparent hover:border-none focus:border-none focus:outline-none py-3"
                         placeholder="Start a new message"
                         onChange={ ( e ) => setMessageText(e.target.value) }
                         value={ messageText }

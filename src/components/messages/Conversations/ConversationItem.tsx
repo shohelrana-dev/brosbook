@@ -12,7 +12,7 @@ import {IoCheckmarkCircleOutline as TickIcon} from "react-icons/io5"
 
 const Box            = tw( BaseBox )`block cursor-pointer py-2 px-3 flex mb-3 w-full gap-3`
 const Name           = tw.h3`font-medium text-gray-900`
-const NameWrapper    = tw.h3`flex gap-3`
+const NameWrapper    = tw.h3`flex items-center gap-3`
 const Date           = tw.p`text-gray-800 text-xs`
 const MessageWrapper = tw.div`flex justify-between mt-1`
 const MessageText    = styled.p( ( { bold }: { bold: boolean } ) => [

@@ -8,7 +8,7 @@ interface Props {
     notification: Notification
 }
 
-function NotificationItem( { notification }: Props ){
+function NotificationItem( { notification }: Props ) {
     let title = null
     let url   = null
 
@@ -38,7 +38,7 @@ function NotificationItem( { notification }: Props ){
         <Link href={ url } key={ notification.id } className="mb-1 flex flex-wrap gap-3 hover:bg-gray-100 p-3">
             <Avatar src={ notification.initiator.avatar.url }/>
             <div>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex gap-2">
                     <h3 className="text-sm font-medium text-black">
                         { notification.initiator.fullName }
                     </h3>
@@ -46,12 +46,12 @@ function NotificationItem( { notification }: Props ){
                         @{ notification.initiator.username }
                     </h4>
                 </div>
-                <p className="text-gray-800">
-                    { title }
-                    <small className="text-gray-600 ml-3">
-                        { timeAgo( notification.createdAt ) }
+                <div className="text-gray-800 flex flex-wrap gap-2 items-center">
+                    <p>{ title }</p>
+                    <small className="text-gray-600 text-xs">
+                        { timeAgo(notification.createdAt) }
                     </small>
-                </p>
+                </div>
             </div>
         </Link>
     )
