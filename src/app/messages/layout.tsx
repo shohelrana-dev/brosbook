@@ -8,7 +8,7 @@ import classNames from "classnames"
 import tw, { styled } from "twin.macro"
 
 const Wrapper = styled.div(( { navbarHeight }: { navbarHeight: number } ) =>
-    [ `height: calc(100vh - ${ navbarHeight }px);`, tw`flex overflow-hidden md:px-10 sm:px-4` ]
+    [ `height: calc(100vh - ${ navbarHeight }px);`, tw`flex flex-wrap overflow-hidden md:px-10 sm:px-4` ]
 )
 
 export const revalidate = 0

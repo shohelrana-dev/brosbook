@@ -5,11 +5,11 @@ export default function PostsSkeleton( { count = 3 } ){
         <>
             { Array.from( { length: count } ).map( (_, i) => (
                 <div key={i} className="box bg-white p-5 mb-3">
-                    <div className="flex justify-between items-center mb-4">
-                        <div className="flex gap-3 items-center">
+                    <div className="flex flex-wrap justify-between items-center mb-4">
+                        <div className="flex flex-wrap gap-3 items-center">
                             <Skeleton width={ 48 } height={ 48 } circle/>
                             <div>
-                                <div className="flex gap-2 mb-1">
+                                <div className="flex flex-wrap gap-2 mb-1">
                                     <Skeleton width={ 110 }/>
                                     <Skeleton height={ 10 } width={ 70 }/>
                                 </div>
@@ -20,7 +20,7 @@ export default function PostsSkeleton( { count = 3 } ){
                     </div>
                     <Skeleton height={ 10 } count={ 3 }/>
                     <Skeleton height={ 10 } style={{width: "50%"}}/>
-                    <div className="flex justify-around border-0 border-solid border-gray-50 border-t-2 border-b-2 py-1 mt-3">
+                    <div className="flex flex-wrap justify-around border-0 border-solid border-gray-50 border-t-2 border-b-2 py-1 mt-3">
                         <Skeleton width={ 22 } height={ 22 } circle/>
                         <Skeleton width={ 22 } height={ 22 } circle/>
                         <Skeleton width={ 22 } height={ 22 } circle/>

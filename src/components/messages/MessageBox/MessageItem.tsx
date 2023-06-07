@@ -12,7 +12,7 @@ import tw from "twin.macro"
 import { Flex } from "@components/styles/Global.styles"
 
 const OwnRow             = tw.div`flex items-end float-right mb-2 max-w-[70%]`
-const PartnerRow         = tw.div`flex items-end float-left mb-1 max-w-[70%]`
+const PartnerRow         = tw.div`flex items-end float-left mb-2 max-w-[70%]`
 const OwnMessageWrap     = tw.div`w-full`
 const PartnerMessageWrap = tw.div`w-full`
 const Time               = tw.div`text-gray-500 text-xs`

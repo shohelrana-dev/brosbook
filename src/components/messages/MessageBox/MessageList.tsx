@@ -55,7 +55,7 @@ export default function MessageList(){
         content = <ChatSkeleton/>
     } else if( isSuccess && messages?.length === 0 ){
         content = (
-        <div className="h-full flex justify-center items-center">
+        <div className="h-full flex flex-wrap justify-center items-center">
             <h4 className="text-gray-700 text-lg">No messages</h4>
         </div>
         )
@@ -66,7 +66,7 @@ export default function MessageList(){
             <InfiniteScroll
                 next={() => setPage(nextPage!)}
                 hasMore={!!nextPage}
-                loader={<Loader size={ 50 } wrapperClassName={"py-3"}/>}
+                loader={<Loader wrapperClassName={"my-8"}/>}
                 dataLength={messages.length}
                 scrollableTarget="message-list"
                 className="flex flex-col-reverse"

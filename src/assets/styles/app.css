@@ -79,6 +79,6 @@ button, input, textarea {
     }
 
     .icon {
-        @apply mr-1 hover:bg-pink-50 rounded-full p-[6px] duration-300 cursor-pointer text-pink-500 flex items-center
+        @apply mr-1 hover:bg-pink-50 rounded-full p-[6px] duration-300 cursor-pointer text-pink-500 flex flex-wrap items-center
     }
 }

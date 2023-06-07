@@ -145,8 +145,14 @@ export default function CreateMessageForm() {
                     <LikeIcon fontSize="medium" color="#FF1493" className="mt-[2px]"/>
                 </IconButton>
 
-                <IconButton type="submit" className="text-theme-green bg-transparent disabled:text-blue-400"
-                            disabled={ isLoading || ( !messageText && !selectedFile ) }>
+                <IconButton
+                    type="submit"
+                    disabled={ isLoading || ( !messageText && !selectedFile ) }
+                    sx={ {
+                        color: ( theme ) => theme.palette.themeLightGreen,
+                        '&:disabled': '#ddd'
+                    } }
+                >
                     <SendIcon fontSize={ 20 } className="ml-1"/>
                 </IconButton>
             </form>

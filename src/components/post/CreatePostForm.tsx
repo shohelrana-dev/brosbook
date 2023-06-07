@@ -52,13 +52,13 @@ export default function CreatePostForm() {
         <div className="relative box p-6 mb-4">
             <h1 className="text-center text-lg lg:text-xl font-bold border-b border-gray-100 mb-4 pb-2">Create
                 post</h1>
-            <div className="flex items-center mb-3">
+            <div className="flex flex-wrap items-center mb-3">
                 <Avatar src={ user?.avatar?.url }/>
                 <div className="ml-4">
                     <h3 className="text-base lg:text-lg font-medium">
                         { user?.fullName }
                     </h3>
-                    <p className="flex text-gray-600 font-medium gap-1 items-center">
+                    <p className="flex flex-wrap text-gray-600 font-medium gap-1 items-center">
                         <MdPublic fontSize={ 16 }/> Public
                     </p>
                 </div>
@@ -97,7 +97,7 @@ export default function CreatePostForm() {
                         <img className="rounded-2xl" src={ URL.createObjectURL(selectedImage) } alt="post image"/>
                     </div> ) : null }
 
-                <div className="flex mt-4 justify-between items-center">
+                <div className="flex flex-wrap mt-4 justify-between items-center">
                     <IconButton sx={ { padding: '10px', color: ( theme ) => theme.palette.themeGreen } }
                                 onClick={ onClick }>
                         <HiPhotograph fontSize={ 30 }/>

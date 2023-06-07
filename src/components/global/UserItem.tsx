@@ -1,4 +1,3 @@
-import React from 'react'
 import Link from "next/link"
 import Avatar from "@components/global/Avatar"
 import { User } from "@interfaces/user.interfaces"

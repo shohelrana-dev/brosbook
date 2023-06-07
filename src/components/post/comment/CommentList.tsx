@@ -9,47 +9,48 @@ import Error from "@components/global/Error"
 import { ErrorResponse } from "@interfaces/index.interfaces"
 import { IconButton } from '@mui/material'
 import { MdSend as SendIcon } from "react-icons/md"
-import {Post} from "@interfaces/posts.interfaces"
+import { Post } from "@interfaces/posts.interfaces"
 import { Button } from '@mui/material'
+import theme from "@utils/theme";
 
 interface Props {
     post: Post
 }
 
-export default function CommentList( { post }: Props ){
-    const [page, setPage]                        = useState( 1 )
+export default function CommentList( { post }: Props ) {
+    const [ page, setPage ]                      = useState(1)
     const { user: currentUser, isAuthenticated } = useAuthState()
-    const commentsQuery                          = useGetCommentsQuery( { postId: post.id, page } )
-    const [createComment]                        = useCreateCommentMutation()
+    const commentsQuery                          = useGetCommentsQuery({ postId: post.id, page })
+    const [ createComment ]                      = useCreateCommentMutation()
 
-    const [commentBody, setCommentBody] = useState( '' )
+    const [ commentBody, setCommentBody ] = useState('')
 
     const { isLoading, isError, isSuccess, data: commentsData } = commentsQuery
     const { items: comments = [], nextPage }                    = commentsData || {}
     const error                                                 = ( commentsQuery.error || {} ) as ErrorResponse
 
-    async function handleSaveComment( event: FormEvent ){
+    async function handleSaveComment( event: FormEvent ) {
         event.preventDefault()
-        if( ! commentBody ) return
+        if ( !commentBody ) return
 
         try {
-            await createComment( { postId: post.id, body: commentBody } ).unwrap()
-            setCommentBody( '' )
+            await createComment({ postId: post.id, body: commentBody }).unwrap()
+            setCommentBody('')
         } catch ( err ) {
-            console.error( err )
+            console.error(err)
         }
     }
 
     //decide content
     let content = null
-    if( isLoading ){
-        content = <Loader size={ 35 }/>
-    } else if( isSuccess && comments.length === 0 ){
+    if ( isLoading ) {
+        content = <Loader/>
+    } else if ( isSuccess && comments.length === 0 ) {
         content = <p className="mt-3">No comments</p>
-    } else if( isError ){
+    } else if ( isError ) {
         content = <Error message={ error.data?.message }/>
-    } else if( isSuccess && comments.length > 0 ){
-        content = comments.map( ( comment ) => <CommentItem comment={ comment } post={ post } key={ comment.id }/> )
+    } else if ( isSuccess && comments.length > 0 ) {
+        content = comments.map(( comment ) => <CommentItem comment={ comment } post={ post } key={ comment.id }/>)
     }
 
     return (
@@ -66,12 +67,18 @@ export default function CommentList( { post }: Props ){
                             type="text"
                             value={ commentBody }
                             className="!rounded-full"
-                            onChange={ ( e ) => setCommentBody( e.target.value ) }
+                            wrapperClassname="!mb-0"
+                            onChange={ ( e ) => setCommentBody(e.target.value) }
                         />
-                        <div className="absolute top-[3px] right-[8px]">
-                            <IconButton type="submit"
-                                        className="text-theme-green bg-transparent px-4 disabled:text-blue-400"
-                                        disabled={ isLoading || ! commentBody }>
+                        <div className="absolute top-[2px] right-[8px]">
+                            <IconButton
+                                type="submit"
+                                disabled={ isLoading || !commentBody }
+                                sx={{
+                                    color: (theme) => theme.palette.themeLightGreen,
+                                    '&:disabled': '#ddd'
+                                }}
+                            >
                                 <SendIcon fontSize={ 20 } className="ml-1"/>
                             </IconButton>
                         </div>
@@ -83,13 +90,13 @@ export default function CommentList( { post }: Props ){
 
             { nextPage ? (
                 <div className="mt-3">
-                    {isLoading ? (
-                        <Loader size={35}/>
-                    ):(
-                        <Button onClick={ () => setPage( nextPage! ) }>
+                    { isLoading ? (
+                        <Loader/>
+                    ) : (
+                        <Button onClick={ () => setPage(nextPage!) }>
                             See more comments
                         </Button>
-                    )}
+                    ) }
                 </div>
             ) : null }
 

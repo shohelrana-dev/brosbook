@@ -44,14 +44,14 @@ export default function CommentItem({ post, comment }: Props){
     }
 
     return (
-        <div className="flex">
+        <div className="flex flex-wrap">
             <Link href={ `/${ author.username }` } className="mt-3">
                 <Avatar src={ author.avatar?.url } size="small"/>
             </Link>
             <div>
                 <div className="flex items-center">
                     <div className="ml-2 mt-1 py-2 px-4 rounded-xl bg-theme-gray relative">
-                        <Link href={ `/${ author.username }` } className="flex flex-wrap">
+                        <Link href={ `/${ author.username }` } className="flex">
                             <h3 className="text-xs font-medium">
                                 { author.fullName }
                             </h3>
@@ -75,7 +75,7 @@ export default function CommentItem({ post, comment }: Props){
                     <CommentOptions comment={ comment } isCurrentUserAuthor={ isCurrentUserAuthor }/>
                 </div>
 
-                <div className="flex items-center text-pink-500 relative">
+                <div className="flex flex-wrap items-center text-pink-500 relative">
                     <motion.button
                         onClick={ handleCommentUnlike }
                         className="icon"

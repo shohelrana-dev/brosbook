@@ -8,7 +8,7 @@ interface AvatarProps extends ImgHTMLAttributes<HTMLImageElement> {
     size?: 'small' | 'medium' | 'large'
 }
 
-function Avatar( { online, size = 'medium', src, className }: AvatarProps ){
+export default function Avatar( { online, size = 'medium', src, className }: AvatarProps ){
 
     let width
     let height
@@ -41,9 +41,7 @@ function Avatar( { online, size = 'medium', src, className }: AvatarProps ){
                 alt="User profile photo"
             /> : null }
             { online ? <div
-                className="bg-green-500 border-white w-3 h-3 absolute right-0 bottom-0 rounded-full border-2"/> : null }
+                className="bg-green-500 border-solid border-white w-3 h-3 absolute right-0 bottom-0 rounded-full border-2"/> : null }
         </div>
     )
 }
-
-export default Avatar

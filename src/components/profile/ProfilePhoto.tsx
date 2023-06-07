@@ -93,7 +93,7 @@ export default function ProfilePhoto( { user }: Props ) {
                             doesn’t include any personal or sensitive info.
                         </p>
                     </div>
-                    <div className="flex justify-center items-center my-5">
+                    <div className="flex flex-wrap justify-center items-center my-5">
                         <div
                             className="relative p-4 overflow-hidden h-[200px] w-[200px] rounded-full">
                             { selectedPhoto ? (

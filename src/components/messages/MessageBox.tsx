@@ -18,7 +18,7 @@ import { RxCross1 as CrossIcon } from "react-icons/rx"
 
 const Wrapper     = tw.div`h-full relative`
 const StyledModal = tw(Modal)`max-h-[85vh] bg-theme-gray overflow-hidden !p-0`
-const Header      = tw(BaseBox)`sticky top-0 left-0 z-50 py-3 px-4 lg:px-6 flex justify-between`
+const Header      = tw(BaseBox)`sticky top-0 left-0 z-50 py-3 px-4 lg:px-6 flex flex-wrap justify-between`
 const Name        = tw.h3`font-medium text-gray-800`
 const Active      = tw.p`text-gray-500 text-sm`
 
@@ -52,7 +52,7 @@ export default function MessageBox() {
 
             {/*User top bar*/ }
             <Header>
-                <div className="flex">
+                <div className="flex flex-wrap">
                     <div className="mr-4">
                         <Avatar
                             src={ avatar?.url }

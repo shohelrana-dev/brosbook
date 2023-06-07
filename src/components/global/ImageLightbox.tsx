@@ -5,12 +5,12 @@ import classNames from "classnames"
 import LightGallery from 'lightgallery/react'
 import lgThumbnail from 'lightgallery/plugins/thumbnail'
 import lgZoom from 'lightgallery/plugins/zoom'
+import { Media } from "@interfaces/index.interfaces"
 
 //css
 import 'lightgallery/css/lightgallery.css'
 import 'lightgallery/css/lg-zoom.css'
 import 'lightgallery/css/lg-thumbnail.css'
-import { Media } from "@interfaces/index.interfaces"
 
 interface Props extends Omit<ImageProps, "src"> {
     image?: Media

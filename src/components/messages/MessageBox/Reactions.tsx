@@ -70,7 +70,7 @@ function Reactions( { message }: { message: Message } ) {
 
             { message.reactions?.length > 0 ? (
                 <div
-                    className={ classNames('absolute w-max bottom-[-16px] flex justify-center p-[2px] bg-white rounded-full px-1', {
+                    className={ classNames('absolute w-max bottom-[-16px] flex flex-wrap justify-center p-[2px] bg-white rounded-full px-1', {
                         "left-2": message.isMeSender,
                         "right-2": !message.isMeSender
                     }) }>

@@ -35,10 +35,10 @@ function NotificationItem( { notification }: Props ){
     }
 
     return (
-        <Link href={ url } key={ notification.id } className="mb-1 flex gap-3 hover:bg-gray-100 p-3">
+        <Link href={ url } key={ notification.id } className="mb-1 flex flex-wrap gap-3 hover:bg-gray-100 p-3">
             <Avatar src={ notification.initiator.avatar.url }/>
             <div>
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                     <h3 className="text-sm font-medium text-black">
                         { notification.initiator.fullName }
                     </h3>

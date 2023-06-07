@@ -48,8 +48,8 @@ export default function PostBar( { post, setIsCommentsShow, isCommentsShow }: Po
 
     return (
         <div
-            className="flex mt-2 border-t-2 border-b-2 border-gray-100 py-1 border-solid border-l-0 border-r-0 justify-around">
-            <div className="flex items-center relative">
+            className="flex flex-wrap mt-2 border-t-2 border-b-2 border-gray-100 py-1 border-solid border-l-0 border-r-0 justify-around">
+            <div className="flex flex-wrap items-center relative">
                 <motion.button
                     className="icon"
                     onClick={ handlePostUnlike }
@@ -81,7 +81,7 @@ export default function PostBar( { post, setIsCommentsShow, isCommentsShow }: Po
                     { likesCount }
                 </motion.p>
             </div>
-            <div className="flex items-center">
+            <div className="flex flex-wrap items-center">
                 <IconButton onClick={ () => setIsCommentsShow(!isCommentsShow) }>
                     <CommentIcon size="18"/>
                 </IconButton>

@@ -41,7 +41,7 @@ function GoogleLoginButton( { setIsLoading }: Props ){
 
     return (
         <GoogleOAuthProvider clientId={ process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID! }>
-            <div className="flex justify-center my-2">
+            <div className="flex flex-wrap justify-center my-2">
                 <GoogleLogin
                     onSuccess={ responseGoogle }
                     onError={ () => console.error( 'Google Login Failed' ) }

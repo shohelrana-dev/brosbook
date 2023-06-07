@@ -56,7 +56,7 @@ export default function EmailVerifyPage({params}: Props) {
 
     const successMarkup = (
         <>
-            <div className="flex justify-center flex-col items-center">
+            <div className="flex flex-wrap justify-center flex flex-col items-center">
                 <p className="mb-4 text-green-600">
                     <CheckmarkIcon size={25}/>
                 </p>
@@ -73,7 +73,7 @@ export default function EmailVerifyPage({params}: Props) {
 
     const errorMarkup = (
         <>
-            <div className="flex justify-center flex-col items-center p-2 rounded-2xl">
+            <div className="flex flex-wrap justify-center flex flex-col items-center p-2 rounded-2xl">
                 <p className="mb-4 text-red-600">
                     <CrossIcon size={25}/>
                 </p>
@@ -87,7 +87,7 @@ export default function EmailVerifyPage({params}: Props) {
                 {isResentEmail ? (
                     <p>Email resent. Please check your inbox.</p>
                 ) : (
-                    <div className="flex flex-col items-center">
+                    <div className="flex flex-wrap flex flex-col items-center">
                         <p>Didn&apos;t receive the link email?</p>
                         <LoadingButton onClick={resendEmail} loading={resendingLink} disabled={!email}
                                        className="mt-2">

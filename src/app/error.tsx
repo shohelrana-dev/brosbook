@@ -5,12 +5,12 @@ import { BiErrorCircle as ErrorIcon } from "react-icons/bi"
 
 export default function GlobalError( { error, reset }: { error: Error; reset: () => void; } ){
     return (
-        <div className="w-full h-full flex items-center justify-center flex-col py-5">
+        <div className="w-full h-full flex flex-wrap items-center justify-center flex flex-col py-5">
             <div className="mb-5">
                 <ErrorIcon size={40} className="text-gray-700"/>
             </div>
             <h2 className="text-lg font-bold text-gray-900 mb-3">Something went wrong. Try reloading.</h2>
-            <Button variant="contained" onClick={ reset } className="flex">
+            <Button variant="contained" onClick={ reset } className="flex flex-wrap">
                 <ReloadIcon size={ 20 }/>&nbsp;Try again
             </Button>
         </div>

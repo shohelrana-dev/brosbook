@@ -94,10 +94,10 @@ export default async function ProfileLayout({children, params}: Props) {
                 <div className="bg-white pb-5 mb-3">
                     <div>
                         <CoverPhoto user={user}/>
-                        <div className="p-4 flex justify-between relative">
+                        <div className="p-4 flex flex-wrap justify-between relative">
                             <ProfilePhoto user={user}/>
 
-                            <div className="flex items-center gap-2">
+                            <div className="flex flex-wrap items-center gap-2">
                                 <ExtraOptions user={user}/>
                                 {currentUser && currentUser?.username !== user?.username ? (
                                     <div>
@@ -117,7 +117,7 @@ export default async function ProfileLayout({children, params}: Props) {
 
                     <div className="px-3 sm:px-6 mb-6">
                         <div>
-                            <div className="flex items-center">
+                            <div className="flex flex-wrap items-center">
                                 <h2 className="text:lg md:text-xl font-bold">
                                     {user?.fullName}
                                 </h2>
@@ -126,15 +126,15 @@ export default async function ProfileLayout({children, params}: Props) {
                             <p className="text-gray-600 mb-2">@{user?.username}</p>
                             <div>{user?.profile?.bio}</div>
                         </div>
-                        <ul className="mt-3 flex">
+                        <ul className="mt-3 flex flex-wrap flex flex-wrap-wrap">
                             {user?.profile?.location && (
-                                <li className="flex items-center text-gray-600 mr-3 mb-1">
+                                <li className="flex flex-wrap items-center text-gray-600 mr-3 mb-2">
                                     <GoLocation className="inline-block text-lg"/>&nbsp;
                                     {user?.profile?.location}
                                 </li>
                             )}
                             {user?.profile?.birthdate && (
-                                <li className="flex items-center text-gray-600 mr-3 mb-1">
+                                <li className="flex flex-wrap items-center text-gray-600 mr-3 mb-2">
                                     <HiOutlineCake className="inline-block text-lg"/>&nbsp;
                                     Born {new Date(user?.profile?.birthdate).toLocaleDateString('en-us', {
                                     day: "numeric",
@@ -143,7 +143,7 @@ export default async function ProfileLayout({children, params}: Props) {
                                 })}
                                 </li>
                             )}
-                            <li className="flex items-center text-gray-600 mr-3 mb-1">
+                            <li className="flex flex-wrap items-center text-gray-600 mr-3 mb-2">
                                 <MdOutlineSchedule className="inline-block text-lg"/>&nbsp;
                                 Joined {new Date(user?.createdAt!).toLocaleDateString('en-us', {
                                 day: "numeric",

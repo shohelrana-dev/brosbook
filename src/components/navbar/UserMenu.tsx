@@ -49,7 +49,7 @@ export default function UserMenu() {
                         <div className="mb-2">
                             <Link href={ `/${ user?.username }` } onClick={ () => popupState.setOpen(false) }>
                                 <OptionButton>
-                                    <div className="py-1 flex gap-[12px]">
+                                    <div className="py-1 flex flex-wrap gap-[12px] items-center">
                                         <Avatar src={ user?.avatar?.url } size="small"/>
                                         <div>
                                             <p>{ user?.fullName }</p>

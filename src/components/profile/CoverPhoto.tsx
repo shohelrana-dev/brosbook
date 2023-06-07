@@ -72,7 +72,7 @@ export default function CoverPhoto( { user }: Props ) {
                         image={ coverPhoto }
                         width={ 600 }
                         height={ 300 }
-                        className="object-cover h-[300px]"
+                        className="object-cover h-[200px] lg:h-[300px]"
                         alt="cover photo"
                     /> ) : (
                     <Image src={ placeholderCoverPhoto } className="object-cover h-[300px]" width={ 600 } height={ 300 }

@@ -38,7 +38,7 @@ const PostCard = ( props: PostCardProps ) => {
                 <div className="ml-4 w-full">
                     <div className="flex justify-between">
                         <Link href={ `/${ author.username }` }>
-                            <div className="text-base font-medium flex flex-wrap mb-3 items-center">
+                            <div className="text-base font-medium flex mb-3 items-center">
                                 <h3 className="mr-[2px]">{ author.fullName }</h3>
                                 <BlueBadgeIcon color="rgb(58,141,245)" size={ 18 } className="mt-[3px]"/>
                                 <p className="ml-2 text-gray-600 text-xs lg:text-sm font-normal">@{ author.username }</p>

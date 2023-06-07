@@ -19,7 +19,7 @@ const Label    = tw.p`text-gray-600 mb-0.5`
 const Heading  = tw.h3`text-base font-medium mb-3`
 const InfoItem = styled.div( ( { last }: { last?: boolean } ) => [
     tw`pb-2 mb-2`,
-    ! last && tw`border-0 border-b-2 border-solid border-gray-200`
+    ! last && tw`border-0 border-b-[1px] border-solid border-gray-200`
 ] )
 
 export default function ParticipantInfo(  ){
@@ -56,7 +56,7 @@ export default function ParticipantInfo(  ){
     //decide listContent
     let listContent = null
     if( isLoading ){
-        listContent = <Loader size={ 40 }/>
+        listContent = <Loader/>
     } else if( isSuccess && mediaList.length === 0 ){
         listContent = <p className="text-center py-4">No media files.</p>
     } else if( isError ){
@@ -103,7 +103,7 @@ export default function ParticipantInfo(  ){
 
                 { nextPage ? (
                     <div className="py-4" ref={ moreLoadRef }>
-                        <Loader size={ 40 }/>
+                        <Loader/>
                     </div>
                 ) : null }
             </Box>

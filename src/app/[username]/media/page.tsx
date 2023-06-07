@@ -23,7 +23,7 @@ export default function MediaPage( { params }: Props ) {
     //decide content
     let content = null
     if ( isLoading ) {
-        content = <div className="py-3"><Loader size={ 50 }/></div>
+        content = <div className="py-3"><Loader/></div>
     } else if ( isSuccess && mediaList.length === 0 ) {
         content = <p className="text-center py-3">{ user?.fullName } haven't media.</p>
     } else if ( isError ) {
@@ -34,7 +34,7 @@ export default function MediaPage( { params }: Props ) {
                 dataLength={ mediaList.length }
                 next={ () => setPage(nextPage!) }
                 hasMore={ !!nextPage }
-                loader={ <Loader size={ 40 }/> }
+                loader={ <Loader/> }
             >
                 <ImageLightbox imageList={ mediaList } width={ 200 } height={ 200 } alt="Media"/>
             </InfiniteScroll>

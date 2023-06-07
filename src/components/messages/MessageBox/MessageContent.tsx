@@ -8,22 +8,22 @@ import { Box } from "@components/styles/Global.styles"
 import Linkify from 'linkify-react'
 
 const TextMessage  = styled(Box)(( { isOwn, hasReaction }: { isOwn: boolean, hasReaction: boolean } ) => [
-    tw`relative py-2 px-4 my-1 flex items-end gap-1  flex-wrap`,
+    tw`relative py-2 px-4 my-1 flex items-end gap-1`,
     isOwn ? tw`bg-theme-green text-white [a]:text-blue-100` : tw`bg-white text-gray-700 [a]:text-blue-500`,
     hasReaction ? tw`mb-3` : tw`mb-0`,
 ])
 const EmojiMessage = styled.div(( { hasReaction }: { hasReaction: boolean } ) => [
-    tw`relative pt-2 text-3xl flex items-end gap-1 text-gray-700 flex-wrap`,
+    tw`relative pt-2 text-3xl flex items-end gap-1 text-gray-700`,
     hasReaction ? tw`mb-3` : tw`mb-0`
 ])
-const ImageMessage = tw.div`relative max-w-[200px] mb-4 flex items-end gap-1 text-gray-700 flex-wrap`
+const ImageMessage = tw.div`relative max-w-[200px] mb-4 flex items-end gap-1 text-gray-700`
 const Time         = tw.time`text-[10px]`
 
 interface Props {
     message: Message
 }
 
-function MessageContent( { message }: Props ) {
+export default function MessageContent( { message }: Props ) {
 
     const { type, isMeSender, body, image, reactions, createdAt } = message
     const hasReaction                                             = reactions?.length > 0
@@ -53,7 +53,7 @@ function MessageContent( { message }: Props ) {
             return (
                 <ImageMessage>
                     <Reactions message={ message }/>
-                    <ImageLightbox image={ image } alt="message image" width={ 400 } height={ 400 }/>
+                    <ImageLightbox image={ image } alt="message image" width={ 200 } height={ 150 }/>
                     <Time>{ moment(createdAt).format("h:mm a") }</Time>
                 </ImageMessage>
             )
@@ -62,5 +62,3 @@ function MessageContent( { message }: Props ) {
             return null
     }
 }
-
-export default MessageContent

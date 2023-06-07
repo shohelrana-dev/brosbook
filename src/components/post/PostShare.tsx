@@ -19,7 +19,7 @@ export default function PostShare( { post }: { post: Post } ) {
         <PopupState variant="popover">
             { ( popupState ) => (
                 <div>
-                    <div className="flex items-center text-gray-600">
+                    <div className="flex flex-wrap items-center text-gray-600">
                         <IconButton { ...bindTrigger(popupState) }>
                             <ShareIcon size="18"/>
                         </IconButton>
@@ -36,7 +36,7 @@ export default function PostShare( { post }: { post: Post } ) {
                             horizontal: 'right',
                         } }
                     >
-                        <div className="p-2 flex gap-2">
+                        <div className="p-2 flex flex-wrap gap-2">
                             <FacebookShareButton url={ `${ process.env.NEXT_PUBLIC_APP_URL }/posts/${ post.id }` }>
                                 <FacebookIcon round={ true } size={ 30 }/>
                             </FacebookShareButton>

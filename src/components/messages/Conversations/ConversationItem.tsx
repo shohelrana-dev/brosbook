@@ -10,7 +10,7 @@ import tw, { styled } from "twin.macro"
 import { Box as BaseBox } from "@components/styles/Global.styles"
 import {IoCheckmarkCircleOutline as TickIcon} from "react-icons/io5"
 
-const Box            = tw( BaseBox )`block cursor-pointer py-2 px-3 flex mb-3 w-full flex-grow gap-3`
+const Box            = tw( BaseBox )`block cursor-pointer py-2 px-3 flex mb-3 w-full gap-3`
 const Name           = tw.h3`font-medium text-gray-900`
 const NameWrapper    = tw.h3`flex gap-3`
 const Date           = tw.p`text-gray-800 text-xs`
@@ -73,7 +73,7 @@ export default function ConversationItem( { conversation }: Props ) {
                                 /> : <TickIcon size={17}/>
                         ) : (
                             unreadMessagesCount ? (
-                                <p className="bg-theme-green text-white rounded-full w-[18px] h-[18px] flex justify-center items-center text-xs font-bold">
+                                <p className="bg-theme-green text-white rounded-full w-[18px] h-[18px] flex flex-wrap justify-center items-center text-xs font-bold">
                                     {unreadMessagesCount}
                                 </p>
                             ) : null

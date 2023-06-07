@@ -14,7 +14,7 @@ import { Container } from "@components/styles/Global.styles"
 import useMediaQuery from "@hooks/useMediaQuery"
 import { usePathname } from "next/navigation"
 
-const StyledContainer = tw(Container)`mx-auto flex items-center justify-between text-gray-900`
+const StyledContainer = tw(Container)`mx-auto flex flex-wrap items-center justify-between text-gray-900`
 
 export default function Navbar() {
     const isSmallDevice       = useMediaQuery('(max-width: 767px)')
@@ -34,8 +34,8 @@ export default function Navbar() {
                         <Image src={ titledLogo } alt={ 'Brosbook logo' } width={ 150 } height={ 40 }/>
                     ) }
                 </Link>
-                <Box sx={ { flexGrow: 1 } }/>
-                <Box sx={ { display: 'flex' } }>
+                <Box sx={ { display: 'flex', flexGrow: 1 } }/>
+                <Box sx={ { display: 'flex', flexWrap: 'wrap' } }>
                     <ExpandableSearch/>
                     { isAuthenticated ? (
                         <>

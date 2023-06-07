@@ -33,7 +33,7 @@ export default function NotificationsNavLink() {
                             horizontal: 'center',
                         } }
                     >
-                        <Box sx={ { maxHeight: '500px', overflowY: 'auto', padding: '8px' } }>
+                        <Box sx={ { maxHeight: '500px', minWidth: '300px', overflowY: 'auto', padding: '8px' } }>
                             <NotificationList/>
                         </Box>
                     </Popover>
