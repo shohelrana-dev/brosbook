@@ -18,7 +18,7 @@ export default function MessageList(){
     //hooks
     const { user }          = useAuthState()
     const {conversationId} = useParams()
-    const {data: conversation} = useGetConversationByIdQuery(conversationId)
+    const {data: conversation} = useGetConversationByIdQuery(conversationId as string)
     const messageListRef    = useRef<HTMLDivElement>( null )
     const [page, setPage]   = useState( 1 )
     const messagesQuery     = useGetMessagesQuery(

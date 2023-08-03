@@ -25,7 +25,7 @@ const Active      = tw.p`text-gray-500 text-sm`
 export default function MessageBox() {
     //hooks
     const { conversationId }                = useParams()
-    const { data: conversation, isLoading } = useGetConversationByIdQuery(conversationId)
+    const { data: conversation, isLoading } = useGetConversationByIdQuery(conversationId as string)
     const { isVisible, toggle }             = useModal()
 
     if ( isLoading ) return <Loader/>

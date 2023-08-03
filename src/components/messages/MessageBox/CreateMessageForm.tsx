@@ -20,7 +20,7 @@ import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state"
 export default function CreateMessageForm() {
     //hooks
     const { conversationId }                                                = useParams()
-    const { data: conversation }                                            = useGetConversationByIdQuery(conversationId)
+    const { data: conversation }                                            = useGetConversationByIdQuery(conversationId as string)
     const [ sendMessage, { isLoading } ]                                    = useSendMessageMutation()
     const { inputRef, onClick, onChange, removeSelectedFile, selectedFile } = useSelectFile()
     const textInputRef                                                      = useRef<HTMLInputElement | null>(null)

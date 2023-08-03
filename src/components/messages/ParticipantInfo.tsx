@@ -25,9 +25,9 @@ const InfoItem = styled.div(( { last }: { last?: boolean } ) => [
 export default function ParticipantInfo() {
     //hooks
     const { conversationId }                                = useParams()
-    const { data: conversation }                            = useGetConversationByIdQuery(conversationId)
+    const { data: conversation }                            = useGetConversationByIdQuery(conversationId as string)
     const [ page, setPage ]                                 = useState<number>(1)
-    const conversationMediaListQuery                        = useGetConversationMediaListQuery({ conversationId, page })
+    const conversationMediaListQuery                        = useGetConversationMediaListQuery({ conversationId: String(conversationId), page })
     const { isLoading, isSuccess, isError, data: listData } = conversationMediaListQuery || {}
     const containerRef                                      = useRef<HTMLDivElement>(null)
 
