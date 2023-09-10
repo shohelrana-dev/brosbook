@@ -49,7 +49,7 @@ export default function CoverPhoto( { user }: Props ) {
             <div className="flex-none">
                 { coverPhoto ? (
                     <ImageLightbox
-                        className="object-cover h-[300px]"
+                        className="object-cover !h-[200px] !lg:h-[300px]"
                         image={ coverPhoto }
                         width={ 600 }
                         height={ 300 }
