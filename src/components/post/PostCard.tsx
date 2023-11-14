@@ -28,7 +28,7 @@ export default function PostCard ( props: PostCardProps ) {
 
     const { post }                           = props
     const { author, body, createdAt, image } = post || {}
-
+    
     return (
         <div className="box p-5 mb-4">
             <div className="flex">
@@ -58,10 +58,11 @@ export default function PostCard ( props: PostCardProps ) {
                     <Body>
                         <ShowMoreText
                             lines={ 5 }
-                            more={ <span className="text-blue-600">See more</span> }
-                            less={ <span className="text-blue-600">See less</span> }
+                            more={ <span className="text-blue-600 cursor-pointer">See more</span> }
+                            less={ <span className="text-blue-600 cursor-pointer">See less</span> }
                             expanded={ false }
                             truncatedEndingComponent={ "... " }
+                            width={1000}
                         >
                             <Linkify>
                                 { nl2br(body) }
