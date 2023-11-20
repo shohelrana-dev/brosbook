@@ -7,54 +7,58 @@ import { Metadata } from "next"
 import { getCurrentUser } from "@services/index"
 import { cookies } from "next/headers"
 import PreLoader from "@components/global/PreLoader"
-
-const appName = process.env.NEXT_PUBLIC_APP_NAME || 'Brosbook'
+import siteMetadata from '@utils/siteMetadata'
 
 export const metadata: Metadata = {
     title: {
-        default: appName,
-        template: `%s | ${ appName }`,
+        default: siteMetadata.title,
+        template: `%s | ${siteMetadata.appName}`,
     },
-    description: `Welcome to ${ appName }. Make your own timeline.`,
-    keywords: [process.env.NEXT_PUBLIC_APP_NAME!, 'social media'],
-    metadataBase: new URL( process.env.NEXT_PUBLIC_APP_URL! ),
-    colorScheme: "light",
-    themeColor: "#FFFFFF",
-    applicationName: appName,
-    viewport: {
-        width: 'device-width',
-        initialScale: 1.0,
-        minimumScale: 1.0,
-        maximumScale: 1.0
-    },
-    creator: "Shohel Rana",
+    description: siteMetadata.description,
+    keywords: siteMetadata.keywords,
+    metadataBase: new URL(siteMetadata.siteUrl),
+    applicationName: siteMetadata.appName,
+    creator: siteMetadata.creator,
     openGraph: {
-        title: process.env.NEXT_PUBLIC_APP_NAME,
-        description: 'A social media platform developed by Shohel Rana',
-        images: '/titled-logo.png'
+        title: siteMetadata.appName,
+        description: siteMetadata.description,
+        images: siteMetadata.titledLogo
     },
     twitter: {
-        title: process.env.NEXT_PUBLIC_APP_NAME,
-        description: 'A social media platform developed by Shohel Rana',
-        images: '/titled-logo.png'
-    }
+        card: 'summary_large_image',
+        title: siteMetadata.appName,
+        description: siteMetadata.description,
+        images: siteMetadata.titledLogo
+    },
+    robots: {
+        index: true,
+        follow: true,
+        googleBot: {
+          index: true,
+          follow: true,
+          noimageindex: false,
+          'max-video-preview': -1,
+          'max-image-preview': 'large',
+          'max-snippet': -1,
+        },
+      },
 }
 
-export default async function RootLayout( { children }: PropsWithChildren ) {
-    const user = await getCurrentUser( cookies() )
+export default async function RootLayout({ children }: PropsWithChildren) {
+    const user = await getCurrentUser(cookies())
 
     return (
         <html lang='eng'>
-        <head/>
-        <body className="bg-theme-gray">
-        <Providers>
-            <PreLoader user={ user! }/>
-            <Navbar/>
-            <main className="relative">
-                { children }
-            </main>
-        </Providers>
-        </body>
+            <head />
+            <body className="bg-theme-gray">
+                <Providers>
+                    <PreLoader user={user!} />
+                    <Navbar />
+                    <main className="relative">
+                        {children}
+                    </main>
+                </Providers>
+            </body>
         </html>
     )
 }
