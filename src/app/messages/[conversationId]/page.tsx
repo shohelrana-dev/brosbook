@@ -1,14 +1,38 @@
+"use client"
 import MessageBox from "@components/messages/MessageBox"
-import { getConversationById } from "@services/index"
-import { cookies } from "next/headers"
-import { Metadata } from "next"
+import Conversations from "@components/messages/Conversations"
+import ParticipantInfo from "@components/messages/ParticipantInfo"
+import useMediaQuery from "@hooks/useMediaQuery"
+import { useEffect } from "react"
+import { useParams } from "next/navigation"
+import { useGetConversationByIdQuery } from "@services/conversationsApi"
 
-export const generateMetadata = async( { params }: { params: { conversationId: string }} ): Promise<Metadata> => {
-    const conversation = await getConversationById( params.conversationId, cookies() )
+export default async function ChatPage() {
+    const params = useParams<{ conversationId?: string }>()
+    const isDesktopOrLaptop = useMediaQuery('(min-width: 1024px)')
+    const { data: conversation } = useGetConversationByIdQuery(params?.conversationId!)
 
-    return { title: conversation?.participant.fullName }
-}
+    useEffect(() => {
+        document.title = conversation?.participant.fullName!
+    }, [conversation])
 
-export default async function Page(){
-    return <MessageBox/>
+    return (
+        <div className="px-4 lg:px-6 grid grid-cols-1 lg:grid-cols-4">
+            {isDesktopOrLaptop ? (
+                <div className="hidden lg:block pr-4 border-solid border-0 border-r-2 border-gray-200">
+                    <Conversations />
+                </div>
+            ) : null}
+
+            <div className="lg:px-4 col-span-4 lg:col-span-2">
+                <MessageBox />
+            </div>
+
+            {isDesktopOrLaptop ? (
+                <div className="hidden lg:block pl-4 border-solid border-0 border-l-2 border-gray-200">
+                    <ParticipantInfo />
+                </div>
+            ) : null}
+        </div>
+    )
 }

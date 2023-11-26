@@ -82,3 +82,26 @@ button, input, textarea {
         @apply mr-1 hover:bg-pink-50 rounded-full p-[6px] duration-300 cursor-pointer text-pink-500 flex flex-wrap items-center
     }
 }
+
+/* style scrollbar */
+
+/* width */
+::-webkit-scrollbar {
+    width: 6px;
+}
+ 
+/* Track */
+::-webkit-scrollbar-track {
+    background: #e9e8e8;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #b8b7b7;
+    border-radius: 5px;
+}
+ 
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #949393;
+}

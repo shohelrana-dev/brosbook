@@ -13,6 +13,9 @@ import tw from "twin.macro"
 import { Container } from "@components/styles/Global.styles"
 import useMediaQuery from "@hooks/useMediaQuery"
 import { usePathname } from "next/navigation"
+import { setNavbarHeight } from "@slices/navbarHeightSlice"
+import { useEffect } from "react"
+import { useDispatch } from "react-redux"
 
 const StyledContainer = tw(Container)`mx-auto flex flex-wrap items-center justify-between text-gray-900`
 
@@ -20,6 +23,14 @@ export default function Navbar() {
     const isSmallDevice       = useMediaQuery('(max-width: 767px)')
     const { isAuthenticated } = useAuthState()
     const pathname            = usePathname()
+    const disptach            = useDispatch()
+
+    useEffect(() => {
+        if ( typeof window !== "undefined" ) {
+            const navbarEl = document.getElementById('appNavbar')
+            disptach( setNavbarHeight( `${navbarEl?.offsetHeight}px` ) )
+        }
+    }, [])
 
     return (
         <AppBar id="appNavbar" variant="outlined" color="default" position="static"

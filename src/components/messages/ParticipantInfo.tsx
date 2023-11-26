@@ -1,3 +1,4 @@
+"use client"
 import Avatar from "@components/global/Avatar"
 import { useGetConversationByIdQuery, useGetConversationMediaListQuery } from "@services/conversationsApi"
 import Loader from "@components/global/Loader"
@@ -9,8 +10,8 @@ import { Box as BaseBox } from "@components/styles/Global.styles"
 import { useParams } from "next/navigation"
 import Error from "@components/global/Error"
 import useInfiniteScroll from "react-infinite-scroll-hook"
+import useNavbarHeight from "@hooks/useNavbarHeight"
 
-const Wrapper  = tw.div`h-full overflow-y-auto scrollbar-hide`
 const Box      = tw(BaseBox)`p-5 mb-3`
 const Header   = tw.header`flex flex-col justify-center items-center`
 const Name     = tw.h3`font-medium text-lg text-gray-800 mt-3`
@@ -30,6 +31,7 @@ export default function ParticipantInfo() {
     const conversationMediaListQuery                        = useGetConversationMediaListQuery({ conversationId: String(conversationId), page })
     const { isLoading, isSuccess, isError, data: listData } = conversationMediaListQuery || {}
     const containerRef                                      = useRef<HTMLDivElement>(null)
+    const navbarHeight                                      = useNavbarHeight()
 
     const { items: mediaList = [], nextPage } = listData || {}
     const error                               = conversationMediaListQuery.error as ErrorResponse || {}
@@ -66,8 +68,8 @@ export default function ParticipantInfo() {
     }
 
     return (
-        <Wrapper ref={ containerRef }>
-            <Box>
+        <div ref={ containerRef } style={{height: `calc(100vh - ${navbarHeight})`}} className="overflow-y-auto">
+            <Box className="mt-2">
                 <Header>
                     <Avatar
                         online={ !!active }
@@ -109,7 +111,6 @@ export default function ParticipantInfo() {
                     </div>
                 ) : null }
             </Box>
-
-        </Wrapper>
+        </div>
     )
 }

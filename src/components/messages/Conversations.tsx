@@ -1,11 +1,15 @@
+"use client"
 import SearchConversation from "@components/messages/Conversations/SearchConversation"
 import ConversationList from "@components/messages/Conversations/ConversationList"
+import useNavbarHeight from "@hooks/useNavbarHeight"
 
 export default function Conversations(){
+    const navbarHeight = useNavbarHeight()
+
     return (
-        <div id="conversations-wrapper" className="h-full overflow-y-auto scrollbar-hide">
+        <div id="conversations-wrapper" style={{height: `calc(100vh - ${navbarHeight})`}} className="overflow-y-auto">
             <div className="sticky top-0 left-0 bg-theme-gray z-50">
-                <h2 className="text-2xl font-medium mb-2">Chats</h2>
+                <h2 className="text-2xl font-medium mb-2 mt-6">Chats</h2>
 
                 <SearchConversation/>
 

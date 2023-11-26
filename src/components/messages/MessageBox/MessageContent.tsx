@@ -33,7 +33,7 @@ export default function MessageContent( { message }: Props ) {
             return (
                 <TextMessage hasReaction={ hasReaction } isOwn={ isMeSender }>
                     <Reactions message={ message }/>
-                    <span>
+                    <span className="break-all">
                         <Linkify >{ body }</Linkify>
                     </span>
                     <Time>{ moment(createdAt).format("h:mm a") }</Time>
