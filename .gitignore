@@ -1,4 +1,5 @@
 .next
+.idea
 .swc
 .vscode
 node_modules
