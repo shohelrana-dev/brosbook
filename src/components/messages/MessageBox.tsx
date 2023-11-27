@@ -36,7 +36,7 @@ export default function MessageBox() {
     const { fullName, active, avatar, username, updatedAt } = conversation?.participant || {}
     
     return (
-        <Wrapper style={{height: `calc(100vh - ${navbarHeight})`}}>
+        <Wrapper style={{height: `calc(100dvh - ${navbarHeight})`}}>
             <StyledModal visible={ isVisible } toggle={ toggle } hideIcon>
                 <div className="relative">
                     <IconButton
