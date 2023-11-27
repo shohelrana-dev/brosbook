@@ -17,14 +17,14 @@ export default async function ChatPage() {
     }, [conversation])
 
     return (
-        <div className="px-4 lg:px-6 grid grid-cols-1 lg:grid-cols-4">
+        <div className="px-4 lg:px-6 grid grid-cols-1 lg:grid-cols-[1fr_2fr_1fr]">
             {isDesktopOrLaptop ? (
                 <div className="hidden lg:block pr-4 border-solid border-0 border-r-2 border-gray-200">
                     <Conversations />
                 </div>
             ) : null}
 
-            <div className="lg:px-4 col-span-4 lg:col-span-2">
+            <div className="lg:px-4">
                 <MessageBox />
             </div>
 

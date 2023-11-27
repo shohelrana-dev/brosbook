@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     title: `Home | ${ process.env.NEXT_PUBLIC_APP_NAME }`
 }
 
-export default function Page() {
+export default function HomePage() {
     return (
         <SidebarLayout>
             <div className="mt-5 mb-4">
