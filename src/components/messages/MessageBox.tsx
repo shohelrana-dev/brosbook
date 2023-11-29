@@ -29,7 +29,7 @@ export default function MessageBox() {
     const { conversationId }                = useParams()
     const { data: conversation, isLoading } = useGetConversationByIdQuery(conversationId as string)
     const { isVisible, toggle }             = useModal()
-    const navbarHeight = useSelector(selectNavbarHeight)
+    const navbarHeight                      = useSelector(selectNavbarHeight)
 
     if ( isLoading ) return <Loader/>
 

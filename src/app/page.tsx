@@ -1,4 +1,3 @@
-import React from 'react'
 import FeedPosts from "./FeedPosts"
 import SidebarLayout from "@components/global/SidebarLayout"
 import { Metadata } from "next"
