@@ -78,9 +78,9 @@ export default function CreatePostForm() {
                     label="What's your mind?"
                     labelHide
                     onChange={e => setBody(e.target.value)}
-                    onClick={toggle}
-                    className='focus:border-gray-200 flex-grow'
-                    wrapperClassname='!mb-0'
+                    onFocus={toggle}
+                    className='focus:border-gray-200'
+                    wrapperClassname='flex-grow !mb-0'
                 />
             </form>
 
