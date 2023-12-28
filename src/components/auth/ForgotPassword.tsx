@@ -6,13 +6,8 @@ import AnimatedInput from "@components/global/AnimatedInput"
 import { useForgotPasswordMutation } from "@services/authApi"
 import { useForm } from "@hooks/useForm"
 import toast from "react-hot-toast"
-import { Box, Describe, FooterBox, Heading, Icon, Wrapper } from "@components/styles/Auth.styles"
-import { Form } from "@components/styles/Global.styles"
-import tw from "twin.macro"
 import { Button } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
-
-const SuccessWrapper = tw.div`text-center [a]:(inline-block mt-5)`
 
 export default function ForgotPassword(){
     //hooks
@@ -27,24 +22,28 @@ export default function ForgotPassword(){
     let content = null
     if( isSuccess ){
         content = (
-            <SuccessWrapper>
-                <Heading>Reset Password</Heading>
+            <div className="text-center">
+                <h1 className="auth-heading">
+                    Reset Password
+                </h1>
                 <p>Check your email for a link to reset your password. If it doesn't appear
                     within a few minutes, check your spam folder.</p>
-                <Link href="/auth/login">
+                <Link href="/auth/login" className="inline-block mt-5">
                     <Button variant='outlined'>Return to login</Button>
                 </Link>
-            </SuccessWrapper>
+            </div>
         )
     } else{
         content = (
-            <Wrapper>
-                <Heading>Trouble with logging in?</Heading>
-                <Describe>
+            <>
+                <h1 className="auth-heading">
+                    Trouble with logging in?
+                </h1>
+                <small className="block text-gray-500 text-center mb-2">
                     Enter your email address and we will send you a link to get back into your account.
-                </Describe>
+                </small>
 
-                <Form onSubmit={ onSubmit }>
+                <form className="form" onSubmit={ onSubmit }>
                     <AnimatedInput
                         label="Email"
                         name="email"
@@ -55,27 +54,27 @@ export default function ForgotPassword(){
                     <LoadingButton variant='contained' type="submit" fullWidth loading={ isLoading }>
                         Send Reset Link
                     </LoadingButton>
-                </Form>
-            </Wrapper>
+                </form>
+            </>
         )
     }
 
     return (
-        <Wrapper>
-            <Box>
-                <Icon>
+        <>
+            <div className="auth-box">
+                <div className='flex flex-wrap justify-center mb-2'>
                     <FiLock size="30"/>
-                </Icon>
+                </div>
 
                 { content }
-            </Box>
+            </div>
 
-            <FooterBox>
+            <div className="auth-box text-center mt-2 text-gray-800">
                 Go back?&nbsp;
-                <Link href="/auth/login">
+                <Link href="/auth/login" className="text-blue-500 font-medium">
                     Log In
                 </Link>
-            </FooterBox>
-        </Wrapper>
+            </div>
+        </>
     )
 }

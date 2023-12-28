@@ -1,16 +1,23 @@
 /**
  * @type {import('next').NextConfig}
  */
-
 const nextConfig = {
     reactStrictMode: false,
-    swcMinify: false,
+    swcMinify: true,
     images: {
-        domains: [
-            'localhost',
-            'brosbook-api.onrender.com',
-            'brosbook-api.adaptable.app',
-            'res.cloudinary.com'
+        remotePatterns: [
+            {
+                protocol: 'http',
+                hostname: 'localhost',
+            },
+            {
+                protocol: 'https',
+                hostname: 'brosbook-api.onrender.com'
+            },
+            {
+                protocol: 'https',
+                hostname: 'res.cloudinary.com'
+            },
         ]
     }
 }

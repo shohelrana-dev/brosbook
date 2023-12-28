@@ -13,12 +13,7 @@ import { setEmail } from "@slices/authSlice"
 import { useDispatch } from "react-redux"
 import PasswordStrengthBar from 'react-password-strength-bar'
 import LoadingOverlay from "@components/global/LoadingOverlay"
-import tw from "twin.macro"
-import { Box, FooterBox, Heading, Wrapper } from "@components/styles/Auth.styles"
-import { Form } from "@components/styles/Global.styles"
 import { Button, Divider } from '@mui/material'
-
-const Policy = tw.p`text-center text-gray-600 text-xs mt-3`
 
 export default function Signup(){
     //hooks
@@ -37,16 +32,18 @@ export default function Signup(){
     }, [isSuccess] )
 
     return (
-        <Wrapper>
+        <>
             <LoadingOverlay isLoading={ isLoading || isSuccess || isLoadingLoginWithGoogle }/>
-            <Box>
-                <Heading>Sign Up</Heading>
+            <div className="auth-box">
+                <h1 className="auth-heading">
+                    Sign Up
+                </h1>
 
                 <GoogleLoginButton setIsLoading={ setIsLoadingLoginWithGoogle }/>
 
                 <Divider className="!my-5">OR</Divider>
 
-                <Form method="post" onSubmit={ onSubmit }>
+                <form className="form" method="post" onSubmit={ onSubmit }>
                     <AnimatedInput
                         label="First Name"
                         name="firstName"
@@ -87,17 +84,19 @@ export default function Signup(){
                     <Button variant="contained" type="submit">
                         Sign Up
                     </Button>
-                </Form>
+                </form>
 
-                <Policy>By signing up, you agree to our Terms, Data Policy and Cookie Policy.</Policy>
-            </Box>
+                <p className="text-center text-gray-600 text-xs mt-3">
+                    By signing up, you agree to our Terms, Data Policy and Cookie Policy.
+                </p>
+            </div>
 
-            <FooterBox>
+            <div className="auth-box text-center mt-2 text-gray-800">
                 Have an account? &nbsp;
-                <Link href="/auth/login">
+                <Link href="/auth/login" className="text-blue-500 font-medium">
                     Log In
                 </Link>
-            </FooterBox>
-        </Wrapper>
+            </div>
+        </>
     )
 }

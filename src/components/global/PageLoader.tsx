@@ -1,16 +1,11 @@
 "use client"
-import React from 'react'
-import tw from "twin.macro"
 import { LinearProgress } from "@mui/material"
-
-const Wrapper = tw.div`absolute top-0 left-0 w-full`
 
 
 export default function PageLoader() {
-
     return (
-        <Wrapper>
+        <div className="absolute top-0 left-0 w-full">
             <LinearProgress color="success"/>
-        </Wrapper>
+        </div>
     )
 }

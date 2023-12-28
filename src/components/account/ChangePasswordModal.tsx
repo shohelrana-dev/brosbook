@@ -5,14 +5,9 @@ import { ChangePasswordPayload } from "@interfaces/account.interfaces"
 import toast from "react-hot-toast"
 import { useForm } from "@hooks/useForm"
 import Modal, { useModal } from "react-minimal-modal"
-import { Form } from "@components/styles/Global.styles"
-import tw from "twin.macro"
-import BaseLink from "next/link"
+import Link from "next/link"
 import { LoadingButton } from '@mui/lab'
 import { Button } from '@mui/material'
-
-const ButtonWrapper = tw.div`text-right [button[type=submit]]:mt-4`
-const Link          = tw( BaseLink )`text-blue-600 text-xs block`
 
 export default function ChangePasswordModal(){
     const [changePassword, { isLoading, isSuccess }]      = useChangePasswordMutation()
@@ -39,7 +34,7 @@ export default function ChangePasswordModal(){
             </div>
 
             <Modal visible={ isVisible } toggle={ toggle } title="Update your password">
-                <Form onSubmit={ onSubmit }>
+                <form className="form" onSubmit={ onSubmit }>
                     <div>
                         <PasswordInput
                             label="Current Password"
@@ -48,7 +43,7 @@ export default function ChangePasswordModal(){
                             error={ errors.currentPassword }
                             onChange={ onChange }
                         />
-                        <Link href="/auth/forgot_password">
+                        <Link href="/auth/forgot_password" className="text-blue-600 text-xs block">
                             Forgot password?
                         </Link>
                     </div>
@@ -67,12 +62,12 @@ export default function ChangePasswordModal(){
                         onChange={ onChange }
                     />
 
-                    <ButtonWrapper>
+                    <div className="text-right mt-4">
                         <LoadingButton variant="contained" type="submit" loading={ isLoading }>
                             Update
                         </LoadingButton>
-                    </ButtonWrapper>
-                </Form>
+                    </div>
+                </form>
             </Modal>
         </>
     )

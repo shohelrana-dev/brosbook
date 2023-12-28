@@ -8,8 +8,6 @@ import { useResetPasswordMutation } from "@services/authApi"
 import { useForm } from "@hooks/useForm"
 import { ResetPassPayload } from "@interfaces/auth.interfaces"
 import toast from "react-hot-toast"
-import { Box, Describe, FooterBox, Heading, Icon, Wrapper } from "@components/styles/Auth.styles"
-import { Form } from "@components/styles/Global.styles"
 import { LoadingButton } from '@mui/lab'
 
 export default function ResetPassword( { token }: { token: string } ){
@@ -30,19 +28,19 @@ export default function ResetPassword( { token }: { token: string } ){
     }, [isSuccess] )
 
     return (
-        <Wrapper>
-            <Box>
-                <Icon>
+        <>
+            <div className='auth-box'>
+                <div className="flex flex-wrap justify-center mb-2">
                     <FiLock size="30"/>
-                </Icon>
+                </div>
 
-                <Heading>Create a strong password</Heading>
-                <Describe>
+                <h1 className="auth-heading">Create a strong password</h1>
+                <small className="block text-gray-500 text-center mb-2">
                     Enter your new password to reset account password.
                     Your password must be at least six characters.
-                </Describe>
+                </small>
 
-                <Form method="post" onSubmit={ onSubmit }>
+                <form className="form" method="post" onSubmit={ onSubmit }>
                     <PasswordInput
                         label="Password"
                         name="password"
@@ -60,15 +58,15 @@ export default function ResetPassword( { token }: { token: string } ){
                     <LoadingButton variant="contained" type="submit" loading={ isLoading || isSuccess }>
                         Reset
                     </LoadingButton>
-                </Form>
-            </Box>
+                </form>
+            </div>
 
-            <FooterBox>
+            <div className="auth-box text-center mt-2 text-gray-800">
                 Go back? &nbsp;
-                <Link href="/auth/login">
+                <Link href="/auth/login" className="text-blue-500 font-medium">
                     Log In
                 </Link>
-            </FooterBox>
-        </Wrapper>
+            </div>
+        </>
     )
 }

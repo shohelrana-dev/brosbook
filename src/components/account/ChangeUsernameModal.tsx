@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import PasswordInput from "@components/global/PasswordInput"
-import BaseLink from "next/link"
+import Link from "next/link"
 import { useChangeUsernameMutation } from "@services/accountApi"
 import { ChangeUsernamePayload } from "@interfaces/account.interfaces"
 import toast from "react-hot-toast"
@@ -8,13 +8,8 @@ import { useForm } from "@hooks/useForm"
 import AnimatedInput from "@components/global/AnimatedInput"
 import Modal, { useModal } from "react-minimal-modal"
 import useAuthState from "@hooks/useAuthState"
-import tw from "twin.macro"
-import { Form } from "@components/styles/Global.styles"
 import {Button} from "@mui/material"
 import { LoadingButton } from '@mui/lab'
-
-const ButtonWrapper = tw.div`text-right`
-const Link          = tw( BaseLink )`text-blue-600 text-xs block`
 
 export default function ChangeUsernameModal(){
     const { user }                                   = useAuthState()
@@ -52,10 +47,10 @@ export default function ChangeUsernameModal(){
 
             <Modal
                 visible={ isVisible }
-                toggle={ toggle }
+                toggle={ toggle }text-right
                 title="Update username"
             >
-                <Form onSubmit={ onSubmit }>
+                <form className="form" onSubmit={ onSubmit }>
                     <AnimatedInput
                         label="Username"
                         name="username"
@@ -71,17 +66,17 @@ export default function ChangeUsernameModal(){
                             error={ errors.password }
                             onChange={ onChange }
                         />
-                        <Link href="/auth/forgot_password">
+                        <Link href="/auth/forgot_password" className="text-blue-600 text-xs block">
                             Forgot password?
                         </Link>
                     </div>
 
-                    <ButtonWrapper>
+                    <div className="text-right">
                         <LoadingButton variant='contained' type="submit" loading={ isLoading }>
                             Update
                         </LoadingButton>
-                    </ButtonWrapper>
-                </Form>
+                    </div>
+                </form>
             </Modal>
         </>
     )

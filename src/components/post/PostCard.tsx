@@ -12,10 +12,6 @@ import PostOptions from "@components/post/PostOptions"
 import nl2br from 'react-nl2br'
 import { TbDiscountCheckFilled as BlueBadgeIcon } from 'react-icons/tb'
 import Linkify from "linkify-react"
-import tw from "twin.macro"
-
-
-const Body = tw.div`mb-1 mt-2 [a]:(text-blue-500 underline)`
 
 interface PostCardProps {
     post: Post
@@ -55,7 +51,7 @@ export default function PostCard ( props: PostCardProps ) {
             </div>
             <div>
                 { body ? (
-                    <Body>
+                    <div className="mb-1 mt-2 [&_a]:text-blue-500 [&_a]:underline">
                         <ShowMoreText
                             lines={ 5 }
                             more={ <span className="text-blue-600 cursor-pointer">See more</span> }
@@ -68,7 +64,7 @@ export default function PostCard ( props: PostCardProps ) {
                                 { nl2br(body) }
                             </Linkify>
                         </ShowMoreText>
-                    </Body>
+                    </div>
                 ) : null }
                 { image ? (
                     <div className="my-3">

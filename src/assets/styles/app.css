@@ -62,24 +62,29 @@ button, input, textarea {
 }
 
 @layer components {
+    /* global components */
     .button {
         @apply bg-theme-gray text-theme-green transition duration-300 py-3 text-xs font-bold px-4 block text-center rounded
     }
-
     .box {
         @apply bg-white border-transparent border-r-2 rounded-lg shadow-lg
     }
-
-    .auth-box {
-        @apply bg-white p-8 border border-gray-200 rounded-2xl
-    }
-
     .container {
-        @apply max-w-[900px] m-auto
+        @apply max-w-[900px] m-auto w-full
     }
-
+    .form { 
+        @apply flex flex-col gap-3 mb-2 
+    }
     .icon {
         @apply mr-1 hover:bg-pink-50 rounded-full p-[6px] duration-300 cursor-pointer text-pink-500 flex flex-wrap items-center
+    }
+
+    /* auth components */
+    .auth-box {
+        @apply bg-white p-8 border border-solid border-gray-200 rounded-2xl
+    }
+    .auth-heading{
+        @apply text-xl text-center mb-4 font-medium
     }
 }
 

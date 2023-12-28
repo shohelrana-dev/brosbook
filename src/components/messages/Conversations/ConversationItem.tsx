@@ -6,20 +6,17 @@ import useAuthState from "@hooks/useAuthState"
 import timeAgo from "@utils/timeAgo"
 import TextOverflow from 'react-text-overflow'
 import Image from "next/image"
-import tw, { styled } from "twin.macro"
-import { Box as BaseBox } from "@components/styles/Global.styles"
 import {IoCheckmarkCircleOutline as TickIcon} from "react-icons/io5"
 
-const Box            = tw( BaseBox )`block cursor-pointer py-2 px-3 flex mb-3 w-full gap-3`
-const Name           = tw.h3`font-medium text-gray-900`
-const NameWrapper    = tw.h3`flex items-center gap-3`
-const Date           = tw.p`text-gray-800 text-xs`
-const MessageWrapper = tw.div`flex justify-between mt-1`
-const MessageText    = styled.p( ( { bold }: { bold: boolean } ) => [
-    tw`text-sm text-gray-700`,
-    bold && tw`!font-bold !text-gray-900`
-] )
-const StyledImage    = tw( Image )`rounded-full h-[15px] w-[15px]`
+const classes = {
+    box            : `box block cursor-pointer py-2 px-3 flex mb-3 w-full gap-3`,
+    name           : `font-medium text-gray-900`,
+    nameWrapper    : `flex items-center gap-3`,
+    date           : `text-gray-800 text-xs`,
+    messageWrapper : `flex justify-between mt-1`,
+    messageText    : ( isBold: boolean ) => `text-sm text-gray-700 ${isBold && '!font-bold !text-gray-900'}`,
+    image          : `rounded-full h-[15px] w-[15px]`
+}
 
 interface Props {
     conversation: Conversation
@@ -44,7 +41,7 @@ export default function ConversationItem( { conversation }: Props ) {
 
     return (
         <Link href={`/messages/${conversation.id}`}>
-            <Box>
+            <div className={classes.box}>
                 <div>
                     <Avatar
                         online={active}
@@ -53,23 +50,26 @@ export default function ConversationItem( { conversation }: Props ) {
                     />
                 </div>
                 <div className="w-full">
-                    <NameWrapper>
-                        <Name>{fullName}</Name>
-                        <Date>
+                    <h3 className={classes.nameWrapper}>
+                        <h3 className={classes.name}>
+                            {fullName}
+                        </h3>
+                        <p className={classes.date}>
                             {timeAgo(lastMessage?.createdAt!)}
-                        </Date>
-                    </NameWrapper>
-                    <MessageWrapper>
-                        <MessageText bold={!isLastMessageSenderMe && !lastMessage?.seenAt}>
+                        </p>
+                    </h3>
+                    <div className={classes.messageWrapper}>
+                        <p className={classes.messageText(!isLastMessageSenderMe && !lastMessage?.seenAt)}>
                             {messageBody ? <TextOverflow text={messageBody}/> : null}
-                        </MessageText>
+                        </p>
                         {isLastMessageSenderMe ? (
                             lastMessage?.seenAt ?
-                                <StyledImage
+                                <Image
                                     src={avatar.url}
                                     alt={fullName}
                                     width={15}
                                     height={15}
+                                    className={classes.image}
                                 /> : <TickIcon size={17}/>
                         ) : (
                             unreadMessagesCount ? (
@@ -78,9 +78,9 @@ export default function ConversationItem( { conversation }: Props ) {
                                 </p>
                             ) : null
                         )}
-                    </MessageWrapper>
+                    </div>
                 </div>
-            </Box>
+            </div>
         </Link>
     )
 }

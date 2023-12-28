@@ -57,7 +57,7 @@ export default function RequiredPage(){
                     { isResentEmail ? (
                         <p>Email resent. Please check your inbox.</p>
                     ) : (
-                        <div className="flex flex-wrap flex flex-col items-center">
+                        <div className="flex flex-wrap flex-col items-center">
                             <p>Didn&apos;t receive the link email?</p>
                             <LoadingButton variant="contained" onClick={ resendEmail } loading={ isLoading } className="mt-2">
                                 Resend email

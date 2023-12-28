@@ -10,9 +10,7 @@ import { ErrorResponse } from "@interfaces/index.interfaces"
 import {useParams} from "next/navigation"
 import {useGetConversationByIdQuery} from "@services/conversationsApi"
 import InfiniteScroll from "react-infinite-scroll-component"
-import tw from "twin.macro"
 
-const Wrapper = tw.div`relative flex flex-col-reverse overflow-y-auto pt-2`
 
 export default function MessageList(){
     //hooks
@@ -86,8 +84,8 @@ export default function MessageList(){
     }
 
     return (
-        <Wrapper id="message-list" ref={ messageListRef }>
+        <div className="relative flex flex-col-reverse overflow-y-auto pt-2" id="message-list" ref={ messageListRef }>
             { content }
-        </Wrapper>
+        </div>
     )
 }

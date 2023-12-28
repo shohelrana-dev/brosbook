@@ -3,21 +3,23 @@ import Reactions from "@components/messages/MessageBox/Reactions"
 import { Message } from "@interfaces/conversation.interfaces"
 import ImageLightbox from "@components/global/ImageLightbox"
 import moment from "moment"
-import tw, { styled } from "twin.macro"
-import { Box } from "@components/styles/Global.styles"
 import Linkify from 'linkify-react'
+import classNames from 'classnames'
 
-const TextMessage  = styled(Box)(( { isOwn, hasReaction }: { isOwn: boolean, hasReaction: boolean } ) => [
-    tw`relative py-2 px-4 my-1 flex items-end gap-1`,
-    isOwn ? tw`bg-theme-green text-white [a]:text-blue-100` : tw`bg-white text-gray-700 [a]:text-blue-500`,
-    hasReaction ? tw`mb-3` : tw`mb-0`,
-])
-const EmojiMessage = styled.div(( { hasReaction }: { hasReaction: boolean } ) => [
-    tw`relative pt-2 text-3xl flex items-end gap-1 text-gray-700`,
-    hasReaction ? tw`mb-3` : tw`mb-0`
-])
-const ImageMessage = tw.div`relative max-w-[200px] flex items-end gap-1 text-gray-700`
-const Time         = tw.time`text-[10px]`
+const classes = {
+    textMessage: ({ isOwn, hasReaction }: { isOwn: boolean, hasReaction: boolean }) => (
+        classNames(
+            'box relative py-2 px-4 my-1 flex items-end gap-1', 
+            isOwn ? `bg-theme-green text-white [a]:text-blue-100` : `bg-white text-gray-700 [a]:text-blue-500`,
+            hasReaction ? `mb-3` : `mb-0`
+        )
+    ),
+    emojiMessage: ({ hasReaction }: { hasReaction: boolean }) => (
+        classNames('relative pt-2 text-3xl flex items-end gap-1 text-gray-700', hasReaction ? `mb-3` : `mb-0`)
+    ),
+    imageMessage: 'relative max-w-[200px] flex items-end gap-1 text-gray-700',
+    time: 'text-[10px]'
+}
 
 interface Props {
     message: Message
@@ -28,30 +30,36 @@ export default function MessageContent( { message }: Props ) {
     const { type, isMeSender, body, image, reactions, createdAt } = message
     const hasReaction                                             = reactions?.length > 0
 
+    const timeMarkup = (
+        <time className={classes.time}>
+            { moment(createdAt).format("h:mm a") }
+        </time>
+    )
+
     switch ( type ) {
         case 'text':
             return (
-                <TextMessage hasReaction={ hasReaction } isOwn={ isMeSender }>
+                <div className={classes.textMessage({hasReaction, isOwn: isMeSender})}>
                     <Reactions message={ message }/>
                     <span className="break-all">
                         <Linkify >{ body }</Linkify>
                     </span>
-                    <Time>{ moment(createdAt).format("h:mm a") }</Time>
-                </TextMessage>
+                    { timeMarkup }
+                </div>
             )
 
         case 'emoji':
             return (
-                <EmojiMessage hasReaction={ hasReaction }>
+                <div className={classes.emojiMessage({hasReaction})}>
                     <Reactions message={ message }/>
                     { body }
-                    <Time>{ moment(createdAt).format("h:mm a") }</Time>
-                </EmojiMessage>
+                    { timeMarkup }
+                </div>
             )
 
         case 'image':
             return (
-                <ImageMessage>
+                <div className={classes.imageMessage}>
                     <Reactions message={ message }/>
                     <ImageLightbox
                         image={ image }
@@ -59,8 +67,8 @@ export default function MessageContent( { message }: Props ) {
                         height="200"
                         alt="message image"
                     />
-                    <Time>{ moment(createdAt).format("h:mm a") }</Time>
-                </ImageMessage>
+                    { timeMarkup }
+                </div>
             )
 
         default:

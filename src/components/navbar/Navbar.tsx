@@ -9,15 +9,11 @@ import Image from "next/image"
 import logo from "@assets/images/logo.png"
 import titledLogo from "@assets/images/titled-logo.png"
 import { Button, AppBar, IconButton, Box } from "@mui/material"
-import tw from "twin.macro"
-import { Container } from "@components/styles/Global.styles"
 import useMediaQuery from "@hooks/useMediaQuery"
 import { usePathname } from "next/navigation"
 import { setNavbarHeight } from "@slices/navbarHeightSlice"
 import { useEffect } from "react"
 import { useDispatch } from "react-redux"
-
-const StyledContainer = tw(Container)`mx-auto flex flex-wrap items-center justify-between text-gray-900`
 
 export default function Navbar() {
     const isSmallDevice       = useMediaQuery('(max-width: 767px)')
@@ -35,7 +31,7 @@ export default function Navbar() {
     return (
         <AppBar id="appNavbar" variant="outlined" color="default" position="static"
                 sx={ { background: "#fff", padding: '6px 10px' } }>
-            <StyledContainer>
+            <div className="container flex flex-wrap items-center justify-between text-gray-900">
                 <Link href="/">
                     { isSmallDevice ? (
                         <IconButton>
@@ -63,7 +59,7 @@ export default function Navbar() {
                         </>
                     ) }
                 </Box>
-            </StyledContainer>
+            </div>
         </AppBar>
     )
 

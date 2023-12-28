@@ -11,18 +11,18 @@ import { IconButton } from '@mui/material'
 import { BiInfoCircle as InfoIcon } from "react-icons/bi"
 import Modal, { useModal } from "react-minimal-modal"
 import ParticipantInfo from "@components/messages/ParticipantInfo"
-import tw from "twin.macro"
-import { Box as BaseBox } from "@components/styles/Global.styles"
 import { useParams } from "next/navigation"
 import { RxCross1 as CrossIcon } from "react-icons/rx"
 import { useSelector } from 'react-redux'
 import { selectNavbarHeight } from '@slices/navbarHeightSlice'
 
-const Wrapper     = tw.div`relative overflow-y-auto grid grid-rows-[auto 1fr auto]`
-const StyledModal = tw(Modal)`max-h-[85vh] bg-theme-gray overflow-hidden !p-0`
-const Header      = tw(BaseBox)`mt-2 py-3 px-4 lg:px-6 flex flex-wrap justify-between`
-const Name        = tw.h3`font-medium text-gray-800`
-const Active      = tw.p`text-gray-500 text-sm`
+const classes = {
+    wrapper: `relative overflow-y-auto grid grid-rows-[auto 1fr auto]`,
+    modal  : `max-h-[85vh] bg-theme-gray overflow-hidden !p-0`,
+    header : `box mt-2 py-3 px-4 lg:px-6 flex flex-wrap justify-between`,
+    name   : `font-medium text-gray-800`,
+    active :`text-gray-500 text-sm`
+}
 
 export default function MessageBox() {
     //hooks
@@ -36,8 +36,8 @@ export default function MessageBox() {
     const { fullName, active, avatar, username, updatedAt } = conversation?.participant || {}
     
     return (
-        <Wrapper style={{height: `calc(100dvh - ${navbarHeight})`}}>
-            <StyledModal visible={ isVisible } toggle={ toggle } hideIcon>
+        <div className={classes.wrapper} style={{height: `calc(100dvh - ${navbarHeight})`}}>
+            <Modal className={classes.modal} visible={ isVisible } toggle={ toggle } hideIcon>
                 <div className="relative">
                     <IconButton
                         sx={ {
@@ -51,10 +51,10 @@ export default function MessageBox() {
                     </IconButton>
                 </div>
                 <ParticipantInfo/>
-            </StyledModal>
+            </Modal>
 
             {/*User top bar*/ }
-            <Header>
+            <header className={classes.header}>
                 <div className="flex flex-wrap">
                     <div className="mr-4">
                         <Avatar
@@ -64,14 +64,14 @@ export default function MessageBox() {
                         />
                     </div>
                     <div className="mr-3">
-                        <Name>
+                        <h3 className={classes.name}>
                             <Link href={ `/${ username }` }>
                                 { fullName }
                             </Link>
-                        </Name>
-                        <Active>
+                        </h3>
+                        <p className={classes.active}>
                             { active ? 'Active now' : 'Active ' + timeAgo(updatedAt!) }
-                        </Active>
+                        </p>
                     </div>
                 </div>
                 <div className="self-center" onClick={ toggle }>
@@ -79,13 +79,13 @@ export default function MessageBox() {
                         <InfoIcon size={ 25 }/>
                     </IconButton>
                 </div>
-            </Header>
+            </header>
 
             {/*Messages*/ }
             <MessageList/>
 
             {/*message form*/ }
             <CreateMessageForm/>
-        </Wrapper>
+        </div>
     )
 }

@@ -13,13 +13,8 @@ import toast from "react-hot-toast"
 import { useDispatch } from "react-redux"
 import { setEmail } from "@slices/authSlice"
 import LoadingOverlay from "@components/global/LoadingOverlay"
-import tw from 'twin.macro'
-import { Wrapper, Box, FooterBox, Heading, Icon } from "@components/styles/Auth.styles"
-import { Form } from "@components/styles/Global.styles"
 import { baseApi } from "@services/baseApi"
 import { Button, Divider } from "@mui/material"
-
-const Forgotten = tw.small`block text-center mt-2 [a]:text-blue-500`
 
 export default function Login() {
     //hooks
@@ -45,16 +40,17 @@ export default function Login() {
     }, [ isSuccess ])
 
     return (
-        <Wrapper>
+        <>
             <LoadingOverlay isLoading={ isLoading || isSuccess || isLoadingLoginWithGoogle }/>
-            <Box>
-                <Icon>
+            <div className='auth-box'>
+                <div className='flex flex-wrap justify-center mb-2'>
                     <FiLock size="30"/>
-                </Icon>
-                <Heading>
+                </div>
+                <h1 className='auth-heading'>
                     Log In to { process.env.NEXT_PUBLIC_APP_NAME || 'Brosbook' }
-                </Heading>
-                <Form method="post" onSubmit={ onSubmit }>
+                </h1>
+
+                <form className="form" method="post" onSubmit={ onSubmit }>
                     <AnimatedInput
                         label="Username or email"
                         name="username"
@@ -72,25 +68,25 @@ export default function Login() {
                     <Button variant='contained' type="submit" fullWidth>
                         Log In
                     </Button>
-                </Form>
+                </form>
 
                 <Divider className="!my-5">OR</Divider>
 
                 <GoogleLoginButton setIsLoading={ setIsLoadingLoginWithGoogle }/>
 
-                <Forgotten>
-                    <Link href="/auth/forgot_password">
+                <small className="block text-center mt-2">
+                    <Link href="/auth/forgot_password" className="text-blue-500">
                         Forgotten your password?
                     </Link>
-                </Forgotten>
-            </Box>
+                </small>
+            </div>
 
-            <FooterBox>
+            <div className="auth-box text-center mt-2 text-gray-800">
                 Don't have an account? &nbsp;
-                <Link href="/auth/signup">
+                <Link href="/auth/signup" className="text-blue-500 font-medium">
                     Sign Up
                 </Link>
-            </FooterBox>
-        </Wrapper>
+            </div>
+        </>
     )
 }
