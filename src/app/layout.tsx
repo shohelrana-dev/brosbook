@@ -7,6 +7,7 @@ import { Metadata } from "next"
 import { getCurrentUser } from "@services/index"
 import { cookies } from "next/headers"
 import PreLoader from "@components/global/PreLoader"
+import { Kanit } from "next/font/google"
 import siteMetadata from '@utils/siteMetadata'
 
 export const metadata: Metadata = {
@@ -44,13 +45,20 @@ export const metadata: Metadata = {
       },
 }
 
+const kanit = Kanit({
+    weight: ['400', '500', '600'],
+    subsets: ['latin'],
+    variable: '--font-kanit',
+    display: "swap"
+})
+
 export default async function RootLayout({ children }: PropsWithChildren) {
     const user = await getCurrentUser(cookies())
 
     return (
         <html lang='eng'>
             <head />
-            <body className="bg-theme-gray">
+            <body className={`${kanit.className} bg-theme-gray`}>
                 <Providers>
                     <PreLoader user={user!} />
                     <Navbar />

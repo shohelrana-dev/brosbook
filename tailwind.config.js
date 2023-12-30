@@ -1,5 +1,4 @@
 /** @type {import('tailwindcss').Config} */
-
 module.exports = {
   mode: 'jit',
   content: [
@@ -29,7 +28,7 @@ module.exports = {
         160: '40rem',
       },
       fontFamily: {
-        kanit: ['Kanit', 'sans-serif']
+        kanit: ['var(--font-kanit)']
       },
     },
   },

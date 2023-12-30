@@ -1,4 +1,4 @@
-import React, { InputHTMLAttributes, LegacyRef } from 'react'
+import { InputHTMLAttributes, LegacyRef } from 'react'
 import classNames from "classnames"
 
 interface BasicInputProps extends InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement> {
@@ -26,7 +26,7 @@ export default function BasicInput( props: BasicInputProps ) {
             ...rest
         } = props
 
-    className = classNames('block w-full outline-none py-2 px-3 rounded-lg border-2 border-solid border-gray-200 focus:border-theme-light-green', className)
+    className = classNames('block w-full font-kanit outline-none py-2 px-3 rounded-lg border-2 border-solid border-gray-200 focus:border-theme-light-green', className)
 
     const id = name ? name : label.replace(' ', '')
 

@@ -11,7 +11,7 @@ const theme = createTheme({
     },
     typography: {
         allVariants: {
-            fontFamily: "'Kanit', sans-serif",
+            fontFamily: 'var(--font-kanit)',
             fontSize: 15
         }
     },
@@ -20,8 +20,7 @@ const theme = createTheme({
             styleOverrides: {
                 root: {
                     borderRadius: '20px',
-                    textTransform: 'inherit',
-                    fontFamily: "'Kanit', sans-serif"
+                    textTransform: 'inherit'
                 }
             }
         },
