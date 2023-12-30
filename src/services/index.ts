@@ -10,10 +10,11 @@ import { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adap
 export async function getCurrentUser( cookies: RequestCookies | ReadonlyRequestCookies ) {
     try {
         const config = getAuthorizationConfig( cookies )
+        
         const res    = await http.get<User>( `/users/me`, config )
-
+        
         return res.data
-    } catch ( e ) {
+    } catch ( err ) {
         return null
     }
 }
