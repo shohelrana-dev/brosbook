@@ -25,6 +25,7 @@ module.exports = {
       },
       spacing: {
         90: '22.5rem',
+        100: '25rem',
         160: '40rem',
       },
       fontFamily: {
