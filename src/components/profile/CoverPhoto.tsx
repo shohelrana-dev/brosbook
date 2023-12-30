@@ -100,15 +100,15 @@ export default function CoverPhoto( { user }: Props ) {
             >
                 <>
                     <h3 className="text-xl font-medium text-gray-900 text-center">Choose cover photo</h3>
-                    <div className="relative h-[250px] w-full overflow-hidden my-5">
-                        { selectedPhoto ? (
-                            <Image
-                                src={ URL.createObjectURL(selectedPhoto) }
-                                alt="Cover photo"
-                                fill={ true }
-                            />
-                        ) : null }
-                    </div>
+                    { selectedPhoto ? (
+                        <Image
+                            src={ URL.createObjectURL(selectedPhoto) }
+                            alt="Cover photo"
+                            height={200}
+                            width={500}
+                            className="h-[200px] w-full object-cover my-5"
+                        />
+                    ) : null }
                     <div className="mt-3">
                         <LoadingButton variant="contained" size="large" loading={ isLoading } fullWidth onClick={ handleSubmit }>
                             Save

@@ -26,7 +26,7 @@ export default function PostCard ( props: PostCardProps ) {
     const { author, body, createdAt, image } = post || {}
     
     return (
-        <div className="box p-5 mb-4">
+        <div className="box rounded-none lg:rounded-md p-5 mb-4">
             <div className="flex">
                 <Link href={ `/${ author.username }` }>
                     <Avatar src={ author.avatar.url }/>

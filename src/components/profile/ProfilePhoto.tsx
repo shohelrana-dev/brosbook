@@ -60,7 +60,7 @@ export default function ProfilePhoto( { user }: Props ) {
             <input hidden name="photo" type="file" accept="image/*" onChange={ handleInputChange } ref={ inputRef }/>
             <ImageLightbox
                 image={ avatar }
-                className="rounded-full w-[130px] !h-[130px] mt-[-80px] border-4 border-solid border-white object-cover"
+                className="size-32 object-cover rounded-full mt-[-80px] border-4 border-solid border-white"
                 alt="User profile photo"
                 width={ 130 }
                 height={ 130 }
@@ -94,16 +94,15 @@ export default function ProfilePhoto( { user }: Props ) {
                         </p>
                     </div>
                     <div className="flex flex-wrap justify-center items-center my-5">
-                        <div
-                            className="relative p-4 overflow-hidden h-[200px] w-[200px] rounded-full">
-                            { selectedPhoto ? (
-                                <Image
-                                    src={ URL.createObjectURL(selectedPhoto) }
-                                    alt="Avatar"
-                                    fill={ true }
-                                />
-                            ) : null }
-                        </div>
+                        { selectedPhoto ? (
+                            <Image
+                                src={ URL.createObjectURL(selectedPhoto) }
+                                alt="Avatar"
+                                width={200}
+                                height={200}
+                                className="size-52 object-cover rounded-full"
+                            />
+                        ) : null }
                     </div>
                     <div className="mt-3">
                         <LoadingButton variant="contained" fullWidth size="large" loading={ isLoading } onClick={ handleSubmit }>

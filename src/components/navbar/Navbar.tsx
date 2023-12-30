@@ -24,7 +24,7 @@ export default function Navbar() {
     useEffect(() => {
         if ( typeof window !== "undefined" ) {
             const navbarEl = document.getElementById('appNavbar')
-            disptach( setNavbarHeight( `${navbarEl?.offsetHeight}px` ) )
+            disptach( setNavbarHeight( `${navbarEl?.clientHeight}px` ) )
         }
     }, [])
 

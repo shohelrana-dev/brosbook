@@ -20,7 +20,7 @@ export default async function AccountLayout( { children }: PropsWithChildren ){
 
     return (
         <SidebarLayout>
-            <div className="bg-white p-5">
+            <div className="bg-white p-5 rounded-lg lg:rounded-none">
                 <TabLinkList links={ tabLinks }/>
                 <div className="flex flex-wrap items-center mt-5">
                     <div className="w-3/12 flex flex-wrap justify-end p-4">

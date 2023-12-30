@@ -33,7 +33,10 @@ export default function ChangePasswordModal(){
                 </Button>                                                   
             </div>
 
-            <Modal visible={ isVisible } toggle={ toggle } title="Update your password">
+            <Modal visible={ isVisible } toggle={ toggle } title="Update your password" width="700px">
+                <p className="mb-6 text-gray-700 -mt-1">
+                    Do not share your password with anyone. Set new password using current password.
+                </p>
                 <form className="form" onSubmit={ onSubmit }>
                     <div>
                         <PasswordInput
