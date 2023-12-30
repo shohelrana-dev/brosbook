@@ -67,26 +67,56 @@ export default function CreatePostForm() {
         <>
             <form
                 onSubmit={submitForm}
-                className='box mb-5 p-3 flex'
+                className='box mb-5 px-4 py-6 pt-8 flex'
             >
                 <Avatar
                     src={user?.avatar?.url}
                     size='small'
                 />
-                <span className='inline-block mr-3'/>
-                <BasicInput
-                    label="What's your mind?"
-                    labelHide
-                    onChange={e => setBody(e.target.value)}
-                    onFocus={toggle}
-                    className='focus:border-gray-200'
-                    wrapperClassname='flex-grow !mb-0'
-                />
+                <span className='inline-block mr-3' />
+                <div className='flex-grow'>
+                    <BasicInput
+                        label="What's your mind?"
+                        labelHide
+                        onChange={e => setBody(e.target.value)}
+                        onFocus={toggle}
+                        className='focus:border-gray-200'
+                        textarea
+                    />
+                    <div className='flex flex-wrap justify-between items-center'>
+                        <IconButton
+                            sx={{
+                                padding: '10px',
+                                marginTop: '-10px',
+                                color: theme => theme.palette.themeGreen,
+                            }}
+                            disabled
+                        >
+                            <HiPhotograph fontSize={25} />
+                        </IconButton>
+                        <div>
+                            <LoadingButton
+                                variant='contained'
+                                size='small'
+                                type='submit'
+                                loading={isLoading}
+                                disabled={
+                                    isLoading || (!body && !selectedImage)
+                                }
+                            >
+                                Publish Post
+                            </LoadingButton>
+                        </div>
+                    </div>
+                </div>
             </form>
 
             <Modal
                 visible={isVisible}
                 toggle={toggle}
+                position='top'
+                width='600px'
+                className='mt-16'
             >
                 <div>
                     <h1 className='text-center text-lg lg:text-xl font-bold border-b border-gray-100 mb-4 pb-2 -mt-4'>
