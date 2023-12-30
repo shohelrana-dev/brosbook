@@ -53,7 +53,7 @@ export default function Navbar() {
                     ) : (
                         <>
                             &nbsp;
-                            <Link href={ `/auth/login?redirect_to=${ pathname }` }>
+                            <Link href={ `/auth/login${pathname.startsWith('/auth') ? '' : '?redirect_to=' + pathname}` }>
                                 <Button variant="contained">Login</Button>
                             </Link>
                         </>
