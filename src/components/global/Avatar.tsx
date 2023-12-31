@@ -1,7 +1,7 @@
 import React, { ImgHTMLAttributes } from 'react'
 import Image from "next/image"
-import classNames from "classnames"
 import Skeleton from "react-loading-skeleton"
+import { twMerge } from 'tailwind-merge'
 
 interface AvatarProps extends ImgHTMLAttributes<HTMLImageElement> {
     online?: boolean
@@ -10,38 +10,47 @@ interface AvatarProps extends ImgHTMLAttributes<HTMLImageElement> {
 
 export default function Avatar( { online, size = 'medium', src, className }: AvatarProps ){
 
-    let width
-    let height
-    if( size === 'small' ){
-        width  = 35
-        height = 35
-    } else if( size === 'medium' ){
-         width  = 45
-         height = 45
-    }else if( size === 'large' ){
-        width  = 60
-        height = 60
+    let _size
+    switch (size) {
+        case 'small':
+            _size  = 35
+            break
+
+        case 'medium':
+            _size  = 45
+            break
+            
+        case 'large':
+            _size  = 60
+            break
     }
 
-    className = classNames( `rounded-full object-cover`, className )
+    const sizeStyle = {
+        width: `${_size}px`,
+        height: `${_size}px`
+    }
+
+    className = twMerge( `rounded-full object-cover`, className )
 
     if( ! src ){
-        return <Skeleton width={ width } height={ height } circle/>
+        return <Skeleton width={ _size } height={ _size } circle/>
     }
 
     return (
-        <div className="flex-none rounded-full relative" style={ { width, height } }>
+        <div className="relative flex-none rounded-full" style={sizeStyle}>
             { src ? <Image
                 priority
                 className={ className }
                 src={ src }
-                width={ width }
-                height={ height }
-                style={ { height: `${ height }px` } }
+                width={ _size }
+                height={ _size }
+                style={sizeStyle}
                 alt="User profile photo"
             /> : null }
-            { online ? <div
-                className="bg-green-500 border-solid border-white w-3 h-3 absolute right-0 bottom-0 rounded-full border-2"/> : null }
+
+            { online ? ( 
+                <div className="bg-green-500 border-solid border-white w-3 h-3 absolute right-0 bottom-0 rounded-full border-2"/> 
+            ) : null }
         </div>
     )
 }

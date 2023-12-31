@@ -1,9 +1,9 @@
 import React from 'react'
 import { User } from "@interfaces/user.interfaces"
 import { useSearchUsersQuery } from "@services/usersApi"
-import classNames from "classnames"
 import UserItem from "@components/global/UserItem"
 import UsersSkeleton from "@components/skeletons/UsersSkeleton"
+import { twMerge } from 'tailwind-merge'
 
 interface Props {
     onUserClick: ( user: User ) => void
@@ -17,8 +17,7 @@ export default function SearchUserList( { onUserClick, searchText, wrapperClassn
     const users = data?.items || []
 
     return (
-        <div
-            className={ classNames( "box bg-white max-w-5xl p-3 absolute top-full left-0 w-max h-fit mt-1 drop-shadow-2xl max-h-[80vh] overflow-y-auto min-w-[250px] z-[99]", wrapperClassname ) }>
+        <div className={ twMerge( "box bg-white max-w-5xl p-3 absolute top-full left-0 w-max h-fit mt-1 drop-shadow-2xl max-h-[80vh] overflow-y-auto min-w-[250px] z-[99]", wrapperClassname ) }>
             { isLoading ? <UsersSkeleton count={ 2 }/> : null }
 
             { ( users && users.length > 0 ) ? users.map( user => (

@@ -1,5 +1,5 @@
 import { InputHTMLAttributes, LegacyRef } from 'react'
-import classNames from "classnames"
+import { twMerge } from 'tailwind-merge'
 
 interface BasicInputProps extends InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement> {
     label: string,
@@ -28,12 +28,12 @@ export default function BasicInput( props: BasicInputProps ) {
             ...rest
         } = props
 
-    className = classNames('block w-full font-kanit outline-none py-3 px-3 rounded-lg border-2 border-solid border-gray-200 focus:border-theme-light-green', className)
+    className = twMerge('block w-full font-kanit text-gray-700 outline-none py-3 px-3 rounded-lg border-2 border-solid border-gray-200 focus:border-theme-light-green', className)
 
     const id = name ? name : label.replace(' ', '')
 
     return (
-        <div className={ classNames("mb-2 md:mb-4", wrapperClassname) }>
+        <div className={ twMerge("mb-2 md:mb-4", wrapperClassname) }>
 
             {/* Label and help text area */}
             { !labelHide || helpText ? (

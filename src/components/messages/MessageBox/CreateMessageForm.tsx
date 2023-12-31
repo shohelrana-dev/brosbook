@@ -13,9 +13,9 @@ import { Popover } from "@mui/material"
 import { isOneEmoji, isMultipleEmoji } from 'is-emojis'
 import { RxCross2 as CancelIcon } from "react-icons/rx"
 import { useParams } from "next/navigation"
-import classNames from "classnames"
 import { useGetConversationByIdQuery } from "@services/conversationsApi"
 import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state"
+import { twJoin } from 'tailwind-merge'
 
 export default function CreateMessageForm() {
     //hooks
@@ -66,9 +66,7 @@ export default function CreateMessageForm() {
     return (
         <form
             onSubmit={ submitForm }
-            className={ classNames("flex items-center mb-2 rounded-2xl bg-white px-2 border-2 border-solid border-gray-200", {
-                "border-theme-light-green": isFocused
-            }) }
+            className={ twJoin("flex items-center mb-2 rounded-2xl bg-white px-2 border-2 border-solid border-gray-200", isFocused && "border-theme-light-green") }
             onClick={ () => textInputRef.current?.focus() }
             onBlur={ () => textInputRef.current?.blur() }
         >

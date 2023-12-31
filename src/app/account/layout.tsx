@@ -24,10 +24,10 @@ export default async function AccountLayout( { children }: PropsWithChildren ){
                 <TabLinkList links={ tabLinks }/>
                 <div className="flex flex-wrap items-center mt-5">
                     <div className="w-3/12 flex flex-wrap justify-end p-4">
-                        <Avatar src={ user?.avatar.url } alt={ user?.username }/>
+                        <Avatar src={ user?.avatar.url } alt={ user?.username } size='large'/>
                     </div>
-                    <div className="flex flex-wrap-auto p-4">
-                        <h3 className="text-xl">{ user?.username }</h3>
+                    <div className="flex flex-wrap p-4">
+                        <h3 className="text-xl font-medium">{ user?.username }</h3>
                     </div>
                 </div>
                 { children }

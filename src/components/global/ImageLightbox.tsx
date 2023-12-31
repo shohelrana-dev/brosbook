@@ -1,7 +1,6 @@
 "use client"
 import React from 'react'
 import Image, { ImageProps } from 'next/image'
-import classNames from "classnames"
 import LightGallery from 'lightgallery/react'
 import lgThumbnail from 'lightgallery/plugins/thumbnail'
 import lgZoom from 'lightgallery/plugins/zoom'
@@ -11,6 +10,7 @@ import { Media } from "@interfaces/index.interfaces"
 import 'lightgallery/css/lightgallery.css'
 import 'lightgallery/css/lg-zoom.css'
 import 'lightgallery/css/lg-thumbnail.css'
+import { twMerge, twJoin } from 'tailwind-merge'
 
 interface Props extends Omit<ImageProps, "src"> {
     image?: Media
@@ -18,7 +18,7 @@ interface Props extends Omit<ImageProps, "src"> {
 }
 
 export default function ImageLightbox( { image, imageList, className, ...rest }: Props ){
-    className = classNames( 'cursor-pointer h-auto', className )
+    className = twMerge( 'cursor-pointer h-auto', className )
 
     if( ! image && ( ! imageList || imageList.length < 1 ) ) return null
 
@@ -35,7 +35,7 @@ export default function ImageLightbox( { image, imageList, className, ...rest }:
         </a>
     )
 
-    const wrapperClassName = classNames( { "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-1": imageList && imageList.length > 0 } )
+    const wrapperClassName = twJoin( imageList && imageList.length > 0 && 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-1' )
 
     return (
         <LightGallery

@@ -11,7 +11,6 @@ import { IconButton } from '@mui/material'
 import { MdSend as SendIcon } from "react-icons/md"
 import { Post } from "@interfaces/posts.interfaces"
 import { Button } from '@mui/material'
-import theme from "@utils/theme";
 
 interface Props {
     post: Post
@@ -57,20 +56,19 @@ export default function CommentList( { post }: Props ) {
         <div className="mt-2">
             { isAuthenticated && (
                 <form onSubmit={ handleSaveComment } className="mb-2 flex items-center">
-                    <div className="mt-[-4px]">
-                        <Avatar src={ currentUser?.avatar?.url } online size="small"/>
-                    </div>
+                    <Avatar src={ currentUser?.avatar?.url } online/>
                     <div className="relative ml-2 w-full">
                         <BasicInput
                             label="Write a comment..."
                             labelHide
                             type="text"
                             value={ commentBody }
-                            className="!rounded-full"
-                            wrapperClassname="!mb-0"
+                            className="rounded-full"
+                            wrapperClassname="mb-0 md:mb-0"
                             onChange={ ( e ) => setCommentBody(e.target.value) }
+                            autoComplete='off'
                         />
-                        <div className="absolute top-[2px] right-[8px]">
+                        <div className="absolute top-[50%] right-[8px] translate-y-[-50%]">
                             <IconButton
                                 type="submit"
                                 disabled={ isLoading || !commentBody }
