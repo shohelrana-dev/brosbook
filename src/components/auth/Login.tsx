@@ -1,8 +1,8 @@
 "use client"
 import React, { useEffect, useState } from 'react'
 import { FiLock } from "react-icons/fi"
-import AnimatedInput from "@components/global/AnimatedInput"
-import PasswordInput from "@components/global/PasswordInput"
+import AnimatedInput from "@components/form/AnimatedInput"
+import PasswordInput from "@components/form/PasswordInput"
 import GoogleLoginButton from "@components/global/GoogleLoginButton"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
@@ -65,7 +65,7 @@ export default function Login() {
                         error={ errors?.password }
                         onChange={ onChange }
                     />
-                    <Button variant='contained' type="submit" fullWidth>
+                    <Button variant='contained' type="submit" fullWidth size="large">
                         Log In
                     </Button>
                 </form>

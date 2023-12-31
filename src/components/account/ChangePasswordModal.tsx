@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import PasswordInput from "@components/global/PasswordInput"
+import PasswordInput from "@components/form/PasswordInput"
 import { useChangePasswordMutation } from "@services/accountApi"
 import { ChangePasswordPayload } from "@interfaces/account.interfaces"
 import toast from "react-hot-toast"

@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react'
 import { FiLock } from "react-icons/fi"
 import Link from "next/link"
-import AnimatedInput from "@components/global/AnimatedInput"
+import AnimatedInput from "@components/form/AnimatedInput"
 import { useForgotPasswordMutation } from "@services/authApi"
 import { useForm } from "@hooks/useForm"
 import toast from "react-hot-toast"
@@ -51,7 +51,7 @@ export default function ForgotPassword(){
                         error={ errors.email }
                         onChange={ onChange }
                     />
-                    <LoadingButton variant='contained' type="submit" fullWidth loading={ isLoading }>
+                    <LoadingButton variant='contained' type="submit" fullWidth loading={ isLoading } size="large">
                         Send Reset Link
                     </LoadingButton>
                 </form>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import BasicInput from "@components/global/BasicInput"
+import BasicInput from "@components/form/BasicInput"
 import SearchUserList from "@components/global/SearchUserList"
 import { User } from "@interfaces/user.interfaces"
 import { useCreateConversationMutation, useLazyGetConversationByParticipantIdQuery } from "@services/conversationsApi"

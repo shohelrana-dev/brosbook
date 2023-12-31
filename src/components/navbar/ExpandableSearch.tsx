@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { BiSearch as SearchIcon } from "react-icons/bi"
 import { IconButton, Tooltip } from '@mui/material'
-import BasicInput from "@components/global/BasicInput"
+import BasicInput from "@components/form/BasicInput"
 import classNames from "classnames"
 import { User } from "@interfaces/user.interfaces"
 import { useRouter } from "next/navigation"

@@ -5,7 +5,7 @@ import { useEffect } from "react"
 import DatePicker from 'react-date-picker'
 import { ProfilePayload } from "@interfaces/account.interfaces"
 import { useUpdateProfileMutation } from '@services/accountApi'
-import BasicInput from "@components/global/BasicInput"
+import BasicInput from "@components/form/BasicInput"
 import useAuthState from "@hooks/useAuthState"
 import Loader from "@components/global/Loader"
 import { useForm } from "@hooks/useForm"

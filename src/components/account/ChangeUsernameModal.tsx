@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react'
-import PasswordInput from "@components/global/PasswordInput"
+import PasswordInput from "@components/form/PasswordInput"
 import Link from "next/link"
 import { useChangeUsernameMutation } from "@services/accountApi"
 import { ChangeUsernamePayload } from "@interfaces/account.interfaces"
 import toast from "react-hot-toast"
 import { useForm } from "@hooks/useForm"
-import AnimatedInput from "@components/global/AnimatedInput"
+import AnimatedInput from "@components/form/AnimatedInput"
 import Modal, { useModal } from "react-minimal-modal"
 import useAuthState from "@hooks/useAuthState"
 import {Button} from "@mui/material"

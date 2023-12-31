@@ -1,8 +1,8 @@
 "use client"
 import React, { useEffect, useState } from 'react'
 import GoogleLoginButton from "@components/global/GoogleLoginButton"
-import AnimatedInput from "@components/global/AnimatedInput"
-import PasswordInput from "@components/global/PasswordInput"
+import AnimatedInput from "@components/form/AnimatedInput"
+import PasswordInput from "@components/form/PasswordInput"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useSignupMutation } from "@services/authApi"
@@ -81,7 +81,7 @@ export default function Signup(){
                     />
                     { formData.password ? <PasswordStrengthBar password={ formData.password }/> : null }
 
-                    <Button variant="contained" type="submit">
+                    <Button variant="contained" type="submit" size="large">
                         Sign Up
                     </Button>
                 </form>

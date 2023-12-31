@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect } from 'react'
 import { FiLock } from "react-icons/fi"
-import PasswordInput from "@components/global/PasswordInput"
+import PasswordInput from "@components/form/PasswordInput"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useResetPasswordMutation } from "@services/authApi"
@@ -55,7 +55,7 @@ export default function ResetPassword( { token }: { token: string } ){
                         error={ errors.confirmPassword }
                         onChange={ onChange }
                     />
-                    <LoadingButton variant="contained" type="submit" loading={ isLoading || isSuccess }>
+                    <LoadingButton variant="contained" type="submit" loading={ isLoading || isSuccess } size="large">
                         Reset
                     </LoadingButton>
                 </form>

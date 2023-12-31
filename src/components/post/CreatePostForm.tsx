@@ -9,7 +9,7 @@ import { IconButton } from '@mui/material'
 
 import Avatar from '@components/global/Avatar'
 import { useCreatePostMutation } from '@services/postsApi'
-import BasicInput from '@components/global/BasicInput'
+import BasicInput from '@components/form/BasicInput'
 import useAuthState from '@hooks/useAuthState'
 import useSelectFile from '@hooks/useSelectFile'
 import Modal, { useModal } from 'react-minimal-modal'
@@ -119,7 +119,7 @@ export default function CreatePostForm() {
                 className='mt-16'
             >
                 <div>
-                    <h1 className='text-center text-lg lg:text-xl font-bold border-b border-gray-100 mb-4 pb-2 -mt-4'>
+                    <h1 className='text-center text-lg lg:text-xl font-bold border-b border-gray-100 mb-3 pb-2 -mt-4'>
                         Create post
                     </h1>
                     <div className='flex flex-wrap items-center mb-3'>
@@ -141,6 +141,8 @@ export default function CreatePostForm() {
                             label="What's your mind?"
                             onChange={e => setBody(e.target.value)}
                             value={body}
+                            rows={4}
+                            className="text-base"
                         />
                         <input
                             ref={fileInputRef}
