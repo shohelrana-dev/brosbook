@@ -21,12 +21,12 @@ export default function TabLinkList( { links }: TabLinkListProps ) {
                             <Tab
                                 key={pathname}
                                 label={
-                                    <Link href={ pathname }>
+                                    <Link href={ pathname } className="px-6 py-4">
                                         { label }
                                     </Link>
                                 }
                                 value={ pathname }
-                                sx={ { textTransform: 'inherit' } }
+                                sx={ { textTransform: 'inherit', padding: 0 } }
                             />
                         )) }
                     </TabList>
