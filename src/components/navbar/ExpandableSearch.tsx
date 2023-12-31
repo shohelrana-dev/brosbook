@@ -49,7 +49,7 @@ export default function ExpandableSearch() {
                 value={ searchText }
                 inputRef={ inputRef }
                 onBlur={ toggleExpand }
-                className="!rounded-3xl z-10 !bg-transparent mt-1"
+                className="!rounded-3xl z-10 !bg-transparent mt-1 !py-2"
                 wrapperClassname={ inputWrapperClassname }
                 type="text"
                 label="Search"
@@ -57,10 +57,10 @@ export default function ExpandableSearch() {
                 autoComplete="off"
             />
 
-            <div className="absolute right-1 top-1">
+            <div className="absolute right-1 top-[50%] translate-y-[-50%]">
                 <Tooltip title="Search">
-                    <IconButton onClick={ toggleExpand } disabled={ expanded }>
-                        <SearchIcon size={ 18 } className="text-gray-700"/>
+                    <IconButton onClick={ toggleExpand } disabled={ expanded } className="mt-1">
+                        <SearchIcon size={ 18 } className="text-gray-700 "/>
                     </IconButton>
                 </Tooltip>
             </div>

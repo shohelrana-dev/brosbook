@@ -28,7 +28,7 @@ export default function ChangePasswordModal(){
     return (
         <>
             <div>
-                <Button variant='outlined' onClick={ toggle } size="small">
+                <Button variant='outlined' onClick={ toggle }>
                     Change
                 </Button>                                                   
             </div>
@@ -46,7 +46,7 @@ export default function ChangePasswordModal(){
                             error={ errors.currentPassword }
                             onChange={ onChange }
                         />
-                        <Link href="/auth/forgot_password" className="text-blue-600 text-xs block">
+                        <Link href="/auth/forgot_password" className="text-blue-600 text-sm block">
                             Forgot password?
                         </Link>
                     </div>
@@ -66,7 +66,7 @@ export default function ChangePasswordModal(){
                     />
 
                     <div className="text-right mt-4">
-                        <LoadingButton variant="contained" type="submit" loading={ isLoading }>
+                        <LoadingButton variant="contained" type="submit" loading={ isLoading } size="large">
                             Update
                         </LoadingButton>
                     </div>

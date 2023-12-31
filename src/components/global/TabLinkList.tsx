@@ -19,6 +19,7 @@ export default function TabLinkList( { links }: TabLinkListProps ) {
                     <TabList aria-label="Tab links">
                         { links.map(( { label, pathname } ) => (
                             <Tab
+                                key={pathname}
                                 label={
                                     <Link href={ pathname }>
                                         { label }

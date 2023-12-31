@@ -14,26 +14,28 @@ import { usePathname } from "next/navigation"
 import { setNavbarHeight } from "@slices/navbarHeightSlice"
 import { useEffect } from "react"
 import { useDispatch } from "react-redux"
+import isServer from "@utils/isServer"
 
 export default function Navbar() {
-    const isSmallDevice       = useMediaQuery('(max-width: 767px)')
+    const isScreenSmall       = useMediaQuery('(max-width: 767px)')
+    const isScreenLarge       = useMediaQuery('(min-width: 920px)')
     const { isAuthenticated } = useAuthState()
     const pathname            = usePathname()
     const disptach            = useDispatch()
 
     useEffect(() => {
-        if ( typeof window !== "undefined" ) {
+        if ( !isServer ) {
             const navbarEl = document.getElementById('appNavbar')
-            disptach( setNavbarHeight( `${navbarEl?.clientHeight}px` ) )
+            disptach( setNavbarHeight( `${isScreenLarge ? navbarEl?.clientHeight : navbarEl?.clientHeight! + 12}px` ) )
+            
         }
-    }, [])
+    }, [isScreenLarge])
 
     return (
-        <AppBar id="appNavbar" variant="outlined" color="default" position="static"
-                sx={ { background: "#fff", padding: '6px 10px' } }>
+        <AppBar id="appNavbar" variant="outlined" color="default" position="static" sx={ { background: "#fff", padding: '6px 10px' } }>
             <div className="container flex flex-wrap items-center justify-between text-gray-900">
                 <Link href="/">
-                    { isSmallDevice ? (
+                    { isScreenSmall ? (
                         <IconButton>
                             <Image src={ logo } alt={ 'Brosbook logo' } width={ 31 } height={ 40 }/>
                         </IconButton>
@@ -42,7 +44,7 @@ export default function Navbar() {
                     ) }
                 </Link>
                 <Box sx={ { display: 'flex', flexGrow: 1 } }/>
-                <Box sx={ { display: 'flex', flexWrap: 'wrap' } }>
+                <Box sx={ { display: 'flex', flexWrap: 'wrap', alignItems: 'center' } }>
                     <ExpandableSearch/>
                     { isAuthenticated ? (
                         <>
@@ -62,5 +64,4 @@ export default function Navbar() {
             </div>
         </AppBar>
     )
-
 }

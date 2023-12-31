@@ -106,7 +106,7 @@ export default async function ProfileLayout({children, params}: Props) {
                                 ) : null}
                                 {currentUser && currentUser?.username === user?.username ? (
                                     <Link href="/account/profile">
-                                        <Button variant="outlined">
+                                        <Button variant="outlined" size="large">
                                             Edit Profile
                                         </Button>
                                     </Link>
@@ -126,7 +126,7 @@ export default async function ProfileLayout({children, params}: Props) {
                             <p className="text-gray-600 mb-2">@{user?.username}</p>
                             <div>{user?.profile?.bio}</div>
                         </div>
-                        <ul className="mt-3 flex flex-wrap flex flex-wrap-wrap">
+                        <ul className="mt-3 flex flex-wrap">
                             {user?.profile?.location && (
                                 <li className="flex flex-wrap items-center text-gray-600 mr-3 mb-2">
                                     <GoLocation className="inline-block text-lg"/>&nbsp;

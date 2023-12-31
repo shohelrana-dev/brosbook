@@ -40,7 +40,7 @@ export default function ChangeUsernameModal(){
     return (
         <>
             <div>
-                <Button variant="outlined" onClick={ toggle } size="small">
+                <Button variant="outlined" onClick={ toggle }>
                     Change
                 </Button>
             </div>
@@ -68,13 +68,13 @@ export default function ChangeUsernameModal(){
                             error={ errors.password }
                             onChange={ onChange }
                         />
-                        <Link href="/auth/forgot_password" className="text-blue-600 text-xs block">
+                        <Link href="/auth/forgot_password" className="text-blue-600 text-sm block">
                             Forgot password?
                         </Link>
                     </div>
 
                     <div className="text-right">
-                        <LoadingButton variant='contained' type="submit" loading={ isLoading }>
+                        <LoadingButton variant='contained' type="submit" loading={ isLoading } size="large">
                             Update
                         </LoadingButton>
                     </div>

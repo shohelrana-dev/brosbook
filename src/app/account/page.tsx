@@ -29,7 +29,7 @@ export default function GeneralSettingsPage(){
                         </p>
                     </div>
                     <div>
-                        <Button variant="outlined" disabled size="small">
+                        <Button variant="outlined" disabled>
                             Change
                         </Button>
                     </div>
@@ -43,7 +43,7 @@ export default function GeneralSettingsPage(){
                     </div>
                     <ChangeUsernameModal/>
                 </div>
-                <div className="flex flex-wrap justify-between mt-5">
+                <div className="flex justify-between mt-5">
                     <div className="mr-1">
                         <h4 className="text-base">Change password</h4>
                         <p className="text-xs text-gray-500">
