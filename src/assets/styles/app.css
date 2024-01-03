@@ -46,12 +46,6 @@ button, input, textarea {
     font-family: var(--font-kanit);
 }
 
-@media only screen and (max-width: 767px) {
-    body {
-        font-size: 14px;
-    }
-}
-
 .react-date-picker__wrapper {
     border: 2px solid #ddd !important;
     border-radius: 7px;
