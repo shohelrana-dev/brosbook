@@ -1,22 +1,24 @@
-import {ChangeEvent, useRef, useState} from "react"
+import { ChangeEvent, useRef, useState } from 'react'
 
-export default function useSelectFile(){
+export default function useSelectFile() {
     const [selectedFile, setSelectedFile] = useState<Blob>()
     const inputRef = useRef<HTMLInputElement | null>(null)
 
     function onChange(event: ChangeEvent<HTMLInputElement>) {
-        if (event.target.files && event.target.files.length > 0) {
-            setSelectedFile(event.target.files[0])
+        const files = event?.target?.files
+
+        if (files && files.length > 0) {
+            setSelectedFile(files[0])
         }
     }
 
-    function onClick(){
+    function onClick() {
         inputRef.current?.click()
     }
 
-    function removeSelectedFile(){
+    function removeSelectedFile() {
         setSelectedFile(undefined)
     }
 
-    return {selectedFile, onChange, inputRef, onClick, removeSelectedFile}
+    return { selectedFile, onChange, inputRef, onClick, removeSelectedFile }
 }

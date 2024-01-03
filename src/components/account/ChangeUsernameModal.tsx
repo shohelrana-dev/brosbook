@@ -49,7 +49,7 @@ export default function ChangeUsernameModal(){
                 visible={ isVisible }
                 toggle={ toggle }text-right
                 title="Update username"
-                width="650px"
+                width={700}
             >
                 <p className="mb-6 text-gray-700 -mt-1">Set your new username using password.</p>
                 <form className="form" onSubmit={ onSubmit }>

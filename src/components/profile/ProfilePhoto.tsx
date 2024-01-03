@@ -82,7 +82,7 @@ export default function ProfilePhoto( { user }: Props ) {
             <Modal
                 visible={ !!selectedPhoto }
                 toggle={ removeSelectedFile }
-                className="max-w-[625px] !p-3"
+                width={625}
             >
                 <>
                     <div className="text-center mb-3 max-w-[450px] m-auto">

@@ -96,7 +96,7 @@ export default function CoverPhoto( { user }: Props ) {
             <Modal
                 visible={ !!selectedPhoto }
                 toggle={ removeSelectedFile }
-                className="max-w-[625px] !p-3 max-h-screen"
+                width={625}
             >
                 <>
                     <h3 className="text-xl font-medium text-gray-900 text-center">Choose cover photo</h3>

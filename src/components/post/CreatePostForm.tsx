@@ -1,5 +1,5 @@
 'use client'
-import { FormEvent, useEffect, useRef, useState } from 'react'
+import { FormEvent, useState } from 'react'
 import { MdPublic as PublicIcon } from 'react-icons/md'
 import { HiPhotograph } from 'react-icons/hi'
 import { RxCross2 as CancelIcon } from 'react-icons/rx'
@@ -18,31 +18,18 @@ export default function CreatePostForm() {
     //hooks
     const { user, isAuthenticated } = useAuthState()
     const [createPost, { isLoading }] = useCreatePostMutation()
-    const [body, setBody] = useState<string>('')
-    const {
-        inputRef: fileInputRef,
-        selectedFile: selectedImage,
-        removeSelectedFile,
-        onChange,
-        onClick,
-    } = useSelectFile()
+    const [messageBody, setMessageBody] = useState<string>('')
+    const { inputRef: fileInputRef, selectedFile: selectedImage, removeSelectedFile, onChange, onClick } = useSelectFile()
     const { toggle, isVisible } = useModal()
-    const inputRef = useRef<HTMLInputElement>()
-
-    useEffect(() => {
-        if (isVisible) {
-            inputRef.current?.focus()
-        }
-    }, [inputRef, isVisible])
 
     async function submitForm(event: FormEvent) {
         event.preventDefault()
 
-        if (!body && !selectedImage) return
+        if (!messageBody && !selectedImage) return
 
         const formData = new FormData()
-        if (body) {
-            formData.append('body', body)
+        if (messageBody) {
+            formData.append('body', messageBody)
         }
         if (selectedImage) {
             formData.append('image', selectedImage)
@@ -51,7 +38,7 @@ export default function CreatePostForm() {
         try {
             await createPost(formData).unwrap()
             toast.success('Post published.')
-            if (body) setBody('')
+            if (messageBody) setMessageBody('')
             if (selectedImage) {
                 removeSelectedFile()
             }
@@ -78,7 +65,8 @@ export default function CreatePostForm() {
                     <BasicInput
                         label="What's your mind?"
                         labelHide
-                        onChange={e => setBody(e.target.value)}
+                        onChange={e => setMessageBody(e.target.value)}
+                        value={isVisible ? '' : messageBody}
                         onFocus={toggle}
                         className='focus:border-gray-200'
                         textarea
@@ -100,9 +88,7 @@ export default function CreatePostForm() {
                                 size='small'
                                 type='submit'
                                 loading={isLoading}
-                                disabled={
-                                    isLoading || (!body && !selectedImage)
-                                }
+                                disabled={isLoading || (!messageBody && !selectedImage)}
                             >
                                 Publish Post
                             </LoadingButton>
@@ -115,7 +101,7 @@ export default function CreatePostForm() {
                 visible={isVisible}
                 toggle={toggle}
                 position='top'
-                width='600px'
+                width={600}
                 className='mt-16'
             >
                 <div>
@@ -125,9 +111,7 @@ export default function CreatePostForm() {
                     <div className='flex flex-wrap items-center mb-3'>
                         <Avatar src={user?.avatar?.url} />
                         <div className='ml-4'>
-                            <h3 className='text-base lg:text-lg font-medium'>
-                                {user?.fullName}
-                            </h3>
+                            <h3 className='text-base lg:text-lg font-medium'>{user?.fullName}</h3>
                             <p className='flex flex-wrap text-gray-600 font-medium gap-1 items-center'>
                                 <PublicIcon fontSize={16} /> Public
                             </p>
@@ -135,14 +119,14 @@ export default function CreatePostForm() {
                     </div>
                     <form onSubmit={submitForm}>
                         <BasicInput
-                            inputRef={inputRef}
                             textarea
                             labelHide
                             label="What's your mind?"
-                            onChange={e => setBody(e.target.value)}
-                            value={body}
+                            onChange={e => setMessageBody(e.target.value)}
+                            value={messageBody}
                             rows={4}
-                            className="text-base"
+                            autoFocus
+                            className='text-base'
                         />
                         <input
                             ref={fileInputRef}
@@ -165,8 +149,7 @@ export default function CreatePostForm() {
                                             background: '#000',
                                             color: '#fff',
                                             '&:hover': {
-                                                background:
-                                                    'rgba(0, 0, 0, 0.7)',
+                                                background: 'rgba(0, 0, 0, 0.7)',
                                             },
                                         }}
                                     >
@@ -195,9 +178,7 @@ export default function CreatePostForm() {
                                 variant='contained'
                                 type='submit'
                                 loading={isLoading}
-                                disabled={
-                                    isLoading || (!body && !selectedImage)
-                                }
+                                disabled={isLoading || (!messageBody && !selectedImage)}
                             >
                                 Publish Post
                             </LoadingButton>

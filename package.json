@@ -40,7 +40,7 @@
     "react-infinite-scroll-component": "^6.1.0",
     "react-infinite-scroll-hook": "^4.0.4",
     "react-loading-skeleton": "^3.1.1",
-    "react-minimal-modal": "^1.2.4",
+    "react-minimal-modal": "^1.3.3",
     "react-nl2br": "^1.0.4",
     "react-password-strength-bar": "^0.4.1",
     "react-redux": "^8.0.4",
@@ -50,14 +50,15 @@
     "react-show-more-text": "^1.6.2",
     "react-spinners": "^0.13.8",
     "react-text-overflow": "^1.0.2",
-    "react-use-confirm-alert": "^1.1.7",
+    "react-use-confirm-alert": "^1.2.3",
     "sharp": "^0.31.3",
     "socket.io-client": "^4.5.4",
     "swiper": "^9.3.1",
     "tailwind-merge": "^2.2.0",
     "tiny-cookie": "^2.4.0",
     "use-async-effect": "^2.2.5",
-    "use-debounce": "^9.0.2"
+    "use-debounce": "^9.0.2",
+    "yarn": "^1.22.21"
   },
   "devDependencies": {
     "@types/javascript-time-ago": "^2.0.3",
