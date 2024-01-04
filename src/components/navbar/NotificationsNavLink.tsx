@@ -1,4 +1,4 @@
-import { IconButton, Badge, Popover, Box, Tooltip } from '@mui/material'
+import { IconButton, Badge, Popover, Tooltip } from '@mui/material'
 import { IoNotificationsOutline as NotificationIcon } from "react-icons/io5"
 import NotificationList from "@components/notifications/NotificationList"
 import { useGetUnreadNotificationsCountQuery } from "@services/notificationsApi"
@@ -32,10 +32,9 @@ export default function NotificationsNavLink() {
                             vertical: 'top',
                             horizontal: 'center',
                         } }
+                        classes={{paper: 'w-full max-w-90 max-h-130 p-2 overflow-y-auto'}}
                     >
-                        <Box sx={ { maxHeight: '500px', minWidth: '300px', overflowY: 'auto', padding: '8px' } }>
-                            <NotificationList/>
-                        </Box>
+                        <NotificationList/>
                     </Popover>
                 </>
             ) }
