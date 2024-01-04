@@ -67,7 +67,7 @@ export default function SearchConversation() {
                                 vertical: 'top',
                                 horizontal: 'center',
                             }}
-                            classes={{ paper: 'w-full max-w-80 max-h-130 mt-2 overflow-y-auto !ml-2' }}
+                            classes={{ paper: 'ml-0 lg:ml-2' }}
                         >
                             <SearchUserList
                                 searchText={dSearchText}

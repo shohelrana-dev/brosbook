@@ -47,10 +47,12 @@ export default function ExpandableSearch() {
 
                 return (
                     <>
-                        <div className='relative'>
+                        <div
+                            className='relative w-[200px] flex justify-end'
+                            {...bindTrigger(popupState)}
+                        >
                             <Tooltip title='Search'>
                                 <IconButton
-                                    {...bindTrigger(popupState)}
                                     disabled={popupState.isOpen}
                                     className='mt-1'
                                 >
@@ -67,8 +69,8 @@ export default function ExpandableSearch() {
                                 inputRef={inputRef}
                                 className='rounded-3xl z-10 bg-transparent mt-1 py-2'
                                 wrapperClassname={twJoin(
-                                    'absolute top-[50%] translate-y-[-50%] right-0 w-[0px] duration-300 transition-all opacity-0',
-                                    popupState.isOpen && 'w-[200px] opacity-100'
+                                    'absolute top-[50%] translate-y-[-50%] right-0 w-0 duration-300 transition-all opacity-0',
+                                    popupState.isOpen && 'w-full opacity-100'
                                 )}
                                 type='text'
                                 label='Search'
@@ -86,9 +88,9 @@ export default function ExpandableSearch() {
                             }}
                             transformOrigin={{
                                 vertical: 'top',
-                                horizontal: 'center',
+                                horizontal: 'left',
                             }}
-                            classes={{ paper: 'w-full max-w-80 max-h-130 mt-2 overflow-y-auto' }}
+                            sx={{ marginTop: '5px' }}
                         >
                             <SearchUserList searchText={dSearchText} />
                         </Popover>

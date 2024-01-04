@@ -24,7 +24,7 @@ export default function UserItem( { user, hideFollowButton = false, className }:
                     <Avatar src={ user.avatar.url }/>
                 </Link>
                 <div className="w-full">
-                    <div className="flex justify-between w-full">
+                    <div className="flex gap-2 w-full">
                         <div className="flex items-center">
                             <Link href={ `/${ user.username }` } className="block">
                                 <h3 className="text-sm font-medium flex items-center">

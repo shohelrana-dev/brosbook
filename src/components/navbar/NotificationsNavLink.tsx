@@ -32,7 +32,6 @@ export default function NotificationsNavLink() {
                             vertical: 'top',
                             horizontal: 'center',
                         } }
-                        classes={{paper: 'w-full max-w-90 max-h-130 p-2 overflow-y-auto'}}
                     >
                         <NotificationList/>
                     </Popover>

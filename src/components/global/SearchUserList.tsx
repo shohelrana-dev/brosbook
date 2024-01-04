@@ -18,7 +18,7 @@ export default function SearchUserList({ handleUserClick, searchText, hideFollow
     const users = data?.items || []
 
     return (
-        <div className={twMerge('mt-1', wrapperClassname)}>
+        <div className={twMerge('min-w-72 max-h-130 p-3 overflow-y-auto', wrapperClassname)}>
             {isLoading ? <UsersSkeleton count={3} /> : null}
 
             {users && users.length > 0
@@ -33,7 +33,7 @@ export default function SearchUserList({ handleUserClick, searchText, hideFollow
                       >
                           <UserItem
                               user={user}
-                              className={twJoin(handleUserClick && 'pointer-events-none')}
+                              className={twMerge('mb-0', handleUserClick && 'pointer-events-none')}
                               hideFollowButton={hideFollowButton}
                           />
                       </div>
