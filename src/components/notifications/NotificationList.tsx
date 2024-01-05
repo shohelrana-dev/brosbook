@@ -45,7 +45,7 @@ export default function NotificationList() {
     }
 
     return (
-        <div className="w-full min-w-72 max-h-130 p-2 overflow-y-auto">
+        <div className="w-full min-w-80 max-h-130 p-2 overflow-y-auto">
             <h3 className="text-xl font-bold text-gray-900 ml-2 mb-1">Notifications</h3>
             { content }
 
