@@ -3,6 +3,8 @@ import Skeleton from 'react-loading-skeleton'
 export default function PostsSkeleton( { count = 3 } ){
     return (
         <>
+            <p className='text-center my-2 text-gray-500'>Loading...</p>
+
             { Array.from( { length: count } ).map( (_, i) => (
                 <div key={i} className="box bg-white p-5 mb-3">
                     <div className="flex flex-wrap justify-between items-center mb-4">

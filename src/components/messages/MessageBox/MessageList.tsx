@@ -84,7 +84,7 @@ export default function MessageList(){
     }
 
     return (
-        <div className="relative flex flex-col-reverse overflow-y-auto pt-2" id="message-list" ref={ messageListRef }>
+        <div className="relative flex flex-col-reverse overflow-y-auto pb-2" id="message-list" ref={ messageListRef }>
             { content }
         </div>
     )

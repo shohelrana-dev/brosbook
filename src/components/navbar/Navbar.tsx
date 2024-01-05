@@ -11,28 +11,14 @@ import titledLogo from "@assets/images/titled-logo.png"
 import { Button, AppBar, IconButton, Box } from "@mui/material"
 import useMediaQuery from "@hooks/useMediaQuery"
 import { usePathname } from "next/navigation"
-import { setNavbarHeight } from "@slices/navbarHeightSlice"
-import { useEffect } from "react"
-import { useDispatch } from "react-redux"
-import isServer from "@utils/isServer"
 
 export default function Navbar() {
     const isScreenSmall       = useMediaQuery('(max-width: 767px)')
-    const isScreenLarge       = useMediaQuery('(min-width: 920px)')
     const { isAuthenticated } = useAuthState()
     const pathname            = usePathname()
-    const disptach            = useDispatch()
-
-    useEffect(() => {
-        if ( !isServer ) {
-            const navbarEl = document.getElementById('appNavbar')
-            disptach( setNavbarHeight( `${isScreenLarge ? navbarEl?.clientHeight : navbarEl?.clientHeight! + 12}px` ) )
-            
-        }
-    }, [isScreenLarge])
 
     return (
-        <AppBar id="appNavbar" variant="outlined" color="default" position="static" sx={ { background: "#fff", padding: '6px 10px' } }>
+        <AppBar variant="outlined" color="default" position="static" sx={ { background: "#fff", padding: '6px 10px', height: 65 } }>
             <div className="container flex flex-wrap items-center justify-between text-gray-900">
                 <Link href="/">
                     { isScreenSmall ? (

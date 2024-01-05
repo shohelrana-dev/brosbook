@@ -32,7 +32,7 @@ export default function UserMenu() {
                 <>
                     <Tooltip title="Profile">
                         <div className="rounded-full ml-2 cursor-pointer"  { ...bindTrigger(popupState) }>
-                            <Avatar src={ user?.avatar?.url } size="small" className="border-solid border-2 border-theme-green"/>
+                            <Avatar src={ user?.avatar?.url } size="small" className="border-solid border-2 border-primary"/>
                         </div>
                     </Tooltip>
                     <Popover

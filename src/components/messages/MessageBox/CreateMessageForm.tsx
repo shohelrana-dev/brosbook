@@ -10,7 +10,7 @@ import EmojiPicker, { EmojiClickData, EmojiStyle } from "emoji-picker-react"
 import { HiOutlineEmojiHappy as EmojiIcon } from "react-icons/hi"
 import { Popover } from "@mui/material"
 //@ts-ignore
-import { isOneEmoji, isMultipleEmoji } from 'is-emojis'
+import { isMultipleEmoji } from 'is-emojis'
 import { RxCross2 as CancelIcon } from "react-icons/rx"
 import { useParams } from "next/navigation"
 import { useGetConversationByIdQuery } from "@services/conversationsApi"
@@ -66,13 +66,13 @@ export default function CreateMessageForm() {
     return (
         <form
             onSubmit={ submitForm }
-            className={ twJoin("flex items-center mb-2 rounded-2xl bg-white px-2 border-2 border-solid border-gray-200", isFocused && "border-theme-light-green") }
+            className={ twJoin("flex items-center mb-4 rounded-2xl bg-white px-2 border-2 border-solid border-gray-200", isFocused && "border-secondary") }
             onClick={ () => textInputRef.current?.focus() }
             onBlur={ () => textInputRef.current?.blur() }
         >
             { !selectedFile ? (
                 <>
-                    <IconButton className="p-2 text-theme-green">
+                    <IconButton className="p-2 text-primary">
                         <input ref={ inputRef } onChange={ onChange } type="file" name="file" accept="image/*"
                                 hidden/>
                         <GalleryIcon onClick={ onClick } fontSize={ 17 }/>
@@ -83,7 +83,7 @@ export default function CreateMessageForm() {
                             <div>
                                 <div className="mr-1">
                                     <IconButton type="button" { ...bindTrigger(popupState) }>
-                                        <EmojiIcon fontSize={ 20 } className="text-theme-green"/>
+                                        <EmojiIcon fontSize={ 20 } className="text-primary"/>
                                     </IconButton>
                                 </div>
                                 <Popover
@@ -146,7 +146,7 @@ export default function CreateMessageForm() {
                 type="submit"
                 disabled={ isLoading || ( !messageText && !selectedFile ) }
                 sx={ {
-                    color: ( theme ) => theme.palette.themeLightGreen,
+                    color: ( theme ) => theme.palette.secondary.main,
                     '&:disabled': '#ddd'
                 } }
             >

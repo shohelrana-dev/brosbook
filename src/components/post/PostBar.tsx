@@ -47,8 +47,7 @@ export default function PostBar( { post, setIsCommentsShow, isCommentsShow }: Po
     }
 
     return (
-        <div
-            className="flex flex-wrap mt-2 border-t-2 border-b-2 border-gray-100 py-1 border-solid border-l-0 border-r-0 justify-around">
+        <div className="flex flex-wrap mt-2 border-x-0 border-y border-solid border-gray-200 py-1 justify-around">
             <div className="flex flex-wrap items-center relative">
                 <motion.button
                     className="icon"

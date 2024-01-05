@@ -73,7 +73,7 @@ export default function CommentList( { post }: Props ) {
                                 type="submit"
                                 disabled={ isLoading || !commentBody }
                                 sx={{
-                                    color: (theme) => theme.palette.themeLightGreen,
+                                    color: (theme) => theme.palette.secondary.main,
                                     '&:disabled': '#ddd'
                                 }}
                             >

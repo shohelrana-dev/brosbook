@@ -9,6 +9,8 @@ import toast from 'react-hot-toast'
 import PopupState, { bindPopover, bindTrigger } from 'material-ui-popup-state'
 import { Popover } from '@mui/material'
 import useInputValue from '@hooks/useInputValue'
+import { useEffect, useRef } from 'react'
+import { twJoin } from 'tailwind-merge'
 
 export default function SearchConversation() {
     const [searchText, handleInputChange, resetSearchText] = useInputValue('')
@@ -17,6 +19,7 @@ export default function SearchConversation() {
     const [createConversation] = useCreateConversationMutation()
     const router = useRouter()
     const confirmAlert = useConfirmAlert()
+    const inputRef = useRef<HTMLInputElement>()
 
     async function handleUserClick(user: User) {
         try {
@@ -48,14 +51,19 @@ export default function SearchConversation() {
             disableAutoFocus
         >
             {popupState => {
+                useEffect(() => {
+                    popupState.isOpen && inputRef.current?.focus()
+                }, [popupState.isOpen, inputRef.current])
+
                 return (
-                    <div className='mb-3'>
+                    <div className={twJoin('mb-3', popupState.isOpen && 'relative z-9999')}>
                         <BasicInput
                             {...bindTrigger(popupState)}
                             label='Search user'
                             labelHide={true}
                             onChange={handleInputChange}
                             autoComplete='off'
+                            inputRef={inputRef}
                         />
                         <Popover
                             {...bindPopover(popupState)}
@@ -68,6 +76,7 @@ export default function SearchConversation() {
                                 horizontal: 'center',
                             }}
                             classes={{ paper: 'ml-0 lg:ml-2' }}
+                            sx={{ '& .MuiPaper-root': { width: `${inputRef.current?.offsetWidth}px` } }}
                         >
                             <SearchUserList
                                 searchText={dSearchText}

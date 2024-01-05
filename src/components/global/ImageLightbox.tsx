@@ -35,7 +35,7 @@ export default function ImageLightbox( { image, imageList, className, ...rest }:
         </a>
     )
 
-    const wrapperClassName = twJoin( imageList && imageList.length > 0 && 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-1' )
+    const wrapperClassName = twJoin( imageList && imageList.length > 0 && 'grid grid-cols-[repeat(auto-fill,_minmax(150px,_1fr))] gap-1' )
 
     return (
         <LightGallery

@@ -48,7 +48,7 @@ export default function ExpandableSearch() {
                 return (
                     <>
                         <div
-                            className='relative w-[200px] flex justify-end'
+                            className={twJoin('relative w-52 flex-grow flex justify-end', popupState.isOpen && 'z-9999')}
                             {...bindTrigger(popupState)}
                         >
                             <Tooltip title='Search'>

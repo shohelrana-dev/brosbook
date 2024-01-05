@@ -58,7 +58,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
     return (
         <html lang='eng'>
             <head />
-            <body className={`${kanit.className} bg-theme-gray`}>
+            <body className={`${kanit.className} bg-primary-gray`}>
                 <Providers>
                     <PreLoader user={user!} />
                     <Navbar />

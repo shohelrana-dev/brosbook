@@ -28,7 +28,7 @@ export default function BasicInput( props: BasicInputProps ) {
             ...rest
         } = props
 
-    className = twMerge('block w-full font-kanit text-gray-700 outline-none py-3 px-3 rounded-lg border-2 border-solid border-gray-200 focus:border-theme-light-green', className)
+    className = twMerge('block w-full font-kanit text-gray-700 outline-none py-3 px-3 rounded-lg border-2 border-solid border-gray-200 focus:border-primary', className)
 
     const id = name ? name : label.replace(' ', '')
 

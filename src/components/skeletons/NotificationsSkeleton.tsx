@@ -3,6 +3,8 @@ import Skeleton from 'react-loading-skeleton'
 export default function NotificationsSkeleton( { count = 5 } ){
     return (
         <>
+            <p className='text-center my-2 text-gray-500'>Loading...</p>
+        
             { Array.from( { length: count } ).map( (_, i) => (
                 <div key={i} className="px-3 py-2 mb-3 flex flex-wrap gap-3 items-center">
                     <Skeleton width={ 45 } height={ 45 } circle/>

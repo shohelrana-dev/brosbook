@@ -50,7 +50,7 @@ export default function CommentItem({ post, comment }: Props){
             </Link>
             <div>
                 <div className="flex items-center">
-                    <div className="ml-2 mt-1 py-2 px-4 rounded-xl bg-theme-gray relative">
+                    <div className="ml-2 mt-1 py-2 px-4 rounded-xl bg-primary-gray relative">
                         <Link href={ `/${ author.username }` } className="flex">
                             <h3 className="text-xs font-medium">
                                 { author.fullName }

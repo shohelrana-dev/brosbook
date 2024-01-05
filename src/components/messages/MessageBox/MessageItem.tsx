@@ -10,8 +10,8 @@ import Image from "next/image"
 import { User } from "@interfaces/user.interfaces"
 
 const classes = {
-    ownRow: 'flex items-end float-right mb-2 max-w-[70%]',
-    PartnerRow: 'flex items-end float-left mb-2 max-w-[70%]',
+    ownRow: 'flex items-end float-right max-w-[70%] mb-1',
+    PartnerRow: 'flex items-end float-left max-w-[70%] mb-1',
     messageWrap: 'w-full',
     time: 'text-gray-500 text-xs'
 }

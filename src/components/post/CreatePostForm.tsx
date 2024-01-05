@@ -76,7 +76,7 @@ export default function CreatePostForm() {
                             sx={{
                                 padding: '10px',
                                 marginTop: '-10px',
-                                color: theme => theme.palette.themeGreen,
+                                color: theme => theme.palette.primary.main,
                             }}
                             disabled
                         >
