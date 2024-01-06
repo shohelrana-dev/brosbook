@@ -116,18 +116,19 @@ export default function CreatePostForm() {
             <div
                 className={twMerge(
                     'box bg-white p-4 max-h-[250px] overflow-hidden absolute top-0 left-0 opacity-0 duration-500',
-                    isVisible && 'relative opacity-100 max-h-[800px] z-50'
+                    isVisible && 'relative opacity-100 max-h-[1600px] z-50'
                 )}
             >
-                <Tooltip
-                    title='Close'
-                    className='absolute top-2 right-2'
-                    onClick={toggle}
-                >
-                    <IconButton>
-                        <CancelIcon size={18} />
-                    </IconButton>
-                </Tooltip>
+                <div className='absolute top-1 right-1'>
+                    <Tooltip
+                        title='Close'
+                        onClick={toggle}
+                    >
+                        <IconButton>
+                            <CancelIcon size={18} />
+                        </IconButton>
+                    </Tooltip>
+                </div>
 
                 <h1 className='text-center text-lg lg:text-xl font-bold border-b border-gray-100 mb-3 pb-2'>Create post</h1>
 
@@ -191,7 +192,7 @@ export default function CreatePostForm() {
                         <IconButton
                             sx={{
                                 padding: '10px',
-                                color: theme => theme.palette.themeGreen,
+                                color: theme => theme.palette.primary.main,
                             }}
                             onClick={onClick}
                         >
