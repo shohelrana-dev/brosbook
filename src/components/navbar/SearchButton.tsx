@@ -10,7 +10,7 @@ import PopupState, { bindPopover, bindTrigger } from 'material-ui-popup-state'
 import useInputValue from '@hooks/useInputValue'
 import { IoArrowBack as BackIcon } from 'react-icons/io5'
 
-export default function ExpandableSearch() {
+export default function SearchButton() {
     const [searchText, handleInputChange, resetInputValue] = useInputValue('')
     const [dSearchText] = useDebounce<string>(searchText, 1000)
     const router = useRouter()
@@ -37,15 +37,11 @@ export default function ExpandableSearch() {
 
                     !isOpen && resetInputValue()
                 }, [isOpen, inputRef.current])
-                /* 'relative w-52 flex-grow flex justify-end', isOpen && 'z-9999' */
+
                 return (
                     <>
                         <Tooltip title='Search'>
-                            <IconButton
-                                disabled={isOpen}
-                                className='mt-1 z-10'
-                                {...bindTrigger(popupState)}
-                            >
+                            <IconButton {...bindTrigger(popupState)}>
                                 <SearchIcon
                                     size={18}
                                     className='text-gray-700 '
@@ -63,9 +59,8 @@ export default function ExpandableSearch() {
                                 vertical: 'top',
                                 horizontal: 'center',
                             }}
-                            sx={{ marginTop: '7px' }}
                         >
-                            <div className='flex gap-1 items-center p-3 pl-1'>
+                            <div className='flex gap-1 items-center p-3 pl-1 pb-0'>
                                 <IconButton
                                     className='h-8 w-8'
                                     onClick={() => setOpen(false)}
