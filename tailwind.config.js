@@ -25,9 +25,10 @@ module.exports = {
                 100: '25rem',
                 130: '32.5rem',
                 160: '40rem',
+                navbar: '65px',
             },
             height: {
-                'screen-content': 'calc(100dvh - 65px)'
+                'screen-content': 'calc(100dvh - 65px)',
             },
             zIndex: {
                 99: 99,

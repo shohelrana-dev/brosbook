@@ -3,17 +3,16 @@ import { Message } from '@interfaces/conversation.interfaces'
 import ImageLightbox from '@components/global/ImageLightbox'
 import moment from 'moment'
 import Linkify from 'linkify-react'
-import { twJoin } from 'tailwind-merge'
+import { twJoin, twMerge } from 'tailwind-merge'
 
 const classes = {
     textMessage: ({ isOwn, hasReaction }: { isOwn: boolean; hasReaction: boolean }) =>
-        twJoin(
-            'box relative flex items-end gap-1',
-            isOwn ? `bg-primary text-white [a]:text-blue-100` : `bg-white text-gray-700 [a]:text-blue-500`,
-            hasReaction ? `mb-3` : `mb-0`
+        twMerge(
+            'box relative flex items-end gap-1 text-sm lg:text-base bg-white text-gray-700 [&_a]:text-blue-500 [&_a]:underline',
+            twJoin(isOwn && 'bg-primary text-white [&_a]:text-white', hasReaction && 'mb-3')
         ),
     emojiMessage: ({ hasReaction }: { hasReaction: boolean }) =>
-        twJoin('relative pt-2 text-3xl flex items-end gap-1 text-gray-700', hasReaction ? `mb-3` : `mb-0`),
+        twJoin('relative pt-2 text-3xl flex items-end gap-1 text-gray-700', hasReaction && `mb-3`),
     imageMessage: 'relative max-w-[200px] flex items-end gap-1 text-gray-700',
     time: 'text-[10px]',
 }
