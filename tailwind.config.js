@@ -39,6 +39,14 @@ module.exports = {
             fontFamily: {
                 kanit: ['var(--font-kanit)'],
             },
+            animation: {
+                like: 'like 0.7s steps(28) forwards;',
+            },
+            keyframes: {
+                like: {
+                    to: { backgroundPosition: 'right' },
+                },
+            },
         },
     },
     corePlugins: {

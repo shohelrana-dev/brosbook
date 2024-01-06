@@ -1,14 +1,12 @@
 import React, { MouseEvent } from 'react'
-import { BsHeartFill as LikeIcon } from 'react-icons/bs'
-import { BsHeart as OutlinedLikeIcon } from 'react-icons/bs'
 import { FaRegComment as CommentIcon } from 'react-icons/fa'
 import { Post } from '@interfaces/posts.interfaces'
 import { usePostLikeMutation, usePostUnlikeMutation } from '@services/postsApi'
-import { motion } from 'framer-motion'
 import { IconButton, Tooltip } from '@mui/material'
 import PostShare from '@components/post/PostShare'
 import useAuthState from '@hooks/useAuthState'
 import useUnauthorizedAlert from '@hooks/useUnauthorzedAlert'
+import { twJoin } from 'tailwind-merge'
 
 interface PostBarProps {
     post: Post
@@ -51,43 +49,20 @@ export default function PostBar({ post, setIsCommentsShow, isCommentsShow }: Pos
 
     return (
         <div className='flex flex-wrap mt-2 border-x-0 border-y border-solid border-gray-200 py-1 justify-around'>
-            <Tooltip title='Like'>
-                <div className='flex flex-wrap items-center relative'>
-                    <motion.button
-                        className='icon'
-                        onClick={handlePostUnlike}
-                        initial={{ scale: 0 }}
-                        animate={{ scale: isViewerLiked ? 1 : 0 }}
-                        transition={{ duration: 0.1 }}
-                    >
-                        <LikeIcon
-                            fontSize='medium'
-                            color='#FF1493'
-                        />
-                    </motion.button>
-
-                    <motion.button
-                        className='icon absolute left-0'
-                        onClick={handlePostLike}
-                        initial={{ scale: 0 }}
-                        animate={{ scale: !isViewerLiked ? 1 : 0 }}
-                        transition={{ duration: 0.1 }}
-                    >
-                        <OutlinedLikeIcon fontSize='medium' />
-                    </motion.button>
-
-                    <motion.p
-                        key={likesCount}
-                        initial={{ y: -20, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        exit={{ opacity: 0, y: 20 }}
-                        transition={{ duration: 0.3 }}
-                        className='text-gray-600'
-                    >
-                        {likesCount}
-                    </motion.p>
-                </div>
-            </Tooltip>
+            <div className='flex flex-wrap items-center gap-1'>
+                <IconButton
+                    onClick={isViewerLiked ? handlePostUnlike : handlePostLike}
+                    className='relative w-8 h-8'
+                >
+                    <div
+                        className={twJoin(
+                            'h-14 w-14 bg-[url("/heart.png")] bg-cover absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2',
+                            isViewerLiked && 'animate-like'
+                        )}
+                    />
+                </IconButton>
+                {likesCount}
+            </div>
             <div className='flex flex-wrap items-center'>
                 <Tooltip title='Comments'>
                     <IconButton onClick={() => setIsCommentsShow(!isCommentsShow)}>
