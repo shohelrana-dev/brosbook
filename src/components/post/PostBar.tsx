@@ -6,7 +6,7 @@ import { IconButton, Tooltip } from '@mui/material'
 import PostShare from '@components/post/PostShare'
 import useAuthState from '@hooks/useAuthState'
 import useUnauthorizedAlert from '@hooks/useUnauthorzedAlert'
-import { twJoin } from 'tailwind-merge'
+import { twJoin, twMerge } from 'tailwind-merge'
 
 interface PostBarProps {
     post: Post
@@ -50,18 +50,37 @@ export default function PostBar({ post, setIsCommentsShow, isCommentsShow }: Pos
     return (
         <div className='flex flex-wrap mt-2 border-x-0 border-y border-solid border-gray-200 py-1 justify-around'>
             <div className='flex flex-wrap items-center gap-1'>
-                <IconButton
-                    onClick={isViewerLiked ? handlePostUnlike : handlePostLike}
-                    className='relative w-8 h-8'
-                >
-                    <div
-                        className={twJoin(
-                            'h-14 w-14 bg-[url("/heart.png")] bg-cover absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2',
-                            isViewerLiked && 'animate-like'
+                <Tooltip title={isViewerLiked ? 'Unlike' : 'Like'}>
+                    <IconButton
+                        onClick={isViewerLiked ? handlePostUnlike : handlePostLike}
+                        className='relative w-8 h-8'
+                    >
+                        <div
+                            className={twJoin(
+                                'h-14 w-14 bg-[url("/heart.png")] bg-cover absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2',
+                                isViewerLiked && 'animate-like'
+                            )}
+                        />
+                    </IconButton>
+                </Tooltip>
+                <div className='text-gray-600 relative h-full'>
+                    <p
+                        className={twMerge(
+                            'absolute left-0 top-1/2 translate-y-[-150%] opacity-0 duration-300',
+                            !isViewerLiked && 'opacity-100 -translate-y-1/2'
                         )}
-                    />
-                </IconButton>
-                {likesCount}
+                    >
+                        {likesCount}
+                    </p>
+                    <p
+                        className={twMerge(
+                            'absolute left-0 top-1/2 translate-y-1/2 opacity-0 duration-300',
+                            isViewerLiked && 'opacity-100 -translate-y-1/2'
+                        )}
+                    >
+                        {likesCount}
+                    </p>
+                </div>
             </div>
             <div className='flex flex-wrap items-center'>
                 <Tooltip title='Comments'>
