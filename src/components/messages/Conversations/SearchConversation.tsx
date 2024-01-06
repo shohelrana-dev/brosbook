@@ -69,13 +69,12 @@ export default function SearchConversation() {
                             {...bindPopover(popupState)}
                             anchorOrigin={{
                                 vertical: 'bottom',
-                                horizontal: 'left',
+                                horizontal: 'center',
                             }}
                             transformOrigin={{
                                 vertical: 'top',
                                 horizontal: 'center',
                             }}
-                            classes={{ paper: 'ml-0 lg:ml-2' }}
                             sx={{ '& .MuiPaper-root': { width: `${inputRef.current?.offsetWidth}px` } }}
                         >
                             <SearchUserList
