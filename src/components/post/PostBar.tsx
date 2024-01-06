@@ -1,93 +1,103 @@
 import React, { MouseEvent } from 'react'
-import { BsHeartFill as LikeIcon } from "react-icons/bs"
-import { BsHeart as OutlinedLikeIcon } from "react-icons/bs"
-import { FaRegComment as CommentIcon } from "react-icons/fa"
-import { Post } from "@interfaces/posts.interfaces"
-import { usePostLikeMutation, usePostUnlikeMutation } from "@services/postsApi"
-import { motion } from "framer-motion"
-import { IconButton } from '@mui/material'
-import PostShare from "@components/post/PostShare"
-import useAuthState from "@hooks/useAuthState"
-import useUnauthorizedAlert from "@hooks/useUnauthorzedAlert"
-
+import { BsHeartFill as LikeIcon } from 'react-icons/bs'
+import { BsHeart as OutlinedLikeIcon } from 'react-icons/bs'
+import { FaRegComment as CommentIcon } from 'react-icons/fa'
+import { Post } from '@interfaces/posts.interfaces'
+import { usePostLikeMutation, usePostUnlikeMutation } from '@services/postsApi'
+import { motion } from 'framer-motion'
+import { IconButton, Tooltip } from '@mui/material'
+import PostShare from '@components/post/PostShare'
+import useAuthState from '@hooks/useAuthState'
+import useUnauthorizedAlert from '@hooks/useUnauthorzedAlert'
 
 interface PostBarProps {
     post: Post
     isCommentsShow: boolean
-    setIsCommentsShow: ( _: boolean ) => void
+    setIsCommentsShow: (_: boolean) => void
 }
 
-export default function PostBar( { post, setIsCommentsShow, isCommentsShow }: PostBarProps ) {
+export default function PostBar({ post, setIsCommentsShow, isCommentsShow }: PostBarProps) {
     //hooks
-    const [ postLike ]        = usePostLikeMutation()
-    const [ postUnlike ]      = usePostUnlikeMutation()
+    const [postLike] = usePostLikeMutation()
+    const [postUnlike] = usePostUnlikeMutation()
     const { isAuthenticated } = useAuthState()
-    const unauthorizedAlert   = useUnauthorizedAlert()
+    const unauthorizedAlert = useUnauthorizedAlert()
 
     const { author, id, isViewerLiked, commentsCount, likesCount } = post
 
-    function handlePostLike( event: MouseEvent<HTMLButtonElement> ) {
+    function handlePostLike(event: MouseEvent<HTMLButtonElement>) {
         event.currentTarget.disabled = true
 
-        if ( !isAuthenticated ) {
+        if (!isAuthenticated) {
             unauthorizedAlert({
                 title: 'Like a Post to share the love.',
-                message: `Join ${ process.env.NEXT_PUBLIC_APP_NAME } now to let ${ author.fullName } know you like their Post.`
+                message: `Join ${process.env.NEXT_PUBLIC_APP_NAME} now to let ${author.fullName} know you like their Post.`,
             })
             return
         }
 
         postLike({ postId: id, authorId: author.id })
+
+        event.currentTarget.disabled = false
     }
 
-    function handlePostUnlike( event: MouseEvent<HTMLButtonElement> ) {
+    function handlePostUnlike(event: MouseEvent<HTMLButtonElement>) {
         event.currentTarget.disabled = true
 
         postUnlike({ postId: id, authorId: author.id })
+
+        event.currentTarget.disabled = false
     }
 
     return (
-        <div className="flex flex-wrap mt-2 border-x-0 border-y border-solid border-gray-200 py-1 justify-around">
-            <div className="flex flex-wrap items-center relative">
-                <motion.button
-                    className="icon"
-                    onClick={ handlePostUnlike }
-                    initial={ { scale: 0 } }
-                    animate={ { scale: isViewerLiked ? 1 : 0 } }
-                    transition={ { duration: 0.1 } }
-                >
-                    <LikeIcon fontSize="medium" color="#FF1493"/>
-                </motion.button>
+        <div className='flex flex-wrap mt-2 border-x-0 border-y border-solid border-gray-200 py-1 justify-around'>
+            <Tooltip title='Like'>
+                <div className='flex flex-wrap items-center relative'>
+                    <motion.button
+                        className='icon'
+                        onClick={handlePostUnlike}
+                        initial={{ scale: 0 }}
+                        animate={{ scale: isViewerLiked ? 1 : 0 }}
+                        transition={{ duration: 0.1 }}
+                    >
+                        <LikeIcon
+                            fontSize='medium'
+                            color='#FF1493'
+                        />
+                    </motion.button>
 
-                <motion.button
-                    className="icon absolute left-0"
-                    onClick={ handlePostLike }
-                    initial={ { scale: 0 } }
-                    animate={ { scale: !isViewerLiked ? 1 : 0 } }
-                    transition={ { duration: 0.1 } }
-                >
-                    <OutlinedLikeIcon fontSize="medium"/>
-                </motion.button>
+                    <motion.button
+                        className='icon absolute left-0'
+                        onClick={handlePostLike}
+                        initial={{ scale: 0 }}
+                        animate={{ scale: !isViewerLiked ? 1 : 0 }}
+                        transition={{ duration: 0.1 }}
+                    >
+                        <OutlinedLikeIcon fontSize='medium' />
+                    </motion.button>
 
-                <motion.p
-                    key={ likesCount }
-                    initial={ { y: -20, opacity: 0 } }
-                    animate={ { y: 0, opacity: 1 } }
-                    exit={ { opacity: 0, y: 20 } }
-                    transition={ { duration: 0.3 } }
-                    className="text-gray-600"
-                >
-                    { likesCount }
-                </motion.p>
+                    <motion.p
+                        key={likesCount}
+                        initial={{ y: -20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        exit={{ opacity: 0, y: 20 }}
+                        transition={{ duration: 0.3 }}
+                        className='text-gray-600'
+                    >
+                        {likesCount}
+                    </motion.p>
+                </div>
+            </Tooltip>
+            <div className='flex flex-wrap items-center'>
+                <Tooltip title='Comments'>
+                    <IconButton onClick={() => setIsCommentsShow(!isCommentsShow)}>
+                        <CommentIcon size='18' />
+                    </IconButton>
+                </Tooltip>
+                <p className='text-gray-600'>{commentsCount}</p>
             </div>
-            <div className="flex flex-wrap items-center">
-                <IconButton onClick={ () => setIsCommentsShow(!isCommentsShow) }>
-                    <CommentIcon size="18"/>
-                </IconButton>
-                <p className="text-gray-600">{ commentsCount }</p>
-            </div>
 
-            <PostShare post={ post }/>
+            <PostShare post={post} />
         </div>
     )
 }
