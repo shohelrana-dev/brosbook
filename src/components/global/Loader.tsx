@@ -17,7 +17,7 @@ export default function Loader( { wrapperClassName, loading = true, ...rest }: L
                 variant="indeterminate"
                 disableShrink
                 sx={ {
-                    color: ( theme ) => theme.palette.secondary.main,
+                    color: ( theme ) => theme.palette.primary.main,
                     animationDuration: '550ms',
                     [`& .${ circularProgressClasses.circle }`]: {
                         strokeLinecap: 'round',
