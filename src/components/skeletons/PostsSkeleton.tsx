@@ -21,7 +21,7 @@ export default function PostsSkeleton( { count = 3 } ){
                         <Skeleton width={ 22 } height={ 6 }/>
                     </div>
                     <Skeleton height={ 10 } count={ 3 }/>
-                    <Skeleton height={ 10 } style={{width: "50%"}}/>
+                    <Skeleton height={ 10 } style={{width: ""}}/>
                     <div className="flex flex-wrap justify-around border-0 border-solid border-gray-50 border-t-2 border-b-2 py-1 mt-3">
                         <Skeleton width={ 22 } height={ 22 } circle/>
                         <Skeleton width={ 22 } height={ 22 } circle/>
