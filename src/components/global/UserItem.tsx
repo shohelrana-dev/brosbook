@@ -5,7 +5,7 @@ import FollowButton from "@components/global/FollowButton"
 import TextOverflow from 'react-text-overflow'
 import useAuthState from "@hooks/useAuthState"
 import {TbDiscountCheckFilled as BlueBadgeIcon} from "react-icons/tb"
-import { twMerge } from "tailwind-merge"
+import cn from "@utils/cn"
 
 interface Props {
     user: User
@@ -18,7 +18,7 @@ export default function UserItem( { user, hideFollowButton = false, className }:
     const isCurrentUser         = user.id === currentUser?.id
 
     return (
-        <div className={ twMerge( 'flex mb-4 w-full', className ) }>
+        <div className={ cn( 'flex mb-4 w-full', className ) }>
             <div className="flex w-full">
                 <Link href={ `/${ user.username }` } className="inline-block min-w-[40px] mr-3">
                     <Avatar src={ user.avatar.url }/>

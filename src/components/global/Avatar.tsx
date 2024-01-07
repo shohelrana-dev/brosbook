@@ -1,7 +1,7 @@
 import React, { ImgHTMLAttributes } from 'react'
 import Image from 'next/image'
 import Skeleton from 'react-loading-skeleton'
-import { twMerge } from 'tailwind-merge'
+import cn from '@utils/cn'
 
 interface AvatarProps extends ImgHTMLAttributes<HTMLImageElement> {
     online?: boolean
@@ -29,7 +29,7 @@ export default function Avatar({ online, size = 'medium', src, className }: Avat
         height: `${_size}px`,
     }
 
-    className = twMerge(`rounded-full object-cover`, className)
+    className = cn(`rounded-full object-cover`, className)
 
     if (!src) {
         return (

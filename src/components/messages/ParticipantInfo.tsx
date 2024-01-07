@@ -8,7 +8,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useParams } from 'next/navigation'
 import Error from '@components/global/Error'
 import useInfiniteScroll from 'react-infinite-scroll-hook'
-import { twMerge } from 'tailwind-merge'
+import cn from '@utils/cn'
 
 const classes = {
     box: `box p-5 mb-3`,
@@ -111,7 +111,7 @@ export default function ParticipantInfo() {
                 ) : null}
             </div>
 
-            <div className={twMerge(classes.box, classes.mediaWrapper)}>
+            <div className={cn(classes.box, classes.mediaWrapper)}>
                 <h3 className={classes.heading}>Shared Media</h3>
 
                 {listContent}

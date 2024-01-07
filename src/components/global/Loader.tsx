@@ -1,6 +1,6 @@
 "use client"
 import CircularProgress, { circularProgressClasses, CircularProgressProps } from '@mui/material/CircularProgress'
-import { twMerge } from 'tailwind-merge'
+import cn from '@utils/cn'
 
 interface LoaderProps extends CircularProgressProps {
     loading?: boolean,
@@ -12,7 +12,7 @@ export default function Loader( { wrapperClassName, loading = true, ...rest }: L
     if ( typeof loading === 'boolean' && !loading ) return null
 
     return (
-        <div className={ twMerge('flex flex-wrap justify-center my-4', wrapperClassName) }>
+        <div className={ cn('flex flex-wrap justify-center my-4', wrapperClassName) }>
             <CircularProgress
                 variant="indeterminate"
                 disableShrink

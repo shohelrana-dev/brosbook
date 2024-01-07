@@ -19,6 +19,7 @@
     "@reduxjs/toolkit": "^1.9.3",
     "add": "^2.0.6",
     "axios": "^1.2.3",
+    "clsx": "^2.1.0",
     "delay": "^5.0.0",
     "emoji-picker-react": "^4.4.7",
     "framer-motion": "^8.5.0",

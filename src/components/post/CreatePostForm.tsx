@@ -7,7 +7,6 @@ import toast from 'react-hot-toast'
 import { LoadingButton } from '@mui/lab'
 import { IconButton, Tooltip } from '@mui/material'
 import { useModal } from 'react-minimal-modal'
-import { twMerge } from 'tailwind-merge'
 
 import Avatar from '@components/global/Avatar'
 import { useCreatePostMutation } from '@services/postsApi'
@@ -15,6 +14,7 @@ import BasicInput from '@components/form/BasicInput'
 import useAuthState from '@hooks/useAuthState'
 import useSelectFile from '@hooks/useSelectFile'
 import useFocus from '@hooks/useFocus'
+import cn from '@utils/cn'
 
 export default function CreatePostForm() {
 	//hooks
@@ -66,7 +66,7 @@ export default function CreatePostForm() {
 	return (
 		<div className='relative mb-5'>
 			<div
-				className={twMerge(
+				className={cn(
 					'fixed top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.3)] z-10 opacity-0 duration-300 invisible',
 					isVisible && 'opacity-100 visible'
 				)}
@@ -114,7 +114,7 @@ export default function CreatePostForm() {
 			)}
 
 			<div
-				className={twMerge(
+				className={cn(
 					'box bg-white p-4 max-h-[250px] overflow-hidden absolute top-0 left-0 opacity-0 duration-500',
 					isVisible && 'relative opacity-100 max-h-[1600px] z-50'
 				)}
