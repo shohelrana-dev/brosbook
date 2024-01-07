@@ -8,6 +8,6 @@ export default function SinglePostPage( { post: initialPost }: { post: Post } ){
     const { data: post = initialPost } = useGetPostByIdQuery( initialPost.id )
 
     return (
-        <PostCard post={ post! } isCommentsShow={ true }/>
+        <PostCard post={ post! } initialCommentsVisible={ true }/>
     )
 }

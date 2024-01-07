@@ -5,7 +5,7 @@ import { BiErrorCircle as ErrorIcon } from "react-icons/bi"
 
 export default function GlobalError( { error, reset }: { error: Error; reset: () => void; } ){
     return (
-        <div className="w-full h-full flex flex-wrap items-center justify-center flex flex-col py-5">
+        <div className="w-full h-full flex flex-wrap items-center justify-center py-5">
             <div className="mb-5">
                 <ErrorIcon size={40} className="text-gray-700"/>
             </div>
