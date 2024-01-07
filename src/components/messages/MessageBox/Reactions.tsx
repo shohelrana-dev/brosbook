@@ -25,7 +25,7 @@ export default function Reactions({ message }: { message: Message }) {
                     <div>
                         <div
                             className={twJoin(
-                                'absolute top-[50%] translate-y-[-50%]',
+                                'absolute top-1/2 -translate-y-1/2',
                                 !message.isMeSender && '-right-9',
                                 message.isMeSender && '-left-9'
                             )}
@@ -79,7 +79,7 @@ export default function Reactions({ message }: { message: Message }) {
             {message.reactions?.length > 0 ? (
                 <div
                     className={twJoin(
-                        'absolute w-max bottom-[-16px] flex gap-x-1 justify-center p-[2px] bg-white rounded-full px-1',
+                        'absolute w-max -bottom-4 flex gap-x-1 justify-center p-[2px] bg-white rounded-full px-1',
                         message.isMeSender && 'left-2',
                         !message.isMeSender && 'right-2'
                     )}

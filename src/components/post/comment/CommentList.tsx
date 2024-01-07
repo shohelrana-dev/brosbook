@@ -68,7 +68,7 @@ export default function CommentList( { post }: Props ) {
                             onChange={ ( e ) => setCommentBody(e.target.value) }
                             autoComplete='off'
                         />
-                        <div className="absolute top-[50%] right-[8px] translate-y-[-50%]">
+                        <div className="absolute top-1/2 right-2 right -translate-y-1/2">
                             <IconButton
                                 type="submit"
                                 disabled={ isLoading || !commentBody }
