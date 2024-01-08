@@ -1,6 +1,7 @@
 'use client'
+import React from 'react'
 import { User } from '@/interfaces/user.interfaces'
-import { useGetSuggestedUsersQuery } from '@/services/usersApi'
+import { useGetFollowersQuery } from '@/services/usersApi'
 import UserItem from '@/components/global/UserItem'
 import Link from 'next/link'
 import UsersSkeleton from '@/components/skeletons/UsersSkeleton'
@@ -10,13 +11,13 @@ import { ErrorResponse } from '@/interfaces/index.interfaces'
 import { Button } from '@mui/material'
 import WidgetLayout from '@/components/widgets/WidgetLayout'
 
-export default function SuggestedPeople() {
-	const { isAuthenticated } = useAuthState()
-	const suggestedUsersQuery = useGetSuggestedUsersQuery({ page: 1, limit: 6 })
+export default function Followers() {
+	const { isAuthenticated, user } = useAuthState()
+	const followersQuery = useGetFollowersQuery({ userId: user?.id!, page: 1 }, { skip: !user?.id })
 
-	const { isError, isLoading } = suggestedUsersQuery
-	const { items: users, nextPage } = suggestedUsersQuery?.data || {}
-	const error = (suggestedUsersQuery.error || {}) as ErrorResponse
+	const { isError, isLoading } = followersQuery
+	const { items: users, nextPage } = followersQuery?.data || {}
+	const error = (followersQuery.error || {}) as ErrorResponse
 
 	if (!isAuthenticated) return null
 
@@ -27,17 +28,17 @@ export default function SuggestedPeople() {
 	} else if (isError) {
 		content = <Error message={error?.data?.message} />
 	} else if (users && users.length === 0) {
-		content = <p>No suggestions</p>
+		content = <p>No one following yet.</p>
 	} else if (users && users.length > 0) {
 		content = users.map((user: User) => <UserItem user={user} key={user.id} />)
 	}
 
 	return (
-		<WidgetLayout title='Suggestions for you'>
+		<WidgetLayout title="Who's follownig">
 			{content}
 
 			{!!nextPage ? (
-				<Link href='/suggestions'>
+				<Link href={`/${user?.username}/followers`}>
 					<Button>See More</Button>
 				</Link>
 			) : null}
