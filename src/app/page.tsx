@@ -5,14 +5,15 @@ import CreatePostForm from '@components/post/CreatePostForm'
 import SlidesSuggestions from '@components/global/SlidesSuggestions'
 import { getFeedPosts } from '@services/index'
 import { cookies } from 'next/headers'
+import siteMetadata from '@utils/siteMetadata'
 
 export const metadata: Metadata = {
-	title: `Home | ${process.env.NEXT_PUBLIC_APP_NAME}`,
+	title: `Home | ${siteMetadata.appName}`,
 }
 
 export default async function HomePage() {
-	const posts = await getFeedPosts(cookies())
-    
+	const postsData = await getFeedPosts(cookies())
+
 	return (
 		<SidebarLayout>
 			<div className='mt-5 mb-4'>
@@ -20,7 +21,7 @@ export default async function HomePage() {
 
 				<SlidesSuggestions />
 
-				<FeedPosts initialPosts={posts} />
+				<FeedPosts initialPostsData={postsData} />
 			</div>
 		</SidebarLayout>
 	)
