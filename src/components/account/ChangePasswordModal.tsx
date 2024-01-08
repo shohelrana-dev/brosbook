@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react'
-import PasswordInput from "@components/form/PasswordInput"
-import { useChangePasswordMutation } from "@services/accountApi"
-import { ChangePasswordPayload } from "@interfaces/account.interfaces"
+import PasswordInput from "@/components/form/PasswordInput"
+import { useChangePasswordMutation } from "@/services/accountApi"
+import { ChangePasswordPayload } from "@/interfaces/account.interfaces"
 import toast from "react-hot-toast"
-import { useForm } from "@hooks/useForm"
+import { useForm } from "@/hooks/useForm"
 import Modal, { useModal } from "react-minimal-modal"
 import Link from "next/link"
 import { LoadingButton } from '@mui/lab'

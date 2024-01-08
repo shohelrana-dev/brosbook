@@ -1,14 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react'
-import MessageItem from "@components/messages/MessageBox/MessageItem"
-import { useGetMessagesQuery, useSeenMessagesMutation } from "@services/messagesApi"
-import Loader from "@components/global/Loader"
-import { Message } from "@interfaces/conversation.interfaces"
-import useAuthState from "@hooks/useAuthState"
-import ChatSkeleton from "@components/skeletons/ChatSkeleton"
-import Error from "@components/global/Error"
-import { ErrorResponse } from "@interfaces/index.interfaces"
+import MessageItem from "@/components/messages/MessageBox/MessageItem"
+import { useGetMessagesQuery, useSeenMessagesMutation } from "@/services/messagesApi"
+import Loader from "@/components/global/Loader"
+import { Message } from "@/interfaces/conversation.interfaces"
+import useAuthState from "@/hooks/useAuthState"
+import ChatSkeleton from "@/components/skeletons/ChatSkeleton"
+import Error from "@/components/global/Error"
+import { ErrorResponse } from "@/interfaces/index.interfaces"
 import {useParams} from "next/navigation"
-import {useGetConversationByIdQuery} from "@services/conversationsApi"
+import {useGetConversationByIdQuery} from "@/services/conversationsApi"
 import InfiniteScroll from "react-infinite-scroll-component"
 
 

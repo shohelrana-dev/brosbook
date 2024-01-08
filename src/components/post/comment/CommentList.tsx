@@ -1,15 +1,15 @@
 import React, { FormEvent, useState } from 'react'
-import Avatar from "@components/global/Avatar"
-import CommentItem from "@components/post/comment/CommentItem"
-import { useCreateCommentMutation, useGetCommentsQuery } from "@services/commentsApi"
-import BasicInput from "@components/form/BasicInput"
-import useAuthState from "@hooks/useAuthState"
-import Loader from "@components/global/Loader"
-import Error from "@components/global/Error"
-import { ErrorResponse } from "@interfaces/index.interfaces"
+import Avatar from "@/components/global/Avatar"
+import CommentItem from "@/components/post/comment/CommentItem"
+import { useCreateCommentMutation, useGetCommentsQuery } from "@/services/commentsApi"
+import BasicInput from "@/components/form/BasicInput"
+import useAuthState from "@/hooks/useAuthState"
+import Loader from "@/components/global/Loader"
+import Error from "@/components/global/Error"
+import { ErrorResponse } from "@/interfaces/index.interfaces"
 import { IconButton } from '@mui/material'
 import { MdSend as SendIcon } from "react-icons/md"
-import { Post } from "@interfaces/posts.interfaces"
+import { Post } from "@/interfaces/posts.interfaces"
 import { Button } from '@mui/material'
 
 interface Props {

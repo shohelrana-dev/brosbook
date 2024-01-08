@@ -1,5 +1,5 @@
-import { Post } from "@interfaces/posts.interfaces"
-import { User } from "@interfaces/user.interfaces"
+import { Post } from "@/interfaces/posts.interfaces"
+import { User } from "@/interfaces/user.interfaces"
 
 export interface ErrorResponse {
     data?: {

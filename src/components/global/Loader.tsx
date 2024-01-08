@@ -1,6 +1,6 @@
 "use client"
 import CircularProgress, { circularProgressClasses, CircularProgressProps } from '@mui/material/CircularProgress'
-import cn from '@utils/cn'
+import cn from '@/utils/cn'
 
 interface LoaderProps extends CircularProgressProps {
     loading?: boolean,

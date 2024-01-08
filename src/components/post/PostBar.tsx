@@ -1,14 +1,14 @@
 import { MouseEvent } from 'react'
 import { FaRegComment as CommentIcon } from 'react-icons/fa'
-import { Post } from '@interfaces/posts.interfaces'
-import { usePostLikeMutation, usePostUnlikeMutation } from '@services/postsApi'
+import { Post } from '@/interfaces/posts.interfaces'
+import { usePostLikeMutation, usePostUnlikeMutation } from '@/services/postsApi'
 import { IconButton, Tooltip } from '@mui/material'
-import PostShare from '@components/post/PostShare'
-import useAuthState from '@hooks/useAuthState'
-import useUnauthorizedAlert from '@hooks/useUnauthorzedAlert'
-import LikeButton from '@components/post/LikeButton'
-import LikesCount from '@components/post/LikesCount'
-import { useCommentsVisibilty } from '@slices/toggleCommentsVisibilitySlice'
+import PostShare from '@/components/post/PostShare'
+import useAuthState from '@/hooks/useAuthState'
+import useUnauthorizedAlert from '@/hooks/useUnauthorzedAlert'
+import LikeButton from '@/components/post/LikeButton'
+import LikesCount from '@/components/post/LikesCount'
+import { useCommentsVisibilty } from '@/slices/toggleCommentsVisibilitySlice'
 
 interface Props {
 	post: Post

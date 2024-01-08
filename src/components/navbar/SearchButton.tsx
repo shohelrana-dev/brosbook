@@ -1,13 +1,13 @@
 import React, { useEffect, useRef } from 'react'
 import { BiSearch as SearchIcon } from 'react-icons/bi'
 import { IconButton, Popover, Tooltip } from '@mui/material'
-import BasicInput from '@components/form/BasicInput'
-import { User } from '@interfaces/user.interfaces'
+import BasicInput from '@/components/form/BasicInput'
+import { User } from '@/interfaces/user.interfaces'
 import { useRouter } from 'next/navigation'
-import SearchUserList from '@components/global/SearchUserList'
+import SearchUserList from '@/components/global/SearchUserList'
 import { useDebounce } from 'use-debounce'
 import PopupState, { bindPopover, bindTrigger } from 'material-ui-popup-state'
-import useInputValue from '@hooks/useInputValue'
+import useInputValue from '@/hooks/useInputValue'
 import { IoArrowBack as BackIcon } from 'react-icons/io5'
 
 export default function SearchButton() {

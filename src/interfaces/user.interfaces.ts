@@ -1,4 +1,4 @@
-import {Media} from "@interfaces/index.interfaces"
+import {Media} from "@/interfaces/index.interfaces"
 
 export interface User {
     id: string

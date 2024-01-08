@@ -1,11 +1,11 @@
 "use client"
 import React, { useState } from 'react'
-import { User } from "@interfaces/user.interfaces"
-import { useFollowMutation, useUnfollowMutation } from "@services/usersApi"
+import { User } from "@/interfaces/user.interfaces"
+import { useFollowMutation, useUnfollowMutation } from "@/services/usersApi"
 import { useConfirmAlert } from "react-use-confirm-alert"
 import toast from "react-hot-toast"
-import useUnauthorizedAlert from "@hooks/useUnauthorzedAlert"
-import useAuthState from "@hooks/useAuthState"
+import useUnauthorizedAlert from "@/hooks/useUnauthorzedAlert"
+import useAuthState from "@/hooks/useAuthState"
 import { Button } from "@mui/material"
 import LoadingButton from "@mui/lab/LoadingButton"
 

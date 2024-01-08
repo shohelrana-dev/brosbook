@@ -1,9 +1,9 @@
-import { User } from "@interfaces/user.interfaces"
+import { User } from "@/interfaces/user.interfaces"
 import { baseApi } from "./baseApi"
-import { ListResponse, Media } from "@interfaces/index.interfaces"
-import { userLoggedIn } from "@slices/authSlice"
-import listQueryExtraDefinitions from "@utils/listQueryExtraDefinitions"
-import { MEDIA_PER_PAGE, SUGGESTIONS_PER_PAGE, USERS_PER_PAGE } from "@utils/constants"
+import { ListResponse, Media } from "@/interfaces/index.interfaces"
+import { userLoggedIn } from "@/slices/authSlice"
+import listQueryExtraDefinitions from "@/utils/listQueryExtraDefinitions"
+import { MEDIA_PER_PAGE, SUGGESTIONS_PER_PAGE, USERS_PER_PAGE } from "@/utils/constants"
 
 export const usersApi = baseApi.injectEndpoints( {
         endpoints: ( build ) => ( {

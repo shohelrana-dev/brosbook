@@ -1,13 +1,13 @@
 // noinspection TypeScriptValidateJSTypes
 
 import { baseApi } from "./baseApi"
-import { Message, MessageType } from "@interfaces/conversation.interfaces"
-import { ListResponse, Media } from "@interfaces/index.interfaces"
-import { RootState } from "@store/index"
-import listQueryExtraDefinitions from "@utils/listQueryExtraDefinitions"
-import { conversationsApi } from "@services/conversationsApi"
-import { initSocket } from "@utils/socket"
-import { MESSAGES_PER_PAGE } from "@utils/constants"
+import { Message, MessageType } from "@/interfaces/conversation.interfaces"
+import { ListResponse, Media } from "@/interfaces/index.interfaces"
+import { RootState } from "@/store/index"
+import listQueryExtraDefinitions from "@/utils/listQueryExtraDefinitions"
+import { conversationsApi } from "@/services/conversationsApi"
+import { initSocket } from "@/utils/socket"
+import { MESSAGES_PER_PAGE } from "@/utils/constants"
 
 export const messagesApi = baseApi.injectEndpoints( {
     endpoints: ( build ) => ( {

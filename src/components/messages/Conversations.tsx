@@ -1,6 +1,6 @@
 'use client'
-import SearchConversation from '@components/messages/Conversations/SearchConversation'
-import ConversationList from '@components/messages/Conversations/ConversationList'
+import SearchConversation from '@/components/messages/Conversations/SearchConversation'
+import ConversationList from '@/components/messages/Conversations/ConversationList'
 
 export default function Conversations() {
     return (

@@ -1,7 +1,7 @@
 "use client"
 import { useRouter }      from "next/navigation"
 import { useEffect }      from "react"
-import Loader from "@components/global/Loader"
+import Loader from "@/components/global/Loader"
 
 function AuthPage() {
     const router = useRouter()

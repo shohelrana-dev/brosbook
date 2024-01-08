@@ -1,4 +1,4 @@
-import ChatSkeleton from '@components/skeletons/ChatSkeleton'
+import ChatSkeleton from '@/components/skeletons/ChatSkeleton'
 import Skeleton from 'react-loading-skeleton'
 
 export default function MessageBoxSkeleton() {

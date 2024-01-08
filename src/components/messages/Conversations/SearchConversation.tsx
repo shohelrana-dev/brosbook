@@ -1,19 +1,19 @@
-import BasicInput from '@components/form/BasicInput'
-import SearchUserList from '@components/global/SearchUserList'
-import { User } from '@interfaces/user.interfaces'
+import BasicInput from '@/components/form/BasicInput'
+import SearchUserList from '@/components/global/SearchUserList'
+import { User } from '@/interfaces/user.interfaces'
 import {
 	useCreateConversationMutation,
 	useLazyGetConversationByParticipantIdQuery,
-} from '@services/conversationsApi'
+} from '@/services/conversationsApi'
 import { useRouter } from 'next/navigation'
 import { useDebounce } from 'use-debounce'
 import { useConfirmAlert } from 'react-use-confirm-alert'
 import toast from 'react-hot-toast'
 import PopupState, { bindPopover, bindTrigger } from 'material-ui-popup-state'
 import { Popover } from '@mui/material'
-import useInputValue from '@hooks/useInputValue'
+import useInputValue from '@/hooks/useInputValue'
 import { useEffect, useRef } from 'react'
-import cn from '@utils/cn'
+import cn from '@/utils/cn'
 
 export default function SearchConversation() {
 	const [searchText, handleInputChange, resetSearchText] = useInputValue('')

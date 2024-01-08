@@ -1,9 +1,9 @@
 import { baseApi } from "./baseApi"
-import { ListResponse, Notification } from "@interfaces/index.interfaces"
-import { RootState } from "@store/index"
-import listQueryExtraDefinitions from "@utils/listQueryExtraDefinitions"
-import { initSocket } from "@utils/socket"
-import { NOTIFICATIONS_PER_PAGE } from "@utils/constants"
+import { ListResponse, Notification } from "@/interfaces/index.interfaces"
+import { RootState } from "@/store/index"
+import listQueryExtraDefinitions from "@/utils/listQueryExtraDefinitions"
+import { initSocket } from "@/utils/socket"
+import { NOTIFICATIONS_PER_PAGE } from "@/utils/constants"
 
 export const notificationsApi = baseApi.injectEndpoints( {
     endpoints: ( build ) => ( {

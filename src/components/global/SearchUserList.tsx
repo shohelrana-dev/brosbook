@@ -1,9 +1,9 @@
 import React from 'react'
-import { User } from '@interfaces/user.interfaces'
-import { useSearchUsersQuery } from '@services/usersApi'
-import UserItem from '@components/global/UserItem'
-import UsersSkeleton from '@components/skeletons/UsersSkeleton'
-import cn from '@utils/cn'
+import { User } from '@/interfaces/user.interfaces'
+import { useSearchUsersQuery } from '@/services/usersApi'
+import UserItem from '@/components/global/UserItem'
+import UsersSkeleton from '@/components/skeletons/UsersSkeleton'
+import cn from '@/utils/cn'
 
 interface Props {
 	searchText: string

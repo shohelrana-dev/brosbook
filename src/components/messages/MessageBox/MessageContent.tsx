@@ -1,9 +1,9 @@
-import Reactions from '@components/messages/MessageBox/Reactions'
-import { Message } from '@interfaces/conversation.interfaces'
-import ImageLightbox from '@components/global/ImageLightbox'
+import Reactions from '@/components/messages/MessageBox/Reactions'
+import { Message } from '@/interfaces/conversation.interfaces'
+import ImageLightbox from '@/components/global/ImageLightbox'
 import moment from 'moment'
 import Linkify from 'linkify-react'
-import cn from '@utils/cn'
+import cn from '@/utils/cn'
 
 const classes = {
 	textMessage: ({ isOwn, hasReaction }: { isOwn: boolean; hasReaction: boolean }) =>

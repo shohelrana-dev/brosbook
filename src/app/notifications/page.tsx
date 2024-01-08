@@ -1,6 +1,6 @@
 import React from 'react'
-import NotificationList from "@components/notifications/NotificationList"
-import SidebarLayout from "@components/global/SidebarLayout"
+import NotificationList from "@/components/notifications/NotificationList"
+import SidebarLayout from "@/components/global/SidebarLayout"
 import { Metadata } from "next"
 
 export const metadata: Metadata = {

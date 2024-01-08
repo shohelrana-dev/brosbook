@@ -1,5 +1,5 @@
 import { OutlinedInputProps, styled, TextField, TextFieldProps, alpha } from '@mui/material'
-import ucfirst from '@utils/ucfirst'
+import ucfirst from '@/utils/ucfirst'
 import { ReactNode } from 'react'
 
 interface CustomTextFieldProps{

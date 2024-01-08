@@ -2,7 +2,7 @@
 import React from 'react'
 import Link from "next/link"
 import { Button } from "@mui/material"
-import useAuthState from "@hooks/useAuthState"
+import useAuthState from "@/hooks/useAuthState"
 
 function NewUserMessage(){
     const { isAuthenticated } = useAuthState()

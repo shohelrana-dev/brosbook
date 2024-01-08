@@ -1,18 +1,18 @@
 "use client"
 import React, { useEffect, useState } from 'react'
-import GoogleLoginButton from "@components/global/GoogleLoginButton"
-import AnimatedInput from "@components/form/AnimatedInput"
-import PasswordInput from "@components/form/PasswordInput"
+import GoogleLoginButton from "@/components/global/GoogleLoginButton"
+import AnimatedInput from "@/components/form/AnimatedInput"
+import PasswordInput from "@/components/form/PasswordInput"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useSignupMutation } from "@services/authApi"
-import { useForm } from "@hooks/useForm"
-import { SignupPayload } from "@interfaces/auth.interfaces"
+import { useSignupMutation } from "@/services/authApi"
+import { useForm } from "@/hooks/useForm"
+import { SignupPayload } from "@/interfaces/auth.interfaces"
 import toast from "react-hot-toast"
-import { setEmail } from "@slices/authSlice"
+import { setEmail } from "@/slices/authSlice"
 import { useDispatch } from "react-redux"
 import PasswordStrengthBar from 'react-password-strength-bar'
-import LoadingOverlay from "@components/global/LoadingOverlay"
+import LoadingOverlay from "@/components/global/LoadingOverlay"
 import { Button, Divider } from '@mui/material'
 
 export default function Signup(){

@@ -1,11 +1,11 @@
 import Link from "next/link"
-import Avatar from "@components/global/Avatar"
-import { User } from "@interfaces/user.interfaces"
-import FollowButton from "@components/global/FollowButton"
+import Avatar from "@/components/global/Avatar"
+import { User } from "@/interfaces/user.interfaces"
+import FollowButton from "@/components/global/FollowButton"
 import TextOverflow from 'react-text-overflow'
-import useAuthState from "@hooks/useAuthState"
+import useAuthState from "@/hooks/useAuthState"
 import {TbDiscountCheckFilled as BlueBadgeIcon} from "react-icons/tb"
-import cn from "@utils/cn"
+import cn from "@/utils/cn"
 
 interface Props {
     user: User

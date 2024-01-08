@@ -1,5 +1,5 @@
 import { Metadata } from "next"
-import ResetPassword from "@components/auth/ResetPassword"
+import ResetPassword from "@/components/auth/ResetPassword"
 
 export const metadata: Metadata = {
     title: 'Reset Password'

@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit"
-import { RootState } from "@store/index"
+import { RootState } from "@/store/index"
 import {Socket} from "socket.io-client"
 
 const initialState: Socket | null =  null

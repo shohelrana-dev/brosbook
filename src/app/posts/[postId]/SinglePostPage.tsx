@@ -1,9 +1,9 @@
 'use client'
 import React, { useEffect } from 'react'
-import PostCard from '@components/post/PostCard'
-import { Post } from '@interfaces/posts.interfaces'
-import { postsApi, useGetPostByIdQuery } from '@services/postsApi'
-import { store } from '@store/index'
+import PostCard from '@/components/post/PostCard'
+import { Post } from '@/interfaces/posts.interfaces'
+import { postsApi, useGetPostByIdQuery } from '@/services/postsApi'
+import { store } from '@/store/index'
 import { useParams } from 'next/navigation'
 
 export default function SinglePostPage({ post: initialPost }: { post: Post }) {

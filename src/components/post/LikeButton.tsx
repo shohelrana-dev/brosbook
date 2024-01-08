@@ -1,5 +1,5 @@
 import { IconButton, Tooltip } from '@mui/material'
-import cn from '@utils/cn'
+import cn from '@/utils/cn'
 import { MouseEvent } from 'react'
 
 interface Props {

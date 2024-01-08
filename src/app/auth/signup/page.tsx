@@ -1,6 +1,6 @@
 import { Metadata } from "next"
-import Signup from "@components/auth/Signup"
-import siteMetadata from '@utils/siteMetadata'
+import Signup from "@/components/auth/Signup"
+import siteMetadata from '@/utils/siteMetadata'
 
 const title = `Signup for ${siteMetadata.appName}`
 const description = `Sign up for a ${siteMetadata.appName} account. From breaking news and entertainment to sports and politics, get the full story with all the live commentary.`

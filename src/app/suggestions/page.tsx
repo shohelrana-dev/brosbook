@@ -1,13 +1,13 @@
 "use client"
 import React, { useEffect, useState } from "react"
-import { useGetSuggestedUsersQuery } from "@services/usersApi"
-import { User } from "@interfaces/user.interfaces"
-import UserItem from "@components/global/UserItem"
+import { useGetSuggestedUsersQuery } from "@/services/usersApi"
+import { User } from "@/interfaces/user.interfaces"
+import UserItem from "@/components/global/UserItem"
 import InfiniteScroll from "react-infinite-scroll-component"
-import UsersSkeleton from "@components/skeletons/UsersSkeleton"
-import Error from "@components/global/Error"
-import { ErrorResponse } from "@interfaces/index.interfaces"
-import SidebarLayout from "@components/global/SidebarLayout"
+import UsersSkeleton from "@/components/skeletons/UsersSkeleton"
+import Error from "@/components/global/Error"
+import { ErrorResponse } from "@/interfaces/index.interfaces"
+import SidebarLayout from "@/components/global/SidebarLayout"
 
 export default function SuggestionsPage(){
     //hooks

@@ -1,14 +1,14 @@
 'use client'
-import { postsApi, useGetPostsQuery } from '@services/postsApi'
-import PostsSkeleton from '@components/skeletons/PostsSkeleton'
-import { usersApi } from '@services/usersApi'
-import Error from '@components/global/Error'
+import { postsApi, useGetPostsQuery } from '@/services/postsApi'
+import PostsSkeleton from '@/components/skeletons/PostsSkeleton'
+import { usersApi } from '@/services/usersApi'
+import Error from '@/components/global/Error'
 import { useEffect, useState } from 'react'
-import { ErrorResponse, ListResponse } from '@interfaces/index.interfaces'
-import PostList from '@components/post/PostList'
-import { Post } from '@interfaces/posts.interfaces'
-import { store } from '@store/index'
-import { User } from '@interfaces/user.interfaces'
+import { ErrorResponse, ListResponse } from '@/interfaces/index.interfaces'
+import PostList from '@/components/post/PostList'
+import { Post } from '@/interfaces/posts.interfaces'
+import { store } from '@/store/index'
+import { User } from '@/interfaces/user.interfaces'
 
 interface Props {
 	initialPostsData: ListResponse<Post>

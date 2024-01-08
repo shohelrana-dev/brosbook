@@ -1,12 +1,12 @@
-import Avatar from "@components/global/Avatar"
+import Avatar from "@/components/global/Avatar"
 import Link from "next/link"
 import { RiUserSettingsFill as SettingIcon } from "react-icons/ri"
 import { FaSignOutAlt as LogoutIcon } from "react-icons/fa"
-import useAuthState from "@hooks/useAuthState"
+import useAuthState from "@/hooks/useAuthState"
 import { useRouter } from "next/navigation"
 import { useConfirmAlert } from "react-use-confirm-alert"
 import { Popover, Divider, Tooltip } from "@mui/material"
-import OptionButton from "@components/global/OptionButton"
+import OptionButton from "@/components/global/OptionButton"
 import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state"
 
 export default function UserMenu() {

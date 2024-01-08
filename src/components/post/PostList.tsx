@@ -1,7 +1,7 @@
 import React from 'react'
-import PostsSkeleton from "@components/skeletons/PostsSkeleton"
-import { Post } from "@interfaces/posts.interfaces"
-import PostCard from "@components/post/PostCard"
+import PostsSkeleton from "@/components/skeletons/PostsSkeleton"
+import { Post } from "@/interfaces/posts.interfaces"
+import PostCard from "@/components/post/PostCard"
 import InfiniteScroll from "react-infinite-scroll-component"
 
 interface Props {

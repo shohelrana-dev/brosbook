@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { baseApi } from '@services/baseApi'
-import { authSlice } from '@slices/authSlice'
-import { socketSlice } from '@slices/socketSlice'
-import { toggleCommentsVisibilitySlice } from '@slices/toggleCommentsVisibilitySlice'
+import { baseApi } from '@/services/baseApi'
+import { authSlice } from '@/slices/authSlice'
+import { socketSlice } from '@/slices/socketSlice'
+import { toggleCommentsVisibilitySlice } from '@/slices/toggleCommentsVisibilitySlice'
 
 export const store = configureStore({
 	reducer: {

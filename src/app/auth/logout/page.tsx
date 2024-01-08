@@ -3,10 +3,10 @@ import { useEffect } from "react"
 import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
 import { useDispatch } from "react-redux"
-import { userLoggedOut } from "@slices/authSlice"
-import { baseApi } from "@services/baseApi"
+import { userLoggedOut } from "@/slices/authSlice"
+import { baseApi } from "@/services/baseApi"
 import { removeCookie } from "tiny-cookie"
-import PageLoader from "@components/global/PageLoader"
+import PageLoader from "@/components/global/PageLoader"
 
 
 function LogoutPage(){

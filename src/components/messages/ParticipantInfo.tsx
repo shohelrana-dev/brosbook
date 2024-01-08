@@ -1,14 +1,14 @@
 'use client'
-import Avatar from '@components/global/Avatar'
-import { useGetConversationByIdQuery, useGetConversationMediaListQuery } from '@services/conversationsApi'
-import Loader from '@components/global/Loader'
-import { ErrorResponse } from '@interfaces/index.interfaces'
-import ImageLightbox from '@components/global/ImageLightbox'
+import Avatar from '@/components/global/Avatar'
+import { useGetConversationByIdQuery, useGetConversationMediaListQuery } from '@/services/conversationsApi'
+import Loader from '@/components/global/Loader'
+import { ErrorResponse } from '@/interfaces/index.interfaces'
+import ImageLightbox from '@/components/global/ImageLightbox'
 import React, { useEffect, useRef, useState } from 'react'
 import { useParams } from 'next/navigation'
-import Error from '@components/global/Error'
+import Error from '@/components/global/Error'
 import useInfiniteScroll from 'react-infinite-scroll-hook'
-import cn from '@utils/cn'
+import cn from '@/utils/cn'
 
 const classes = {
     box: `box p-5 mb-3`,

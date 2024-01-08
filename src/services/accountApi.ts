@@ -1,6 +1,6 @@
 import { baseApi } from "./baseApi"
-import { User } from "@interfaces/user.interfaces"
-import { ChangePasswordPayload, ChangeUsernamePayload, ProfilePayload } from "@interfaces/account.interfaces"
+import { User } from "@/interfaces/user.interfaces"
+import { ChangePasswordPayload, ChangeUsernamePayload, ProfilePayload } from "@/interfaces/account.interfaces"
 
 export const accountApi = baseApi.injectEndpoints( {
     endpoints: ( build ) => ( {

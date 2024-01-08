@@ -1,7 +1,7 @@
 import { IconButton, Badge, Tooltip } from '@mui/material'
 import { IoMailOutline as MessageIcon } from "react-icons/io5"
 import Link from "next/link"
-import { useGetUnreadConversationsCountQuery } from "@services/conversationsApi"
+import { useGetUnreadConversationsCountQuery } from "@/services/conversationsApi"
 
 export default function MessagesNavLink() {
     const { data: unreadConversationsData } = useGetUnreadConversationsCountQuery()

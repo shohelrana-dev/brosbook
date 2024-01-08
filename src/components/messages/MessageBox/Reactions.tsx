@@ -2,10 +2,10 @@ import Image from 'next/image'
 import { HiOutlineEmojiHappy as EmojiIcon } from 'react-icons/hi'
 import { Popover } from '@mui/material'
 import { IconButton } from '@mui/material'
-import { useSendReactionMutation } from '@services/messagesApi'
-import { Message } from '@interfaces/conversation.interfaces'
+import { useSendReactionMutation } from '@/services/messagesApi'
+import { Message } from '@/interfaces/conversation.interfaces'
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state'
-import cn from '@utils/cn'
+import cn from '@/utils/cn'
 
 export default function Reactions({ message }: { message: Message }) {
 	const { isMeSender } = message

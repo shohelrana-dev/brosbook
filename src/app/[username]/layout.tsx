@@ -4,23 +4,23 @@ import {GoLocation} from "react-icons/go"
 import {HiOutlineCake} from "react-icons/hi"
 import {MdOutlineSchedule} from "react-icons/md"
 
-import FollowButton from "@components/global/FollowButton"
+import FollowButton from "@/components/global/FollowButton"
 import {cookies} from "next/headers"
-import TabLinkList from "@components/global/TabLinkList"
-import CoverPhoto from "@components/profile/CoverPhoto"
-import ProfilePhoto from "@components/profile/ProfilePhoto"
-import SidebarLayout from "@components/global/SidebarLayout"
-import ExtraOptions from "@components/profile/ExtraOptions"
+import TabLinkList from "@/components/global/TabLinkList"
+import CoverPhoto from "@/components/profile/CoverPhoto"
+import ProfilePhoto from "@/components/profile/ProfilePhoto"
+import SidebarLayout from "@/components/global/SidebarLayout"
+import ExtraOptions from "@/components/profile/ExtraOptions"
 import {
     getCurrentUser,
     getFollowersCount,
     getFollowingsCount,
     getUserByUsername
-} from "@services/index"
+} from "@/services/index"
 import {Metadata} from "next"
 import {notFound} from "next/navigation"
 import {TbDiscountCheckFilled as BlueBadgeIcon} from "react-icons/tb"
-import Button from "@components/global/Button"
+import Button from "@/components/global/Button"
 
 export const generateMetadata = async ({params}: Props): Promise<Metadata> => {
     const user = await getUserByUsername(params.username, cookies())

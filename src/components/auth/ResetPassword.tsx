@@ -1,12 +1,12 @@
 "use client"
 import React, { useEffect } from 'react'
 import { FiLock } from "react-icons/fi"
-import PasswordInput from "@components/form/PasswordInput"
+import PasswordInput from "@/components/form/PasswordInput"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useResetPasswordMutation } from "@services/authApi"
-import { useForm } from "@hooks/useForm"
-import { ResetPassPayload } from "@interfaces/auth.interfaces"
+import { useResetPasswordMutation } from "@/services/authApi"
+import { useForm } from "@/hooks/useForm"
+import { ResetPassPayload } from "@/interfaces/auth.interfaces"
 import toast from "react-hot-toast"
 import { LoadingButton } from '@mui/lab'
 

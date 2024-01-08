@@ -3,14 +3,14 @@ import 'react-date-picker/dist/DatePicker.css'
 import 'react-calendar/dist/Calendar.css'
 import { useEffect } from "react"
 import DatePicker from 'react-date-picker'
-import { ProfilePayload } from "@interfaces/account.interfaces"
-import { useUpdateProfileMutation } from '@services/accountApi'
-import BasicInput from "@components/form/BasicInput"
-import useAuthState from "@hooks/useAuthState"
-import Loader from "@components/global/Loader"
-import { useForm } from "@hooks/useForm"
+import { ProfilePayload } from "@/interfaces/account.interfaces"
+import { useUpdateProfileMutation } from '@/services/accountApi'
+import BasicInput from "@/components/form/BasicInput"
+import useAuthState from "@/hooks/useAuthState"
+import Loader from "@/components/global/Loader"
+import { useForm } from "@/hooks/useForm"
 import toast from "react-hot-toast"
-import { useGetUserByIdQuery } from "@services/usersApi"
+import { useGetUserByIdQuery } from "@/services/usersApi"
 import { FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 

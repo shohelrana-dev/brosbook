@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import {AiOutlineEye as VisibleEyeIcon} from "react-icons/ai"
 import {AiOutlineEyeInvisible as InvisibleEyeIcon} from "react-icons/ai"
-import AnimatedInput, { AnimatedInputProps } from "@components/form/AnimatedInput"
+import AnimatedInput, { AnimatedInputProps } from "@/components/form/AnimatedInput"
 import { InputAdornment, IconButton } from "@mui/material"
 
 export default function PasswordInput(props: AnimatedInputProps) {

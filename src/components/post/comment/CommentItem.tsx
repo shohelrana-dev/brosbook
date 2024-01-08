@@ -1,15 +1,15 @@
 import Link from 'next/link'
 import ShowMoreText from 'react-show-more-text'
 
-import Avatar from '@components/global/Avatar'
-import { Comment, Post } from '@interfaces/posts.interfaces'
-import { useLikeCommentMutation, useUnlikeCommentMutation } from '@services/commentsApi'
-import timeAgo from '@utils/timeAgo'
-import CommentOptions from '@components/post/comment/CommentOptions'
-import useAuthState from '@hooks/useAuthState'
-import useUnauthorizedAlert from '@hooks/useUnauthorzedAlert'
-import LikeButton from '@components/post/LikeButton'
-import LikesCount from '@components/post/LikesCount'
+import Avatar from '@/components/global/Avatar'
+import { Comment, Post } from '@/interfaces/posts.interfaces'
+import { useLikeCommentMutation, useUnlikeCommentMutation } from '@/services/commentsApi'
+import timeAgo from '@/utils/timeAgo'
+import CommentOptions from '@/components/post/comment/CommentOptions'
+import useAuthState from '@/hooks/useAuthState'
+import useUnauthorizedAlert from '@/hooks/useUnauthorzedAlert'
+import LikeButton from '@/components/post/LikeButton'
+import LikesCount from '@/components/post/LikesCount'
 
 interface Props {
 	comment: Comment

@@ -1,14 +1,14 @@
-import '@assets/styles/app.css'
+import '@/assets/styles/app.css'
 import 'react-loading-skeleton/dist/skeleton.css'
 import { PropsWithChildren } from "react"
 import Providers from "./providers"
-import Navbar from "@components/navbar/Navbar"
+import Navbar from "@/components/navbar/Navbar"
 import { Metadata } from "next"
-import { getCurrentUser } from "@services/index"
+import { getCurrentUser } from "@/services/index"
 import { cookies } from "next/headers"
-import PreLoader from "@components/global/PreLoader"
+import PreLoader from "@/components/global/PreLoader"
 import { Kanit } from "next/font/google"
-import siteMetadata from '@utils/siteMetadata'
+import siteMetadata from '@/utils/siteMetadata'
 
 export const metadata: Metadata = {
     title: {

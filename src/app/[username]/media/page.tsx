@@ -1,11 +1,11 @@
 "use client"
 import { useState } from 'react'
-import { useGetMediaListQuery, useGetUserByUsernameQuery } from "@services/usersApi"
-import Loader from "@components/global/Loader"
-import ImageLightbox from "@components/global/ImageLightbox"
+import { useGetMediaListQuery, useGetUserByUsernameQuery } from "@/services/usersApi"
+import Loader from "@/components/global/Loader"
+import ImageLightbox from "@/components/global/ImageLightbox"
 import InfiniteScroll from "react-infinite-scroll-component"
-import Error from "@components/global/Error"
-import { ErrorResponse } from "@interfaces/index.interfaces"
+import Error from "@/components/global/Error"
+import { ErrorResponse } from "@/interfaces/index.interfaces"
 
 interface Props {
     params: { username: string }

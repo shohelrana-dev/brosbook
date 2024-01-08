@@ -5,11 +5,11 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import toast from "react-hot-toast"
 
-import mailImage from "@assets/images/mail-with-value.png"
-import { useResendVerificationLinkMutation } from "@services/authApi"
-import Loader from "@components/global/Loader"
+import mailImage from "@/assets/images/mail-with-value.png"
+import { useResendVerificationLinkMutation } from "@/services/authApi"
+import Loader from "@/components/global/Loader"
 import { useSelector } from "react-redux"
-import { selectAuthState } from "@slices/authSlice"
+import { selectAuthState } from "@/slices/authSlice"
 import { LoadingButton } from '@mui/lab'
 
 export default function RequiredPage(){

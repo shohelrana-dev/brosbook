@@ -4,8 +4,8 @@ import Image, { ImageProps } from 'next/image'
 import LightGallery from 'lightgallery/react'
 import lgThumbnail from 'lightgallery/plugins/thumbnail'
 import lgZoom from 'lightgallery/plugins/zoom'
-import { Media } from '@interfaces/index.interfaces'
-import cn from '@utils/cn'
+import { Media } from '@/interfaces/index.interfaces'
+import cn from '@/utils/cn'
 
 //css
 import 'lightgallery/css/lightgallery.css'
@@ -21,7 +21,7 @@ export default function ImageLightbox({ image, imageList, className, ...rest }: 
 	className = cn('cursor-pointer h-auto', className)
 
 	if (!image && (!imageList || imageList.length < 1)) return null
-
+	
 	const imageElements = imageList?.map(img => (
 		<a data-src={img.url} data-lg-size={`${img.width}-${img.height}`} key={img.id}>
 			<Image

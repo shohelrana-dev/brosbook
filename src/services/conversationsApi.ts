@@ -1,10 +1,10 @@
 import { baseApi } from "./baseApi"
-import { Conversation, Message } from "@interfaces/conversation.interfaces"
-import { ListResponse, Media } from "@interfaces/index.interfaces"
-import { RootState } from "@store/index"
-import listQueryExtraDefinitions from "@utils/listQueryExtraDefinitions"
-import { initSocket } from "@utils/socket"
-import { CONVERSATIONS_PER_PAGE, MEDIA_PER_PAGE } from "@utils/constants"
+import { Conversation, Message } from "@/interfaces/conversation.interfaces"
+import { ListResponse, Media } from "@/interfaces/index.interfaces"
+import { RootState } from "@/store/index"
+import listQueryExtraDefinitions from "@/utils/listQueryExtraDefinitions"
+import { initSocket } from "@/utils/socket"
+import { CONVERSATIONS_PER_PAGE, MEDIA_PER_PAGE } from "@/utils/constants"
 
 export const conversationsApi = baseApi.injectEndpoints( {
     endpoints: ( build ) => ( {

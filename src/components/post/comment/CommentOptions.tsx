@@ -6,15 +6,15 @@ import toast from "react-hot-toast"
 import { Popover } from "@mui/material"
 import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state"
 
-import { useFollowMutation, useUnfollowMutation } from "@services/usersApi"
-import { useDeleteCommentMutation } from "@services/commentsApi"
-import useAuthState from "@hooks/useAuthState"
+import { useFollowMutation, useUnfollowMutation } from "@/services/usersApi"
+import { useDeleteCommentMutation } from "@/services/commentsApi"
+import useAuthState from "@/hooks/useAuthState"
 import { useConfirmAlert } from "react-use-confirm-alert"
-import { User } from "@interfaces/user.interfaces"
-import { Comment } from "@interfaces/posts.interfaces"
+import { User } from "@/interfaces/user.interfaces"
+import { Comment } from "@/interfaces/posts.interfaces"
 import { IconButton } from '@mui/material'
-import OptionButton from "@components/global/OptionButton"
-import useUnauthorizedAlert from "@hooks/useUnauthorzedAlert"
+import OptionButton from "@/components/global/OptionButton"
+import useUnauthorizedAlert from "@/hooks/useUnauthorzedAlert"
 
 interface Props {
     isCurrentUserAuthor: boolean

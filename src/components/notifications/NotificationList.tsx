@@ -1,11 +1,11 @@
 "use client"
 import React, { useEffect, useState } from 'react'
-import { useGetNotificationsQuery, useReadAllNotificationMutation } from "@services/notificationsApi"
-import { ErrorResponse, Notification } from "@interfaces/index.interfaces"
+import { useGetNotificationsQuery, useReadAllNotificationMutation } from "@/services/notificationsApi"
+import { ErrorResponse, Notification } from "@/interfaces/index.interfaces"
 import NotificationItem from "./NotificationItem"
 import useInfiniteScroll from "react-infinite-scroll-hook"
-import NotificationsSkeleton from "@components/skeletons/NotificationsSkeleton"
-import Error from "@components/global/Error"
+import NotificationsSkeleton from "@/components/skeletons/NotificationsSkeleton"
+import Error from "@/components/global/Error"
 
 export default function NotificationList() {
     const [page, setPage]       = useState( 1 )

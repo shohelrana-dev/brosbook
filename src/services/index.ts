@@ -1,10 +1,10 @@
 import { RequestCookies } from "next/dist/server/web/spec-extension/cookies"
-import { http } from "@utils/axiosInstance"
-import getAuthorizationConfig from "@utils/getAuthorizationConfig"
-import { User } from "@interfaces/user.interfaces"
-import { Post } from "@interfaces/posts.interfaces"
-import { ListResponse } from "@interfaces/index.interfaces"
-import { Conversation } from "@interfaces/conversation.interfaces"
+import { http } from "@/utils/axiosInstance"
+import getAuthorizationConfig from "@/utils/getAuthorizationConfig"
+import { User } from "@/interfaces/user.interfaces"
+import { Post } from "@/interfaces/posts.interfaces"
+import { ListResponse } from "@/interfaces/index.interfaces"
+import { Conversation } from "@/interfaces/conversation.interfaces"
 import { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies"
 
 export async function getCurrentUser( cookies: RequestCookies | ReadonlyRequestCookies ) {

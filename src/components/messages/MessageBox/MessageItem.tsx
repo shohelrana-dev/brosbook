@@ -1,13 +1,13 @@
 import React from 'react'
-import Avatar from "@components/global/Avatar"
-import { Message } from "@interfaces/conversation.interfaces"
-import MessageContent from "@components/messages/MessageBox/MessageContent"
-import timeAgo from "@utils/timeAgo"
+import Avatar from "@/components/global/Avatar"
+import { Message } from "@/interfaces/conversation.interfaces"
+import MessageContent from "@/components/messages/MessageBox/MessageContent"
+import timeAgo from "@/utils/timeAgo"
 import moment from "moment/moment"
 import { IoCheckmarkCircleOutline as TickIcon } from "react-icons/io5"
 import { BsCircle as CircleIcon } from "react-icons/bs"
 import Image from "next/image"
-import { User } from "@interfaces/user.interfaces"
+import { User } from "@/interfaces/user.interfaces"
 
 const classes = {
     ownRow: 'flex items-end float-right max-w-[70%] mb-1',

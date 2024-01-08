@@ -1,4 +1,4 @@
-import Conversations from '@components/messages/Conversations'
+import Conversations from '@/components/messages/Conversations'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {

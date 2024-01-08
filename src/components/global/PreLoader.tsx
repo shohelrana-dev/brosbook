@@ -1,13 +1,13 @@
 "use client"
 import { useEffect, useRef } from 'react'
-import useUnauthorizedAlert from "@hooks/useUnauthorzedAlert"
+import useUnauthorizedAlert from "@/hooks/useUnauthorzedAlert"
 import { usePathname } from "next/navigation"
-import useAuthState from "@hooks/useAuthState"
-import { userLoggedIn, userLoggedOut } from "@slices/authSlice"
-import { User } from "@interfaces/user.interfaces"
+import useAuthState from "@/hooks/useAuthState"
+import { userLoggedIn, userLoggedOut } from "@/slices/authSlice"
+import { User } from "@/interfaces/user.interfaces"
 import { useDispatch } from "react-redux"
 import { removeCookie } from "tiny-cookie"
-import { initSocket } from "@utils/socket"
+import { initSocket } from "@/utils/socket"
 
 export default function PreLoader( { user: preLoadedUser }: { user: User } ) {
     const loaded                               = useRef( false )

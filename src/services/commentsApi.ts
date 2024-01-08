@@ -1,10 +1,10 @@
 // noinspection TypeScriptValidateJSTypes
 
-import { ListResponse } from "@interfaces/index.interfaces"
-import { Comment } from "@interfaces/posts.interfaces"
-import { baseApi } from "@services/baseApi"
-import listQueryExtraDefinitions from "@utils/listQueryExtraDefinitions"
-import { COMMENTS_PER_PAGE } from "@utils/constants"
+import { ListResponse } from "@/interfaces/index.interfaces"
+import { Comment } from "@/interfaces/posts.interfaces"
+import { baseApi } from "@/services/baseApi"
+import listQueryExtraDefinitions from "@/utils/listQueryExtraDefinitions"
+import { COMMENTS_PER_PAGE } from "@/utils/constants"
 
 export const commentsApi = baseApi.injectEndpoints( {
     endpoints: ( build ) => ( {

@@ -1,9 +1,9 @@
 "use client"
 import React from 'react'
-import useAuthState from "@hooks/useAuthState"
-import Loader from "@components/global/Loader"
-import ChangePasswordModal from "@components/account/ChangePasswordModal"
-import ChangeUsernameModal from "@components/account/ChangeUsernameModal"
+import useAuthState from "@/hooks/useAuthState"
+import Loader from "@/components/global/Loader"
+import ChangePasswordModal from "@/components/account/ChangePasswordModal"
+import ChangeUsernameModal from "@/components/account/ChangeUsernameModal"
 import TextOverflow from 'react-text-overflow'
 import { Button } from '@mui/material'
 

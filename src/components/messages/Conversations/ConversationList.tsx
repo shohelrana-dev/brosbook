@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import { Conversation } from '@interfaces/conversation.interfaces'
-import ConversationItem from '@components/messages/Conversations/ConversationItem'
-import { useGetConversationsQuery } from '@services/conversationsApi'
+import { Conversation } from '@/interfaces/conversation.interfaces'
+import ConversationItem from '@/components/messages/Conversations/ConversationItem'
+import { useGetConversationsQuery } from '@/services/conversationsApi'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import ConversationsSkeleton from '@components/skeletons/ConversationsSkeleton'
-import Error from '@components/global/Error'
-import { ErrorResponse } from '@interfaces/index.interfaces'
+import ConversationsSkeleton from '@/components/skeletons/ConversationsSkeleton'
+import Error from '@/components/global/Error'
+import { ErrorResponse } from '@/interfaces/index.interfaces'
 
 export default function ConversationList() {
     const [page, setPage] = useState(1)

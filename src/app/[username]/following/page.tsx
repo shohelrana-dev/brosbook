@@ -1,12 +1,12 @@
 "use client"
 import React, { useState } from "react"
-import { useGetFollowingsQuery, useGetUserByUsernameQuery } from "@services/usersApi"
-import { User } from "@interfaces/user.interfaces"
-import UserItem from "@components/global/UserItem"
+import { useGetFollowingsQuery, useGetUserByUsernameQuery } from "@/services/usersApi"
+import { User } from "@/interfaces/user.interfaces"
+import UserItem from "@/components/global/UserItem"
 import InfiniteScroll from "react-infinite-scroll-component"
-import UsersSkeleton from "@components/skeletons/UsersSkeleton"
-import Error from "@components/global/Error"
-import { ErrorResponse } from "@interfaces/index.interfaces"
+import UsersSkeleton from "@/components/skeletons/UsersSkeleton"
+import Error from "@/components/global/Error"
+import { ErrorResponse } from "@/interfaces/index.interfaces"
 
 interface Props {
     params: { username: string }

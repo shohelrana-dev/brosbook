@@ -1,6 +1,6 @@
 import { IconButton, Tooltip } from '@mui/material'
 import { FaShareSquare as ShareIcon } from 'react-icons/fa'
-import { Post } from '@interfaces/posts.interfaces'
+import { Post } from '@/interfaces/posts.interfaces'
 import { Popover } from '@mui/material'
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state'
 import {

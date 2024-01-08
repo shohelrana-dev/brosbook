@@ -1,7 +1,7 @@
 import { IconButton, Badge, Popover, Tooltip } from '@mui/material'
 import { IoNotificationsOutline as NotificationIcon } from "react-icons/io5"
-import NotificationList from "@components/notifications/NotificationList"
-import { useGetUnreadNotificationsCountQuery } from "@services/notificationsApi"
+import NotificationList from "@/components/notifications/NotificationList"
+import { useGetUnreadNotificationsCountQuery } from "@/services/notificationsApi"
 import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state"
 
 export default function NotificationsNavLink() {

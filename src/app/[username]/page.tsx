@@ -1,4 +1,4 @@
-import { getPostsByAuthorId, getUserByUsername } from '@services/index'
+import { getPostsByAuthorId, getUserByUsername } from '@/services/index'
 import UserPostsList from 'app/[username]/UserPostList'
 import { cookies } from 'next/headers'
 

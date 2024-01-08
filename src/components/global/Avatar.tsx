@@ -1,7 +1,7 @@
 import React, { ImgHTMLAttributes } from 'react'
 import Image from 'next/image'
 import Skeleton from 'react-loading-skeleton'
-import cn from '@utils/cn'
+import cn from '@/utils/cn'
 
 interface AvatarProps extends ImgHTMLAttributes<HTMLImageElement> {
     online?: boolean

@@ -1,7 +1,7 @@
-import { CredentialPayload, ResetPassPayload, SignupPayload } from "@interfaces/auth.interfaces"
-import { User } from "@interfaces/user.interfaces"
-import { baseApi } from "@services/baseApi"
-import { userLoggedIn } from "@slices/authSlice"
+import { CredentialPayload, ResetPassPayload, SignupPayload } from "@/interfaces/auth.interfaces"
+import { User } from "@/interfaces/user.interfaces"
+import { baseApi } from "@/services/baseApi"
+import { userLoggedIn } from "@/slices/authSlice"
 import { setCookie } from "tiny-cookie"
 
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import Loader from "@components/global/Loader"
+import Loader from "@/components/global/Loader"
 
 export default function PageLoading(){
     return (

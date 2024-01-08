@@ -8,13 +8,13 @@ import { LoadingButton } from '@mui/lab'
 import { IconButton, Tooltip } from '@mui/material'
 import { useModal } from 'react-minimal-modal'
 
-import Avatar from '@components/global/Avatar'
-import { useCreatePostMutation } from '@services/postsApi'
-import BasicInput from '@components/form/BasicInput'
-import useAuthState from '@hooks/useAuthState'
-import useSelectFile from '@hooks/useSelectFile'
-import useFocus from '@hooks/useFocus'
-import cn from '@utils/cn'
+import Avatar from '@/components/global/Avatar'
+import { useCreatePostMutation } from '@/services/postsApi'
+import BasicInput from '@/components/form/BasicInput'
+import useAuthState from '@/hooks/useAuthState'
+import useSelectFile from '@/hooks/useSelectFile'
+import useFocus from '@/hooks/useFocus'
+import cn from '@/utils/cn'
 
 export default function CreatePostForm() {
 	//hooks

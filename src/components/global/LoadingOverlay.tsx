@@ -1,5 +1,5 @@
 import React from 'react'
-import Loader from "@components/global/Loader"
+import Loader from "@/components/global/Loader"
 import { motion, AnimatePresence } from "framer-motion"
 
 export default function LoadingOverlay( { isLoading }: { isLoading: boolean } ){

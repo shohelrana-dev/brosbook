@@ -1,6 +1,6 @@
 import { RequestCookies } from 'next/dist/server/web/spec-extension/cookies'
 import { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies'
-import getAuthorizationConfig from '@utils/getAuthorizationConfig'
+import getAuthorizationConfig from '@/utils/getAuthorizationConfig'
 
 export default async function isAuthenticated(
     cookies: RequestCookies | ReadonlyRequestCookies

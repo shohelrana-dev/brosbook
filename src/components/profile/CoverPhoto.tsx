@@ -2,16 +2,16 @@
 import React, { ChangeEvent, useState } from 'react'
 import { IconButton } from '@mui/material'
 import { TbCameraPlus } from "react-icons/tb"
-import { useChangeCoverPhotoMutation } from "@services/usersApi"
+import { useChangeCoverPhotoMutation } from "@/services/usersApi"
 import toast from "react-hot-toast"
-import ImageLightbox from "@components/global/ImageLightbox"
+import ImageLightbox from "@/components/global/ImageLightbox"
 import Image from "next/image"
-import { User } from "@interfaces/user.interfaces"
-import placeholderCoverPhoto from "@assets/images/placeholder-cover-photo.png"
-import useAuthState from "@hooks/useAuthState"
+import { User } from "@/interfaces/user.interfaces"
+import placeholderCoverPhoto from "@/assets/images/placeholder-cover-photo.png"
+import useAuthState from "@/hooks/useAuthState"
 import Modal from "react-minimal-modal"
-import useSelectFile from "@hooks/useSelectFile"
-import { Media } from "@interfaces/index.interfaces"
+import useSelectFile from "@/hooks/useSelectFile"
+import { Media } from "@/interfaces/index.interfaces"
 import { LoadingButton } from '@mui/lab'
 import { Button } from '@mui/material'
 

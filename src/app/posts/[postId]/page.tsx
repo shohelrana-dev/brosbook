@@ -1,4 +1,4 @@
-import { getPostById } from "@services/index"
+import { getPostById } from "@/services/index"
 import { cookies } from "next/headers"
 import { Metadata } from "next"
 import { notFound } from "next/navigation"

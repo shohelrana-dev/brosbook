@@ -2,9 +2,9 @@
 import React, { useEffect } from 'react'
 import { FiLock } from "react-icons/fi"
 import Link from "next/link"
-import AnimatedInput from "@components/form/AnimatedInput"
-import { useForgotPasswordMutation } from "@services/authApi"
-import { useForm } from "@hooks/useForm"
+import AnimatedInput from "@/components/form/AnimatedInput"
+import { useForgotPasswordMutation } from "@/services/authApi"
+import { useForm } from "@/hooks/useForm"
 import toast from "react-hot-toast"
 import { Button } from '@mui/material'
 import { LoadingButton } from '@mui/lab'

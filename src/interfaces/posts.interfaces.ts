@@ -1,5 +1,5 @@
-import { User }         from "@interfaces/user.interfaces"
-import {Media} from "@interfaces/index.interfaces"
+import { User }         from "@/interfaces/user.interfaces"
+import {Media} from "@/interfaces/index.interfaces"
 
 export interface Post {
     id: string
