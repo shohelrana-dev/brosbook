@@ -9,7 +9,7 @@ export default async function ChatPage() {
     const { data: conversation } = useGetConversationByIdQuery(params?.conversationId!)
 
     useEffect(() => {
-        document.title = conversation?.participant.fullName!
+        document.title = conversation?.participant.fullName! || ''
     }, [conversation])
 
     return <MessageBox/>
