@@ -29,12 +29,12 @@ export default function ResetPassword( { token }: { token: string } ){
 
     return (
         <>
-            <div className='auth-box'>
+            <div className='card-auth'>
                 <div className="flex flex-wrap justify-center mb-2">
                     <FiLock size="30"/>
                 </div>
 
-                <h1 className="auth-heading">Create a strong password</h1>
+                <h1 className="heading-auth">Create a strong password</h1>
                 <small className="block text-gray-500 text-center mb-2">
                     Enter your new password to reset account password.
                     Your password must be at least six characters.
@@ -61,7 +61,7 @@ export default function ResetPassword( { token }: { token: string } ){
                 </form>
             </div>
 
-            <div className="auth-box text-center mt-2 text-gray-800">
+            <div className="card-auth text-center mt-2 text-gray-800">
                 Go back? &nbsp;
                 <Link href="/auth/login" className="text-blue-500 font-medium">
                     Log In

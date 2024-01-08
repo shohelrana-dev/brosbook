@@ -47,7 +47,7 @@ export default function ProfilePhoto( { user }: Props ) {
         return (
             <ImageLightbox
                 image={ avatar }
-                className="rounded-full w-[130px] !h-[130px] mt-[-80px] border-4 border-solid border-white object-cover"
+                className="rounded-full w-[130px] !h-[130px] mt-[-80px] border-4 border-white object-cover"
                 alt="User profile photo"
                 width={ 130 }
                 height={ 130 }
@@ -60,7 +60,7 @@ export default function ProfilePhoto( { user }: Props ) {
             <input hidden name="photo" type="file" accept="image/*" onChange={ handleInputChange } ref={ inputRef }/>
             <ImageLightbox
                 image={ avatar }
-                className="size-32 object-cover rounded-full mt-[-80px] border-4 border-solid border-white"
+                className="size-32 object-cover rounded-full mt-[-80px] border-4 border-white"
                 alt="User profile photo"
                 width={ 130 }
                 height={ 130 }

@@ -26,7 +26,7 @@ export default function PostCard({ post, initialCommentsVisible }: Props) {
     
 
 	return (
-		<div className='box rounded-none lg:rounded-md p-5 mb-4'>
+		<div className='card rounded-none lg:rounded-md p-5 mb-4'>
 			<div className='flex'>
 				<Link href={`/${author.username}`}>
 					<Avatar src={author.avatar.url} />

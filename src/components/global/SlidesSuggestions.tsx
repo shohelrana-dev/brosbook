@@ -46,7 +46,7 @@ export default function SlidesSuggestions() {
     } else if ( isSuccess && users.length > 0 ) {
         content = users.map( ( user: User ) => (
             <SwiperSlide key={ user.id }>
-                <div className="flex flex-wrap items-center justify-center flex flex-col box p-3">
+                <div className="flex flex-wrap items-center justify-center flex flex-col card p-3">
                     <Link href={ `/${ user.username }` } className="flex flex-wrap items-center justify-center flex flex-col">
                         <Avatar src={ user.avatar.url }/>
                         <h4 className="font-bold text-gray-900 text-sm mt-2">

@@ -49,7 +49,7 @@ export default function UserPostsList({ initialPostsData, user }: Props) {
 	} else if (isError) {
 		content = <Error message={error.data?.message} />
 	} else if (posts && posts?.length === 0) {
-		content = <p className='box text-center py-6'>{user?.fullName}'s haven't any post.</p>
+		content = <p className='card text-center py-6'>{user?.fullName}'s haven't any post.</p>
 	} else if (posts && posts?.length > 0) {
 		content = <PostList posts={posts} loadMore={() => setPage(nextPage!)} hasMore={!!nextPage} />
 	}

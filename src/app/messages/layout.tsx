@@ -26,7 +26,7 @@ export default function layout({ children }: PropsWithChildren) {
                     <Conversations />
                 </div>
 
-                <div className='border-0 border-x-2 border-solid border-gray-200'>{children}</div>
+                <div className='border-0 border-x-2 border-gray-200'>{children}</div>
 
                 <div className='hidden lg:block mx-2 my-3'>
                     <ParticipantInfo />
@@ -39,7 +39,7 @@ export default function layout({ children }: PropsWithChildren) {
             <div className='grid grid-cols-1 md:grid-cols-[1fr_3fr]  xl:grid-cols-[1fr_4fr]'>
                 <div>{children}</div>
 
-                <div className='hidden md:block pl-4 py-6 border-0 border-l-2 border-solid border-gray-200'>
+                <div className='hidden md:block pl-4 py-6 border-l-2 border-gray-200'>
                     <h3 className='text-2xl font-bold'>Select a message</h3>
                     <p>Choose from your existing conversations, start a new one, or just keep swimming.</p>
                 </div>

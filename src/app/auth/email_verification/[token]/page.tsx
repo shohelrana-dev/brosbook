@@ -108,7 +108,7 @@ export default function EmailVerifyPage({params}: Props) {
                         Thank you for signing up for a {process.env.NEXT_PUBLIC_APP_NAME} account.
                     </p>
                 </div>
-                <div className="auth-box">
+                <div className="card-auth">
                     <div className="text-center">
                         {isSuccess ? successMarkup : errorMarkup}
                     </div>

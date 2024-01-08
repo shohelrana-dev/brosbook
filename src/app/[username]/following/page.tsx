@@ -49,7 +49,7 @@ export default function FollowingPage( { params }: Props ){
     }
 
     return (
-        <div className="box p-3">
+        <div className="card p-3">
             { content }
         </div>
     )

@@ -35,7 +35,7 @@ export default function SuggestedPeople() {
     }
 
     return (
-        <div className="box p-5">
+        <div className="card p-5">
             <h2 className="text-xl font-medium mb-5">Suggestions for you</h2>
             {content}
 

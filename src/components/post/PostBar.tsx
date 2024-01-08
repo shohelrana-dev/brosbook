@@ -49,7 +49,7 @@ export default function PostBar({ post }: Props) {
 	}
 
 	return (
-		<div className='flex flex-wrap mt-2 border-x-0 border-y border-solid border-gray-200 py-1 justify-around'>
+		<div className='flex flex-wrap mt-2 border-y border-gray-200 py-1 justify-around'>
 			<div className='flex flex-wrap items-center gap-1'>
 				<LikeButton
 					isViewerLiked={isViewerLiked}

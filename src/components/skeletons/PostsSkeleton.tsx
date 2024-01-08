@@ -6,7 +6,7 @@ export default function PostsSkeleton( { count = 3 } ){
             <p className='text-center my-2 text-gray-500'>Loading...</p>
 
             { Array.from( { length: count } ).map( (_, i) => (
-                <div key={i} className="box bg-white p-5 mb-3">
+                <div key={i} className="card bg-white p-5 mb-3">
                     <div className="flex flex-wrap justify-between items-center mb-4">
                         <div className="flex flex-wrap gap-3 items-center">
                             <Skeleton width={ 48 } height={ 48 } circle/>
@@ -22,7 +22,7 @@ export default function PostsSkeleton( { count = 3 } ){
                     </div>
                     <Skeleton height={ 10 } count={ 3 }/>
                     <Skeleton height={ 10 } style={{width: ""}}/>
-                    <div className="flex flex-wrap justify-around border-0 border-solid border-gray-50 border-t-2 border-b-2 py-1 mt-3">
+                    <div className="flex flex-wrap justify-around border-y-2 border-gray-50 py-1 mt-3">
                         <Skeleton width={ 22 } height={ 22 } circle/>
                         <Skeleton width={ 22 } height={ 22 } circle/>
                         <Skeleton width={ 22 } height={ 22 } circle/>

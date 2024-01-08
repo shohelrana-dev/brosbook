@@ -42,11 +42,11 @@ export default function Login() {
     return (
         <>
             <LoadingOverlay isLoading={ isLoading || isSuccess || isLoadingLoginWithGoogle }/>
-            <div className='auth-box'>
+            <div className='card-auth'>
                 <div className='flex flex-wrap justify-center mb-2'>
                     <FiLock size="30"/>
                 </div>
-                <h1 className='auth-heading'>
+                <h1 className='heading-auth'>
                     Log In to { process.env.NEXT_PUBLIC_APP_NAME || 'Brosbook' }
                 </h1>
 
@@ -81,7 +81,7 @@ export default function Login() {
                 </small>
             </div>
 
-            <div className="auth-box text-center mt-2 text-gray-800">
+            <div className="card-auth text-center mt-2 text-gray-800">
                 Don't have an account? &nbsp;
                 <Link href="/auth/signup" className="text-blue-500 font-medium">
                     Sign Up

@@ -4,7 +4,7 @@ import Skeleton from 'react-loading-skeleton'
 export default function MessageBoxSkeleton() {
     return (
         <div className='m-3 h-screen-content flex flex-col'>
-            <div className='box bg-white px-3 py-2 flex flex-wrap justify-between gap-3 items-center'>
+            <div className='card bg-white px-3 py-2 flex flex-wrap justify-between gap-3 items-center'>
                 <div className='flex flex-wrap gap-3 '>
                     <Skeleton width={48} height={48} circle />
                     <div>

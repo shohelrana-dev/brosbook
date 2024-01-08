@@ -77,7 +77,7 @@ export default function CreateMessageForm() {
 		<form
 			onSubmit={submitForm}
 			className={cn(
-				'flex items-center mb-4 rounded-2xl bg-white px-2 border-2 border-solid border-gray-200',
+				'flex items-center mb-4 rounded-2xl bg-white px-2 border-2 border-gray-200',
 				{ 'border-primary': isFocused }
 			)}
 		>

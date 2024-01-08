@@ -21,7 +21,7 @@ const CustomTextField = styled(({endAdornment, ...restProps}: TextFieldProps & C
         transition: theme.transitions.create([
             'border-color',
             'background-color',
-            'box-shadow',
+            'card-shadow',
         ]),
         '&:hover': {
             backgroundColor: 'transparent',

@@ -34,7 +34,7 @@ export default function FeedPosts({ initialPostsData }: Props) {
 	} else if (isError) {
 		content = <Error message={`Error fetching posts: ${error.data?.message}`} />
 	} else if (posts && posts.length === 0) {
-		content = <p className='box text-center py-6'>Your feed is empty.</p>
+		content = <p className='card text-center py-6'>Your feed is empty.</p>
 	} else if (posts && posts.length > 0) {
 		content = <PostList posts={posts} loadMore={() => setPage(nextPage!)} hasMore={!!nextPage} />
 	}

@@ -27,7 +27,7 @@ export default function SuggestionsPage(){
     if( isLoading ){
         content = <UsersSkeleton/>
     } else if( isSuccess && users.length === 0 ){
-        content = <p className="box text-center py-6">You have no suggestion.</p>
+        content = <p className="card text-center py-6">You have no suggestion.</p>
     } else if( isError ){
         content = <Error message={ error?.data?.message }/>
     } else if( isSuccess && users.length > 0 ){

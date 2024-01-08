@@ -8,7 +8,7 @@ import cn from '@/utils/cn'
 const classes = {
 	textMessage: ({ isOwn, hasReaction }: { isOwn: boolean; hasReaction: boolean }) =>
 		cn(
-			'box relative flex items-end gap-1 text-sm lg:text-base bg-white text-gray-700 [&_a]:text-blue-500 [&_a]:underline',
+			'card relative flex items-end gap-1 text-sm lg:text-base bg-white text-gray-700 [&_a]:text-blue-500 [&_a]:underline',
 			{ 'bg-primary text-white [&_a]:text-white': isOwn, 'mb-3': hasReaction }
 		),
 	emojiMessage: ({ hasReaction }: { hasReaction: boolean }) =>

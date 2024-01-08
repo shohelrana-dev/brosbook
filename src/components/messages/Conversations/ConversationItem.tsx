@@ -11,9 +11,9 @@ import { IoCheckmarkCircleOutline as TickIcon } from 'react-icons/io5'
 import cn from '@/utils/cn'
 
 const classes = {
-	box: ({ isActiveConversation }: { isActiveConversation: boolean }) =>
+	card: ({ isActiveConversation }: { isActiveConversation: boolean }) =>
 		cn(
-			`box block cursor-pointer py-2 px-3 flex mb-2 w-full gap-3`,
+			`card block cursor-pointer py-2 px-3 flex mb-2 w-full gap-3`,
 			isActiveConversation && `bg-primary [&_*]:text-white`
 		),
 	name: `font-medium text-gray-900`,
@@ -48,7 +48,7 @@ export default function ConversationItem({ conversation }: Props) {
 	}
 
 	return (
-		<Link href={`/messages/${conversation.id}`} className={classes.box({ isActiveConversation })}>
+		<Link href={`/messages/${conversation.id}`} className={classes.card({ isActiveConversation })}>
 			<Avatar online={active} alt={fullName} src={avatar?.url} />
 			<div className='w-full'>
 				<h3 className={classes.nameWrapper}>

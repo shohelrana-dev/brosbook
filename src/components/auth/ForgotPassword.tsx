@@ -23,7 +23,7 @@ export default function ForgotPassword(){
     if( isSuccess ){
         content = (
             <div className="text-center">
-                <h1 className="auth-heading">
+                <h1 className="heading-auth">
                     Reset Password
                 </h1>
                 <p>Check your email for a link to reset your password. If it doesn't appear
@@ -36,7 +36,7 @@ export default function ForgotPassword(){
     } else{
         content = (
             <>
-                <h1 className="auth-heading">
+                <h1 className="heading-auth">
                     Trouble with logging in?
                 </h1>
                 <small className="block text-gray-500 text-center mb-2">
@@ -61,7 +61,7 @@ export default function ForgotPassword(){
 
     return (
         <>
-            <div className="auth-box">
+            <div className="card-auth">
                 <div className='flex flex-wrap justify-center mb-2'>
                     <FiLock size="30"/>
                 </div>
@@ -69,7 +69,7 @@ export default function ForgotPassword(){
                 { content }
             </div>
 
-            <div className="auth-box text-center mt-2 text-gray-800">
+            <div className="card-auth text-center mt-2 text-gray-800">
                 Go back?&nbsp;
                 <Link href="/auth/login" className="text-blue-500 font-medium">
                     Log In

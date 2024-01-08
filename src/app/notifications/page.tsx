@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function NotificationPage(){
     return (
         <SidebarLayout>
-            <div className="box py-6 px-4">
+            <div className="card py-6 px-4">
                 <NotificationList/>
             </div>
         </SidebarLayout>

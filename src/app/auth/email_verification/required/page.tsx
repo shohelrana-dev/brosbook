@@ -44,7 +44,7 @@ export default function RequiredPage(){
                     Thank you for signing up for a { process.env.NEXT_PUBLIC_APP_NAME } account.
                 </p>
             </div>
-            <div className="auth-box text-center">
+            <div className="card-auth text-center">
                 <Image src={ mailImage } className="text-center m-auto" alt='image'/>
                 <h2 className="text-xl md:text-2xl mb-4">Verify your email address</h2>
                 <p>Verification email has been sent to:</p>
@@ -67,7 +67,7 @@ export default function RequiredPage(){
                 </div>
             </div>
 
-            <div className="auth-box text-center mt-2">
+            <div className="card-auth text-center mt-2">
                 <p className="text-gray-800">
                     Go Back?
                     <Link href="/auth/login" className="ml-1 text-blue-500 font-medium">

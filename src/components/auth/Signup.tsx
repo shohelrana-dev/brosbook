@@ -34,8 +34,8 @@ export default function Signup(){
     return (
         <>
             <LoadingOverlay isLoading={ isLoading || isSuccess || isLoadingLoginWithGoogle }/>
-            <div className="auth-box">
-                <h1 className="auth-heading">
+            <div className="card-auth">
+                <h1 className="heading-auth">
                     Sign Up
                 </h1>
 
@@ -91,7 +91,7 @@ export default function Signup(){
                 </p>
             </div>
 
-            <div className="auth-box text-center mt-2 text-gray-800">
+            <div className="card-auth text-center mt-2 text-gray-800">
                 Have an account? &nbsp;
                 <Link href="/auth/login" className="text-blue-500 font-medium">
                     Log In

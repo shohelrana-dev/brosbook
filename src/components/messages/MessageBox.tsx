@@ -17,7 +17,7 @@ import { RxCross1 as CrossIcon } from 'react-icons/rx'
 const classes = {
     wrapper: `h-screen-content overflow-hidden px-2 grid grid-rows-[auto_1fr_auto]`,
     modal: `max-h-[85vh] !bg-primary-gray flex flex-col !p-[1px] !rounded-xl`,
-    header: `box mt-2 py-3 px-4 lg:px-6 flex flex-wrap justify-between`,
+    header: `card mt-2 py-3 px-4 lg:px-6 flex flex-wrap justify-between`,
     name: `font-medium text-gray-800`,
     active: `text-gray-500 text-sm`,
 }

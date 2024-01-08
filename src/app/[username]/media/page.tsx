@@ -42,7 +42,7 @@ export default function MediaPage( { params }: Props ) {
     }
 
     return (
-        <div className="box">
+        <div className="card">
             { content }
         </div>
     )

@@ -2,7 +2,7 @@ import Skeleton from 'react-loading-skeleton'
 
 export default function CreatePostFormSkeleton(){
     return (
-        <div className="box bg-white p-5 mb-3">
+        <div className="card bg-white p-5 mb-3">
             <p className='text-center my-2 text-gray-500'>Loading...</p>
             <div className="text-center mb-4">
                 <Skeleton width={ 110 }/>
