@@ -4,9 +4,11 @@ import PostCard from '@components/post/PostCard'
 import { Post } from '@interfaces/posts.interfaces'
 import { postsApi, useGetPostByIdQuery } from '@services/postsApi'
 import { store } from '@store/index'
+import { useParams } from 'next/navigation'
 
 export default function SinglePostPage({ post: initialPost }: { post: Post }) {
-	const { data: post = initialPost } = useGetPostByIdQuery(initialPost.id, {
+	const { postId } = useParams<{ postId: string }>()
+	const { data: post = initialPost } = useGetPostByIdQuery(initialPost.id || postId, {
 		skip: initialPost.id ? true : false,
 	})
 
