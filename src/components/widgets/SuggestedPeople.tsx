@@ -23,7 +23,7 @@ export default function SuggestedPeople() {
 	//decide content
 	let content = null
 	if (isLoading) {
-		content = <UsersSkeleton />
+		content = <UsersSkeleton count={2} />
 	} else if (isError) {
 		content = <Error message={error?.data?.message} />
 	} else if (users && users.length === 0) {

@@ -53,7 +53,7 @@ export async function getPostById( postId: string, cookies: RequestCookies | Rea
 
 export async function getPostsByAuthorId( authorId: string, cookies: RequestCookies | ReadonlyRequestCookies ) {
     const config = getAuthorizationConfig( cookies )
-    const res    = await http.get<ListResponse<Post>>( `/posts?userId=${ authorId }`, config )
+    const res    = await http.get<ListResponse<Post>>( `/posts?authorId=${ authorId }`, config )
 
     return res.data
 }
