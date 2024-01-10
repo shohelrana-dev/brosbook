@@ -1,20 +1,20 @@
 'use client'
-import { FormEvent, useEffect, useState } from 'react'
-import { MdPublic as PublicIcon } from 'react-icons/md'
-import { HiPhotograph } from 'react-icons/hi'
-import { RxCross2 as CancelIcon } from 'react-icons/rx'
-import toast from 'react-hot-toast'
 import { LoadingButton } from '@mui/lab'
 import { IconButton, Tooltip } from '@mui/material'
+import { FormEvent, useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
+import { HiPhotograph } from 'react-icons/hi'
+import { MdPublic as PublicIcon } from 'react-icons/md'
+import { RxCross2 as CancelIcon } from 'react-icons/rx'
 
-import Avatar from '@/components/global/Avatar'
-import { useCreatePostMutation } from '@/services/postsApi'
 import BasicInput from '@/components/form/BasicInput'
-import useAuthState from '@/hooks/useAuthState'
-import useSelectFile from '@/hooks/useSelectFile'
-import useFocus from '@/hooks/useFocus'
-import useToggle from '@/hooks/useToggle'
+import Avatar from '@/components/global/Avatar'
 import DarkOverlay from '@/components/global/DarkOverlay'
+import useAuthState from '@/hooks/useAuthState'
+import useFocus from '@/hooks/useFocus'
+import useSelectFile from '@/hooks/useSelectFile'
+import { useCreatePostMutation } from '@/services/postsApi'
+import { useToggle } from 'react-minimal-modal'
 
 export default function CreatePostForm() {
 	//hooks
@@ -28,12 +28,12 @@ export default function CreatePostForm() {
 		onChange,
 		onClick,
 	} = useSelectFile()
-	const [isVisible, toggleVisibility] = useToggle()
+	const [isOpen, toggleVisibility] = useToggle()
 	const { inputRef, focus } = useFocus()
 
 	useEffect(() => {
-		if (isVisible) focus()
-	}, [isVisible])
+		if (isOpen) focus()
+	}, [isOpen])
 
 	async function submitForm(event: FormEvent) {
 		event.preventDefault()
@@ -65,9 +65,9 @@ export default function CreatePostForm() {
 
 	return (
 		<div className='mb-5'>
-			<DarkOverlay isVisible={isVisible} onClick={isVisible ? toggleVisibility : undefined} />
+			<DarkOverlay isOpen={isOpen} onClick={isOpen ? toggleVisibility : undefined} />
 
-			{!isVisible && (
+			{!isOpen && (
 				<form onSubmit={submitForm} className='card px-4 py-6 pt-8 flex z-10 relative'>
 					<Avatar src={user?.avatar?.url} size='small' />
 					<span className='inline-block mr-3' />
@@ -76,7 +76,7 @@ export default function CreatePostForm() {
 							label="What's your mind?"
 							labelHide
 							onChange={e => setMessageBody(e.target.value)}
-							value={isVisible ? '' : messageBody}
+							value={isOpen ? '' : messageBody}
 							onFocus={toggleVisibility}
 							className='focus:border-gray-200'
 						/>
@@ -107,7 +107,7 @@ export default function CreatePostForm() {
 				</form>
 			)}
 
-			{isVisible && (
+			{isOpen && (
 				<div className='relative card bg-white p-4 z-20'>
 					<div className='absolute top-1 right-1'>
 						<Tooltip title='Close' onClick={toggleVisibility}>

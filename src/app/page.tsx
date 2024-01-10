@@ -1,14 +1,13 @@
-import FeedPosts from './FeedPosts'
 import SidebarLayout from '@/components/global/SidebarLayout'
-import { Metadata } from 'next'
-import CreatePostForm from '@/components/post/CreatePostForm'
 import SlidesSuggestions from '@/components/global/SlidesSuggestions'
+import CreatePostForm from '@/components/post/CreatePostForm'
 import { getFeedPosts } from '@/services/index'
+import { Metadata } from 'next'
 import { cookies } from 'next/headers'
-import siteMetadata from '@/utils/siteMetadata'
+import FeedPosts from './FeedPosts'
 
 export const metadata: Metadata = {
-	title: `Home | ${siteMetadata.appName}`,
+	title: 'Home',
 }
 
 export default async function HomePage() {
