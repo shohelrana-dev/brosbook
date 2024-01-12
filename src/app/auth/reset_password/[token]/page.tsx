@@ -1,17 +1,14 @@
-import { Metadata } from "next"
-import ResetPassword from "@/components/auth/ResetPassword"
+import { Metadata } from 'next'
+import ResetPassword from '~/components/auth/ResetPassword'
 
 export const metadata: Metadata = {
-    title: 'Reset Password'
+	title: 'Reset Password',
 }
-
 
 type Props = {
-    params: { token: string }
+	params: { token: string }
 }
 
-export default function ResetPasswordPage( { params }: Props ){
-    return (
-        <ResetPassword token={ params.token }/>
-    )
+export default function ResetPasswordPage({ params }: Props) {
+	return <ResetPassword token={params.token} />
 }

@@ -1,9 +1,8 @@
-import React from 'react'
-import { User } from '@/interfaces/user.interfaces'
-import { useSearchUsersQuery } from '@/services/usersApi'
-import UserItem from '@/components/global/UserItem'
-import UsersSkeleton from '@/components/skeletons/UsersSkeleton'
-import cn from '@/utils/cn'
+import UserItem from '~/components/global/UserItem'
+import UsersSkeleton from '~/components/skeletons/UsersSkeleton'
+import { User } from '~/interfaces/user.interfaces'
+import { useSearchUsersQuery } from '~/services/usersApi'
+import cn from '~/utils/cn'
 
 interface Props {
 	searchText: string
@@ -36,7 +35,8 @@ export default function SearchUserList({
 							onClick={() => handleUserClick && handleUserClick(user)}
 							className={cn(
 								'p-3',
-								handleUserClick && 'cursor-pointer hover:bg-gray-100 max-h-[70px] duration-200'
+								handleUserClick &&
+									'cursor-pointer hover:bg-gray-100 max-h-[70px] duration-200'
 							)}
 						>
 							<UserItem

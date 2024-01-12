@@ -1,5 +1,6 @@
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+import type { Config } from 'tailwindcss'
+
+const config: Config = {
 	mode: 'jit',
 	content: ['./src/**/*.{js,ts,jsx,tsx}'],
 	theme: {
@@ -31,10 +32,10 @@ module.exports = {
 				'screen-content': 'calc(100dvh - 65px)',
 			},
 			zIndex: {
-				99: 99,
-				999: 999,
-				9999: 9999,
-				99999: 99999,
+				'99': '99',
+				'999': '999',
+				'9999': '9999',
+				'99999': '99999',
 			},
 			fontFamily: {
 				kanit: ['var(--font-kanit)'],
@@ -55,3 +56,5 @@ module.exports = {
 	},
 	plugins: [require('tailwind-scrollbar-hide')],
 }
+
+export default config

@@ -1,16 +1,16 @@
-"use client"
-import MessageBox from "@/components/messages/MessageBox"
-import { useEffect } from "react"
-import { useParams } from "next/navigation"
-import { useGetConversationByIdQuery } from "@/services/conversationsApi"
+'use client'
+import { useParams } from 'next/navigation'
+import { useEffect } from 'react'
+import MessageBox from '~/components/messages/MessageBox'
+import { useGetConversationByIdQuery } from '~/services/conversationsApi'
 
 export default async function ChatPage() {
-    const params = useParams<{ conversationId?: string }>()
-    const { data: conversation } = useGetConversationByIdQuery(params?.conversationId!)
+	const params = useParams<{ conversationId?: string }>()
+	const { data: conversation } = useGetConversationByIdQuery(params?.conversationId!)
 
-    useEffect(() => {
-        document.title = conversation?.participant.fullName! || ''
-    }, [conversation])
+	useEffect(() => {
+		document.title = conversation?.participant.fullName! || ''
+	}, [conversation])
 
-    return <MessageBox/>
+	return <MessageBox />
 }

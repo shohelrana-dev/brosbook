@@ -1,14 +1,14 @@
 'use client'
-import { User } from '@/interfaces/user.interfaces'
-import { useGetSuggestedUsersQuery } from '@/services/usersApi'
-import UserItem from '@/components/global/UserItem'
-import Link from 'next/link'
-import UsersSkeleton from '@/components/skeletons/UsersSkeleton'
-import useAuthState from '@/hooks/useAuthState'
-import Error from '@/components/global/Error'
-import { ErrorResponse } from '@/interfaces/index.interfaces'
 import { Button } from '@mui/material'
-import WidgetLayout from '@/components/widgets/WidgetLayout'
+import Link from 'next/link'
+import Error from '~/components/global/Error'
+import UserItem from '~/components/global/UserItem'
+import UsersSkeleton from '~/components/skeletons/UsersSkeleton'
+import WidgetLayout from '~/components/widgets/WidgetLayout'
+import useAuthState from '~/hooks/useAuthState'
+import { ErrorResponse } from '~/interfaces/index.interfaces'
+import { User } from '~/interfaces/user.interfaces'
+import { useGetSuggestedUsersQuery } from '~/services/usersApi'
 
 export default function SuggestedPeople() {
 	const { isAuthenticated } = useAuthState()

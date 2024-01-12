@@ -1,9 +1,9 @@
-import { PropsWithChildren } from 'react'
+import { ReactNode } from 'react'
 
-export default function Layout({ children }: PropsWithChildren) {
-    return (
-        <div className='w-100 max-w-full mx-auto mt-12 lg:mt-28 relative z-50'>
-            {children}
-        </div>
-    )
+interface Props {
+	children: ReactNode
+}
+
+export default function Layout({ children }: Props) {
+	return <div className='w-100 max-w-full mx-auto mt-12 lg:mt-28 relative z-50'>{children}</div>
 }

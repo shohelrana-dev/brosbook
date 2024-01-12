@@ -1,14 +1,14 @@
 'use client'
-import { postsApi, useGetPostsQuery } from '@/services/postsApi'
-import PostsSkeleton from '@/components/skeletons/PostsSkeleton'
-import { usersApi } from '@/services/usersApi'
-import Error from '@/components/global/Error'
 import { useEffect, useState } from 'react'
-import { ErrorResponse, ListResponse } from '@/interfaces/index.interfaces'
-import PostList from '@/components/post/PostList'
-import { Post } from '@/interfaces/posts.interfaces'
-import { store } from '@/store/index'
-import { User } from '@/interfaces/user.interfaces'
+import Error from '~/components/global/Error'
+import PostList from '~/components/post/PostList'
+import PostsSkeleton from '~/components/skeletons/PostsSkeleton'
+import { ErrorResponse, ListResponse } from '~/interfaces/index.interfaces'
+import { Post } from '~/interfaces/posts.interfaces'
+import { User } from '~/interfaces/user.interfaces'
+import { postsApi, useGetPostsQuery } from '~/services/postsApi'
+import { usersApi } from '~/services/usersApi'
+import { store } from '~/store/index'
 
 interface Props {
 	initialPostsData: ListResponse<Post>
@@ -49,7 +49,7 @@ export default function UserPostsList({ initialPostsData, user }: Props) {
 	} else if (isError) {
 		content = <Error message={error.data?.message} />
 	} else if (posts && posts?.length === 0) {
-		content = <p className='card text-center py-6'>{user?.fullName}'s haven't any post.</p>
+		content = <p className='card text-center py-6'>{user?.fullName}&apos;s haven&apos;t any post.</p>
 	} else if (posts && posts?.length > 0) {
 		content = <PostList posts={posts} loadMore={() => setPage(nextPage!)} hasMore={!!nextPage} />
 	}

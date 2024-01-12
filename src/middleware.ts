@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import isAuthenticated from '@/utils/isAuthenticated'
+import { NextResponse } from 'next/server'
+import isAuthenticated from '~/utils/isAuthenticated'
 
 const protectedPaths = [
 	'/messages',

@@ -1,18 +1,18 @@
 'use client'
-import Link from 'next/link'
-import SearchButton from '@/components/navbar/SearchButton'
-import NotificationsNavLink from '@/components/navbar/NotificationsNavLink'
-import MessagesNavLink from '@/components/navbar/MessagesNavLink'
-import UserMenu from '@/components/navbar/UserMenu'
-import useAuthState from '@/hooks/useAuthState'
+import { AppBar, Box, Button, IconButton } from '@mui/material'
 import Image from 'next/image'
-import logo from '@/assets/images/logo.png'
-import titledLogo from '@/assets/images/titled-logo.png'
-import { Button, AppBar, IconButton, Box } from '@mui/material'
-import useMediaQuery from '@/hooks/useMediaQuery'
+import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import logo from '~/assets/images/logo.png'
+import titledLogo from '~/assets/images/titled-logo.png'
+import MessagesNavLink from '~/components/header/MessagesNavLink'
+import NotificationsNavLink from '~/components/header/NotificationsNavLink'
+import SearchButton from '~/components/header/SearchButton'
+import UserMenu from '~/components/header/UserMenu'
+import useAuthState from '~/hooks/useAuthState'
+import useMediaQuery from '~/hooks/useMediaQuery'
 
-export default function Navbar() {
+export default function Header() {
 	const isScreenSmall = useMediaQuery('(max-width: 767px)')
 	const { isAuthenticated } = useAuthState()
 	const pathname = usePathname()

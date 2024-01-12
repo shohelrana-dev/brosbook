@@ -1,13 +1,13 @@
-import PasswordInput from '@/components/form/PasswordInput'
-import { useForm } from '@/hooks/useForm'
-import { ChangePasswordPayload } from '@/interfaces/account.interfaces'
-import { useChangePasswordMutation } from '@/services/accountApi'
 import { LoadingButton } from '@mui/lab'
 import { Button } from '@mui/material'
 import Link from 'next/link'
 import { useEffect } from 'react'
 import toast from 'react-hot-toast'
 import Modal, { useToggle } from 'react-minimal-modal'
+import PasswordInput from '~/components/form/PasswordInput'
+import { useForm } from '~/hooks/useForm'
+import { ChangePasswordPayload } from '~/interfaces/account.interfaces'
+import { useChangePasswordMutation } from '~/services/accountApi'
 
 export default function ChangePasswordModal() {
 	const [changePassword, { isLoading, isSuccess }] = useChangePasswordMutation()

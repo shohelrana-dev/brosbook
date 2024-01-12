@@ -1,6 +1,6 @@
 import { IconButton, Tooltip } from '@mui/material'
-import cn from '@/utils/cn'
 import { MouseEvent } from 'react'
+import cn from '~/utils/cn'
 
 interface Props {
 	isViewerLiked: boolean

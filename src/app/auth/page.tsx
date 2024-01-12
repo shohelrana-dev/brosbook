@@ -1,16 +1,7 @@
-"use client"
-import { useRouter }      from "next/navigation"
-import { useEffect }      from "react"
-import Loader from "@/components/global/Loader"
+import { redirect } from 'next/navigation'
 
-function AuthPage() {
-    const router = useRouter()
+export default function AuthPage() {
+	redirect('/auth/login')
 
-    useEffect( () => {
-        router.push( '/auth/login' )
-    }, [router] )
-
-    return <Loader/>
+	return null
 }
-
-export default AuthPage

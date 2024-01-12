@@ -1,10 +1,4 @@
 'use client'
-import ImageLightbox from '@/components/global/ImageLightbox'
-import useAuthState from '@/hooks/useAuthState'
-import useSelectFile from '@/hooks/useSelectFile'
-import { Media } from '@/interfaces/index.interfaces'
-import { User } from '@/interfaces/user.interfaces'
-import { useChangeProfilePhotoMutation } from '@/services/usersApi'
 import { LoadingButton } from '@mui/lab'
 import { Button, IconButton } from '@mui/material'
 import Image from 'next/image'
@@ -12,6 +6,12 @@ import { ChangeEvent, useState } from 'react'
 import toast from 'react-hot-toast'
 import { TbCameraPlus } from 'react-icons/tb'
 import Modal from 'react-minimal-modal'
+import ImageLightbox from '~/components/global/ImageLightbox'
+import useAuthState from '~/hooks/useAuthState'
+import useSelectFile from '~/hooks/useSelectFile'
+import { Media } from '~/interfaces/index.interfaces'
+import { User } from '~/interfaces/user.interfaces'
+import { useChangeProfilePhotoMutation } from '~/services/usersApi'
 
 type Props = { user: User }
 

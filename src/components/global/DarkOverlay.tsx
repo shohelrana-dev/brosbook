@@ -1,5 +1,5 @@
-import cn from '@/utils/cn'
 import { HTMLAttributes } from 'react'
+import cn from '~/utils/cn'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
 	isOpen: boolean

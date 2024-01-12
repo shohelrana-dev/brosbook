@@ -1,19 +1,19 @@
-import BasicInput from '@/components/form/BasicInput'
-import SearchUserList from '@/components/global/SearchUserList'
-import { User } from '@/interfaces/user.interfaces'
+import { Popover } from '@mui/material'
+import PopupState, { bindPopover, bindTrigger } from 'material-ui-popup-state'
+import { useRouter } from 'next/navigation'
+import { useEffect, useRef } from 'react'
+import toast from 'react-hot-toast'
+import { useConfirmAlert } from 'react-use-confirm-alert'
+import { useDebounce } from 'use-debounce'
+import BasicInput from '~/components/form/BasicInput'
+import SearchUserList from '~/components/global/SearchUserList'
+import useInputValue from '~/hooks/useInputValue'
+import { User } from '~/interfaces/user.interfaces'
 import {
 	useCreateConversationMutation,
 	useLazyGetConversationByParticipantIdQuery,
-} from '@/services/conversationsApi'
-import { useRouter } from 'next/navigation'
-import { useDebounce } from 'use-debounce'
-import { useConfirmAlert } from 'react-use-confirm-alert'
-import toast from 'react-hot-toast'
-import PopupState, { bindPopover, bindTrigger } from 'material-ui-popup-state'
-import { Popover } from '@mui/material'
-import useInputValue from '@/hooks/useInputValue'
-import { useEffect, useRef } from 'react'
-import cn from '@/utils/cn'
+} from '~/services/conversationsApi'
+import cn from '~/utils/cn'
 
 export default function SearchConversation() {
 	const [searchText, handleInputChange, resetSearchText] = useInputValue('')
@@ -53,9 +53,10 @@ export default function SearchConversation() {
 			{popupState => {
 				const { isOpen } = popupState
 
+				//eslint-disable-next-line
 				useEffect(() => {
 					isOpen && inputRef.current?.focus()
-				}, [isOpen, inputRef.current])
+				}, [isOpen])
 
 				return (
 					<div className={cn('mb-3', { 'relative z-9999': isOpen })}>

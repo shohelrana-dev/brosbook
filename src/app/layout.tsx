@@ -1,13 +1,13 @@
-import '@/assets/styles/app.css'
-import PreLoader from '@/components/global/PreLoader'
-import Navbar from '@/components/navbar/Navbar'
-import { getCurrentUser } from '@/services/index'
-import siteMetadata from '@/utils/siteMetadata'
 import { Metadata } from 'next'
 import { Kanit } from 'next/font/google'
 import { cookies } from 'next/headers'
 import { ReactNode } from 'react'
 import 'react-loading-skeleton/dist/skeleton.css'
+import '~/assets/styles/app.css'
+import PreLoader from '~/components/global/PreLoader'
+import Header from '~/components/header/Header'
+import { getCurrentUser } from '~/services/index'
+import siteMetadata from '~/utils/siteMetadata'
 import Providers from './providers'
 
 export const metadata: Metadata = {
@@ -57,7 +57,7 @@ interface Props {
 	auth: ReactNode
 }
 
-export default async function RootLayout(props: Props) {
+export default async function RootLayout({ children, auth }: Props) {
 	const user = await getCurrentUser(cookies())
 
 	return (
@@ -66,10 +66,10 @@ export default async function RootLayout(props: Props) {
 			<body className={`${kanit.className} bg-primary-gray`}>
 				<Providers>
 					<PreLoader user={user!} />
-					<Navbar />
+					<Header />
 					<main>
-						{props.children}
-						{props.auth}
+						{children}
+						{auth}
 					</main>
 				</Providers>
 			</body>

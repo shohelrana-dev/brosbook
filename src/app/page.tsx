@@ -1,9 +1,9 @@
-import SidebarLayout from '@/components/global/SidebarLayout'
-import SlidesSuggestions from '@/components/global/SlidesSuggestions'
-import CreatePostForm from '@/components/post/CreatePostForm'
-import { getFeedPosts } from '@/services/index'
 import { Metadata } from 'next'
 import { cookies } from 'next/headers'
+import SidebarLayout from '~/components/global/SidebarLayout'
+import SlidesSuggestions from '~/components/global/SlidesSuggestions'
+import CreatePostForm from '~/components/post/CreatePostForm'
+import { getFeedPosts } from '~/services/index'
 import FeedPosts from './FeedPosts'
 
 export const metadata: Metadata = {

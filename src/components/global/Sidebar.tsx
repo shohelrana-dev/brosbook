@@ -1,8 +1,8 @@
 'use client'
-import SuggestedPeople from '@/components/widgets/SuggestedPeople'
-import NewUserMessage from '@/components/widgets/NewUserMessage'
-import useMediaQuery from '@/hooks/useMediaQuery'
-import Followers from '@/components/widgets/Followers'
+import Followers from '~/components/widgets/Followers'
+import NewUserMessage from '~/components/widgets/NewUserMessage'
+import SuggestedPeople from '~/components/widgets/SuggestedPeople'
+import useMediaQuery from '~/hooks/useMediaQuery'
 
 export default function Sidebar() {
 	const isLaptopOrDesktop = useMediaQuery('(min-width: 768px)')

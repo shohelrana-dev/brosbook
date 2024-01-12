@@ -1,17 +1,17 @@
 'use client'
-import Link from 'next/link'
-import ShowMoreText from 'react-show-more-text'
-import Avatar from '@/components/global/Avatar'
-import { Post } from '@/interfaces/posts.interfaces'
-import CommentList from '@/components/post/comment/CommentList'
-import timeAgo from '@/utils/timeAgo'
-import ImageLightbox from '@/components/global/ImageLightbox'
-import PostBar from '@/components/post/PostBar'
-import PostOptions from '@/components/post/PostOptions'
-import nl2br from 'react-nl2br'
-import { TbDiscountCheckFilled as BlueBadgeIcon } from 'react-icons/tb'
 import Linkify from 'linkify-react'
-import { useCommentsVisibilty } from '@/slices/toggleCommentsVisibilitySlice'
+import Link from 'next/link'
+import { TbDiscountCheckFilled as BlueBadgeIcon } from 'react-icons/tb'
+import nl2br from 'react-nl2br'
+import ShowMoreText from 'react-show-more-text'
+import Avatar from '~/components/global/Avatar'
+import ImageLightbox from '~/components/global/ImageLightbox'
+import PostBar from '~/components/post/PostBar'
+import PostOptions from '~/components/post/PostOptions'
+import CommentList from '~/components/post/comment/CommentList'
+import { Post } from '~/interfaces/posts.interfaces'
+import { useCommentsVisibilty } from '~/slices/toggleCommentsVisibilitySlice'
+import timeAgo from '~/utils/timeAgo'
 
 interface Props {
 	post: Post
@@ -23,7 +23,6 @@ export default function PostCard({ post, initialCommentsVisible }: Props) {
 
 	//hooks
 	const { isCommentsVisible } = useCommentsVisibilty(id, initialCommentsVisible)
-    
 
 	return (
 		<div className='card rounded-none lg:rounded-md p-5 mb-4'>

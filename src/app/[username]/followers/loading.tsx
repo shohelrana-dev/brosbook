@@ -1,10 +1,9 @@
-import React from 'react'
-import UsersSkeleton from "@/components/skeletons/UsersSkeleton"
+import UsersSkeleton from '~/components/skeletons/UsersSkeleton'
 
-export default function Loading(){
-    return (
-        <div className="card p-3">
-            <UsersSkeleton/>
-        </div>
-    )
+export default function Loading() {
+	return (
+		<div className='card p-3'>
+			<UsersSkeleton />
+		</div>
+	)
 }

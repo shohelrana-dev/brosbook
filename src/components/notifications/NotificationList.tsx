@@ -1,59 +1,58 @@
-"use client"
-import React, { useEffect, useState } from 'react'
-import { useGetNotificationsQuery, useReadAllNotificationMutation } from "@/services/notificationsApi"
-import { ErrorResponse, Notification } from "@/interfaces/index.interfaces"
-import NotificationItem from "./NotificationItem"
-import useInfiniteScroll from "react-infinite-scroll-hook"
-import NotificationsSkeleton from "@/components/skeletons/NotificationsSkeleton"
-import Error from "@/components/global/Error"
+'use client'
+import { useEffect, useState } from 'react'
+import useInfiniteScroll from 'react-infinite-scroll-hook'
+import Error from '~/components/global/Error'
+import NotificationsSkeleton from '~/components/skeletons/NotificationsSkeleton'
+import { ErrorResponse, Notification } from '~/interfaces/index.interfaces'
+import { useGetNotificationsQuery, useReadAllNotificationMutation } from '~/services/notificationsApi'
+import NotificationItem from './NotificationItem'
 
 export default function NotificationList() {
-    const [page, setPage]       = useState( 1 )
-    const notificationsQuery    = useGetNotificationsQuery( page )
-    const [readAllNotification] = useReadAllNotificationMutation()
+	const [page, setPage] = useState(1)
+	const notificationsQuery = useGetNotificationsQuery(page)
+	const [readAllNotification] = useReadAllNotificationMutation()
 
-    const { data: notificationsData, isLoading, isSuccess, isError } = notificationsQuery || {}
-    const { items: notifications = [], nextPage }                    = notificationsData || {}
-    const error                                                      = notificationsQuery.error as ErrorResponse || {}
-    const firstNotification                                          = notifications[0] || {}
+	const { data: notificationsData, isLoading, isSuccess, isError } = notificationsQuery || {}
+	const { items: notifications = [], nextPage } = notificationsData || {}
+	const error = (notificationsQuery.error as ErrorResponse) || {}
+	const firstNotification = notifications[0] || {}
 
-    useEffect( () => {
-        if ( isSuccess && firstNotification.id && !firstNotification.readAt ) {
-            readAllNotification()
-        }
-    }, [isSuccess, firstNotification] )
+	useEffect(() => {
+		if (isSuccess && firstNotification.id && !firstNotification.readAt) {
+			readAllNotification()
+		}
+	}, [isSuccess, firstNotification])
 
+	const [moreLoadRef] = useInfiniteScroll({
+		loading: isLoading,
+		hasNextPage: !!nextPage,
+		onLoadMore: () => setPage(nextPage!),
+	})
 
-    const [moreLoadRef] = useInfiniteScroll( {
-        loading: isLoading,
-        hasNextPage: !!nextPage,
-        onLoadMore: () => setPage( nextPage! ),
-    } )
+	//decide content
+	let content = null
+	if (isLoading) {
+		content = <NotificationsSkeleton />
+	} else if (isSuccess && notifications.length === 0) {
+		content = <p className='ml-2'>No notifications</p>
+	} else if (isError) {
+		content = <Error message={error?.data?.message} />
+	} else if (isSuccess && notifications.length > 0) {
+		content = notifications.map((notification: Notification) => (
+			<NotificationItem key={notification.id} notification={notification} />
+		))
+	}
 
-    //decide content
-    let content = null
-    if ( isLoading ) {
-        content = <NotificationsSkeleton/>
-    } else if ( isSuccess && notifications.length === 0 ) {
-        content = <p className="ml-2">No notifications</p>
-    } else if ( isError ) {
-        content = <Error message={ error?.data?.message }/>
-    } else if ( isSuccess && notifications.length > 0 ) {
-        content = notifications.map( ( notification: Notification ) => (
-            <NotificationItem key={ notification.id } notification={ notification }/>
-        ) )
-    }
+	return (
+		<div className='w-full min-w-80 max-h-130 p-2 overflow-y-auto'>
+			<h3 className='text-xl font-bold text-gray-900 ml-2 mb-1'>Notifications</h3>
+			{content}
 
-    return (
-        <div className="w-full min-w-80 max-h-130 p-2 overflow-y-auto">
-            <h3 className="text-xl font-bold text-gray-900 ml-2 mb-1">Notifications</h3>
-            { content }
-
-            { nextPage ? (
-                <div ref={ moreLoadRef }>
-                    <NotificationsSkeleton count={ 3 }/>
-                </div>
-            ) : null }
-        </div>
-    )
+			{nextPage ? (
+				<div ref={moreLoadRef}>
+					<NotificationsSkeleton count={3} />
+				</div>
+			) : null}
+		</div>
+	)
 }

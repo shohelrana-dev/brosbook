@@ -1,15 +1,15 @@
-import AnimatedInput from '@/components/form/AnimatedInput'
-import PasswordInput from '@/components/form/PasswordInput'
-import useAuthState from '@/hooks/useAuthState'
-import { useForm } from '@/hooks/useForm'
-import { ChangeUsernamePayload } from '@/interfaces/account.interfaces'
-import { useChangeUsernameMutation } from '@/services/accountApi'
 import { LoadingButton } from '@mui/lab'
 import { Button } from '@mui/material'
 import Link from 'next/link'
 import { useEffect } from 'react'
 import toast from 'react-hot-toast'
 import Modal, { useToggle } from 'react-minimal-modal'
+import AnimatedInput from '~/components/form/AnimatedInput'
+import PasswordInput from '~/components/form/PasswordInput'
+import useAuthState from '~/hooks/useAuthState'
+import { useForm } from '~/hooks/useForm'
+import { ChangeUsernamePayload } from '~/interfaces/account.interfaces'
+import { useChangeUsernameMutation } from '~/services/accountApi'
 
 export default function ChangeUsernameModal() {
 	const { user } = useAuthState()

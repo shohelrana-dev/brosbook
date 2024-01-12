@@ -7,14 +7,14 @@ import { HiPhotograph } from 'react-icons/hi'
 import { MdPublic as PublicIcon } from 'react-icons/md'
 import { RxCross2 as CancelIcon } from 'react-icons/rx'
 
-import BasicInput from '@/components/form/BasicInput'
-import Avatar from '@/components/global/Avatar'
-import DarkOverlay from '@/components/global/DarkOverlay'
-import useAuthState from '@/hooks/useAuthState'
-import useFocus from '@/hooks/useFocus'
-import useSelectFile from '@/hooks/useSelectFile'
-import { useCreatePostMutation } from '@/services/postsApi'
 import { useToggle } from 'react-minimal-modal'
+import BasicInput from '~/components/form/BasicInput'
+import Avatar from '~/components/global/Avatar'
+import DarkOverlay from '~/components/global/DarkOverlay'
+import useAuthState from '~/hooks/useAuthState'
+import useFocus from '~/hooks/useFocus'
+import useSelectFile from '~/hooks/useSelectFile'
+import { useCreatePostMutation } from '~/services/postsApi'
 
 export default function CreatePostForm() {
 	//hooks

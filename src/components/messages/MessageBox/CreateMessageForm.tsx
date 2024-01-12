@@ -1,22 +1,21 @@
-import React, { FormEvent, useState, useRef } from 'react'
-import { MessageType } from '@/interfaces/conversation.interfaces'
-import useSelectFile from '@/hooks/useSelectFile'
-import { RiGalleryLine as GalleryIcon } from 'react-icons/ri'
-import { BsHeartFill as LikeIcon } from 'react-icons/bs'
-import { MdSend as SendIcon } from 'react-icons/md'
-import { IconButton } from '@mui/material'
-import { useSendMessageMutation } from '@/services/messagesApi'
+import { IconButton, Popover } from '@mui/material'
 import EmojiPicker, { EmojiClickData, EmojiStyle } from 'emoji-picker-react'
+import { FormEvent, useState } from 'react'
+import { BsHeartFill as LikeIcon } from 'react-icons/bs'
 import { HiOutlineEmojiHappy as EmojiIcon } from 'react-icons/hi'
-import { Popover } from '@mui/material'
+import { MdSend as SendIcon } from 'react-icons/md'
+import { RiGalleryLine as GalleryIcon } from 'react-icons/ri'
+import useSelectFile from '~/hooks/useSelectFile'
+import { MessageType } from '~/interfaces/conversation.interfaces'
+import { useSendMessageMutation } from '~/services/messagesApi'
 //@ts-ignore
 import { isMultipleEmoji } from 'is-emojis'
-import { RxCross2 as CancelIcon } from 'react-icons/rx'
+import PopupState, { bindPopover, bindTrigger } from 'material-ui-popup-state'
 import { useParams } from 'next/navigation'
-import { useGetConversationByIdQuery } from '@/services/conversationsApi'
-import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state'
-import useFocus from '@/hooks/useFocus'
-import cn from '@/utils/cn'
+import { RxCross2 as CancelIcon } from 'react-icons/rx'
+import useFocus from '~/hooks/useFocus'
+import { useGetConversationByIdQuery } from '~/services/conversationsApi'
+import cn from '~/utils/cn'
 
 export default function CreateMessageForm() {
 	//hooks
@@ -76,10 +75,9 @@ export default function CreateMessageForm() {
 	return (
 		<form
 			onSubmit={submitForm}
-			className={cn(
-				'flex items-center mb-4 rounded-2xl bg-white px-2 border-2 border-gray-200',
-				{ 'border-primary': isFocused }
-			)}
+			className={cn('flex items-center mb-4 rounded-2xl bg-white px-2 border-2 border-gray-200', {
+				'border-primary': isFocused,
+			})}
 		>
 			{!selectedFile ? (
 				<>

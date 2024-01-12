@@ -1,14 +1,13 @@
-import React from 'react'
-import Link from 'next/link'
-import { Conversation } from '@/interfaces/conversation.interfaces'
-import Avatar from '@/components/global/Avatar'
-import useAuthState from '@/hooks/useAuthState'
-import timeAgo from '@/utils/timeAgo'
-import TextOverflow from 'react-text-overflow'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { IoCheckmarkCircleOutline as TickIcon } from 'react-icons/io5'
-import cn from '@/utils/cn'
+import TextOverflow from 'react-text-overflow'
+import Avatar from '~/components/global/Avatar'
+import useAuthState from '~/hooks/useAuthState'
+import { Conversation } from '~/interfaces/conversation.interfaces'
+import cn from '~/utils/cn'
+import timeAgo from '~/utils/timeAgo'
 
 const classes = {
 	card: ({ isActiveConversation }: { isActiveConversation: boolean }) =>
