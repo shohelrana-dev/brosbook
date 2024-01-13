@@ -1,3 +1,1 @@
-import PageLoader from '~/components/global/PageLoader'
-
-export default PageLoader
+export { default } from '~/components/global/PageLoader'

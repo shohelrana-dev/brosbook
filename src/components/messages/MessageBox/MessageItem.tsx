@@ -4,93 +4,73 @@ import { BsCircle as CircleIcon } from 'react-icons/bs'
 import { IoCheckmarkCircleOutline as TickIcon } from 'react-icons/io5'
 import Avatar from '~/components/global/Avatar'
 import MessageContent from '~/components/messages/MessageBox/MessageContent'
+import ReactionsInput from '~/components/messages/MessageBox/ReactionsInput'
 import { Message } from '~/interfaces/conversation.interfaces'
 import { User } from '~/interfaces/user.interfaces'
+import cn from '~/utils/cn'
 import timeAgo from '~/utils/timeAgo'
 
 const classes = {
-	ownRow: 'flex items-end float-right max-w-[70%] mb-1',
-	PartnerRow: 'flex items-end float-left max-w-[70%] mb-1',
-	messageWrap: 'w-full',
+	row: ({ isOwn }: { isOwn: boolean }) =>
+		cn('flex flex-wrap mb-[2px] max-w-3/4', { 'justify-end ml-auto': isOwn }),
 	time: 'text-gray-500 text-xs',
 }
 
-interface SingleMessageProps {
+interface Props {
 	message: Message
 	prevMessage: Message | null
 	isLastMessage: boolean
 	participant: User
 }
 
-function MessageItem({ message, prevMessage, isLastMessage, participant }: SingleMessageProps) {
-	const timeDiff = moment(prevMessage?.createdAt).diff(message.createdAt, 'minutes')
-	const isSameUser = prevMessage && message.sender.id === prevMessage?.sender.id
+export default function MessageItem({ message, prevMessage, isLastMessage, participant }: Props) {
+	const { isMeSender, createdAt, seenAt, sender } = message
+
+	const timeDiff = moment(prevMessage?.createdAt).diff(createdAt, 'minutes')
+	const isSameUser = prevMessage && sender.id === prevMessage?.sender.id
 	const isSameUserAndTimeLessThanFiveMin = isSameUser && timeDiff <= 5
 
 	const avatarMarkup = (
-		<Avatar
-			online={message.sender.active}
-			alt={message.sender.fullName}
-			src={message.sender.avatar.url}
-			size='small'
+		<Avatar online={sender.active} alt={sender.fullName} src={sender.avatar.url} size='small' />
+	)
+
+	const seenMarkup = seenAt ? (
+		<Image
+			src={participant?.avatar.url}
+			alt={'User photo'}
+			width={15}
+			height={15}
+			className='h-[16px] w-[16px] object-cover rounded-full'
 		/>
+	) : (
+		<p className='text-gray-600'>{createdAt ? <TickIcon size={17} /> : <CircleIcon size={14} />}</p>
 	)
 
 	return (
-		<div>
-			{message.isMeSender ? (
-				<div className={classes.ownRow}>
-					<div className={classes.messageWrap}>
-						<div className='flex'>
-							<MessageContent message={message} />
-							<div className='min-w-[20px] self-end ml-1'>
-								{isLastMessage ? (
-									message.seenAt ? (
-										<Image
-											src={participant?.avatar.url}
-											alt={'User photo'}
-											width={15}
-											height={15}
-											className='h-[16px] w-[16px] object-cover rounded-full'
-										/>
-									) : (
-										<p className='text-gray-600'>
-											{message.createdAt ? (
-												<TickIcon size={17} />
-											) : (
-												<CircleIcon size={14} />
-											)}
-										</p>
-									)
-								) : null}
-							</div>
-						</div>
-						<div className='flex justify-between'>
-							{!isSameUserAndTimeLessThanFiveMin && message.createdAt ? (
-								<time className={classes.time}>{timeAgo(message.createdAt)}</time>
-							) : null}
-						</div>
-					</div>
-				</div>
-			) : null}
+		<article className={classes.row({ isOwn: isMeSender })}>
+			{!isMeSender && (
+				<div className='w-9 mr-1 mt-1'>{!isSameUserAndTimeLessThanFiveMin && avatarMarkup}</div>
+			)}
 
-			<div className='clear-both' />
+			<div>
+				<div className='flex'>
+					{isMeSender && <ReactionsInput message={message} />}
 
-			{!message.isMeSender ? (
-				<div className={classes.PartnerRow}>
-					<div className='min-w-[35px] mr-3'>
-						{!isSameUserAndTimeLessThanFiveMin ? avatarMarkup : null}
-					</div>
-					<div className={classes.messageWrap}>
-						<MessageContent message={message} />
-						{!isSameUser && message.createdAt ? (
-							<time className={classes.time}>{timeAgo(message.createdAt)}</time>
-						) : null}
-					</div>
+					<MessageContent message={message} />
+
+					{!isMeSender && <ReactionsInput message={message} />}
+
+					{isMeSender && (
+						<div className='min-w-[20px] self-end ml-1'>{isLastMessage && seenMarkup}</div>
+					)}
 				</div>
-			) : null}
-		</div>
+
+				<div className='flex justify-between'>
+					{!isSameUserAndTimeLessThanFiveMin && createdAt ? (
+						<time className={classes.time}>{timeAgo(createdAt)}</time>
+					) : null}
+				</div>
+			</div>
+		</article>
 	)
 }
-
-export default MessageItem

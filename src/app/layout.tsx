@@ -67,10 +67,9 @@ export default async function RootLayout({ children, auth }: Props) {
 				<Providers>
 					<PreLoader user={user!} />
 					<Header />
-					<main>
-						{children}
-						{auth}
-					</main>
+
+					{children}
+					{auth}
 				</Providers>
 			</body>
 		</html>

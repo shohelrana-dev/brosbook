@@ -12,32 +12,34 @@ export default function Layout({ children }: PropsWithChildren) {
 	const { conversationId } = useParams<{ conversationId: string }>()
 	const isMounted = useMount()
 
+	//decide page content
+	let content
 	if (!isMounted) {
-		return (
-			<div className='flex justify-center mt-10'>
+		content = (
+			<main className='flex justify-center mt-10'>
 				<Loader />
-			</div>
+			</main>
 		)
 	} else if (isScreenLarge && conversationId) {
 		//chat page
-		return (
-			<div className='h-screen-content overflow-hidden grid grid-cols-1 lg:grid-cols-[1fr_2fr_1fr] xl:grid-cols-[1fr_3fr_1fr]'>
-				<div className='hidden lg:block'>
+		content = (
+			<main className='h-screen-content overflow-hidden grid grid-cols-1 lg:grid-cols-[1fr_2fr_1fr] xl:grid-cols-[1fr_3fr_1fr]'>
+				<aside className='hidden lg:block'>
 					<Conversations />
-				</div>
+				</aside>
 
 				<div className='border-0 border-x-2 border-gray-200'>{children}</div>
 
-				<div className='hidden lg:block mx-2 my-3'>
+				<aside className='hidden lg:block mx-2 my-3'>
 					<ParticipantInfo />
-				</div>
-			</div>
+				</aside>
+			</main>
 		)
 	} else if (isScreenLarge) {
 		//conversations page
-		return (
-			<div className='grid grid-cols-1 md:grid-cols-[1fr_3fr]  xl:grid-cols-[1fr_4fr]'>
-				<div>{children}</div>
+		content = (
+			<main className='grid grid-cols-1 md:grid-cols-[1fr_3fr]  xl:grid-cols-[1fr_4fr]'>
+				{children}
 
 				<div className='hidden md:block pl-4 py-6 border-l-2 border-gray-200'>
 					<h3 className='text-2xl font-bold'>Select a message</h3>
@@ -45,10 +47,12 @@ export default function Layout({ children }: PropsWithChildren) {
 						Choose from your existing conversations, start a new one, or just keep swimming.
 					</p>
 				</div>
-			</div>
+			</main>
 		)
+	} else {
+		//without layout page
+		content = children
 	}
 
-	//page 'without layout'
-	return children
+	return content
 }
