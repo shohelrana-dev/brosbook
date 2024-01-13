@@ -1,62 +1,41 @@
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import isAuthenticated from '~/utils/isAuthenticated'
-
-const protectedPaths = [
-	'/messages',
-	'/notifications',
-	'/suggestions',
-	'/account',
-	'/account/profile',
-	'/auth/logout',
-]
-const guestPaths = ['/auth/login', '/auth/signup', '/auth/email_verification']
+import { guestPathnames, protectedPathnames } from '~/utils/pathnames'
 
 export async function middleware(request: NextRequest) {
 	const currentPathname = request.nextUrl.pathname
-	const isUserAuthorized = await isAuthenticated(request.cookies)
+	const isAuth = await isAuthenticated(request.cookies)
 
-	const isProtectedPath = Boolean(
-		protectedPaths.find(path => path !== '/' && currentPathname.startsWith(path))?.length
-	)
-	const isGuestPath = Boolean(guestPaths.find(path => currentPathname.startsWith(path))?.length)
+	const isProtectedPath = protectedPathnames.includes(currentPathname)
+	const isGuestPath = guestPathnames.includes(currentPathname)
 
-	const shouldRedirect = (isProtectedPath && !isUserAuthorized) || (isGuestPath && isUserAuthorized)
+	if (isProtectedPath && !isAuth) {
+		//unauhorized user should be redirect from protected path
+		const response = NextResponse.redirect(
+			new URL(`/auth/login?redirect_to=${currentPathname}`, request.url)
+		)
 
-	// Conditionally delete access_token cookie for clarity
-	if (!isUserAuthorized && request.cookies.has('access_token')) {
-		request.cookies.delete('access_token')
+		//clear access token from cookies if has
+		if (response.cookies.has('access_token')) response.cookies.delete('access_token')
+
+		return response
 	}
 
-	if (shouldRedirect) {
-		if (isProtectedPath && !isUserAuthorized) {
-			return NextResponse.redirect(
-				new URL(`/auth/login?redirect_to=${currentPathname}`, request.url)
-			)
-		}
-
-		//authorized but guest path
+	if (isGuestPath && isAuth) {
+		//guest path only accesible for unauthorized users
 		return NextResponse.redirect(new URL('/', request.url))
 	}
 
-	return NextResponse.next()
+	NextResponse.next()
 }
 
 export const config = {
 	matcher: [
-		/*
-		 * Match all request paths except for the ones starting with:
-		 * - api (API routes)
-		 * - _next/static (static files)
-		 * - _next/image (image optimization files)
-		 * - favicon.ico (favicon file)
-		 */
-		{
-			source: '/((?!api|_next/static|_next/image|favicon.ico).*)',
-			missing: [
-				{ type: 'header', key: 'next-router-prefetch' },
-				{ type: 'header', key: 'purpose', value: 'prefetch' },
-			],
-		},
+		'/account/:path*',
+		'/auth/:path*',
+		'/messages/:path*',
+		'/notifications/:path*',
+		'/suggestions/:path*',
 	],
 }
