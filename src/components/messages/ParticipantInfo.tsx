@@ -6,6 +6,7 @@ import Avatar from '~/components/global/Avatar'
 import Error from '~/components/global/Error'
 import ImageLightbox from '~/components/global/ImageLightbox'
 import Loader from '~/components/global/Loader'
+import Transition from '~/components/global/Transition'
 import { ErrorResponse } from '~/interfaces/index.interfaces'
 import {
 	useGetConversationByIdQuery,
@@ -67,7 +68,11 @@ export default function ParticipantInfo() {
 	} else if (isError) {
 		listContent = <Error message={error.data?.message} />
 	} else if (isSuccess && mediaList.length > 0) {
-		listContent = <ImageLightbox imageList={mediaList} alt='Chat photo' />
+		listContent = (
+			<Transition>
+				<ImageLightbox imageList={mediaList} alt='Chat photo' />
+			</Transition>
+		)
 	}
 
 	return (

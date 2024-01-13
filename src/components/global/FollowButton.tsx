@@ -4,7 +4,7 @@ import { Button } from '@mui/material'
 import { useState } from 'react'
 import toast from 'react-hot-toast'
 import { useConfirmAlert } from 'react-use-confirm-alert'
-import useAuthState from '~/hooks/useAuthState'
+import useAuth from '~/hooks/useAuth'
 import useUnauthorizedAlert from '~/hooks/useUnauthorzedAlert'
 import { User } from '~/interfaces/user.interfaces'
 import { useFollowMutation, useUnfollowMutation } from '~/services/usersApi'
@@ -18,7 +18,7 @@ export default function FollowButton(props: FollowButtonProps) {
 	const [user, setUser] = useState<User>(props.user)
 	const [follow, { isLoading }] = useFollowMutation()
 	const [unfollow] = useUnfollowMutation()
-	const { isAuthenticated } = useAuthState()
+	const { isAuthenticated } = useAuth()
 	const confirmAlert = useConfirmAlert()
 	const unauthorizedAlert = useUnauthorizedAlert()
 

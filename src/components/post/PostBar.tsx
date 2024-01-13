@@ -4,7 +4,7 @@ import { FaRegComment as CommentIcon } from 'react-icons/fa'
 import LikeButton from '~/components/post/LikeButton'
 import LikesCount from '~/components/post/LikesCount'
 import PostShare from '~/components/post/PostShare'
-import useAuthState from '~/hooks/useAuthState'
+import useAuth from '~/hooks/useAuth'
 import useUnauthorizedAlert from '~/hooks/useUnauthorzedAlert'
 import { Post } from '~/interfaces/posts.interfaces'
 import { usePostLikeMutation, usePostUnlikeMutation } from '~/services/postsApi'
@@ -20,7 +20,7 @@ export default function PostBar({ post }: Props) {
 	//hooks
 	const [postLike] = usePostLikeMutation()
 	const [postUnlike] = usePostUnlikeMutation()
-	const { isAuthenticated } = useAuthState()
+	const { isAuthenticated } = useAuth()
 	const unauthorizedAlert = useUnauthorizedAlert()
 	const { toggleCommentsVisibility } = useCommentsVisibilty(id)
 

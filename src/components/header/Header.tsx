@@ -9,12 +9,12 @@ import MessagesNavLink from '~/components/header/MessagesNavLink'
 import NotificationsNavLink from '~/components/header/NotificationsNavLink'
 import SearchButton from '~/components/header/SearchButton'
 import UserMenu from '~/components/header/UserMenu'
-import useAuthState from '~/hooks/useAuthState'
+import useAuth from '~/hooks/useAuth'
 import useMediaQuery from '~/hooks/useMediaQuery'
 
 export default function Header() {
 	const isScreenSmall = useMediaQuery('(max-width: 767px)')
-	const { isAuthenticated } = useAuthState()
+	const { isAuthenticated } = useAuth()
 	const pathname = usePathname()
 
 	return (
@@ -28,24 +28,10 @@ export default function Header() {
 				<Link href='/'>
 					{isScreenSmall ? (
 						<IconButton>
-							<Image
-								priority
-								src={logo}
-								alt={'Brosbook logo'}
-								width={31}
-								height={40}
-								placeholder='blur'
-							/>
+							<Image priority src={logo} alt={'Brosbook logo'} width={31} height={40} />
 						</IconButton>
 					) : (
-						<Image
-							priority
-							src={titledLogo}
-							alt={'Brosbook logo'}
-							width={150}
-							height={40}
-							placeholder='blur'
-						/>
+						<Image priority src={titledLogo} alt={'Brosbook logo'} width={150} height={40} />
 					)}
 				</Link>
 				<Box sx={{ display: 'flex', flexGrow: 1 }} />

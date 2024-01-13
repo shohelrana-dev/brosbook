@@ -3,9 +3,10 @@ import { useEffect, useRef, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import Error from '~/components/global/Error'
 import Loader from '~/components/global/Loader'
+import Transition from '~/components/global/Transition'
 import MessageItem from '~/components/messages/MessageBox/MessageItem'
 import ChatSkeleton from '~/components/skeletons/ChatSkeleton'
-import useAuthState from '~/hooks/useAuthState'
+import useAuth from '~/hooks/useAuth'
 import { Message } from '~/interfaces/conversation.interfaces'
 import { ErrorResponse } from '~/interfaces/index.interfaces'
 import { useGetConversationByIdQuery } from '~/services/conversationsApi'
@@ -13,7 +14,7 @@ import { useGetMessagesQuery, useSeenMessagesMutation } from '~/services/message
 
 export default function MessageList() {
 	//hooks
-	const { user } = useAuthState()
+	const { user } = useAuth()
 	const { conversationId } = useParams()
 	const { data: conversation } = useGetConversationByIdQuery(conversationId as string)
 	const messageListRef = useRef<HTMLDivElement>(null)
@@ -36,9 +37,7 @@ export default function MessageList() {
 		}
 	}, [messages, isSuccess, lastMessage?.isMeSender])
 
-	useEffect(() => {
-		scrollToBottom()
-	}, [lastMessage])
+	useEffect(() => scrollToBottom(), [lastMessage])
 
 	function scrollToBottom() {
 		if (messageListRef && messageListRef.current) {
@@ -61,25 +60,27 @@ export default function MessageList() {
 		content = <Error message={error?.data?.message} />
 	} else if (isSuccess && messages.length > 0) {
 		content = (
-			<InfiniteScroll
-				next={() => setPage(nextPage!)}
-				hasMore={!!nextPage}
-				loader={<Loader wrapperClassName={'my-8'} />}
-				dataLength={messages.length}
-				scrollableTarget='message-list'
-				className='flex flex-col-reverse'
-				inverse={true}
-			>
-				{messages.map((message: Message, index: number) => (
-					<MessageItem
-						key={message.id}
-						message={message}
-						participant={participant!}
-						prevMessage={index === 0 ? null : messages[index - 1]}
-						isLastMessage={0 === index}
-					/>
-				))}
-			</InfiniteScroll>
+			<Transition>
+				<InfiniteScroll
+					next={() => setPage(nextPage!)}
+					hasMore={!!nextPage}
+					loader={<Loader wrapperClassName={'my-8'} />}
+					dataLength={messages.length}
+					scrollableTarget='message-list'
+					className='flex flex-col-reverse'
+					inverse={true}
+				>
+					{messages.map((message: Message, index: number) => (
+						<MessageItem
+							key={message.id}
+							message={message}
+							participant={participant!}
+							prevMessage={index === 0 ? null : messages[index - 1]}
+							isLastMessage={0 === index}
+						/>
+					))}
+				</InfiniteScroll>
+			</Transition>
 		)
 	}
 

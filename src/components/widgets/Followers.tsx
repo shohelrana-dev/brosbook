@@ -5,13 +5,13 @@ import Error from '~/components/global/Error'
 import UserItem from '~/components/global/UserItem'
 import UsersSkeleton from '~/components/skeletons/UsersSkeleton'
 import WidgetLayout from '~/components/widgets/WidgetLayout'
-import useAuthState from '~/hooks/useAuthState'
+import useAuth from '~/hooks/useAuth'
 import { ErrorResponse } from '~/interfaces/index.interfaces'
 import { User } from '~/interfaces/user.interfaces'
 import { useGetFollowersQuery } from '~/services/usersApi'
 
 export default function Followers() {
-	const { isAuthenticated, user } = useAuthState()
+	const { isAuthenticated, user } = useAuth()
 	const followersQuery = useGetFollowersQuery({ userId: user?.id!, page: 1 }, { skip: !user?.id })
 
 	const { isError, isLoading } = followersQuery

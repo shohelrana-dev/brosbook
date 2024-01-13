@@ -6,6 +6,7 @@ import { useEffect } from 'react'
 import toast from 'react-hot-toast'
 import Modal, { useToggle } from 'react-minimal-modal'
 import PasswordInput from '~/components/form/PasswordInput'
+import useAuth from '~/hooks/useAuth'
 import { useForm } from '~/hooks/useForm'
 import { ChangePasswordPayload } from '~/interfaces/account.interfaces'
 import { useChangePasswordMutation } from '~/services/accountApi'
@@ -16,6 +17,7 @@ export default function ChangePasswordModal() {
 		useForm<ChangePasswordPayload>(changePassword)
 	const router = useRouter()
 	const [isOpen, toggle] = useToggle(true)
+	const _ = useAuth({ require: true })
 
 	useEffect(() => {
 		if (isSuccess) {

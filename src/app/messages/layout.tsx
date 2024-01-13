@@ -4,6 +4,7 @@ import { PropsWithChildren } from 'react'
 import Loader from '~/components/global/Loader'
 import Conversations from '~/components/messages/Conversations'
 import ParticipantInfo from '~/components/messages/ParticipantInfo'
+import useAuth from '~/hooks/useAuth'
 import useMediaQuery from '~/hooks/useMediaQuery'
 import useMount from '~/hooks/useMount'
 
@@ -11,6 +12,9 @@ export default function Layout({ children }: PropsWithChildren) {
 	const isScreenLarge = useMediaQuery('(min-width: 1024px)')
 	const { conversationId } = useParams<{ conversationId: string }>()
 	const isMounted = useMount()
+	const { isAuthenticated } = useAuth({ require: true })
+
+	if (!isAuthenticated) return null
 
 	//decide page content
 	let content

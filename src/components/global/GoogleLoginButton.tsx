@@ -7,37 +7,36 @@ import { useLoginWithGoogleMutation } from '~/services/authApi'
 import { baseApi } from '~/services/baseApi'
 
 interface Props {
-	setIsLoading: (isLoading: boolean) => void
+	onLoading?: () => void
+	onComplete?: () => void
 }
 
-function GoogleLoginButton({ setIsLoading }: Props) {
+export default function GoogleLoginButton({ onLoading, onComplete }: Props) {
 	//hooks
-	const router = useRouter()
 	const dispatch = useDispatch()
 	const params = useSearchParams()
-	const [login, { isLoading, isSuccess }] = useLoginWithGoogleMutation()
+	const router = useRouter()
+	const [login, { isLoading }] = useLoginWithGoogleMutation()
+
+	useEffect(() => {
+		if (isLoading && onLoading) onLoading()
+	}, [isLoading, onLoading])
 
 	async function responseGoogle(response: CredentialResponse) {
+		onLoading && onLoading()
+
 		try {
 			await login(response.credential!).unwrap()
-			dispatch(baseApi.util.resetApiState())
-			router.push(params.get('redirect_to') ? params.get('redirect_to')! : '/')
 			toast.success('Logged in.')
+			dispatch(baseApi.util.resetApiState())
+			router.replace(params.get('redirect_to') ? params.get('redirect_to')! : '/')
 		} catch (err: any) {
 			console.error(err)
 			toast.error(err?.data?.message || 'Login failed.')
+		} finally {
+			onComplete && onComplete()
 		}
 	}
-
-	useEffect(() => {
-		if (isLoading) {
-			setIsLoading(true)
-		} else if (isSuccess) {
-			setIsLoading(true)
-		} else {
-			setIsLoading(false)
-		}
-	}, [isSuccess, isLoading])
 
 	return (
 		<GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>
@@ -51,5 +50,3 @@ function GoogleLoginButton({ setIsLoading }: Props) {
 		</GoogleOAuthProvider>
 	)
 }
-
-export default GoogleLoginButton

@@ -5,7 +5,7 @@ import Avatar from '~/components/global/Avatar'
 import LikeButton from '~/components/post/LikeButton'
 import LikesCount from '~/components/post/LikesCount'
 import CommentOptions from '~/components/post/comment/CommentOptions'
-import useAuthState from '~/hooks/useAuthState'
+import useAuth from '~/hooks/useAuth'
 import useUnauthorizedAlert from '~/hooks/useUnauthorzedAlert'
 import { Comment, Post } from '~/interfaces/posts.interfaces'
 import { useLikeCommentMutation, useUnlikeCommentMutation } from '~/services/commentsApi'
@@ -20,7 +20,7 @@ export default function CommentItem({ post, comment }: Props) {
 	//hooks
 	const [likeComment] = useLikeCommentMutation()
 	const [unlikeComment] = useUnlikeCommentMutation()
-	const { user: currentUser, isAuthenticated } = useAuthState()
+	const { user: currentUser, isAuthenticated } = useAuth()
 	const unauthorizedAlert = useUnauthorizedAlert()
 
 	const { id, body, isViewerLiked, likesCount, author, createdAt } = comment

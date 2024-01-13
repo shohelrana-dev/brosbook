@@ -7,7 +7,7 @@ import toast from 'react-hot-toast'
 import { TbCameraPlus } from 'react-icons/tb'
 import Modal from 'react-minimal-modal'
 import ImageLightbox from '~/components/global/ImageLightbox'
-import useAuthState from '~/hooks/useAuthState'
+import useAuth from '~/hooks/useAuth'
 import useSelectFile from '~/hooks/useSelectFile'
 import { Media } from '~/interfaces/index.interfaces'
 import { User } from '~/interfaces/user.interfaces'
@@ -16,7 +16,7 @@ import { useChangeProfilePhotoMutation } from '~/services/usersApi'
 type Props = { user: User }
 
 export default function ProfilePhoto({ user }: Props) {
-	const { user: currentUser } = useAuthState()
+	const { user: currentUser } = useAuth()
 	const [changeProfilePhoto, { isLoading }] = useChangeProfilePhotoMutation()
 	const [avatar, setAvatar] = useState<Media | undefined>(user.avatar)
 	const {

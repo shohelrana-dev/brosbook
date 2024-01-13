@@ -1,11 +1,15 @@
 'use client'
-import { useParams } from 'next/navigation'
 import { useEffect } from 'react'
 import MessageBox from '~/components/messages/MessageBox'
 import { useGetConversationByIdQuery } from '~/services/conversationsApi'
 
-export default async function ChatPage() {
-	const params = useParams<{ conversationId?: string }>()
+interface Props {
+	params: {
+		conversationId?: string
+	}
+}
+
+export default function ChatPage({ params }: Props) {
 	const { data: conversation } = useGetConversationByIdQuery(params?.conversationId!)
 
 	useEffect(() => {

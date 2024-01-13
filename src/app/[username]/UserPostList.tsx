@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import Error from '~/components/global/Error'
+import Transition from '~/components/global/Transition'
 import PostList from '~/components/post/PostList'
 import PostsSkeleton from '~/components/skeletons/PostsSkeleton'
 import { ErrorResponse, ListResponse } from '~/interfaces/index.interfaces'
@@ -51,7 +52,11 @@ export default function UserPostsList({ initialPostsData, user }: Props) {
 	} else if (posts && posts?.length === 0) {
 		content = <p className='card text-center py-6'>{user?.fullName}&apos;s haven&apos;t any post.</p>
 	} else if (posts && posts?.length > 0) {
-		content = <PostList posts={posts} loadMore={() => setPage(nextPage!)} hasMore={!!nextPage} />
+		content = (
+			<Transition>
+				{<PostList posts={posts} loadMore={() => setPage(nextPage!)} hasMore={!!nextPage} />}
+			</Transition>
+		)
 	}
 
 	return <div className='mt-1'>{content}</div>

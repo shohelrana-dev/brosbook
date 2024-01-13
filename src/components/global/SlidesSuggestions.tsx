@@ -11,14 +11,14 @@ import Avatar from '~/components/global/Avatar'
 import Error from '~/components/global/Error'
 import FollowButton from '~/components/global/FollowButton'
 import Loader from '~/components/global/Loader'
-import useAuthState from '~/hooks/useAuthState'
+import useAuth from '~/hooks/useAuth'
 import useMediaQuery from '~/hooks/useMediaQuery'
 import { ErrorResponse } from '~/interfaces/index.interfaces'
 import { User } from '~/interfaces/user.interfaces'
 import { useGetSuggestedUsersQuery } from '~/services/usersApi'
 
 export default function SlidesSuggestions() {
-	const { isAuthenticated } = useAuthState()
+	const { isAuthenticated } = useAuth()
 	const suggestedUsersQuery = useGetSuggestedUsersQuery({ page: 1, limit: 12 })
 	const isMobileDevice = useMediaQuery('(max-width: 768px)')
 	const [isTimeUp, setIsTimeUp] = useState(false)

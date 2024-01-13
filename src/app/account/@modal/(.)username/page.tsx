@@ -7,13 +7,13 @@ import toast from 'react-hot-toast'
 import Modal, { useToggle } from 'react-minimal-modal'
 import AnimatedInput from '~/components/form/AnimatedInput'
 import PasswordInput from '~/components/form/PasswordInput'
-import useAuthState from '~/hooks/useAuthState'
+import useAuth from '~/hooks/useAuth'
 import { useForm } from '~/hooks/useForm'
 import { ChangeUsernamePayload } from '~/interfaces/account.interfaces'
 import { useChangeUsernameMutation } from '~/services/accountApi'
 
 export default function ChangeUsernameModal() {
-	const { user } = useAuthState()
+	const { user } = useAuth()
 	const [changeUsername, { isLoading, isSuccess }] = useChangeUsernameMutation()
 	const { formData, onChange, onSubmit, errors, reset } = useForm<ChangeUsernamePayload>(
 		changeUsername,
@@ -24,6 +24,7 @@ export default function ChangeUsernameModal() {
 	)
 	const [isOpen, toggle] = useToggle(true)
 	const router = useRouter()
+	const _ = useAuth({ require: true })
 
 	useEffect(() => {
 		if (isSuccess) {

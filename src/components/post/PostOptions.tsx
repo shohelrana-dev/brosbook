@@ -12,7 +12,7 @@ import { usePathname } from 'next/navigation'
 import { useDispatch } from 'react-redux'
 import { useConfirmAlert } from 'react-use-confirm-alert'
 import OptionButton from '~/components/global/OptionButton'
-import useAuthState from '~/hooks/useAuthState'
+import useAuth from '~/hooks/useAuth'
 import useUnauthorizedAlert from '~/hooks/useUnauthorzedAlert'
 import { ListResponse } from '~/interfaces/index.interfaces'
 import { Post } from '~/interfaces/posts.interfaces'
@@ -30,7 +30,7 @@ export default function PostOptions({ post }: Props) {
 	const [unfollow] = useUnfollowMutation()
 	const [deletePost] = useDeletePostMutation()
 
-	const { user: currentUser, isAuthenticated } = useAuthState()
+	const { user: currentUser, isAuthenticated } = useAuth()
 	const [author, setAuthor] = useState<User>(post.author)
 	const confirmAlert = useConfirmAlert()
 	const unauthorizedAlert = useUnauthorizedAlert()

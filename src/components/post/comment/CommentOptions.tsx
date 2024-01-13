@@ -9,7 +9,7 @@ import { RiDeleteBin5Line as DeleteIcon, RiUserUnfollowLine as UnfollowIcon } fr
 import { IconButton } from '@mui/material'
 import { useConfirmAlert } from 'react-use-confirm-alert'
 import OptionButton from '~/components/global/OptionButton'
-import useAuthState from '~/hooks/useAuthState'
+import useAuth from '~/hooks/useAuth'
 import useUnauthorizedAlert from '~/hooks/useUnauthorzedAlert'
 import { Comment } from '~/interfaces/posts.interfaces'
 import { User } from '~/interfaces/user.interfaces'
@@ -26,7 +26,7 @@ export default function CommentOptions({ comment, isCurrentUserAuthor }: Props) 
 	const [unfollow] = useUnfollowMutation()
 	const [deleteComment] = useDeleteCommentMutation()
 
-	const { isAuthenticated } = useAuthState()
+	const { isAuthenticated } = useAuth()
 	const confirmAlert = useConfirmAlert()
 	const [author, setAuthor] = useState<User>(comment.author)
 	const unauthorizedAlert = useUnauthorizedAlert()

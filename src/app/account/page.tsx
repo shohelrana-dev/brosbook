@@ -2,16 +2,16 @@
 import { Button } from '@mui/material'
 import Link from 'next/link'
 import TextOverflow from 'react-text-overflow'
-import Loader from '~/components/global/Loader'
-import useAuthState from '~/hooks/useAuthState'
+import Transition from '~/components/global/Transition'
+import useAuth from '~/hooks/useAuth'
 
 export default function GeneralSettingsPage() {
-	const { user, isAuthenticated } = useAuthState()
+	const { user, isAuthenticated } = useAuth({ require: true })
 
-	if (!isAuthenticated) return <Loader />
+	if (!isAuthenticated) return null
 
 	return (
-		<div className='p-4'>
+		<Transition style={{ padding: 16 }}>
 			<div className='mb-7'>
 				<h3 className='text-base sm:text-lg mb-3'>Account settings</h3>
 				<small className='text-gray-500'>ACCOUNT PREFERENCES</small>
@@ -58,6 +58,6 @@ export default function GeneralSettingsPage() {
 					</Link>
 				</div>
 			</div>
-		</div>
+		</Transition>
 	)
 }

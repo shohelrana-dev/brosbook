@@ -1,5 +1,6 @@
-import { Badge, IconButton, Popover, Tooltip } from '@mui/material'
+import { Badge, Link as ButtonLink, IconButton, Popover, Tooltip } from '@mui/material'
 import PopupState, { bindPopover, bindTrigger } from 'material-ui-popup-state'
+import Link from 'next/link'
 import { IoNotificationsOutline as NotificationIcon } from 'react-icons/io5'
 import NotificationList from '~/components/notifications/NotificationList'
 import { useGetUnreadNotificationsCountQuery } from '~/services/notificationsApi'
@@ -33,7 +34,19 @@ export default function NotificationsNavLink() {
 							horizontal: 'center',
 						}}
 					>
-						<NotificationList />
+						<div className='w-full min-w-80 max-h-130 p-2 overflow-y-auto'>
+							<div className='flex flex-wrap justify-between'>
+								<h3 className='text-xl font-bold text-gray-900 ml-2 mb-1'>
+									Notifications
+								</h3>
+
+								<Link href='/notifications' onClick={() => popupState.setOpen(false)}>
+									<ButtonLink underline='hover'>See all</ButtonLink>
+								</Link>
+							</div>
+
+							<NotificationList />
+						</div>
 					</Popover>
 				</>
 			)}

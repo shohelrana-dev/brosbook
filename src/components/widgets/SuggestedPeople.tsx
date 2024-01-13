@@ -5,13 +5,13 @@ import Error from '~/components/global/Error'
 import UserItem from '~/components/global/UserItem'
 import UsersSkeleton from '~/components/skeletons/UsersSkeleton'
 import WidgetLayout from '~/components/widgets/WidgetLayout'
-import useAuthState from '~/hooks/useAuthState'
+import useAuth from '~/hooks/useAuth'
 import { ErrorResponse } from '~/interfaces/index.interfaces'
 import { User } from '~/interfaces/user.interfaces'
 import { useGetSuggestedUsersQuery } from '~/services/usersApi'
 
 export default function SuggestedPeople() {
-	const { isAuthenticated } = useAuthState()
+	const { isAuthenticated } = useAuth()
 	const suggestedUsersQuery = useGetSuggestedUsersQuery({ page: 1, limit: 6 })
 
 	const { isError, isLoading } = suggestedUsersQuery

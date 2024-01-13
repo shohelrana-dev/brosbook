@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import Error from '~/components/global/Error'
+import Transition from '~/components/global/Transition'
 import UserItem from '~/components/global/UserItem'
 import UsersSkeleton from '~/components/skeletons/UsersSkeleton'
 import { ErrorResponse } from '~/interfaces/index.interfaces'
@@ -32,18 +33,20 @@ export default function FollowingPage({ params }: Props) {
 		content = <Error message={error?.data?.message} />
 	} else if (isSuccess && followings.length > 0) {
 		content = (
-			<InfiniteScroll
-				next={() => setPage(nextPage!)}
-				hasMore={!!nextPage}
-				loader={<UsersSkeleton count={2} />}
-				dataLength={followings.length}
-			>
-				{followings.map((user: User) => (
-					<div className='mb-2' key={user.id}>
-						<UserItem user={user} />
-					</div>
-				))}
-			</InfiniteScroll>
+			<Transition>
+				<InfiniteScroll
+					next={() => setPage(nextPage!)}
+					hasMore={!!nextPage}
+					loader={<UsersSkeleton count={2} />}
+					dataLength={followings.length}
+				>
+					{followings.map((user: User) => (
+						<div className='mb-2' key={user.id}>
+							<UserItem user={user} />
+						</div>
+					))}
+				</InfiniteScroll>
+			</Transition>
 		)
 	}
 

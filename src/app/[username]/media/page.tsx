@@ -4,6 +4,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import Error from '~/components/global/Error'
 import ImageLightbox from '~/components/global/ImageLightbox'
 import Loader from '~/components/global/Loader'
+import Transition from '~/components/global/Transition'
 import { ErrorResponse } from '~/interfaces/index.interfaces'
 import { useGetMediaListQuery, useGetUserByUsernameQuery } from '~/services/usersApi'
 
@@ -34,14 +35,16 @@ export default function MediaPage({ params }: Props) {
 		content = <Error message={error?.data?.message} />
 	} else if (isSuccess && mediaList.length > 0) {
 		content = (
-			<InfiniteScroll
-				dataLength={mediaList.length}
-				next={() => setPage(nextPage!)}
-				hasMore={!!nextPage}
-				loader={<Loader />}
-			>
-				<ImageLightbox imageList={mediaList} width={200} height={200} alt='Media' />
-			</InfiniteScroll>
+			<Transition>
+				<InfiniteScroll
+					dataLength={mediaList.length}
+					next={() => setPage(nextPage!)}
+					hasMore={!!nextPage}
+					loader={<Loader />}
+				>
+					<ImageLightbox imageList={mediaList} width={200} height={200} alt='Media' />
+				</InfiniteScroll>
+			</Transition>
 		)
 	}
 

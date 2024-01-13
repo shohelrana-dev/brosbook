@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import Error from '~/components/global/Error'
+import Transition from '~/components/global/Transition'
 import ConversationItem from '~/components/messages/Conversations/ConversationItem'
 import ConversationsSkeleton from '~/components/skeletons/ConversationsSkeleton'
 import { Conversation } from '~/interfaces/conversation.interfaces'
@@ -25,17 +26,19 @@ export default function ConversationList() {
 		content = <Error message={error?.data?.message} />
 	} else if (isSuccess && conversations.length > 0) {
 		content = (
-			<InfiniteScroll
-				next={() => setPage(nextPage!)}
-				hasMore={!!nextPage}
-				loader={<ConversationsSkeleton />}
-				dataLength={conversations.length}
-				scrollableTarget='conversations-wrapper'
-			>
-				{conversations.map((conversation: Conversation) => (
-					<ConversationItem conversation={conversation} key={conversation.id} />
-				))}
-			</InfiniteScroll>
+			<Transition>
+				<InfiniteScroll
+					next={() => setPage(nextPage!)}
+					hasMore={!!nextPage}
+					loader={<ConversationsSkeleton />}
+					dataLength={conversations.length}
+					scrollableTarget='conversations-wrapper'
+				>
+					{conversations.map((conversation: Conversation) => (
+						<ConversationItem conversation={conversation} key={conversation.id} />
+					))}
+				</InfiniteScroll>
+			</Transition>
 		)
 	}
 

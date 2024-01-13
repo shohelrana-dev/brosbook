@@ -8,7 +8,7 @@ import { TbCameraPlus } from 'react-icons/tb'
 import Modal from 'react-minimal-modal'
 import placeholderCoverPhoto from '~/assets/images/placeholder-cover-photo.png'
 import ImageLightbox from '~/components/global/ImageLightbox'
-import useAuthState from '~/hooks/useAuthState'
+import useAuth from '~/hooks/useAuth'
 import useSelectFile from '~/hooks/useSelectFile'
 import { Media } from '~/interfaces/index.interfaces'
 import { User } from '~/interfaces/user.interfaces'
@@ -17,7 +17,7 @@ import { useChangeCoverPhotoMutation } from '~/services/usersApi'
 type Props = { user: User }
 
 export default function CoverPhoto({ user }: Props) {
-	const { user: currentUser } = useAuthState()
+	const { user: currentUser } = useAuth()
 	const [changeCoverPhoto, { isLoading }] = useChangeCoverPhotoMutation()
 	const [coverPhoto, setCoverPhoto] = useState<Media | undefined>(user.profile?.coverPhoto)
 	const {

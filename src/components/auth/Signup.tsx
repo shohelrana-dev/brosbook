@@ -1,7 +1,7 @@
 'use client'
 import { Button, Divider } from '@mui/material'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import PasswordStrengthBar from 'react-password-strength-bar'
@@ -21,23 +21,27 @@ export default function Signup() {
 	const router = useRouter()
 	const [signup, { isLoading, isSuccess }] = useSignupMutation()
 	const { formData, onChange, onSubmit, errors } = useForm<SignupPayload>(signup)
-	const [isLoadingLoginWithGoogle, setIsLoadingLoginWithGoogle] = useState<boolean>(false)
+	const [loading, setLoading] = useState(isLoading)
 
 	useEffect(() => {
 		if (isSuccess) {
+			toast.success('Signup success. You have received a mail to verify the account.')
 			dispatch(setEmail(formData.email))
 			router.push('/auth/email_verification/required')
-			toast.success('Signup success. You have received a mail to verify the account.')
 		}
 	}, [isSuccess])
 
 	return (
 		<>
-			<LoadingOverlay isLoading={isLoading || isSuccess || isLoadingLoginWithGoogle} />
+			<LoadingOverlay isLoading={loading || isSuccess} />
+
 			<div className='card-auth'>
 				<h1 className='heading-auth'>Sign Up</h1>
 
-				<GoogleLoginButton setIsLoading={setIsLoadingLoginWithGoogle} />
+				<GoogleLoginButton
+					onLoading={() => setLoading(true)}
+					onComplete={() => setLoading(false)}
+				/>
 
 				<Divider className='!my-5'>OR</Divider>
 

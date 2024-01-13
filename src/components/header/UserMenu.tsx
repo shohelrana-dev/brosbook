@@ -9,12 +9,12 @@ import { useConfirmAlert } from 'react-use-confirm-alert'
 import { removeCookie } from 'tiny-cookie'
 import Avatar from '~/components/global/Avatar'
 import OptionButton from '~/components/global/OptionButton'
-import useAuthState from '~/hooks/useAuthState'
+import useAuth from '~/hooks/useAuth'
 import { baseApi } from '~/services/baseApi'
 import siteMetadata from '~/utils/siteMetadata'
 
 export default function UserMenu() {
-	const { user } = useAuthState()
+	const { user } = useAuth()
 	const router = useRouter()
 	const confirmAlert = useConfirmAlert()
 	const dispatch = useDispatch()

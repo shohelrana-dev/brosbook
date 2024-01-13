@@ -1,10 +1,10 @@
 'use client'
 import { Button } from '@mui/material'
 import Link from 'next/link'
-import useAuthState from '~/hooks/useAuthState'
+import useAuth from '~/hooks/useAuth'
 
 function NewUserMessage() {
-	const { isAuthenticated } = useAuthState()
+	const { isAuthenticated } = useAuth()
 
 	if (isAuthenticated) return null
 

@@ -11,14 +11,14 @@ import { useToggle } from 'react-minimal-modal'
 import BasicInput from '~/components/form/BasicInput'
 import Avatar from '~/components/global/Avatar'
 import DarkOverlay from '~/components/global/DarkOverlay'
-import useAuthState from '~/hooks/useAuthState'
+import useAuth from '~/hooks/useAuth'
 import useFocus from '~/hooks/useFocus'
 import useSelectFile from '~/hooks/useSelectFile'
 import { useCreatePostMutation } from '~/services/postsApi'
 
 export default function CreatePostForm() {
 	//hooks
-	const { user, isAuthenticated } = useAuthState()
+	const { user, isAuthenticated } = useAuth()
 	const [createPost, { isLoading }] = useCreatePostMutation()
 	const [messageBody, setMessageBody] = useState<string>('')
 	const {

@@ -2,6 +2,7 @@
 import { useParams } from 'next/navigation'
 import { useEffect } from 'react'
 import PostCard from '~/components/post/PostCard'
+import useAuth from '~/hooks/useAuth'
 import { Post } from '~/interfaces/posts.interfaces'
 import { postsApi, useGetPostByIdQuery } from '~/services/postsApi'
 import { store } from '~/store/index'
@@ -11,10 +12,13 @@ export default function SinglePostPage({ post: initialPost }: { post: Post }) {
 	const { data: post = initialPost } = useGetPostByIdQuery(initialPost.id || postId, {
 		skip: initialPost.id ? true : false,
 	})
+	const { isAuthenticated } = useAuth({ require: true })
 
 	useEffect(() => {
 		store.dispatch(postsApi.util.upsertQueryData('getPostById', initialPost.id, { ...initialPost }))
 	}, [])
+
+	if (!isAuthenticated) return null
 
 	return <PostCard post={post!} initialCommentsVisible={true} />
 }

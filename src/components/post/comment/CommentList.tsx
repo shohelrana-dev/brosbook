@@ -6,7 +6,7 @@ import Avatar from '~/components/global/Avatar'
 import Error from '~/components/global/Error'
 import Loader from '~/components/global/Loader'
 import CommentItem from '~/components/post/comment/CommentItem'
-import useAuthState from '~/hooks/useAuthState'
+import useAuth from '~/hooks/useAuth'
 import { ErrorResponse } from '~/interfaces/index.interfaces'
 import { Post } from '~/interfaces/posts.interfaces'
 import { useCreateCommentMutation, useGetCommentsQuery } from '~/services/commentsApi'
@@ -17,7 +17,7 @@ interface Props {
 
 export default function CommentList({ post }: Props) {
 	const [page, setPage] = useState(1)
-	const { user: currentUser, isAuthenticated } = useAuthState()
+	const { user: currentUser, isAuthenticated } = useAuth()
 	const commentsQuery = useGetCommentsQuery({ postId: post.id, page })
 	const [createComment] = useCreateCommentMutation()
 

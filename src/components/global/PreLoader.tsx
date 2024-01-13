@@ -3,7 +3,7 @@ import { usePathname } from 'next/navigation'
 import { useEffect, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { removeCookie } from 'tiny-cookie'
-import useAuthState from '~/hooks/useAuthState'
+import useAuth from '~/hooks/useAuth'
 import useUnauthorizedAlert from '~/hooks/useUnauthorzedAlert'
 import { User } from '~/interfaces/user.interfaces'
 import { userLoggedIn, userLoggedOut } from '~/slices/authSlice'
@@ -12,7 +12,7 @@ import { initSocket } from '~/utils/socket'
 export default function PreLoader({ user: preLoadedUser }: { user: User }) {
 	const loaded = useRef(false)
 	const showedPopup = useRef(false)
-	const { user, isAuthenticated, isChecked } = useAuthState()
+	const { user, isAuthenticated, isChecked } = useAuth()
 	const unauthorizedAlert = useUnauthorizedAlert()
 	const pathname = usePathname()
 	const dispatch = useDispatch()

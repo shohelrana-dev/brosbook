@@ -18,30 +18,31 @@ import { setEmail } from '~/slices/authSlice'
 
 export default function Login() {
 	//hooks
-	const dispatch = useDispatch()
 	const router = useRouter()
+	const dispatch = useDispatch()
 	const params = useSearchParams()
 	const [login, { isLoading, isSuccess, data }] = useLoginMutation()
 	const { formData, onChange, onSubmit, errors } = useForm<CredentialPayload>(login)
-	const [isLoadingLoginWithGoogle, setIsLoadingLoginWithGoogle] = useState<boolean>(false)
+	const [loading, setLoading] = useState(isLoading)
 
 	useEffect(() => {
 		if (isSuccess) {
 			if (data?.user?.hasEmailVerified) {
+				toast.success('Logged in.')
 				dispatch(baseApi.util.resetApiState())
 				router.replace(params.get('redirect_to') ? params.get('redirect_to')! : '/')
-				toast.success('Logged in.')
 			} else {
+				toast.error('Your email not verified yet.')
 				dispatch(setEmail(data?.user?.email!))
 				router.push('/auth/email_verification/required')
-				toast.error('Your email not verified yet.')
 			}
 		}
-	}, [isSuccess])
+	}, [isSuccess, params])
 
 	return (
 		<>
-			<LoadingOverlay isLoading={isLoading || isSuccess || isLoadingLoginWithGoogle} />
+			<LoadingOverlay isLoading={loading || isSuccess} />
+
 			<div className='card-auth'>
 				<div className='flex flex-wrap justify-center mb-2'>
 					<FiLock size='30' />
@@ -72,7 +73,10 @@ export default function Login() {
 
 				<Divider className='!my-5'>OR</Divider>
 
-				<GoogleLoginButton setIsLoading={setIsLoadingLoginWithGoogle} />
+				<GoogleLoginButton
+					onLoading={() => setLoading(true)}
+					onComplete={() => setLoading(false)}
+				/>
 
 				<small className='block text-center mt-2'>
 					<Link href='/auth/forgot_password' className='text-blue-500'>

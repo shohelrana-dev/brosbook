@@ -3,7 +3,7 @@ import { TbDiscountCheckFilled as BlueBadgeIcon } from 'react-icons/tb'
 import TextOverflow from 'react-text-overflow'
 import Avatar from '~/components/global/Avatar'
 import FollowButton from '~/components/global/FollowButton'
-import useAuthState from '~/hooks/useAuthState'
+import useAuth from '~/hooks/useAuth'
 import { User } from '~/interfaces/user.interfaces'
 import cn from '~/utils/cn'
 
@@ -14,7 +14,7 @@ interface Props {
 }
 
 export default function UserItem({ user, hideFollowButton = false, className }: Props) {
-	const { user: currentUser } = useAuthState()
+	const { user: currentUser } = useAuth()
 	const isCurrentUser = user.id === currentUser?.id
 
 	return (
