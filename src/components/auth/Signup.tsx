@@ -1,7 +1,7 @@
 'use client'
 import { Button, Divider } from '@mui/material'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import PasswordStrengthBar from 'react-password-strength-bar'
