@@ -9,8 +9,8 @@ import ImageLightbox from '~/components/global/ImageLightbox'
 import PostBar from '~/components/post/PostBar'
 import PostOptions from '~/components/post/PostOptions'
 import CommentList from '~/components/post/comment/CommentList'
+import useCommentsVisibilty from '~/hooks/useCommentsVisibilty'
 import { Post } from '~/interfaces/posts.interfaces'
-import { useCommentsVisibilty } from '~/slices/toggleCommentsVisibilitySlice'
 import timeAgo from '~/utils/timeAgo'
 
 interface Props {

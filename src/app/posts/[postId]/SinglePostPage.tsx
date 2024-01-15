@@ -1,24 +1,25 @@
 'use client'
 import { useParams } from 'next/navigation'
-import { useEffect } from 'react'
+import { useRef } from 'react'
 import PostCard from '~/components/post/PostCard'
-import useAuth from '~/hooks/useAuth'
 import { Post } from '~/interfaces/posts.interfaces'
 import { postsApi, useGetPostByIdQuery } from '~/services/postsApi'
-import { store } from '~/store/index'
+import { store } from '~/store'
+import isServer from '~/utils/isServer'
 
-export default function SinglePostPage({ post: initialPost }: { post: Post }) {
+export default function SinglePostPage({ initialPost }: { initialPost?: Post }) {
 	const { postId } = useParams<{ postId: string }>()
-	const { data: post = initialPost } = useGetPostByIdQuery(initialPost.id || postId, {
-		skip: initialPost.id ? true : false,
-	})
-	const { isAuthenticated } = useAuth({ require: true })
+	const { data = initialPost } = useGetPostByIdQuery(initialPost?.id || postId)
+	const loaded = useRef(false)
 
-	useEffect(() => {
-		store.dispatch(postsApi.util.upsertQueryData('getPostById', initialPost.id, { ...initialPost }))
-	}, [])
+	//prevent data fetch in client side if data already fetch in server side
+	if (initialPost?.id && !isServer && !loaded.current) {
+		store.dispatch(
+			postsApi.util.upsertQueryData('getPostById', initialPost.id || postId, { ...initialPost })
+		)
 
-	if (!isAuthenticated) return null
+		loaded.current = true
+	}
 
-	return <PostCard post={post!} initialCommentsVisible={true} />
+	return <PostCard post={data!} initialCommentsVisible={true} />
 }

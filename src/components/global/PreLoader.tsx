@@ -7,6 +7,7 @@ import useAuth from '~/hooks/useAuth'
 import useUnauthorizedAlert from '~/hooks/useUnauthorzedAlert'
 import { User } from '~/interfaces/user.interfaces'
 import { userLoggedIn, userLoggedOut } from '~/slices/authSlice'
+import isServer from '~/utils/isServer'
 import { initSocket } from '~/utils/socket'
 
 export default function PreLoader({ user: preLoadedUser }: { user: User }) {
@@ -21,9 +22,7 @@ export default function PreLoader({ user: preLoadedUser }: { user: User }) {
 		dispatch(userLoggedIn(preLoadedUser))
 		loaded.current = true
 	} else if (!loaded.current) {
-		if (typeof window !== 'undefined') {
-			removeCookie('access_token')
-		}
+		if (!isServer) removeCookie('access_token')
 		dispatch(userLoggedOut())
 		loaded.current = true
 	}

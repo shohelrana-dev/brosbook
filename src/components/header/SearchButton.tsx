@@ -17,11 +17,7 @@ export default function SearchButton() {
 	const inputRef = useRef<HTMLInputElement>()
 
 	async function handleUserClick(user: User) {
-		try {
-			router.push(`/${user.username}`)
-		} catch (e) {
-			console.log(e)
-		}
+		router.push(`/${user.username}`)
 	}
 
 	return (

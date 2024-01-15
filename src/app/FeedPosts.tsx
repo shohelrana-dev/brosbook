@@ -1,31 +1,33 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useRef, useState } from 'react'
 import Error from '~/components/global/Error'
 import PostList from '~/components/post/PostList'
 import PostsSkeleton from '~/components/skeletons/PostsSkeleton'
 import { ErrorResponse, ListResponse } from '~/interfaces/index.interfaces'
 import { Post } from '~/interfaces/posts.interfaces'
 import { postsApi, useGetFeedPostsQuery } from '~/services/postsApi'
-import { store } from '~/store/index'
+import { store } from '~/store'
+import isServer from '~/utils/isServer'
 
 interface Props {
-	initialPostsData: ListResponse<Post>
+	initialPostsData?: ListResponse<Post>
 }
 
 export default function FeedPosts({ initialPostsData }: Props) {
 	//hooks
 	const [page, setPage] = useState<number>(1)
-	const feedPostsQuery = useGetFeedPostsQuery(page, { skip: page === 1 })
+	const feedPostsQuery = useGetFeedPostsQuery(page)
+	const loaded = useRef(false)
 
-	const { isLoading, isSuccess, isError, data: postsData = initialPostsData } = feedPostsQuery || {}
-	const { items: posts, nextPage } = postsData || {}
+	const { isLoading, isError, data = initialPostsData } = feedPostsQuery || {}
+	const { items: posts, nextPage } = data || {}
 	const error = (feedPostsQuery.error as ErrorResponse) || {}
 
-	useEffect(() => {
-		if (initialPostsData && Object.keys(initialPostsData).length > 0) {
-			store.dispatch(postsApi.util.upsertQueryData('getFeedPosts', page, { ...initialPostsData }))
-		}
-	}, [])
+	//prevent data fetch in client side if data already fetch in server side
+	if (initialPostsData?.currentPage && !isServer && !loaded.current) {
+		store.dispatch(postsApi.util.upsertQueryData('getFeedPosts', page, { ...initialPostsData }))
+		loaded.current = true
+	}
 
 	//decide content
 	let content = null
@@ -35,7 +37,10 @@ export default function FeedPosts({ initialPostsData }: Props) {
 		content = <Error message={`Error fetching posts: ${error.data?.message}`} />
 	} else if (posts && posts.length === 0) {
 		content = <p className='card text-center py-6'>Your feed is empty.</p>
-	} else if (posts && posts.length > 0) {
+	}
+
+	//extra condtion for server rendering
+	if (posts && posts.length > 0) {
 		content = <PostList posts={posts} loadMore={() => setPage(nextPage!)} hasMore={!!nextPage} />
 	}
 

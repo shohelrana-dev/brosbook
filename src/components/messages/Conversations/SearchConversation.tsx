@@ -38,7 +38,7 @@ export default function SearchConversation() {
 						const conversation: any = await createConversation(user.id).unwrap()
 						router.push(`/messages/${conversation.id}`)
 					} catch (err) {
-						console.log(err)
+						console.error(err)
 						toast.error('Failed to create conversation.')
 					}
 				},

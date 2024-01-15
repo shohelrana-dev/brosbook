@@ -22,6 +22,7 @@ export default function Header() {
 			variant='outlined'
 			color='default'
 			position='static'
+			elevation={0}
 			sx={{ background: '#fff', padding: '6px 10px', height: 65 }}
 		>
 			<div className='container flex flex-wrap items-center justify-between text-gray-900'>

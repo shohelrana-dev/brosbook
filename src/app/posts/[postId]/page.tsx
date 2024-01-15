@@ -49,5 +49,5 @@ export default async function Page({ params }: Props) {
 
 	if (!post) return notFound()
 
-	return <SinglePostPage post={post} />
+	return <SinglePostPage initialPost={post} />
 }

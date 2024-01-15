@@ -5,10 +5,10 @@ import LikeButton from '~/components/post/LikeButton'
 import LikesCount from '~/components/post/LikesCount'
 import PostShare from '~/components/post/PostShare'
 import useAuth from '~/hooks/useAuth'
+import useCommentsVisibilty from '~/hooks/useCommentsVisibilty'
 import useUnauthorizedAlert from '~/hooks/useUnauthorzedAlert'
 import { Post } from '~/interfaces/posts.interfaces'
 import { usePostLikeMutation, usePostUnlikeMutation } from '~/services/postsApi'
-import { useCommentsVisibilty } from '~/slices/toggleCommentsVisibilitySlice'
 
 interface Props {
 	post: Post

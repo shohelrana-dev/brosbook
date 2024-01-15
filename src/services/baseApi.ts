@@ -1,5 +1,4 @@
-import { fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react'
-import { createApi } from '@reduxjs/toolkit/query/react'
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { getCookie, removeCookie } from 'tiny-cookie'
 import { userLoggedOut } from '~/slices/authSlice'
 import { RootState } from '~/store/index'
@@ -34,5 +33,5 @@ export const baseApi = createApi({
 	},
 	keepUnusedDataFor: 300,
 	tagTypes: ['CurrentUser', 'User', 'Comments', 'Conversation', 'UserMedia', 'ConversationMedia'],
-	endpoints: () => ({}),
+	endpoints: () => ({})
 })

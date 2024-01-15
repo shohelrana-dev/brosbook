@@ -3,7 +3,7 @@ import { Kanit } from 'next/font/google'
 import { cookies } from 'next/headers'
 import { ReactNode } from 'react'
 import 'react-loading-skeleton/dist/skeleton.css'
-import '~/assets/styles/app.css'
+import '~/assets/styles/main.css'
 import PreLoader from '~/components/global/PreLoader'
 import Header from '~/components/header/Header'
 import { getCurrentUser } from '~/services/index'
@@ -55,9 +55,10 @@ const kanit = Kanit({
 interface Props {
 	children: ReactNode
 	auth: ReactNode
+	photo: ReactNode
 }
 
-export default async function RootLayout({ children, auth }: Props) {
+export default async function RootLayout({ children, auth, photo }: Props) {
 	const user = await getCurrentUser(cookies())
 
 	return (
@@ -70,6 +71,7 @@ export default async function RootLayout({ children, auth }: Props) {
 
 					{children}
 					{auth}
+					{photo}
 				</Providers>
 			</body>
 		</html>

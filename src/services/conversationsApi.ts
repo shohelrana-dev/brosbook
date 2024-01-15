@@ -130,8 +130,8 @@ export const conversationsApi = baseApi.injectEndpoints({
 							}
 						)
 					)
-				} catch (e) {
-					console.log(e)
+				} catch (err) {
+					throw err
 				}
 			},
 		}),

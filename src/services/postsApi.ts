@@ -75,7 +75,7 @@ export const postsApi = baseApi.injectEndpoints({
 						)
 					)
 				} catch (e) {
-					console.log(e)
+					throw e
 				}
 			},
 		}),
@@ -114,6 +114,7 @@ export const postsApi = baseApi.injectEndpoints({
 
 				try {
 					await queryFulfilled
+					await new Promise(resolve => setTimeout(() => resolve(true), 4000))
 				} catch (err) {
 					patchResult1.undo()
 					patchResult2.undo()

@@ -36,7 +36,7 @@ export default function MessageContent({ message }: Props) {
 			return (
 				<div
 					className={classes.textMessage({ hasReaction, isOwn: isMeSender })}
-					style={{ padding: 10 }}
+					style={{ padding: 10, wordBreak: 'break-word' }}
 				>
 					<Reactions message={message} />
 					<span>
