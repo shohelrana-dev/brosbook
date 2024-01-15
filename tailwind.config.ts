@@ -41,7 +41,7 @@ const config: Config = {
 				kanit: ['var(--font-kanit)'],
 			},
 			animation: {
-				like: 'like 0.7s steps(28) forwards;',
+				like: 'like 1s steps(28) forwards;',
 			},
 			keyframes: {
 				like: {
