@@ -14,7 +14,7 @@ export default function LikesCount({ isViewerLiked, likesCount }: Props) {
 					!isViewerLiked && 'opacity-100 -translate-y-1/2'
 				)}
 			>
-				{likesCount}
+				{isViewerLiked ? likesCount - 1 : likesCount}
 			</p>
 			<p
 				className={cn(
@@ -22,7 +22,7 @@ export default function LikesCount({ isViewerLiked, likesCount }: Props) {
 					isViewerLiked && 'opacity-100 -translate-y-1/2'
 				)}
 			>
-				{likesCount}
+				{!isViewerLiked ? likesCount + 1 : likesCount}
 			</p>
 		</div>
 	)
