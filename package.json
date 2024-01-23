@@ -31,7 +31,7 @@
     "linkifyjs": "^4.1.1",
     "material-ui-popup-state": "^5.0.8",
     "moment": "^2.29.4",
-    "next": "^14.0.4",
+    "next": "^14.1.0",
     "react": "^18.2.0",
     "react-content-loader": "^6.2.0",
     "react-date-picker": "^10.0.3",
@@ -58,8 +58,7 @@
     "tailwind-merge": "^2.2.0",
     "tiny-cookie": "^2.4.0",
     "use-async-effect": "^2.2.5",
-    "use-debounce": "^9.0.2",
-    "yarn": "^1.22.21"
+    "use-debounce": "^9.0.2"
   },
   "devDependencies": {
     "@types/javascript-time-ago": "^2.0.3",
