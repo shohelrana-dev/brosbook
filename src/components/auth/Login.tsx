@@ -8,7 +8,7 @@ import { FiLock } from 'react-icons/fi'
 import { useDispatch } from 'react-redux'
 import AnimatedInput from '~/components/form/AnimatedInput'
 import PasswordInput from '~/components/form/PasswordInput'
-import GoogleLoginButton from '~/components/global/GoogleLoginButton'
+import GoogleLoginButton, { LoginStatus } from '~/components/global/GoogleLoginButton'
 import LoadingOverlay from '~/components/global/LoadingOverlay'
 import { useForm } from '~/hooks/useForm'
 import { CredentialPayload } from '~/interfaces/auth.interfaces'
@@ -23,25 +23,27 @@ export default function Login() {
 	const params = useSearchParams()
 	const [login, { isLoading, isSuccess, data }] = useLoginMutation()
 	const { formData, onChange, onSubmit, errors } = useForm<CredentialPayload>(login)
-	const [loading, setLoading] = useState(isLoading)
+	const [status, setStatus] = useState<LoginStatus>('idle')
 
 	useEffect(() => {
-		if (isSuccess) {
-			if (data?.user?.hasEmailVerified) {
-				toast.success('Logged in.')
-				dispatch(baseApi.util.resetApiState())
-				router.replace(params.get('redirect_to') ? params.get('redirect_to')! : '/')
-			} else {
-				toast.error('Your email not verified yet.')
-				dispatch(setEmail(data?.user?.email!))
-				router.push('/auth/email_verification/required')
-			}
+		if (!isSuccess) return
+
+		if (data?.user?.hasEmailVerified) {
+			toast.success('Logged in.')
+			dispatch(baseApi.util.resetApiState())
+			router.replace(params.get('redirect_to') ? params.get('redirect_to')! : '/')
+		} else {
+			toast.error('Your email not verified yet.')
+			dispatch(setEmail(data?.user?.email!))
+			router.push('/auth/email_verification/required')
 		}
-	}, [isSuccess, params])
+	}, [isSuccess])
+
+	const loading = status === 'loading' || status === 'success' || isLoading || isSuccess
 
 	return (
 		<>
-			<LoadingOverlay isLoading={loading || isSuccess} />
+			<LoadingOverlay isLoading={loading} />
 
 			<div className='card-auth'>
 				<div className='flex flex-wrap justify-center mb-2'>
@@ -73,10 +75,7 @@ export default function Login() {
 
 				<Divider className='!my-5'>OR</Divider>
 
-				<GoogleLoginButton
-					onLoading={() => setLoading(true)}
-					onComplete={() => setLoading(false)}
-				/>
+				<GoogleLoginButton onStatusChange={_status => setStatus(_status)} />
 
 				<small className='block text-center mt-2'>
 					<Link href='/auth/forgot_password' className='text-blue-500'>

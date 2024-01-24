@@ -8,7 +8,7 @@ import PasswordStrengthBar from 'react-password-strength-bar'
 import { useDispatch } from 'react-redux'
 import AnimatedInput from '~/components/form/AnimatedInput'
 import PasswordInput from '~/components/form/PasswordInput'
-import GoogleLoginButton from '~/components/global/GoogleLoginButton'
+import GoogleLoginButton, { LoginStatus } from '~/components/global/GoogleLoginButton'
 import LoadingOverlay from '~/components/global/LoadingOverlay'
 import { useForm } from '~/hooks/useForm'
 import { SignupPayload } from '~/interfaces/auth.interfaces'
@@ -21,15 +21,17 @@ export default function Signup() {
 	const router = useRouter()
 	const [signup, { isLoading, isSuccess }] = useSignupMutation()
 	const { formData, onChange, onSubmit, errors } = useForm<SignupPayload>(signup)
-	const [loading, setLoading] = useState(isLoading)
+	const [status, setStatus] = useState<LoginStatus>('idle')
 
 	useEffect(() => {
-		if (isSuccess) {
-			toast.success('Signup success. You have received a mail to verify the account.')
-			dispatch(setEmail(formData.email))
-			router.push('/auth/email_verification/required')
-		}
+		if (!isSuccess) return
+
+		toast.success('Signup success. You have received a mail to verify the account.')
+		dispatch(setEmail(formData.email))
+		router.push('/auth/email_verification/required')
 	}, [isSuccess])
+
+	const loading = status === 'loading' || status === 'success' || isLoading || isSuccess
 
 	return (
 		<>
@@ -38,10 +40,7 @@ export default function Signup() {
 			<div className='card-auth'>
 				<h1 className='heading-auth'>Sign Up</h1>
 
-				<GoogleLoginButton
-					onLoading={() => setLoading(true)}
-					onComplete={() => setLoading(false)}
-				/>
+				<GoogleLoginButton onStatusChange={_status => setStatus(_status)} />
 
 				<Divider className='!my-5'>OR</Divider>
 

@@ -6,35 +6,39 @@ import { useDispatch } from 'react-redux'
 import { useLoginWithGoogleMutation } from '~/services/authApi'
 import { baseApi } from '~/services/baseApi'
 
+export type LoginStatus = 'idle' | 'loading' | 'success' | 'error'
+
 interface Props {
-	onLoading?: () => void
-	onComplete?: () => void
+	onStatusChange: (status: LoginStatus) => void
 }
 
-export default function GoogleLoginButton({ onLoading, onComplete }: Props) {
+export default function GoogleLoginButton({ onStatusChange }: Props) {
 	//hooks
 	const dispatch = useDispatch()
 	const params = useSearchParams()
 	const router = useRouter()
-	const [login, { isLoading }] = useLoginWithGoogleMutation()
+	const [login, { isLoading, isSuccess, isError }] = useLoginWithGoogleMutation()
 
 	useEffect(() => {
-		if (isLoading && onLoading) onLoading()
-	}, [isLoading, onLoading])
+		if (isLoading) onStatusChange('loading')
+		else if (isSuccess) onStatusChange('success')
+		else if (isError) onStatusChange('error')
+		else onStatusChange('idle')
+	}, [onStatusChange, isLoading, isSuccess, isError])
 
 	async function responseGoogle(response: CredentialResponse) {
-		onLoading && onLoading()
+		onStatusChange('loading')
 
 		try {
 			await login(response.credential!).unwrap()
+			onStatusChange('success')
 			toast.success('Logged in.')
 			dispatch(baseApi.util.resetApiState())
 			router.replace(params.get('redirect_to') ? params.get('redirect_to')! : '/')
 		} catch (err: any) {
 			console.error(err)
+			onStatusChange('error')
 			toast.error(err?.data?.message || 'Login failed.')
-		} finally {
-			onComplete && onComplete()
 		}
 	}
 
