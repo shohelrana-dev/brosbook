@@ -3,7 +3,6 @@ import Linkify from 'linkify-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { TbDiscountCheckFilled as BlueBadgeIcon } from 'react-icons/tb'
-import nl2br from 'react-nl2br'
 import ShowMoreText from 'react-show-more-text'
 import PostBar from '~/components/post/PostBar'
 import PostOptions from '~/components/post/PostOptions'
@@ -12,6 +11,7 @@ import Avatar from '~/components/ui/Avatar'
 import Lightbox from '~/components/ui/Lightbox'
 import useCommentsVisibilty from '~/hooks/useCommentsVisibilty'
 import { Post } from '~/interfaces/posts.interfaces'
+import { nl2br } from '~/utils/nl2br'
 import timeAgo from '~/utils/timeAgo'
 
 interface Props {
@@ -52,7 +52,7 @@ export default function PostCard({ post, initialCommentsVisible }: Props) {
             </div>
          </div>
          <div>
-            {body ? (
+            {!!body && (
                <div className="mb-1 mt-2 [&_a]:text-blue-500 [&_a]:underline">
                   <ShowMoreText
                      lines={5}
@@ -62,11 +62,14 @@ export default function PostCard({ post, initialCommentsVisible }: Props) {
                      truncatedEndingComponent={'... '}
                      width={1000}
                   >
-                     <Linkify>{nl2br(body)}</Linkify>
+                     <Linkify>
+                        <div dangerouslySetInnerHTML={{ __html: nl2br(body) }} />
+                     </Linkify>
                   </ShowMoreText>
                </div>
-            ) : null}
-            {image ? (
+            )}
+
+            {!!image?.id && (
                <div className="my-3">
                   <Lightbox>
                      <a href={image.url}>
@@ -74,7 +77,7 @@ export default function PostCard({ post, initialCommentsVisible }: Props) {
                      </a>
                   </Lightbox>
                </div>
-            ) : null}
+            )}
 
             <PostBar post={post} />
 

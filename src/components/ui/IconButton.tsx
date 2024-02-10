@@ -31,7 +31,6 @@ const IconButton = forwardRef((props: IconButtonProps, ref?: ReactRef<HTMLButton
          variant="light"
          size="md"
          isIconOnly
-         onPressStart={(e) => e.continuePropagation()}
          {...rest}
          ref={ref}
       />

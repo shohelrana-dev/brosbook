@@ -21,14 +21,9 @@ const Button = forwardRef((props: ButtonProps, ref?: any) => {
          color="primary"
          size="md"
          radius="full"
-         onPressStart={(e) => e.continuePropagation()}
          className={cn('font-medium', className)}
          spinner={
-            <Loader
-               size={props.size === 'sm' ? 'xs' : 'sm'}
-               disableText
-               className="border-t-gray-900"
-            />
+            <Loader size={props.size === 'sm' ? 'xs' : 'sm'} disableText className="border-t-gray-900" />
          }
          {...rest}
          ref={ref}

@@ -44,13 +44,7 @@ export function UnauthorizedPopupProvider({ children }: PropsWithChildren) {
                   >
                      Log in
                   </Button>
-                  <Button
-                     as={Link}
-                     href="/auth/signup"
-                     variant="bordered"
-                     fullWidth
-                     onClick={toggle}
-                  >
+                  <Button as={Link} href="/auth/signup" variant="bordered" fullWidth onClick={toggle}>
                      Sign up
                   </Button>
                </div>
@@ -64,7 +58,7 @@ export default function useUnauthorizedAlert() {
    const context = useContext(UnauthorizedPopupContext)
 
    if (!context) {
-      throw new Error('Please Use UnauthorizedPopupProvider in parent component.')
+      throw Error('Please Use UnauthorizedPopupProvider in parent component.')
    }
 
    return context

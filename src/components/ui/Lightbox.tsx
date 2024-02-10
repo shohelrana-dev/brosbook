@@ -24,7 +24,7 @@ export default function Lightbox({ className, children }: Props) {
    }, [containerId])
 
    return (
-      <div id={containerId} className={className}>
+      <div id={containerId} className={className} suppressHydrationWarning>
          {children}
       </div>
    )
