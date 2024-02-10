@@ -6,7 +6,6 @@ import { MdPublic as PublicIcon } from 'react-icons/md'
 import { RxCross2 as CrossIcon } from 'react-icons/rx'
 import { toast } from 'sonner'
 
-import { useToggle } from 'react-minimal-modal'
 import BasicInput from '~/components/form/BasicInput'
 import Avatar from '~/components/ui/Avatar'
 import Button from '~/components/ui/Button'
@@ -23,7 +22,7 @@ export default function CreatePostForm() {
 	const [createPost, { isLoading }] = useCreatePostMutation()
 	const [messageText, setMessageText] = useState<string>('')
 	const { inputRef, handleChange, handleClick, selectedFile, removeSelectedFile } = useSelectFile()
-	const [isOpen, toggleVisibility] = useToggle()
+	const [isOpen, setIsOpen] = useState(false)
 
 	async function submitForm(e: FormEvent) {
 		e.preventDefault()
@@ -49,6 +48,11 @@ export default function CreatePostForm() {
 			console.error(err)
 			toast.error("Post couldn't be saved.")
 		}
+	}
+
+	function toggleVisibility() {
+		if (isOpen && messageText) setMessageText('')
+		setIsOpen(!isOpen)
 	}
 
 	if (!isAuthenticated) return null

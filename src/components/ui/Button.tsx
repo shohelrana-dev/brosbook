@@ -1,15 +1,25 @@
 'use client'
-import { ButtonProps, Button as NextUIButton } from '@nextui-org/react'
+import { ButtonProps, Button as NextUIButton, extendVariants } from '@nextui-org/react'
 import { forwardRef } from 'react'
 import Loader from '~/components/ui/Loader'
 import cn from '~/utils/cn'
+
+const BaseButton = extendVariants(NextUIButton, {
+	variants: {
+		size: {
+			sm: 'font-semibold text-sm',
+			md: 'text-base',
+		},
+	},
+})
 
 const Button = forwardRef((props: ButtonProps, ref?: any) => {
 	const { className, ...rest } = props
 
 	return (
-		<NextUIButton
+		<BaseButton
 			color='primary'
+			size='md'
 			radius='full'
 			onPressStart={e => e.continuePropagation()}
 			className={cn('font-medium', className)}

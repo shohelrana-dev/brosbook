@@ -1,0 +1,90 @@
+{
+   "screencastMode.fontSize": 57,
+	"editor.lineHeight": 1.9,
+	"javascript.updateImportsOnFileMove.enabled": "always",
+	"editor.fontFamily": "'Cascadia Code', 'Operator Mono Lig', 'Dank Mono', inconsolata,  'Courier New', monospace",
+	"editor.fontLigatures": true,
+	"editor.fontWeight": "600",
+	"debug.console.fontSize": 15,
+	"editor.letterSpacing": 0.4,
+	"editor.smoothScrolling": true,
+	"workbench.tree.indent": 16,
+	"editor.semanticHighlighting.enabled": false,
+	"[javascript]": {
+		"editor.formatOnSave": false,
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[javascriptreact]": {
+		"editor.formatOnSave": false,
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"debug.console.lineHeight": 1.6,
+	"typescript.updateImportsOnFileMove.enabled": "always",
+	"explorer.confirmDelete": false,
+	"editor.codeLensFontFamily": "'Cascadia Code', 'Operator Mono Lig', 'Dank Mono', inconsolata,  'Courier New', monospace",
+	"typescript.preferences.importModuleSpecifier": "non-relative",
+	"html.format.indentHandlebars": true,
+
+	//code formatting
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.formatOnSave": false,
+	"typescript.validate.enable": true, //built-in syntax checking
+	"javascript.validate.enable": true, //built-in syntax checking
+	"editor.detectIndentation": false,
+	"editor.tabSize": 3,
+	"prettier.semi": false,
+	"prettier.singleQuote": true,
+	"prettier.jsxSingleQuote": true,
+	"prettier.arrowParens": "avoid",
+	"prettier.singleAttributePerLine": false,
+	"prettier.embeddedLanguageFormatting": "auto",
+	"prettier.enableDebugLogs": true,
+	"prettier.printWidth": 105,
+	"prettier.proseWrap": "always",
+	"prettier.bracketSpacing": true,
+	"prettier.tabWidth": 3,
+	"prettier.useTabs": true,
+	"prettier.bracketSameLine": false,
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": "explicit",
+		"source.fixAll.tslint": "explicit",
+		"source.organizeImports": "explicit"
+	},
+	"emmet.includeLanguages": {
+		"javascript": "javascriptreact"
+	},
+	"eslint.run": "onType",
+	"eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
+
+	//php config
+	"phpfmt.passes": [
+		"AlignConstVisibilityEquals",
+		"AlignDoubleArrow",
+		"AlignDoubleSlashComments",
+		"AlignEquals",
+		"AutoSemicolon",
+		"ConvertOpenTagWithEcho",
+		"IndentTernaryConditions",
+		"EncapsulateNamespaces"
+	],
+	"[php]": {
+		"editor.defaultFormatter": "kokororin.vscode-phpfmt"
+	},
+	"phpfmt.psr2": false,
+
+	// emmet
+	"emmet.triggerExpansionOnTab": true,
+
+	"workbench.iconTheme": "jetbrainsicons",
+	"files.exclude": {
+		"**/node_modules": true
+	},
+	"editor.fontSize": 15,
+	"[prisma]": {
+		"editor.defaultFormatter": "Prisma.prisma"
+	},
+	"terminal.integrated.fontFamily": "MesloLGS NF",
+	"tailwindCSS.emmetCompletions": true,
+	"tailwindCSS.experimental.configFile": null,
+	"workbench.colorTheme": "Learn with Sumit - Peace of the eye"
+}

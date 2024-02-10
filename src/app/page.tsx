@@ -7,21 +7,21 @@ import { getFeedPosts } from '~/services/index'
 import FeedPosts from './FeedPosts'
 
 export const metadata: Metadata = {
-	title: 'Home',
+   title: 'Home',
 }
 
 export default async function HomePage() {
-	const postsData = await getFeedPosts(cookies())
+   const postsData = await getFeedPosts(cookies())
 
-	return (
-		<SidebarLayout>
-			<div className='mx-2 lg:mx-0 pt-5 pb-4 h-screen-content overflow-y-auto scrollbar-hide'>
-				<CreatePostForm />
+   return (
+      <SidebarLayout>
+         <div className="mx-2 lg:mx-0 pt-5 pb-4 h-screen-content overflow-y-auto scrollbar-hide">
+            <CreatePostForm />
 
-				<SlidesSuggestions />
+            <SlidesSuggestions />
 
-				<FeedPosts initialPostsData={postsData} />
-			</div>
-		</SidebarLayout>
-	)
+            <FeedPosts initialPostsData={postsData} />
+         </div>
+      </SidebarLayout>
+   )
 }
