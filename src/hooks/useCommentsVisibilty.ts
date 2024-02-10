@@ -6,21 +6,21 @@ import {
 } from '~/slices/toggleCommentsSlice'
 
 export default function useCommentsVisibilty(postId: string, initialVisible = false) {
-	const [isCommentsVisible, steIsCommentsVisible] = useState(initialVisible)
-	const { postIds } = useToggleCommentsState()
-	const dispatch = useDispatch()
+   const [isCommentsVisible, steIsCommentsVisible] = useState(initialVisible)
+   const { postIds } = useToggleCommentsState()
+   const dispatch = useDispatch()
 
-	useEffect(() => {
-		if (postIds.includes(postId)) {
-			steIsCommentsVisible(true)
-		} else {
-			steIsCommentsVisible(false)
-		}
-	}, [postIds, postId])
+   useEffect(() => {
+      if (postIds.includes(postId)) {
+         steIsCommentsVisible(true)
+      } else {
+         steIsCommentsVisible(false)
+      }
+   }, [postIds, postId])
 
-	function toggleCommentsVisibility() {
-		dispatch(toggleCommentsAction(postId))
-	}
+   function toggleCommentsVisibility() {
+      dispatch(toggleCommentsAction(postId))
+   }
 
-	return { isCommentsVisible, toggleCommentsVisibility }
+   return { isCommentsVisible, toggleCommentsVisibility }
 }

@@ -9,18 +9,18 @@ import { UnauthorizedPopupProvider } from '~/hooks/useUnauthorzedAlert'
 import { store } from '~/store/index'
 
 export default function Providers({ children }: PropsWithChildren) {
-	const router = useRouter()
+   const router = useRouter()
 
-	return (
-		<Provider store={store}>
-			<NextUIProvider navigate={router.push}>
-				<UnauthorizedPopupProvider>
-					<ConfirmAlertProvider>
-						{children}
-						<Toaster style={{ zIndex: 99999 }} position='top-right' />
-					</ConfirmAlertProvider>
-				</UnauthorizedPopupProvider>
-			</NextUIProvider>
-		</Provider>
-	)
+   return (
+      <Provider store={store}>
+         <NextUIProvider navigate={router.push}>
+            <UnauthorizedPopupProvider>
+               <ConfirmAlertProvider>
+                  {children}
+                  <Toaster style={{ zIndex: 99999 }} position="top-right" />
+               </ConfirmAlertProvider>
+            </UnauthorizedPopupProvider>
+         </NextUIProvider>
+      </Provider>
+   )
 }

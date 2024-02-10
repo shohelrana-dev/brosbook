@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 
 export default function useMount() {
-	const [isMount, setIsMount] = useState(false)
+   const [isMount, setIsMount] = useState(false)
 
-	useEffect(() => {
-		setIsMount(true)
+   useEffect(() => {
+      setIsMount(true)
 
-		return () => setIsMount(false)
-	}, [])
+      return () => setIsMount(false)
+   }, [])
 
-	return isMount
+   return isMount
 }

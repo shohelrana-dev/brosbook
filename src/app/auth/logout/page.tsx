@@ -4,11 +4,11 @@ import { removeCookie } from 'tiny-cookie'
 import PageLoader from '~/components/ui/PageLoader'
 
 export default function LogoutPage() {
-	useEffect(() => {
-		removeCookie('access_token')
+   useEffect(() => {
+      removeCookie('access_token')
 
-		window.location.href = '/auth/login'
-	})
+      window.location.href = '/auth/login'
+   })
 
-	return <PageLoader />
+   return <PageLoader />
 }

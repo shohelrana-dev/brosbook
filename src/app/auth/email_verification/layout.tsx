@@ -1,10 +1,10 @@
+import { Metadata } from 'next'
 import { PropsWithChildren } from 'react'
-import { Metadata } from "next"
 
 export const metadata: Metadata = {
-    title: 'Email Verification'
+   title: 'Email Verification',
 }
 
-export default function Layout( { children }: PropsWithChildren ){
-    return children
+export default function Layout({ children }: PropsWithChildren) {
+   return children
 }

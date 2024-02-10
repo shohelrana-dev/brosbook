@@ -1,5 +1,5 @@
 export default function ucfirst(str?: string) {
-	if (!str) return null
+   if (!str) return null
 
-	return str.charAt(0).toUpperCase() + str.slice(1)
+   return str.charAt(0).toUpperCase() + str.slice(1)
 }
