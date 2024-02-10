@@ -11,36 +11,36 @@ import { useGetSuggestedUsersQuery } from '~/services/usersApi'
 import { getErrorData } from '~/utils/error'
 
 export default function SuggestedPeople() {
-	const { isAuthenticated } = useAuth()
-	const suggestedUsersQuery = useGetSuggestedUsersQuery({ page: 1, limit: 6 })
+   const { isAuthenticated } = useAuth()
+   const suggestedUsersQuery = useGetSuggestedUsersQuery({ page: 1, limit: 6 })
 
-	const { isError, isLoading, isSuccess, error } = suggestedUsersQuery
-	const { items: users, nextPage } = suggestedUsersQuery?.data || {}
-	const { message } = getErrorData(error) || {}
+   const { isError, isLoading, isSuccess, error } = suggestedUsersQuery
+   const { items: users, nextPage } = suggestedUsersQuery?.data || {}
+   const { message } = getErrorData(error) || {}
 
-	if (!isAuthenticated) return null
+   if (!isAuthenticated) return null
 
-	//decide content
-	let content = null
-	if (isLoading) {
-		content = <UsersSkeleton count={2} />
-	} else if (isError) {
-		content = <Error message={message} />
-	} else if (isSuccess && users && users.length === 0) {
-		content = <p>No suggestions</p>
-	} else if (isSuccess && users && users.length > 0) {
-		content = users.map((user: User) => <UserItem user={user} key={user.id} />)
-	}
+   //decide content
+   let content = null
+   if (isLoading) {
+      content = <UsersSkeleton count={2} />
+   } else if (isError) {
+      content = <Error message={message} />
+   } else if (isSuccess && users && users.length === 0) {
+      content = <p>No suggestions</p>
+   } else if (isSuccess && users && users.length > 0) {
+      content = users.map((user: User) => <UserItem user={user} key={user.id} />)
+   }
 
-	return (
-		<WidgetLayout title='Suggestions for you'>
-			{content}
+   return (
+      <WidgetLayout title="Suggestions for you">
+         {content}
 
-			{!!nextPage && (
-				<Button as={Link} href='/suggestions'>
-					See More
-				</Button>
-			)}
-		</WidgetLayout>
-	)
+         {!!nextPage && (
+            <Button as={Link} href="/suggestions">
+               See More
+            </Button>
+         )}
+      </WidgetLayout>
+   )
 }

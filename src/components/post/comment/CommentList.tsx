@@ -13,92 +13,94 @@ import { Post } from '~/interfaces/posts.interfaces'
 import { useCreateCommentMutation, useGetCommentsQuery } from '~/services/commentsApi'
 
 interface Props {
-	post: Post
+   post: Post
 }
 
 export default function CommentList({ post }: Props) {
-	const [page, setPage] = useState(1)
-	const { user: currentUser, isAuthenticated } = useAuth()
-	const commentsQuery = useGetCommentsQuery({ postId: post.id, page })
-	const [createComment] = useCreateCommentMutation()
+   const [page, setPage] = useState(1)
+   const { user: currentUser, isAuthenticated } = useAuth()
+   const commentsQuery = useGetCommentsQuery({ postId: post.id, page })
+   const [createComment] = useCreateCommentMutation()
 
-	const [commentText, setCommentText] = useState('')
+   const [commentText, setCommentText] = useState('')
 
-	const { isLoading, isError, isSuccess, data: commentsData } = commentsQuery
-	const { items: comments = [], nextPage } = commentsData || {}
-	const error = (commentsQuery.error || {}) as ErrorResponse
+   const { isLoading, isError, isSuccess, data: commentsData } = commentsQuery
+   const { items: comments = [], nextPage } = commentsData || {}
+   const error = (commentsQuery.error || {}) as ErrorResponse
 
-	async function handleSaveComment(event: FormEvent) {
-		event.preventDefault()
-		if (!commentText) return
+   async function handleSaveComment(event: FormEvent) {
+      event.preventDefault()
+      if (!commentText) return
 
-		try {
-			await createComment({ postId: post.id, body: commentText }).unwrap()
-			setCommentText('')
-		} catch (err) {
-			console.error(err)
-		}
-	}
+      try {
+         await createComment({ postId: post.id, body: commentText }).unwrap()
+         setCommentText('')
+      } catch (err) {
+         console.error(err)
+      }
+   }
 
-	//decide content
-	let content = null
-	if (isLoading) {
-		content = <Loader />
-	} else if (isSuccess && comments.length === 0) {
-		content = <p className='mt-3'>No comments</p>
-	} else if (isError) {
-		content = <Error message={error.data?.message} />
-	} else if (isSuccess && comments.length > 0) {
-		content = comments.map(comment => <CommentItem comment={comment} post={post} key={comment.id} />)
-	}
+   //decide content
+   let content = null
+   if (isLoading) {
+      content = <Loader />
+   } else if (isSuccess && comments.length === 0) {
+      content = <p className="mt-3">No comments</p>
+   } else if (isError) {
+      content = <Error message={error.data?.message} />
+   } else if (isSuccess && comments.length > 0) {
+      content = comments.map((comment) => (
+         <CommentItem comment={comment} post={post} key={comment.id} />
+      ))
+   }
 
-	return (
-		<div className='mt-2'>
-			{isAuthenticated && (
-				<form onSubmit={handleSaveComment} className='mb-2 flex items-center'>
-					<Avatar src={currentUser?.avatar?.url} online />
-					<div className='relative ml-2 w-full'>
-						<BasicInput
-							placeholder='Write a comment...'
-							type='text'
-							radius='full'
-							value={commentText}
-							className='rounded-full'
-							wrapperClassname='mb-0 md:mb-0'
-							onValueChange={setCommentText}
-							autoComplete='off'
-						/>
-						<div className='absolute top-1/2 right-2 right -translate-y-1/2'>
-							<IconButton
-								type='submit'
-								isDisabled={isLoading || !commentText}
-								className='text-primary'
-							>
-								<SendIcon fontSize={20} className='ml-1' />
-							</IconButton>
-						</div>
-					</div>
-				</form>
-			)}
+   return (
+      <div className="mt-2">
+         {isAuthenticated && (
+            <form onSubmit={handleSaveComment} className="mb-2 flex items-center">
+               <Avatar src={currentUser?.avatar?.url} online />
+               <div className="relative ml-2 w-full">
+                  <BasicInput
+                     placeholder="Write a comment..."
+                     type="text"
+                     radius="full"
+                     value={commentText}
+                     className="rounded-full"
+                     wrapperClassname="mb-0 md:mb-0"
+                     onValueChange={setCommentText}
+                     autoComplete="off"
+                  />
+                  <div className="absolute top-1/2 right-2 right -translate-y-1/2">
+                     <IconButton
+                        type="submit"
+                        isDisabled={isLoading || !commentText}
+                        className="text-primary"
+                     >
+                        <SendIcon fontSize={20} className="ml-1" />
+                     </IconButton>
+                  </div>
+               </div>
+            </form>
+         )}
 
-			{content}
+         {content}
 
-			{nextPage ? (
-				<div className='mt-3'>
-					{isLoading ? (
-						<Loader />
-					) : (
-						<Button
-							color='primary'
-							size='sm'
-							radius='full'
-							onClick={() => setPage(nextPage!)}
-						>
-							See more comments
-						</Button>
-					)}
-				</div>
-			) : null}
-		</div>
-	)
+         {nextPage ? (
+            <div className="mt-3">
+               {isLoading ? (
+                  <Loader />
+               ) : (
+                  <Button
+                     color="primary"
+                     size="sm"
+                     radius="full"
+                     onClick={() => setPage(nextPage!)}
+                  >
+                     See more comments
+                  </Button>
+               )}
+            </div>
+         ) : null}
+      </div>
+   )
 }

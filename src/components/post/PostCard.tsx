@@ -15,71 +15,71 @@ import { Post } from '~/interfaces/posts.interfaces'
 import timeAgo from '~/utils/timeAgo'
 
 interface Props {
-	post: Post
-	initialCommentsVisible?: boolean
+   post: Post
+   initialCommentsVisible?: boolean
 }
 
 export default function PostCard({ post, initialCommentsVisible }: Props) {
-	const { id, author, body, createdAt, image } = post || {}
+   const { id, author, body, createdAt, image } = post || {}
 
-	//hooks
-	const { isCommentsVisible } = useCommentsVisibilty(id, initialCommentsVisible)
+   //hooks
+   const { isCommentsVisible } = useCommentsVisibilty(id, initialCommentsVisible)
 
-	return (
-		<div className='card rounded-lg p-5 mb-4'>
-			<div className='flex'>
-				<Link href={`/${author.username}`}>
-					<Avatar src={author.avatar.url} />
-				</Link>
-				<div className='ml-4 w-full'>
-					<div className='flex justify-between'>
-						<Link href={`/${author.username}`}>
-							<div className='text-base font-medium flex mb-3 items-center'>
-								<h3 className='mr-[2px]'>{author.fullName}</h3>
+   return (
+      <div className="card rounded-lg p-5 mb-4">
+         <div className="flex">
+            <Link href={`/${author.username}`}>
+               <Avatar src={author.avatar.url} />
+            </Link>
+            <div className="ml-4 w-full">
+               <div className="flex justify-between">
+                  <Link href={`/${author.username}`}>
+                     <div className="text-base font-medium flex mb-3 items-center">
+                        <h3 className="mr-[2px]">{author.fullName}</h3>
 
-								<BlueBadgeIcon color='rgb(58,141,245)' size={18} className='mt-[3px]' />
+                        <BlueBadgeIcon color="rgb(58,141,245)" size={18} className="mt-[3px]" />
 
-								<p className='ml-2 text-gray-600 text-xs lg:text-sm font-normal'>
-									@{author.username}
-								</p>
-							</div>
-						</Link>
+                        <p className="ml-2 text-gray-600 text-xs lg:text-sm font-normal">
+                           @{author.username}
+                        </p>
+                     </div>
+                  </Link>
 
-						<PostOptions post={post} />
-					</div>
+                  <PostOptions post={post} />
+               </div>
 
-					<p className='text-gray-500 font-medium text-xs mt-[-8px]'>{timeAgo(createdAt)}</p>
-				</div>
-			</div>
-			<div>
-				{body ? (
-					<div className='mb-1 mt-2 [&_a]:text-blue-500 [&_a]:underline'>
-						<ShowMoreText
-							lines={5}
-							more={<span className='text-blue-600 cursor-pointer'>See more</span>}
-							less={<span className='text-blue-600 cursor-pointer'>See less</span>}
-							expanded={false}
-							truncatedEndingComponent={'... '}
-							width={1000}
-						>
-							<Linkify>{nl2br(body)}</Linkify>
-						</ShowMoreText>
-					</div>
-				) : null}
-				{image ? (
-					<div className='my-3'>
-						<Lightbox>
-							<a href={image.url}>
-								<Image src={image.url} alt='Post photo' width='550' height='400' />
-							</a>
-						</Lightbox>
-					</div>
-				) : null}
+               <p className="text-gray-500 font-medium text-xs mt-[-8px]">{timeAgo(createdAt)}</p>
+            </div>
+         </div>
+         <div>
+            {body ? (
+               <div className="mb-1 mt-2 [&_a]:text-blue-500 [&_a]:underline">
+                  <ShowMoreText
+                     lines={5}
+                     more={<span className="text-blue-600 cursor-pointer">See more</span>}
+                     less={<span className="text-blue-600 cursor-pointer">See less</span>}
+                     expanded={false}
+                     truncatedEndingComponent={'... '}
+                     width={1000}
+                  >
+                     <Linkify>{nl2br(body)}</Linkify>
+                  </ShowMoreText>
+               </div>
+            ) : null}
+            {image ? (
+               <div className="my-3">
+                  <Lightbox>
+                     <a href={image.url}>
+                        <Image src={image.url} alt="Post photo" width="550" height="400" />
+                     </a>
+                  </Lightbox>
+               </div>
+            ) : null}
 
-				<PostBar post={post} />
+            <PostBar post={post} />
 
-				{isCommentsVisible && <CommentList post={post} />}
-			</div>
-		</div>
-	)
+            {isCommentsVisible && <CommentList post={post} />}
+         </div>
+      </div>
+   )
 }

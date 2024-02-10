@@ -1,7 +1,7 @@
-export default function Error({ isError, message }: { message?: string; isError?: boolean }) {
-	if (!message && typeof isError === 'undefined') {
-		return null
-	}
+type Props = { message?: string; isError?: boolean }
 
-	return <div className='bg-danger p-4'>{message ? message : 'An error has occured!'}</div>
+export default function Error({ isError = true, message }: Props) {
+   if (!isError) return null
+
+   return <div className="bg-danger p-4">{message ? message : 'An error has occured!'}</div>
 }

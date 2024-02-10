@@ -20,84 +20,84 @@ import { getErrorData } from '~/utils/error'
 import siteMetadata from '~/utils/siteMetadata'
 
 export default function Login() {
-	//hooks
-	const router = useRouter()
-	const dispatch = useDispatch()
-	const params = useSearchParams()
-	const [login, { isLoading, isSuccess, error }] = useLoginMutation()
-	const [loginWithGoogle, { isLoading: isLWGLoading, isSuccess: isLWGSuccess }] =
-		useLoginWithGoogleMutation()
-	const { formData, handleChange } = useForm<CredentialPayload>()
+   //hooks
+   const router = useRouter()
+   const dispatch = useDispatch()
+   const params = useSearchParams()
+   const [login, { isLoading, isSuccess, error }] = useLoginMutation()
+   const [loginWithGoogle, { isLoading: isLWGLoading, isSuccess: isLWGSuccess }] =
+      useLoginWithGoogleMutation()
+   const { formData, handleChange } = useForm<CredentialPayload>()
 
-	const { errors } = getErrorData<CredentialPayload>(error) || {}
+   const { errors } = getErrorData<CredentialPayload>(error) || {}
 
-	async function handleFormSubmit(e: FormEvent) {
-		e.preventDefault()
+   async function handleFormSubmit(e: FormEvent) {
+      e.preventDefault()
 
-		try {
-			const data = await login(formData).unwrap()
+      try {
+         const data = await login(formData).unwrap()
 
-			if (data.user.hasEmailVerified) {
-				toast.success('Logged in.')
-				dispatch(baseApi.util.resetApiState())
-				router.replace(params.get('redirect_to') ? params.get('redirect_to')! : '/')
-			} else {
-				toast.error('Your email not verified yet.')
-				dispatch(setEmail(data.user.email))
-				router.push('/auth/email_verification/required')
-			}
-		} catch (err: any) {
-			toast.error(err?.data?.message || 'Request failed.')
-		}
-	}
+         if (data.user.hasEmailVerified) {
+            toast.success('Logged in.')
+            dispatch(baseApi.util.resetApiState())
+            router.replace(params.get('redirect_to') ? params.get('redirect_to')! : '/')
+         } else {
+            toast.error('Your email not verified yet.')
+            dispatch(setEmail(data.user.email))
+            router.push('/auth/email_verification/required')
+         }
+      } catch (err: any) {
+         toast.error(err?.data?.message || 'Request failed.')
+      }
+   }
 
-	return (
-		<>
-			<LoadingOverlay isLoading={isLoading || isSuccess || isLWGLoading || isLWGSuccess} />
+   return (
+      <>
+         <LoadingOverlay isLoading={isLoading || isSuccess || isLWGLoading || isLWGSuccess} />
 
-			<div className='card-auth'>
-				<div className='flex flex-wrap justify-center mb-2'>
-					<FiLock size='30' />
-				</div>
-				<h1 className='heading-auth'>Log In to {siteMetadata.appName}</h1>
+         <div className="card-auth">
+            <div className="flex flex-wrap justify-center mb-2">
+               <FiLock size="30" />
+            </div>
+            <h1 className="heading-auth">Log In to {siteMetadata.appName}</h1>
 
-				<form className='form' method='post' onSubmit={handleFormSubmit}>
-					<AnimatedInput
-						label='Username or email'
-						name='username'
-						value={formData.username}
-						error={errors?.username}
-						onChange={handleChange}
-					/>
-					<PasswordInput
-						label='Password'
-						name='password'
-						value={formData.password}
-						error={errors?.password}
-						onChange={handleChange}
-					/>
-					<Button type='submit' radius='md'>
-						Log In
-					</Button>
-				</form>
+            <form className="form" method="post" onSubmit={handleFormSubmit}>
+               <AnimatedInput
+                  label="Username or email"
+                  name="username"
+                  value={formData.username}
+                  error={errors?.username}
+                  onChange={handleChange}
+               />
+               <PasswordInput
+                  label="Password"
+                  name="password"
+                  value={formData.password}
+                  error={errors?.password}
+                  onChange={handleChange}
+               />
+               <Button type="submit" radius="md">
+                  Log In
+               </Button>
+            </form>
 
-				<TextDivider className='my-5'>OR</TextDivider>
+            <TextDivider className="my-5">OR</TextDivider>
 
-				<GoogleLoginButton loginMutationFn={loginWithGoogle} />
+            <GoogleLoginButton loginMutationFn={loginWithGoogle} />
 
-				<small className='block text-center mt-2'>
-					<Link href='/auth/forgot_password' className='text-blue-500'>
-						Forgotten your password?
-					</Link>
-				</small>
-			</div>
+            <small className="block text-center mt-2">
+               <Link href="/auth/forgot_password" className="text-blue-500">
+                  Forgotten your password?
+               </Link>
+            </small>
+         </div>
 
-			<div className='card-auth text-center mt-2 text-gray-800'>
-				Don&apos;t have an account? &nbsp;
-				<Link href='/auth/signup' className='text-blue-500 font-medium'>
-					Sign Up
-				</Link>
-			</div>
-		</>
-	)
+         <div className="card-auth text-center mt-2 text-gray-800">
+            Don&apos;t have an account? &nbsp;
+            <Link href="/auth/signup" className="text-blue-500 font-medium">
+               Sign Up
+            </Link>
+         </div>
+      </>
+   )
 }

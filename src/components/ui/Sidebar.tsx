@@ -5,15 +5,15 @@ import SuggestedPeople from '~/components/widgets/SuggestedPeople'
 import useMediaQuery from '~/hooks/useMediaQuery'
 
 export default function Sidebar() {
-	const isLaptopOrDesktop = useMediaQuery('(min-width: 768px)')
+   const isLaptopOrDesktop = useMediaQuery('(min-width: 768px)')
 
-	if (!isLaptopOrDesktop) return null
+   if (!isLaptopOrDesktop) return null
 
-	return (
-		<aside className='mt-5'>
-			<NewUserMessage />
-			<SuggestedPeople />
-			<Followers />
-		</aside>
-	)
+   return (
+      <aside className="mt-5">
+         <NewUserMessage />
+         <SuggestedPeople />
+         <Followers />
+      </aside>
+   )
 }

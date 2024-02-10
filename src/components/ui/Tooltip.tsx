@@ -2,23 +2,23 @@ import { Tooltip as BaseTooltip, TooltipProps } from '@nextui-org/react'
 import { forwardRef } from 'react'
 
 interface Props extends TooltipProps {
-	disableWrapper?: boolean
+   disableWrapper?: boolean
 }
 
 const Tooltip = forwardRef(({ children, disableWrapper, ...rest }: Props, ref: any) => {
-	return (
-		<BaseTooltip
-			placement='bottom'
-			color='foreground'
-			size='sm'
-			delay={500}
-			closeDelay={200}
-			showArrow
-			{...rest}
-		>
-			{disableWrapper ? children : <span ref={ref}>{children}</span>}
-		</BaseTooltip>
-	)
+   return (
+      <BaseTooltip
+         placement="bottom"
+         color="foreground"
+         size="sm"
+         delay={500}
+         closeDelay={200}
+         showArrow
+         {...rest}
+      >
+         {disableWrapper ? children : <span ref={ref}>{children}</span>}
+      </BaseTooltip>
+   )
 })
 
 Tooltip.displayName = 'displayName'
