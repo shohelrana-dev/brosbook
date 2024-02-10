@@ -1,46 +1,55 @@
 'use client'
-import { LoadingButton } from '@mui/lab'
-import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material'
-import { useEffect } from 'react'
+import { Radio, RadioGroup } from '@nextui-org/react'
+import { FormEvent, useEffect } from 'react'
 import 'react-calendar/dist/Calendar.css'
 import DatePicker from 'react-date-picker'
 import 'react-date-picker/dist/DatePicker.css'
-import toast from 'react-hot-toast'
+import { toast } from 'sonner'
 import BasicInput from '~/components/form/BasicInput'
-import Loader from '~/components/global/Loader'
-import Transition from '~/components/global/Transition'
+import Button from '~/components/ui/Button'
+import Loader from '~/components/ui/Loader'
+import Transition from '~/components/ui/Transition'
 import useAuth from '~/hooks/useAuth'
 import { useForm } from '~/hooks/useForm'
 import { ProfilePayload } from '~/interfaces/account.interfaces'
 import { useUpdateProfileMutation } from '~/services/accountApi'
 import { useGetUserByIdQuery } from '~/services/usersApi'
+import { getErrorData } from '~/utils/error'
 
 export default function ProfileSettingsPage() {
 	//hooks
 	const { user: currentUser } = useAuth({ require: true })
 	const { data: user, isLoading: isUserLoading } = useGetUserByIdQuery(currentUser?.id!)
-	const [updateProfile, { isLoading, isSuccess }] = useUpdateProfileMutation()
-	const { formData, onChange, onSubmit, errors, setFormData, clearErrors } =
-		useForm<ProfilePayload>(updateProfile)
+	const [updateProfile, { isLoading, error }] = useUpdateProfileMutation()
+	const { formData, handleChange, setFormData } = useForm<ProfilePayload>()
+
+	const { errors } = getErrorData<ProfilePayload>(error) || {}
 
 	useEffect(() => {
-		setFormData({
-			firstName: user?.firstName || '',
-			lastName: user?.lastName || '',
-			birthdate: user?.profile?.birthdate ? new Date(user?.profile?.birthdate!) : undefined,
-			bio: user?.profile?.bio || '',
-			gender: user?.profile?.gender || '',
-			phone: user?.profile?.phone || '',
-			location: user?.profile?.location! || '',
-		})
-	}, [user])
-
-	useEffect(() => {
-		if (isSuccess) {
-			toast.success('Profile updated.')
-			clearErrors()
+		if (user?.id) {
+			setFormData({
+				firstName: user?.firstName || '',
+				lastName: user?.lastName || '',
+				birthdate: user?.profile?.birthdate ? new Date(user?.profile?.birthdate!) : undefined,
+				bio: user?.profile?.bio || '',
+				gender: user?.profile?.gender || '',
+				phone: user?.profile?.phone || '',
+				location: user?.profile?.location! || '',
+			})
 		}
-	}, [isLoading, isSuccess])
+	}, [user, setFormData])
+
+	async function handleFormSubmit(e: FormEvent) {
+		e.preventDefault()
+
+		try {
+			await updateProfile(formData).unwrap()
+
+			toast.success('Profile updated.')
+		} catch (err: any) {
+			toast.error(err?.data?.message || 'Request failed.')
+		}
+	}
 
 	if (isUserLoading) {
 		return <Loader />
@@ -48,7 +57,7 @@ export default function ProfileSettingsPage() {
 
 	return (
 		<Transition>
-			<form className='flex-auto p-4 w-full' onSubmit={onSubmit}>
+			<form className='flex-auto p-4 w-full' onSubmit={handleFormSubmit}>
 				<div className='mb-7'>
 					<h3 className='text-base sm:text-lg mb-3'>Customize profile</h3>
 					<small className='text-gray-500'>PROFILE INFORMATION</small>
@@ -60,16 +69,16 @@ export default function ProfileSettingsPage() {
 					name='firstName'
 					value={formData.firstName}
 					error={errors?.firstName}
-					onChange={onChange}
-					helpText='Set a display name. This does not change your username.'
+					onChange={handleChange}
+					description='Set a display name. This does not change your username.'
 				/>
 				<BasicInput
 					label='Last Name'
 					name='lastName'
 					value={formData.lastName}
 					error={errors?.lastName}
-					onChange={onChange}
-					helpText='Set a display name. This does not change your username.'
+					onChange={handleChange}
+					description='Set a display name. This does not change your username.'
 				/>
 				<BasicInput
 					textarea
@@ -77,8 +86,8 @@ export default function ProfileSettingsPage() {
 					name='bio'
 					value={formData.bio}
 					error={errors?.bio}
-					onChange={onChange}
-					helpText='A brief description of yourself shown on your profile.'
+					onChange={handleChange}
+					description='A brief description of yourself shown on your profile.'
 				/>
 				<BasicInput
 					label='Phone Number'
@@ -86,20 +95,20 @@ export default function ProfileSettingsPage() {
 					type='number'
 					value={formData.phone}
 					error={errors?.phone}
-					onChange={onChange}
-					helpText='Your current phone number.'
+					onChange={handleChange}
+					description='Your current phone number.'
 				/>
 				<BasicInput
 					label='Location'
 					name='location'
 					value={formData.location}
 					error={errors?.location}
-					onChange={onChange}
-					helpText='Your full address.'
+					onChange={handleChange}
+					description='Your full address.'
 				/>
 
 				<div className='flex flex-col'>
-					<label htmlFor='birthdate' className='text-gray-800 mb-2'>
+					<label htmlFor='birthdate' className='text-gray-900 font-medium mb-2'>
 						Date of birth
 					</label>
 					<DatePicker
@@ -109,31 +118,27 @@ export default function ProfileSettingsPage() {
 						maxDate={new Date()}
 						className='!rounded-lg'
 					/>
-					{errors?.birthdate ? (
-						<p className='font-medium text-red-600 text-[12px]'>{errors?.birthdate}</p>
-					) : null}
+					{!!errors?.birthdate && (
+						<p className='font-medium text-red-600 text-[12px]'>{errors?.birthdate as any}</p>
+					)}
 				</div>
 
 				<div className='my-5'>
-					<FormControl
-						onChange={(e: any) => setFormData({ ...formData, gender: e.target.value })}
+					<RadioGroup
+						label='Gender'
+						value={formData.gender}
+						name='gender'
+						onChange={handleChange}
+						classNames={{ label: 'text-gray-900 font-medium' }}
 					>
-						<FormLabel id='gender' sx={{ color: '#000' }}>
-							Gender
-						</FormLabel>
-						<RadioGroup aria-labelledby='gender' value={formData?.gender} name='gender'>
-							<FormControlLabel value='female' control={<Radio />} label='Female' />
-							<FormControlLabel value='male' control={<Radio />} label='Male' />
-						</RadioGroup>
-					</FormControl>
-					{errors?.gender ? (
-						<p className='font-medium text-red-600 text-[12px]'>{errors?.gender}</p>
-					) : null}
+						<Radio value='female'>Female</Radio>
+						<Radio value='male'>Male</Radio>
+					</RadioGroup>
 				</div>
 
-				<LoadingButton variant='contained' type='submit' loading={isLoading} className='w-32'>
+				<Button type='submit' isLoading={isLoading} className='min-w-32'>
 					Update
-				</LoadingButton>
+				</Button>
 			</form>
 		</Transition>
 	)

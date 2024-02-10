@@ -1,79 +1,62 @@
-import { InputHTMLAttributes, LegacyRef } from 'react'
+import { Input, InputProps, Textarea, TextAreaProps } from '@nextui-org/react'
+import { forwardRef } from 'react'
 import cn from '~/utils/cn'
+import ucfirst from '~/utils/ucfirst'
 
-interface BasicInputProps extends InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement> {
-	label: string
-	textarea?: boolean
+interface Props {
 	error?: string
-	helpText?: string
-	labelHide?: boolean
 	wrapperClassname?: string
-	rows?: number
-	inputRef?: LegacyRef<any>
+	textarea?: boolean
 }
 
-export default function BasicInput(props: BasicInputProps) {
-	let {
-		label,
-		name,
-		textarea,
-		className,
-		type = 'text',
-		error,
-		helpText,
-		labelHide = false,
-		wrapperClassname,
-		rows,
-		inputRef,
-		...rest
-	} = props
-
-	className = cn(
-		'block w-full font-kanit text-gray-700 outline-none py-3 px-3 rounded-lg border-2 border-gray-200 focus:border-primary',
-		className
-	)
-
-	const id = name ? name : label.replace(' ', '')
+const BasicInput = forwardRef((props: Props & InputProps & TextAreaProps, ref: any) => {
+	let { wrapperClassname, textarea, error, classNames, label, description, ...rest } = props
+	const isError = !!error
 
 	return (
 		<div className={cn('mb-2 md:mb-4', wrapperClassname)}>
-			{/* Label and help text area */}
-			{!labelHide || helpText ? (
-				<div className='mb-2'>
-					{!labelHide ? (
-						<label htmlFor={id} className='font-medium text-gray-900 cursor-pointer block'>
-							{label}
-						</label>
-					) : null}
-					{helpText ? <p className='text-gray-600 text-xs mb-3'>{helpText}</p> : null}
-				</div>
-			) : null}
-
-			{/* Input text area */}
-			<div>
-				{!textarea ? (
-					<input
-						id={id}
-						type={type}
-						className={className}
-						name={name}
-						placeholder={label}
-						ref={inputRef}
-						{...rest}
-					/>
-				) : (
-					<textarea
-						id={id}
-						className={className}
-						name={name}
-						placeholder={label}
-						ref={inputRef}
-						rows={rows}
-						{...rest}
-					/>
-				)}
-				{error ? <p className='font-medium text-red-600 text-[12px]'>{error}</p> : null}
-			</div>
+			{!!label && (
+				<label htmlFor={rest.name} className='font-medium block mb-1'>
+					{label}
+				</label>
+			)}
+			{!!description && <p className='text-xs text-gray-700 mb-3'>{description}</p>}
+			{textarea ? (
+				<Textarea
+					color='primary'
+					variant='bordered'
+					classNames={{
+						...classNames,
+						inputWrapper: cn('border-large bg-white', classNames?.inputWrapper),
+						input: cn('text-sm', classNames?.input),
+					}}
+					size='lg'
+					labelPlacement='outside'
+					errorMessage={ucfirst(error)}
+					isInvalid={isError}
+					{...rest}
+					ref={ref}
+				/>
+			) : (
+				<Input
+					color='primary'
+					variant='bordered'
+					classNames={{
+						...classNames,
+						inputWrapper: cn('border-large bg-white', classNames?.inputWrapper),
+						input: cn('text-sm', classNames?.input),
+					}}
+					size='lg'
+					labelPlacement='outside'
+					errorMessage={ucfirst(error)}
+					isInvalid={isError}
+					{...rest}
+					ref={ref}
+				/>
+			)}
 		</div>
 	)
-}
+})
+
+BasicInput.displayName = 'BasicInput'
+export default BasicInput

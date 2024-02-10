@@ -1,17 +1,15 @@
-import { Popover, Tooltip } from '@mui/material'
-import PopupState, { bindPopover, bindTrigger } from 'material-ui-popup-state'
+import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react'
+import { usePathname } from 'next/navigation'
 import { useState } from 'react'
-import toast from 'react-hot-toast'
 import { AiOutlineCopy as CopyIcon, AiOutlineUserAdd as FollowIcon } from 'react-icons/ai'
 import { BsThreeDots as ThreeDotsIcon } from 'react-icons/bs'
 import { MdHideSource as HideIcon } from 'react-icons/md'
 import { RiDeleteBin5Line as DeleteIcon, RiUserUnfollowLine as UnfollowIcon } from 'react-icons/ri'
-
-import { IconButton } from '@mui/material'
-import { usePathname } from 'next/navigation'
 import { useDispatch } from 'react-redux'
 import { useConfirmAlert } from 'react-use-confirm-alert'
-import OptionButton from '~/components/global/OptionButton'
+import { toast } from 'sonner'
+import IconButton from '~/components/ui/IconButton'
+import Tooltip from '~/components/ui/Tooltip'
 import useAuth from '~/hooks/useAuth'
 import useUnauthorizedAlert from '~/hooks/useUnauthorzedAlert'
 import { ListResponse } from '~/interfaces/index.interfaces'
@@ -101,64 +99,66 @@ export default function PostOptions({ post }: Props) {
 		dispatch(postsApi.util.updateQueryData('getFeedPosts', undefined as any, removePostFromDraft))
 	}
 
-	function copyPostLinkToClipboard() {
+	function handlecopyPostLink() {
 		navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_APP_URL}/posts/${post.id}`).then(() => {
 			toast.success('Post link copied.')
 		})
 	}
 
 	return (
-		<PopupState variant='popover'>
-			{popupState => (
-				<div>
-					<Tooltip title='Options'>
-						<IconButton {...bindTrigger(popupState)}>
-							<ThreeDotsIcon size='18' />
-						</IconButton>
-					</Tooltip>
+		<Dropdown placement='bottom-end'>
+			<Tooltip content='Post options'>
+				<DropdownTrigger>
+					<IconButton>
+						<ThreeDotsIcon size='18' />
+					</IconButton>
+				</DropdownTrigger>
+			</Tooltip>
 
-					<Popover
-						{...bindPopover(popupState)}
-						anchorOrigin={{
-							vertical: 'bottom',
-							horizontal: 'center',
-						}}
-						transformOrigin={{
-							vertical: 'top',
-							horizontal: 'right',
-						}}
-					>
-						<div className='min-w-[150px] max-w-[200px]'>
-							{isCurrentUserAuthor ? (
-								<OptionButton onClick={handleDeletePostClick}>
-									<DeleteIcon size='18' className='mr-2' />
-									Delete
-								</OptionButton>
-							) : author.isViewerFollow ? (
-								<OptionButton onClick={handleUnfollowClick}>
-									<UnfollowIcon size='18' className='mr-2' />
-									Unfollow @{author.username}
-								</OptionButton>
-							) : (
-								<OptionButton onClick={handleFollowClick}>
-									<FollowIcon size='18' className='mr-2' />
-									Follow @{author.username}
-								</OptionButton>
-							)}
-							<OptionButton onClick={copyPostLinkToClipboard}>
-								<CopyIcon size='18' className='mr-2' />
-								Copy link to post
-							</OptionButton>
-							{!pathname?.startsWith('/posts/') && (
-								<OptionButton onClick={handleHidePost}>
-									<HideIcon size='18' className='mr-2' />
-									Hide
-								</OptionButton>
-							)}
-						</div>
-					</Popover>
-				</div>
-			)}
-		</PopupState>
+			<DropdownMenu variant='faded' aria-label='Post options'>
+				{isCurrentUserAuthor && (
+					<DropdownItem
+						onClick={handleDeletePostClick}
+						startContent={<DeleteIcon size='18' />}
+						title='Delete'
+					/>
+				)}
+
+				{!isCurrentUserAuthor &&
+					(author.isViewerFollow ? (
+						<DropdownItem
+							key='unfollow'
+							onClick={handleUnfollowClick}
+							startContent={<UnfollowIcon size='18' />}
+							title={`Unfollow @${author.username}`}
+						/>
+					) : (
+						<DropdownItem
+							key='follow'
+							onClick={handleFollowClick}
+							startContent={<FollowIcon size='18' />}
+							title={`Follow @${author.username}`}
+						/>
+					))}
+
+				<DropdownItem
+					key='copy'
+					onClick={handlecopyPostLink}
+					startContent={<CopyIcon size='18' />}
+					title='Copy link to post'
+				/>
+
+				{!pathname?.startsWith('/posts/') ? (
+					<DropdownItem
+						key='hide'
+						onClick={handleHidePost}
+						startContent={<HideIcon size='18' />}
+						title='Hide'
+					/>
+				) : (
+					(null as any)
+				)}
+			</DropdownMenu>
+		</Dropdown>
 	)
 }

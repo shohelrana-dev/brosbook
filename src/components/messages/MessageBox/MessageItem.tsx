@@ -2,9 +2,9 @@ import moment from 'moment/moment'
 import Image from 'next/image'
 import { BsCircle as CircleIcon } from 'react-icons/bs'
 import { IoCheckmarkCircleOutline as TickIcon } from 'react-icons/io5'
-import Avatar from '~/components/global/Avatar'
 import MessageContent from '~/components/messages/MessageBox/MessageContent'
 import ReactionsInput from '~/components/messages/MessageBox/ReactionsInput'
+import Avatar from '~/components/ui/Avatar'
 import { Message } from '~/interfaces/conversation.interfaces'
 import { User } from '~/interfaces/user.interfaces'
 import cn from '~/utils/cn'
@@ -47,7 +47,7 @@ export default function MessageItem({ message, prevMessage, isLastMessage, parti
 	)
 
 	return (
-		<article className={classes.row({ isOwn: isMeSender })}>
+		<li className={classes.row({ isOwn: isMeSender })}>
 			{!isMeSender && (
 				<div className='w-9 mr-1 mt-1'>{!isSameUserAndTimeLessThanFiveMin && avatarMarkup}</div>
 			)}
@@ -71,6 +71,6 @@ export default function MessageItem({ message, prevMessage, isLastMessage, parti
 					) : null}
 				</div>
 			</div>
-		</article>
+		</li>
 	)
 }

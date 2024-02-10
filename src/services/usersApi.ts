@@ -141,6 +141,8 @@ export const {
 	useUnfollowMutation,
 	useGetFollowersQuery,
 	useGetFollowingsQuery,
+	useGetFollowersCountQuery,
+	useGetFollowingsCountQuery,
 	useSearchUsersQuery,
 	useGetMediaListQuery,
 } = usersApi

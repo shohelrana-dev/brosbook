@@ -1,37 +1,44 @@
 'use client'
-import { LoadingButton } from '@mui/lab'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
-import toast from 'react-hot-toast'
+import { FormEvent } from 'react'
 import Modal, { useToggle } from 'react-minimal-modal'
+import { toast } from 'sonner'
 import PasswordInput from '~/components/form/PasswordInput'
+import Button from '~/components/ui/Button'
 import useAuth from '~/hooks/useAuth'
 import { useForm } from '~/hooks/useForm'
 import { ChangePasswordPayload } from '~/interfaces/account.interfaces'
 import { useChangePasswordMutation } from '~/services/accountApi'
+import { getErrorData } from '~/utils/error'
 
 export default function ChangePasswordModal() {
-	const [changePassword, { isLoading, isSuccess }] = useChangePasswordMutation()
-	const { formData, onChange, onSubmit, errors, reset } =
-		useForm<ChangePasswordPayload>(changePassword)
+	const [changePassword, { isLoading, error }] = useChangePasswordMutation()
+	const { formData, handleChange } = useForm<ChangePasswordPayload>()
 	const router = useRouter()
 	const [isOpen, toggle] = useToggle(true)
-	const _ = useAuth({ require: true })
+	useAuth({ require: true })
 
-	useEffect(() => {
-		if (isSuccess) {
+	const { errors } = getErrorData<ChangePasswordPayload>(error) || {}
+
+	async function handleFormSubmit(e: FormEvent) {
+		e.preventDefault()
+
+		try {
+			await changePassword(formData).unwrap()
+
 			toast.success('Password changed.')
 			handleClose()
+		} catch (err: any) {
+			toast.error(err?.data?.message || 'Request failed.')
 		}
-	}, [isSuccess])
+	}
 
 	function handleClose() {
 		toggle()
 
 		//delay for show modal animation
 		setTimeout(() => {
-			reset()
 			router.back()
 		}, 300)
 	}
@@ -41,14 +48,14 @@ export default function ChangePasswordModal() {
 			<p className='mb-6 text-gray-700 -mt-1'>
 				Do not share your password with anyone. Set new password using current password.
 			</p>
-			<form className='form' onSubmit={onSubmit} autoComplete='off'>
+			<form className='form' onSubmit={handleFormSubmit} autoComplete='off'>
 				<div>
 					<PasswordInput
 						label='Current Password'
 						name='currentPassword'
 						value={formData.currentPassword}
-						error={errors.currentPassword}
-						onChange={onChange}
+						error={errors?.currentPassword}
+						onChange={handleChange}
 					/>
 					<Link href='/auth/forgot_password' className='text-blue-600 text-sm block'>
 						Forgot password?
@@ -58,21 +65,21 @@ export default function ChangePasswordModal() {
 					label='New Password'
 					name='newPassword'
 					value={formData.newPassword}
-					error={errors.newPassword}
-					onChange={onChange}
+					error={errors?.newPassword}
+					onChange={handleChange}
 				/>
 				<PasswordInput
 					label='Confirm New Password'
 					name='confirmNewPassword'
 					value={formData.confirmNewPassword}
-					error={errors.confirmNewPassword}
-					onChange={onChange}
+					error={errors?.confirmNewPassword}
+					onChange={handleChange}
 				/>
 
 				<div className='text-right mt-4'>
-					<LoadingButton variant='contained' type='submit' loading={isLoading} size='large'>
+					<Button type='submit' isLoading={isLoading} className='min-w-32'>
 						Update
-					</LoadingButton>
+					</Button>
 				</div>
 			</form>
 		</Modal>

@@ -1,60 +1,26 @@
-import { ChangeEvent, FormEvent, useState } from "react"
-import { MutationTrigger } from "@reduxjs/toolkit/dist/query/react/buildHooks"
-import { MutationDefinition } from "@reduxjs/toolkit/query"
-import toast from "react-hot-toast"
+import { ChangeEvent, useState } from 'react'
 
-export type Errors<TPayload> = {
-    [Key in keyof TPayload]: string
-}
+export function useForm<T>(initialFormData: T = {} as T) {
+	const [formData, setFormData] = useState<T>(initialFormData)
 
-type Options<TPayload> = {
-    initialFormData?: TPayload
-    successMessage?: string
-    errorMessage?: string
-}
+	function handleChange(e: ChangeEvent<any>) {
+		if (!e.target.name) {
+			throw Error(`name attribute missing in ${e.target}`)
+		}
+		setFormData({ ...formData, [e.target.name]: e.target.value })
+	}
 
-export function useForm<TPayload>( mutationFN: MutationTrigger<MutationDefinition<TPayload, any, any, any>>, initialFormData?: TPayload ){
-    const [formData, setFormData] = useState<TPayload>( initialFormData || {} as TPayload )
-    const [errors, setErrors]     = useState<Errors<TPayload>>( {} as Errors<TPayload> )
+	function clearFormData() {
+		if (Object.keys(formData as any).length < 1) {
+			return
+		}
+		setFormData({} as T)
+	}
 
-    function onChange( e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement> ){
-        if( ! e.target.name ){
-            throw new Error( `name attribute missing in ${ e.target }` )
-        }
-        setFormData( { ...formData, [e.target.name]: e.target.value } )
-    }
-
-    async function onSubmit( e: FormEvent ){
-        e.preventDefault()
-
-        try {
-            await mutationFN( formData ).unwrap()
-        } catch ( err: any ) {
-            console.error( err )
-            setErrors( err?.data?.errors || {} )
-            toast.error( err?.data?.message || 'Request failed.' )
-        }
-    }
-
-    function reset(){
-        clearErrors()
-        clearFormData()
-    }
-
-    function clearErrors(){
-        if( Object.keys( errors ).length < 1 ){
-            return
-        }
-        setErrors( {} as Errors<TPayload> )
-    }
-
-    function clearFormData(){
-        // @ts-ignore
-        if( Object.keys( formData ).length < 1 ){
-            return
-        }
-        setFormData( {} as TPayload )
-    }
-
-    return { formData, onChange, onSubmit, errors, setFormData, reset, clearErrors, clearFormData }
+	return {
+		formData,
+		handleChange,
+		setFormData,
+		clearFormData,
+	}
 }

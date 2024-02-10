@@ -1,1 +1,2 @@
-export { default } from '~/components/global/PageLoader'
+export { default } from '~/components/ui/PageLoader';
+

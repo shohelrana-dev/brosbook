@@ -1,7 +1,5 @@
 import { usePathname } from 'next/navigation'
-import { useEffect } from 'react'
-import { useSelector } from 'react-redux'
-import { selectAuthState } from '~/slices/authSlice'
+import { useAuthState } from '~/slices/authSlice'
 
 type UseAuthOptions = {
 	require?: boolean
@@ -10,25 +8,25 @@ type UseAuthOptions = {
 }
 
 export default function useAuth(options?: UseAuthOptions) {
-	const authState = useSelector(selectAuthState)
+	const authState = useAuthState()
 	const pathname = usePathname()
 
 	const { onUnautenticated, onAutenticated, require } = options || {}
 	const { isAuthenticated, isChecked } = authState
 
-	useEffect(() => {
-		if (typeof onUnautenticated === 'function' && isChecked && !isAuthenticated) {
+	if (isChecked) {
+		if (onUnautenticated && !isAuthenticated) {
 			onUnautenticated()
 		}
 
-		if (typeof onAutenticated === 'function' && isChecked && isAuthenticated) {
+		if (onAutenticated && isAuthenticated) {
 			onAutenticated()
 		}
 
-		if (require && isChecked && !isAuthenticated) {
+		if (require && !isAuthenticated) {
 			window.location.href = `/auth/login?redirect_to=${pathname}`
 		}
-	}, [isAuthenticated, isChecked, onUnautenticated, onAutenticated, require, pathname])
+	}
 
 	return authState
 }

@@ -3,7 +3,6 @@ import { ListResponse, Media } from '~/interfaces/index.interfaces'
 import { RootState } from '~/store/index'
 import { CONVERSATIONS_PER_PAGE, MEDIA_PER_PAGE } from '~/utils/constants'
 import listQueryExtraDefinitions from '~/utils/listQueryExtraDefinitions'
-import { initSocket } from '~/utils/socket'
 import { baseApi } from './baseApi'
 
 export const conversationsApi = baseApi.injectEndpoints({
@@ -17,8 +16,9 @@ export const conversationsApi = baseApi.injectEndpoints({
 			...listQueryExtraDefinitions,
 			onCacheEntryAdded: async (arg, api) => {
 				const { updateCachedData, cacheEntryRemoved, cacheDataLoaded, getState } = api
-				const currentUser = (getState() as RootState)?.auth?.user
-				const socket = initSocket()
+				const rootState = getState() as RootState
+				const currentUser = rootState.auth.user
+				const socket = rootState.socket.socket
 
 				try {
 					await cacheDataLoaded
@@ -66,8 +66,8 @@ export const conversationsApi = baseApi.injectEndpoints({
 						})
 					}
 
-					socket.on(`message.new`, newMessageListener)
-					socket.on(`message.seen`, seenMessageListener)
+					socket?.on(`message.new`, newMessageListener)
+					socket?.on(`message.seen`, seenMessageListener)
 				} catch (err) {
 					await cacheEntryRemoved
 					throw err
@@ -92,13 +92,13 @@ export const conversationsApi = baseApi.injectEndpoints({
 			onCacheEntryAdded: async (arg, api) => {
 				const { cacheDataLoaded, cacheEntryRemoved, updateCachedData, getState } = api
 				const rootState = getState() as RootState
-				const currentUser = rootState?.auth?.user
-				const socket = initSocket()
+				const currentUser = rootState.auth.user
+				const socket = rootState.socket.socket
 
 				try {
 					await cacheDataLoaded
 
-					socket.on(`conversation.unread.count.${currentUser?.id}`, (count: number) => {
+					socket?.on(`conversation.unread.count.${currentUser?.id}`, (count: number) => {
 						updateCachedData(draft => {
 							draft.count = count
 						})

@@ -2,7 +2,6 @@ import { ListResponse, Notification } from '~/interfaces/index.interfaces'
 import { RootState } from '~/store/index'
 import { NOTIFICATIONS_PER_PAGE } from '~/utils/constants'
 import listQueryExtraDefinitions from '~/utils/listQueryExtraDefinitions'
-import { initSocket } from '~/utils/socket'
 import { baseApi } from './baseApi'
 
 export const notificationsApi = baseApi.injectEndpoints({
@@ -15,13 +14,13 @@ export const notificationsApi = baseApi.injectEndpoints({
 			onCacheEntryAdded: async (arg, api) => {
 				const { cacheDataLoaded, cacheEntryRemoved, updateCachedData, getState } = api
 				const rootState = getState() as RootState
-				const currentUser = rootState?.auth?.user
-				const socket = initSocket()
+				const currentUser = rootState.auth.user
+				const socket = rootState.socket.socket
 
 				try {
 					await cacheDataLoaded
 
-					socket.on(`notification.new.${currentUser?.id}`, notification => {
+					socket?.on(`notification.new.${currentUser?.id}`, notification => {
 						updateCachedData(draft => {
 							draft.items.unshift(notification)
 						})
@@ -41,13 +40,13 @@ export const notificationsApi = baseApi.injectEndpoints({
 			onCacheEntryAdded: async (arg, api) => {
 				const { cacheDataLoaded, cacheEntryRemoved, updateCachedData, getState } = api
 				const rootState = getState() as RootState
-				const currentUser = rootState?.auth?.user
-				const socket = initSocket()
+				const currentUser = rootState.auth.user
+				const socket = rootState.socket.socket
 
 				try {
 					await cacheDataLoaded
 
-					socket.on(`notification.unread.count.${currentUser?.id}`, (count: number) => {
+					socket?.on(`notification.unread.count.${currentUser?.id}`, (count: number) => {
 						updateCachedData(draft => {
 							draft.count = count
 						})

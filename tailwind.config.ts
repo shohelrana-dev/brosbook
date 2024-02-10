@@ -1,8 +1,14 @@
+import { nextui } from '@nextui-org/react'
+//@ts-ignore
+import scrollbarHide from 'tailwind-scrollbar-hide'
 import type { Config } from 'tailwindcss'
 
 const config: Config = {
 	mode: 'jit',
-	content: ['./src/**/*.{js,ts,jsx,tsx}'],
+	content: [
+		'./src/**/*.{js,ts,jsx,tsx}',
+		'./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
+	],
 	theme: {
 		extend: {
 			colors: {
@@ -26,10 +32,10 @@ const config: Config = {
 				100: '25rem',
 				130: '32.5rem',
 				160: '40rem',
-				navbar: '65px',
+				navbar: '3.5rem',
 			},
 			height: {
-				'screen-content': 'calc(100dvh - 65px)',
+				'screen-content': 'calc(100dvh - 3.5rem)',
 			},
 			zIndex: {
 				'99': '99',
@@ -50,11 +56,33 @@ const config: Config = {
 			},
 		},
 	},
-	corePlugins: {
-		// Remove the Tailwind CSS preflight styles so it can use Material UI's preflight instead (CssBaseline).
-		preflight: false,
-	},
-	plugins: [require('tailwind-scrollbar-hide')],
+	plugins: [
+		scrollbarHide,
+		nextui({
+			prefix: 'brosbook',
+			themes: {
+				light: {
+					colors: {
+						danger: {
+							DEFAULT: '#F60002',
+						},
+					},
+				},
+			},
+			layout: {
+				/* radius: {
+					small: '3px', // rounded-small
+					medium: '6px', // rounded-medium
+					large: '10px', // rounded-large
+				}, */
+				borderWidth: {
+					small: '1px', // border-small
+					medium: '1px', // border-medium
+					large: '2px', // border-large
+				},
+			},
+		}),
+	],
 }
 
 export default config

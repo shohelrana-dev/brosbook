@@ -1,22 +1,21 @@
 'use client'
-import { Button } from '@mui/material'
 import Link from 'next/link'
-import Error from '~/components/global/Error'
-import UserItem from '~/components/global/UserItem'
 import UsersSkeleton from '~/components/skeletons/UsersSkeleton'
+import Button from '~/components/ui/Button'
+import Error from '~/components/ui/Error'
+import UserItem from '~/components/ui/UserItem'
 import WidgetLayout from '~/components/widgets/WidgetLayout'
 import useAuth from '~/hooks/useAuth'
-import { ErrorResponse } from '~/interfaces/index.interfaces'
-import { User } from '~/interfaces/user.interfaces'
 import { useGetFollowersQuery } from '~/services/usersApi'
+import { getErrorData } from '~/utils/error'
 
 export default function Followers() {
 	const { isAuthenticated, user } = useAuth()
 	const followersQuery = useGetFollowersQuery({ userId: user?.id!, page: 1 }, { skip: !user?.id })
 
-	const { isError, isLoading } = followersQuery
-	const { items: users, nextPage } = followersQuery?.data || {}
-	const error = (followersQuery.error || {}) as ErrorResponse
+	const { isError, isLoading, isSuccess, error } = followersQuery
+	const { items: users, nextPage } = followersQuery.data || {}
+	const { message } = getErrorData(error) || {}
 
 	if (!isAuthenticated) return null
 
@@ -25,22 +24,22 @@ export default function Followers() {
 	if (isLoading) {
 		content = <UsersSkeleton count={2} />
 	} else if (isError) {
-		content = <Error message={error?.data?.message} />
-	} else if (users && users.length === 0) {
+		content = <Error message={message} />
+	} else if (isSuccess && users && users.length === 0) {
 		content = <p>No one following yet.</p>
-	} else if (users && users.length > 0) {
-		content = users.map((user: User) => <UserItem user={user} key={user.id} />)
+	} else if (isSuccess && users && users.length > 0) {
+		content = users.map(user => <UserItem user={user} key={user.id} />)
 	}
 
 	return (
 		<WidgetLayout title="Who's follownig">
 			{content}
 
-			{!!nextPage ? (
-				<Link href={`/${user?.username}/followers`}>
-					<Button>See More</Button>
-				</Link>
-			) : null}
+			{!!nextPage && (
+				<Button as={Link} href={`/${user?.username}/followers`}>
+					See More
+				</Button>
+			)}
 		</WidgetLayout>
 	)
 }

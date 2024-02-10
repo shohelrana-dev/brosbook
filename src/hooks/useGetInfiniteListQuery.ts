@@ -1,33 +1,34 @@
-import { useEffect, useState } from "react"
-import { UseQuery, UseQueryStateOptions } from "@reduxjs/toolkit/dist/query/react/buildHooks"
-import { QueryDefinition } from "@reduxjs/toolkit/query"
+import { UseQuery, UseQueryStateOptions } from '@reduxjs/toolkit/dist/query/react/buildHooks'
+import { QueryDefinition } from '@reduxjs/toolkit/query'
+import { useEffect, useState } from 'react'
 
-export function useGetInfiniteListQuery<T>( useQueryHook: UseQuery<QueryDefinition<any, any, any, any>>, queryParams: any = {}, options?: UseQueryStateOptions<any, any> ){
-    const [page, setPage]   = useState<number>( queryParams?.page ?? 1 )
-    let { data, ...rest }   = useQueryHook( { ...queryParams, page }, options )
-    const [items, setItems] = useState<T[]>( [] )
+export function useGetInfiniteListQuery<T>(
+	useQueryHook: UseQuery<QueryDefinition<any, any, any, any>>,
+	searchParams: any = {},
+	options?: UseQueryStateOptions<any, any>
+) {
+	const [page, setPage] = useState<number>(searchParams?.page ?? 1)
+	let { data, ...rest } = useQueryHook({ ...searchParams, page }, options)
+	const [items, setItems] = useState<T[] | null>(null)
 
-    const hasMore = !! data?.nextPage
+	const hasMore = !!data?.nextPage
 
-    function loadMore(){
-        if( hasMore ){
-            setPage( data.nextPage )
-        }
-    }
+	function loadMore() {
+		if (hasMore) setPage(data.nextPage)
+	}
 
+	useEffect(() => {
+		if (!data?.items || data.items.length === 0) {
+			setItems([])
+			return
+		}
 
-    useEffect( () => {
-        if( ! data?.items || data.items.length < 1 ){
-            setItems( () => [] )
-            return
-        }
+		if (page === 1) {
+			setItems(() => [...data.items])
+		} else if (page === data.currentPage) {
+			setItems(prevItems => (prevItems ? [...prevItems, ...data.items] : data.items))
+		}
+	}, [data, page])
 
-        if( page === 1 ){
-            setItems( () => [...data.items] )
-        } else if( page === data.currentPage ){
-            setItems( prevItems => [...prevItems, ...data.items] )
-        }
-    }, [data?.items] )
-
-    return { hasMore, items, loadMore, setItems, data, ...rest }
+	return { hasMore, items, loadMore, setItems, data, ...rest }
 }

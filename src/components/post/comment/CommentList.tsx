@@ -1,11 +1,12 @@
-import { Button, IconButton } from '@mui/material'
+import { Button } from '@nextui-org/react'
 import { FormEvent, useState } from 'react'
 import { MdSend as SendIcon } from 'react-icons/md'
 import BasicInput from '~/components/form/BasicInput'
-import Avatar from '~/components/global/Avatar'
-import Error from '~/components/global/Error'
-import Loader from '~/components/global/Loader'
 import CommentItem from '~/components/post/comment/CommentItem'
+import Avatar from '~/components/ui/Avatar'
+import Error from '~/components/ui/Error'
+import IconButton from '~/components/ui/IconButton'
+import Loader from '~/components/ui/Loader'
 import useAuth from '~/hooks/useAuth'
 import { ErrorResponse } from '~/interfaces/index.interfaces'
 import { Post } from '~/interfaces/posts.interfaces'
@@ -21,7 +22,7 @@ export default function CommentList({ post }: Props) {
 	const commentsQuery = useGetCommentsQuery({ postId: post.id, page })
 	const [createComment] = useCreateCommentMutation()
 
-	const [commentBody, setCommentBody] = useState('')
+	const [commentText, setCommentText] = useState('')
 
 	const { isLoading, isError, isSuccess, data: commentsData } = commentsQuery
 	const { items: comments = [], nextPage } = commentsData || {}
@@ -29,11 +30,11 @@ export default function CommentList({ post }: Props) {
 
 	async function handleSaveComment(event: FormEvent) {
 		event.preventDefault()
-		if (!commentBody) return
+		if (!commentText) return
 
 		try {
-			await createComment({ postId: post.id, body: commentBody }).unwrap()
-			setCommentBody('')
+			await createComment({ postId: post.id, body: commentText }).unwrap()
+			setCommentText('')
 		} catch (err) {
 			console.error(err)
 		}
@@ -58,23 +59,20 @@ export default function CommentList({ post }: Props) {
 					<Avatar src={currentUser?.avatar?.url} online />
 					<div className='relative ml-2 w-full'>
 						<BasicInput
-							label='Write a comment...'
-							labelHide
+							placeholder='Write a comment...'
 							type='text'
-							value={commentBody}
+							radius='full'
+							value={commentText}
 							className='rounded-full'
 							wrapperClassname='mb-0 md:mb-0'
-							onChange={e => setCommentBody(e.target.value)}
+							onValueChange={setCommentText}
 							autoComplete='off'
 						/>
 						<div className='absolute top-1/2 right-2 right -translate-y-1/2'>
 							<IconButton
 								type='submit'
-								disabled={isLoading || !commentBody}
-								sx={{
-									color: theme => theme.palette.secondary.main,
-									'&:disabled': '#ddd',
-								}}
+								isDisabled={isLoading || !commentText}
+								className='text-primary'
 							>
 								<SendIcon fontSize={20} className='ml-1' />
 							</IconButton>
@@ -90,7 +88,14 @@ export default function CommentList({ post }: Props) {
 					{isLoading ? (
 						<Loader />
 					) : (
-						<Button onClick={() => setPage(nextPage!)}>See more comments</Button>
+						<Button
+							color='primary'
+							size='sm'
+							radius='full'
+							onClick={() => setPage(nextPage!)}
+						>
+							See more comments
+						</Button>
 					)}
 				</div>
 			) : null}

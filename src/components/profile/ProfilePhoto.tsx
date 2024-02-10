@@ -1,12 +1,12 @@
 'use client'
-import { LoadingButton } from '@mui/lab'
-import { Button, IconButton } from '@mui/material'
 import Image from 'next/image'
-import { ChangeEvent, useState } from 'react'
-import toast from 'react-hot-toast'
-import { TbCameraPlus } from 'react-icons/tb'
+import { useState } from 'react'
+import { TbCameraPlus as CameraIcon } from 'react-icons/tb'
 import Modal from 'react-minimal-modal'
-import ImageLightbox from '~/components/global/ImageLightbox'
+import { toast } from 'sonner'
+import Button from '~/components/ui/Button'
+import IconButton from '~/components/ui/IconButton'
+import Lightbox from '~/components/ui/Lightbox'
 import useAuth from '~/hooks/useAuth'
 import useSelectFile from '~/hooks/useSelectFile'
 import { Media } from '~/interfaces/index.interfaces'
@@ -19,20 +19,14 @@ export default function ProfilePhoto({ user }: Props) {
 	const { user: currentUser } = useAuth()
 	const [changeProfilePhoto, { isLoading }] = useChangeProfilePhotoMutation()
 	const [avatar, setAvatar] = useState<Media | undefined>(user.avatar)
-	const {
-		onChange,
-		onClick,
-		inputRef,
-		selectedFile: selectedPhoto,
-		removeSelectedFile,
-	} = useSelectFile()
+	const { handleChange, handleClick, inputRef, selectedFile, removeSelectedFile } = useSelectFile()
 
 	async function handleSubmit() {
-		if (!selectedPhoto) return
+		if (!selectedFile) return
 
 		try {
 			const formData = new FormData()
-			formData.append('avatar', selectedPhoto)
+			formData.append('avatar', selectedFile)
 			const data = await changeProfilePhoto(formData).unwrap()
 
 			removeSelectedFile()
@@ -44,19 +38,19 @@ export default function ProfilePhoto({ user }: Props) {
 		}
 	}
 
-	function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
-		onChange(event)
-	}
-
 	if (user.id !== currentUser?.id) {
 		return (
-			<ImageLightbox
-				image={avatar}
-				className='rounded-full w-[130px] !h-[130px] mt-[-80px] border-4 border-white object-cover'
-				alt='User profile photo'
-				width={130}
-				height={130}
-			/>
+			<Lightbox>
+				<a href={avatar?.url} target='__blank'>
+					<Image
+						src={avatar?.url!}
+						alt='User profile photo'
+						width={130}
+						height={130}
+						className='rounded-full w-[130px] h-[130px] mt-[-80px] border-4 border-white object-cover'
+					/>
+				</a>
+			</Lightbox>
 		)
 	}
 
@@ -67,67 +61,50 @@ export default function ProfilePhoto({ user }: Props) {
 				name='photo'
 				type='file'
 				accept='image/*'
-				onChange={handleInputChange}
+				onChange={handleChange}
 				ref={inputRef}
 			/>
-			<ImageLightbox
-				image={avatar}
-				className='size-32 object-cover rounded-full mt-[-80px] border-4 border-white'
-				alt='User profile photo'
-				width={130}
-				height={130}
-			/>
+			<Lightbox>
+				<a href={avatar?.url} target='__blank'>
+					<Image
+						src={avatar?.url!}
+						alt='User profile photo'
+						width={130}
+						height={130}
+						className='size-32 object-cover rounded-full mt-[-80px] border-4 border-white'
+					/>
+				</a>
+			</Lightbox>
 
-			<IconButton
-				onClick={onClick}
-				sx={{
-					position: 'absolute',
-					bottom: '8px',
-					right: '10px',
-					background: 'rgba(0, 0, 0, 0.9)',
-					'&:hover': { background: 'rgba(0, 0, 0, 0.7)' },
-				}}
-			>
-				<TbCameraPlus fontSize={20} color='#fff' />
+			<IconButton color='black' onClick={handleClick} className='absolute bottom-2 left-[10px]'>
+				<CameraIcon fontSize={20} />
 			</IconButton>
 
-			<Modal open={!!selectedPhoto} toggle={removeSelectedFile} width={625}>
+			<Modal open={!!selectedFile} toggle={removeSelectedFile} width={625}>
 				<>
 					<div className='text-center mb-3 max-w-[450px] m-auto'>
 						<h4 className='text-2xl font-medium mb-2 text-gray-900'>Looking good!</h4>
 						<p className='text-gray-800'>
-							This photo will be added to your profile. It will also be seen by hosts or
-							guest, so be sure it doesn’t include any personal or sensitive info.
+							This photo will be added to your profile. It will also be seen by hosts or guest, so
+							be sure it doesn’t include any personal or sensitive info.
 						</p>
 					</div>
 					<div className='flex flex-wrap justify-center items-center my-5'>
-						{selectedPhoto ? (
+						{!!selectedFile && (
 							<Image
-								src={URL.createObjectURL(selectedPhoto)}
+								src={URL.createObjectURL(selectedFile)}
 								alt='Avatar'
 								width={200}
 								height={200}
 								className='size-52 object-cover rounded-full'
 							/>
-						) : null}
+						)}
 					</div>
 					<div className='mt-3'>
-						<LoadingButton
-							variant='contained'
-							fullWidth
-							size='large'
-							loading={isLoading}
-							onClick={handleSubmit}
-						>
+						<Button fullWidth isLoading={isLoading} onClick={handleSubmit}>
 							Save
-						</LoadingButton>
-						<Button
-							variant='outlined'
-							fullWidth
-							sx={{ marginTop: '12px' }}
-							size='large'
-							onClick={onClick}
-						>
+						</Button>
+						<Button fullWidth variant='bordered' onClick={handleClick} className='mt-3'>
 							Change Photo
 						</Button>
 					</div>

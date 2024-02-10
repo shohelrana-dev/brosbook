@@ -2,18 +2,20 @@ import { Metadata } from 'next'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { ReactNode } from 'react'
-import Avatar from '~/components/global/Avatar'
-import SidebarLayout from '~/components/global/SidebarLayout'
-import TabLinkList from '~/components/global/TabLinkList'
+import { CgProfile as ProfileIcon } from 'react-icons/cg'
+import { MdOutlineManageAccounts as AccountIcon } from 'react-icons/md'
+import Avatar from '~/components/ui/Avatar'
+import SidebarLayout from '~/components/ui/SidebarLayout'
+import TabLinkList, { TabLink } from '~/components/ui/TabLinkList'
 import { getCurrentUser } from '~/services/index'
 
 export const metadata: Metadata = {
 	title: 'Your account',
 }
 
-const tabLinks = [
-	{ label: 'Account', pathname: '/account' },
-	{ label: 'Profile', pathname: '/account/profile' },
+const tabLinks: TabLink[] = [
+	{ label: 'Account', pathname: '/account', icon: <AccountIcon size={20} /> },
+	{ label: 'Profile', pathname: '/account/profile', icon: <ProfileIcon size={18} /> },
 ]
 
 interface Props {

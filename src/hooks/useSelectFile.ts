@@ -1,24 +1,24 @@
 import { ChangeEvent, useRef, useState } from 'react'
 
 export default function useSelectFile() {
-    const [selectedFile, setSelectedFile] = useState<Blob>()
-    const inputRef = useRef<HTMLInputElement | null>(null)
+	const inputRef = useRef<HTMLInputElement>(null)
+	const [selectedFile, setSelectedFile] = useState<Blob | null>(null)
 
-    function onChange(event: ChangeEvent<HTMLInputElement>) {
-        const files = event?.target?.files
+	function handleChange(event: ChangeEvent<HTMLInputElement>) {
+		setSelectedFile(event.target.files?.[0] || null)
+	}
 
-        if (files && files.length > 0) {
-            setSelectedFile(files[0])
-        }
-    }
+	function handleClick() {
+		inputRef.current?.click()
+	}
 
-    function onClick() {
-        inputRef.current?.click()
-    }
+	function removeSelectedFile() {
+		setSelectedFile(null)
 
-    function removeSelectedFile() {
-        setSelectedFile(undefined)
-    }
+		if (inputRef.current?.value) {
+			inputRef.current.value = ''
+		}
+	}
 
-    return { selectedFile, onChange, inputRef, onClick, removeSelectedFile }
+	return { inputRef, handleChange, selectedFile, handleClick, removeSelectedFile }
 }

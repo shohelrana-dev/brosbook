@@ -10,16 +10,20 @@ import isServer from '~/utils/isServer'
 export default function SinglePostPage({ initialPost }: { initialPost?: Post }) {
 	const { postId } = useParams<{ postId: string }>()
 	const { data = initialPost } = useGetPostByIdQuery(initialPost?.id || postId)
-	const loaded = useRef(false)
+	const loadedRef = useRef(false)
 
 	//prevent data fetch in client side if data already fetch in server side
-	if (initialPost?.id && !isServer && !loaded.current) {
+	if (initialPost?.id && !isServer && !loadedRef.current) {
 		store.dispatch(
 			postsApi.util.upsertQueryData('getPostById', initialPost.id || postId, { ...initialPost })
 		)
 
-		loaded.current = true
+		loadedRef.current = true
 	}
 
-	return <PostCard post={data!} initialCommentsVisible={true} />
+	return (
+		<div className='mx-2 lg:mx-0'>
+			<PostCard post={data!} initialCommentsVisible={true} />
+		</div>
+	)
 }

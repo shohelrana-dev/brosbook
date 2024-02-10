@@ -6,8 +6,16 @@ import { conversationsApi } from '~/services/conversationsApi'
 import { RootState } from '~/store/index'
 import { MESSAGES_PER_PAGE } from '~/utils/constants'
 import listQueryExtraDefinitions from '~/utils/listQueryExtraDefinitions'
-import { initSocket } from '~/utils/socket'
 import { baseApi } from './baseApi'
+
+interface MessagePayload {
+	conversationId: string
+	data: {
+		type: MessageType
+		body?: string
+		image?: Blob | null
+	}
+}
 
 export const messagesApi = baseApi.injectEndpoints({
 	endpoints: build => ({
@@ -19,8 +27,9 @@ export const messagesApi = baseApi.injectEndpoints({
 			...listQueryExtraDefinitions,
 			onCacheEntryAdded: async (arg, api) => {
 				const { updateCachedData, cacheEntryRemoved, cacheDataLoaded, getState, dispatch } = api
-				const currentUser = (getState() as RootState).auth.user
-				const socket = initSocket()
+				const rootState = getState() as RootState
+				const currentUser = rootState.auth.user
+				const socket = rootState.socket.socket
 
 				try {
 					await cacheDataLoaded
@@ -60,9 +69,9 @@ export const messagesApi = baseApi.injectEndpoints({
 						})
 					}
 
-					socket.on(`message.new`, newMessageListener)
-					socket.on(`message.update`, updateMessageListener)
-					socket.on(`message.seen`, updateMessageListener)
+					socket?.on(`message.new`, newMessageListener)
+					socket?.on(`message.update`, updateMessageListener)
+					socket?.on(`message.seen`, updateMessageListener)
 				} catch (err) {
 					await cacheEntryRemoved
 					throw err
@@ -70,13 +79,7 @@ export const messagesApi = baseApi.injectEndpoints({
 			},
 		}),
 
-		sendMessage: build.mutation<
-			Message,
-			{
-				conversationId: string
-				data: { type: MessageType; body?: string; image?: Blob }
-			}
-		>({
+		sendMessage: build.mutation<Message, MessagePayload>({
 			query: ({ conversationId, data }) => {
 				const body = new FormData()
 				body.append('type', data.type)
@@ -120,16 +123,15 @@ export const messagesApi = baseApi.injectEndpoints({
 			},
 		}),
 
-		sendReaction: build.mutation<
-			Message,
-			{ messageId: string; conversationId: string; name: string }
-		>({
-			query: ({ conversationId, messageId, ...data }) => ({
-				url: `/conversations/${conversationId}/messages/${messageId}/reactions`,
-				method: 'POST',
-				body: data,
-			}),
-		}),
+		sendReaction: build.mutation<Message, { messageId: string; conversationId: string; name: string }>(
+			{
+				query: ({ conversationId, messageId, ...data }) => ({
+					url: `/conversations/${conversationId}/messages/${messageId}/reactions`,
+					method: 'POST',
+					body: data,
+				}),
+			}
+		),
 
 		seenMessages: build.mutation<Message, string>({
 			query: conversationId => ({

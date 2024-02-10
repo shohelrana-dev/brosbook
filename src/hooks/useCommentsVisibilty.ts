@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import {
-	selectToggleCommentsVisibilityState,
-	toggleCommentsVisibility as toggleCommentsVisibilityAction,
-} from '~/slices/toggleCommentsVisibilitySlice'
+   toggleComments as toggleCommentsAction,
+   useToggleCommentsState,
+} from '~/slices/toggleCommentsSlice'
 
 export default function useCommentsVisibilty(postId: string, initialVisible = false) {
 	const [isCommentsVisible, steIsCommentsVisible] = useState(initialVisible)
-	const { postIds } = useSelector(selectToggleCommentsVisibilityState)
+	const { postIds } = useToggleCommentsState()
 	const dispatch = useDispatch()
 
 	useEffect(() => {
@@ -16,10 +16,10 @@ export default function useCommentsVisibilty(postId: string, initialVisible = fa
 		} else {
 			steIsCommentsVisible(false)
 		}
-	}, [postIds])
+	}, [postIds, postId])
 
 	function toggleCommentsVisibility() {
-		dispatch(toggleCommentsVisibilityAction(postId))
+		dispatch(toggleCommentsAction(postId))
 	}
 
 	return { isCommentsVisible, toggleCommentsVisibility }

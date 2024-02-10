@@ -5,9 +5,7 @@ export const metadata: Metadata = {
 	title: 'Reset Password',
 }
 
-type Props = {
-	params: { token: string }
-}
+type Props = { params: { token: string } }
 
 export default function ResetPasswordPage({ params }: Props) {
 	return <ResetPassword token={params.token} />

@@ -1,5 +1,5 @@
 'use client'
-import { Button } from '@mui/material';
+import { Button } from '@nextui-org/react';
 import { BiErrorCircle as ErrorIcon } from 'react-icons/bi';
 import { IoReload as ReloadIcon } from 'react-icons/io5';
 
@@ -12,7 +12,7 @@ export default function GlobalError({ error, reset }: { error: Error; reset: () 
 			<h2 className='text-lg font-bold text-gray-900 mb-3'>
 				An error has occured: {error.message}.
 			</h2>
-			<Button variant='contained' onClick={reset} className='flex flex-wrap'>
+			<Button color='primary' onClick={reset} className='flex flex-wrap'>
 				<ReloadIcon size={20} />
 				&nbsp;Try again
 			</Button>

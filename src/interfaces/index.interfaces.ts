@@ -3,8 +3,9 @@ import { User } from '~/interfaces/user.interfaces'
 
 export interface ErrorResponse {
 	data?: {
-		message: string
 		statusCode: number
+		message: string
+		errors?: { [name: string]: string }
 	}
 }
 

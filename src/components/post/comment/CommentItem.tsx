@@ -1,10 +1,10 @@
 import Link from 'next/link'
 import ShowMoreText from 'react-show-more-text'
 
-import Avatar from '~/components/global/Avatar'
 import LikeButton from '~/components/post/LikeButton'
 import LikesCount from '~/components/post/LikesCount'
 import CommentOptions from '~/components/post/comment/CommentOptions'
+import Avatar from '~/components/ui/Avatar'
 import useAuth from '~/hooks/useAuth'
 import useUnauthorizedAlert from '~/hooks/useUnauthorzedAlert'
 import { Comment, Post } from '~/interfaces/posts.interfaces'

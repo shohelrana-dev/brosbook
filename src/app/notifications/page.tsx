@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
-import SidebarLayout from '~/components/global/SidebarLayout'
 import NotificationList from '~/components/notifications/NotificationList'
+import SidebarLayout from '~/components/ui/SidebarLayout'
 
 export const metadata: Metadata = {
 	title: 'Notifications',

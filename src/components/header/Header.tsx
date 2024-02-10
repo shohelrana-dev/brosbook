@@ -1,5 +1,5 @@
 'use client'
-import { AppBar, Box, Button, IconButton } from '@mui/material'
+import { Navbar, NavbarBrand, NavbarContent } from '@nextui-org/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -9,6 +9,7 @@ import MessagesNavLink from '~/components/header/MessagesNavLink'
 import NotificationsNavLink from '~/components/header/NotificationsNavLink'
 import SearchButton from '~/components/header/SearchButton'
 import UserMenu from '~/components/header/UserMenu'
+import Button from '~/components/ui/Button'
 import useAuth from '~/hooks/useAuth'
 import useMediaQuery from '~/hooks/useMediaQuery'
 
@@ -18,25 +19,26 @@ export default function Header() {
 	const pathname = usePathname()
 
 	return (
-		<AppBar
-			variant='outlined'
-			color='default'
-			position='static'
-			elevation={0}
-			sx={{ background: '#fff', padding: '6px 10px', height: 65 }}
-		>
+		<Navbar className='h-navbar'>
 			<div className='container flex flex-wrap items-center justify-between text-gray-900'>
-				<Link href='/'>
-					{isScreenSmall ? (
-						<IconButton>
+				<NavbarBrand>
+					<Link href='/'>
+						{isScreenSmall ? (
 							<Image priority src={logo} alt={'Brosbook logo'} width={31} height={40} />
-						</IconButton>
-					) : (
-						<Image priority src={titledLogo} alt={'Brosbook logo'} width={150} height={40} />
-					)}
-				</Link>
-				<Box sx={{ display: 'flex', flexGrow: 1 }} />
-				<Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
+						) : (
+							<Image
+								priority
+								src={titledLogo}
+								alt={'Brosbook logo'}
+								width={135}
+								height={40}
+								className='max-w-36'
+							/>
+						)}
+					</Link>
+				</NavbarBrand>
+
+				<NavbarContent as='div' justify='end' className='gap-1'>
 					<SearchButton />
 					{isAuthenticated ? (
 						<>
@@ -47,17 +49,19 @@ export default function Header() {
 					) : (
 						<>
 							&nbsp;
-							<Link
+							<Button
+								as={Link}
 								href={`/auth/login${
 									pathname.startsWith('/auth') ? '' : '?redirect_to=' + pathname
 								}`}
+								size='sm'
 							>
-								<Button variant='contained'>Login</Button>
-							</Link>
+								Login
+							</Button>
 						</>
 					)}
-				</Box>
+				</NavbarContent>
 			</div>
-		</AppBar>
+		</Navbar>
 	)
 }

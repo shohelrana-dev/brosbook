@@ -1,17 +1,16 @@
 'use client'
 import { useEffect, useState } from 'react'
 import useInfiniteScroll from 'react-infinite-scroll-hook'
-import Error from '~/components/global/Error'
-import Transition from '~/components/global/Transition'
 import NotificationsSkeleton from '~/components/skeletons/NotificationsSkeleton'
+import Error from '~/components/ui/Error'
+import Transition from '~/components/ui/Transition'
 import useAuth from '~/hooks/useAuth'
-import { ErrorResponse, Notification } from '~/interfaces/index.interfaces'
+import { Notification } from '~/interfaces/index.interfaces'
 import { useGetNotificationsQuery, useReadAllNotificationMutation } from '~/services/notificationsApi'
+import { getErrorData } from '~/utils/error'
 import NotificationItem from './NotificationItem'
 
-interface Props {
-	skeletonCount?: number
-}
+type Props = { skeletonCount?: number }
 
 export default function NotificationList({ skeletonCount }: Props) {
 	const [page, setPage] = useState(1)
@@ -19,16 +18,16 @@ export default function NotificationList({ skeletonCount }: Props) {
 	const [readAllNotification] = useReadAllNotificationMutation()
 	const { isAuthenticated } = useAuth({ require: true })
 
-	const { data: notificationsData, isLoading, isSuccess, isError } = notificationsQuery || {}
-	const { items: notifications = [], nextPage } = notificationsData || {}
-	const error = (notificationsQuery.error as ErrorResponse) || {}
-	const firstNotification = notifications[0] || {}
+	const { data: notificationsData, isLoading, isSuccess, isError, error } = notificationsQuery
+	const { items: notifications, nextPage } = notificationsData || {}
+	const { message } = getErrorData(error) || {}
+	const firstNotification = notifications?.[0]
 
 	useEffect(() => {
-		if (isSuccess && firstNotification.id && !firstNotification.readAt) {
+		if (firstNotification?.id && !firstNotification.readAt) {
 			readAllNotification()
 		}
-	}, [isSuccess, firstNotification])
+	}, [firstNotification, readAllNotification])
 
 	const [moreLoadRef] = useInfiniteScroll({
 		loading: isLoading,
@@ -42,11 +41,11 @@ export default function NotificationList({ skeletonCount }: Props) {
 	let content = null
 	if (isLoading) {
 		content = <NotificationsSkeleton count={skeletonCount} />
-	} else if (isSuccess && notifications.length === 0) {
-		content = <p className='ml-2'>No notifications</p>
 	} else if (isError) {
-		content = <Error message={error?.data?.message} />
-	} else if (isSuccess && notifications.length > 0) {
+		content = <Error message={message} />
+	} else if (isSuccess && notifications && notifications.length === 0) {
+		content = <p className='ml-2'>No notifications</p>
+	} else if (isSuccess && notifications && notifications.length > 0) {
 		content = (
 			<Transition>
 				{notifications.map((notification: Notification) => (
@@ -60,11 +59,11 @@ export default function NotificationList({ skeletonCount }: Props) {
 		<>
 			{content}
 
-			{nextPage ? (
+			{!!nextPage && (
 				<div ref={moreLoadRef}>
 					<NotificationsSkeleton count={3} />
 				</div>
-			) : null}
+			)}
 		</>
 	)
 }

@@ -1,32 +1,36 @@
-import { Popover } from '@mui/material'
-import PopupState, { bindPopover, bindTrigger } from 'material-ui-popup-state'
+import { Popover, PopoverContent } from '@nextui-org/react'
 import { useRouter } from 'next/navigation'
-import { useEffect, useRef } from 'react'
-import toast from 'react-hot-toast'
+import { useEffect, useRef, useState } from 'react'
+import { BiSearch as SearchIcon } from 'react-icons/bi'
 import { useConfirmAlert } from 'react-use-confirm-alert'
-import { useDebounce } from 'use-debounce'
+import { toast } from 'sonner'
 import BasicInput from '~/components/form/BasicInput'
-import SearchUserList from '~/components/global/SearchUserList'
+import SearchUserList from '~/components/ui/SearchUserList'
+import useFocus from '~/hooks/useFocus'
 import useInputValue from '~/hooks/useInputValue'
 import { User } from '~/interfaces/user.interfaces'
 import {
-	useCreateConversationMutation,
-	useLazyGetConversationByParticipantIdQuery,
+   useCreateConversationMutation,
+   useLazyGetConversationByParticipantIdQuery,
 } from '~/services/conversationsApi'
-import cn from '~/utils/cn'
 
 export default function SearchConversation() {
 	const [searchText, handleInputChange, resetSearchText] = useInputValue('')
-	const [dSearchText] = useDebounce<string>(searchText, 1000)
 	const [getConversationByParticipantId] = useLazyGetConversationByParticipantIdQuery()
 	const [createConversation] = useCreateConversationMutation()
 	const router = useRouter()
 	const confirmAlert = useConfirmAlert()
-	const inputRef = useRef<HTMLInputElement>()
+	const { inputRef, isFocused } = useFocus()
+	const triggerRef = useRef<HTMLSpanElement>(null)
+	const [isOpen, setIsOpen] = useState(false)
+
+	useEffect(() => {
+		isFocused && setIsOpen(true)
+	}, [isFocused])
 
 	async function handleUserClick(user: User) {
 		try {
-			const conversation: any = await getConversationByParticipantId(user.id).unwrap()
+			const conversation = await getConversationByParticipantId(user.id).unwrap()
 			router.push(`/messages/${conversation.id}`)
 		} catch (e) {
 			confirmAlert({
@@ -35,7 +39,7 @@ export default function SearchConversation() {
 				confirmButtonLabel: 'Create',
 				onConfirm: async () => {
 					try {
-						const conversation: any = await createConversation(user.id).unwrap()
+						const conversation = await createConversation(user.id).unwrap()
 						router.push(`/messages/${conversation.id}`)
 					} catch (err) {
 						console.error(err)
@@ -48,47 +52,48 @@ export default function SearchConversation() {
 		}
 	}
 
+	function handleOpenChange(open: boolean) {
+		!open && inputRef.current?.blur()
+		setIsOpen(open)
+	}
+
+	const innerWrapperWidth = triggerRef.current?.querySelector(
+		'[data-slot="inner-wrapper"]'
+	)?.clientWidth
+
 	return (
-		<PopupState variant='popover' disableAutoFocus>
-			{popupState => {
-				const { isOpen } = popupState
+		<Popover
+			placement='bottom'
+			isOpen={isOpen}
+			onOpenChange={handleOpenChange}
+			triggerRef={triggerRef}
+			showArrow
+		>
+			<span ref={triggerRef}>
+				<BasicInput
+					className='z-99'
+					placeholder='Search Conversation'
+					aria-label='Search Conversation'
+					onChange={handleInputChange}
+					value={searchText}
+					autoComplete='off'
+					startContent={<SearchIcon className='text-default-400' size={18} />}
+					ref={inputRef}
+					isClearable
+					onClear={resetSearchText}
+				/>
+			</span>
 
-				//eslint-disable-next-line
-				useEffect(() => {
-					isOpen && inputRef.current?.focus()
-				}, [isOpen])
-
-				return (
-					<div className={cn('mb-3', { 'relative z-9999': isOpen })}>
-						<BasicInput
-							{...bindTrigger(popupState)}
-							label='Search user'
-							labelHide={true}
-							onChange={handleInputChange}
-							autoComplete='off'
-							inputRef={inputRef}
-						/>
-						<Popover
-							{...bindPopover(popupState)}
-							anchorOrigin={{
-								vertical: 'bottom',
-								horizontal: 'center',
-							}}
-							transformOrigin={{
-								vertical: 'top',
-								horizontal: 'center',
-							}}
-							sx={{ '& .MuiPaper-root': { width: `${inputRef.current?.offsetWidth}px` } }}
-						>
-							<SearchUserList
-								searchText={dSearchText}
-								handleUserClick={handleUserClick}
-								hideFollowButton
-							/>
-						</Popover>
-					</div>
-				)
-			}}
-		</PopupState>
+			<PopoverContent tabIndex={null!}>
+				<SearchUserList
+					searchText={searchText}
+					onUserClick={handleUserClick}
+					hideFollowButton
+					style={{
+						width: innerWrapperWidth ? innerWrapperWidth + 10 : undefined,
+					}}
+				/>
+			</PopoverContent>
+		</Popover>
 	)
 }

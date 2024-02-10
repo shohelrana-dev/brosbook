@@ -1,9 +1,9 @@
 'use client'
 import { useParams } from 'next/navigation'
 import { PropsWithChildren } from 'react'
-import Loader from '~/components/global/Loader'
 import Conversations from '~/components/messages/Conversations'
 import ParticipantInfo from '~/components/messages/ParticipantInfo'
+import Loader from '~/components/ui/Loader'
 import useAuth from '~/hooks/useAuth'
 import useMediaQuery from '~/hooks/useMediaQuery'
 import useMount from '~/hooks/useMount'
@@ -42,14 +42,12 @@ export default function Layout({ children }: PropsWithChildren) {
 	} else if (isScreenLarge) {
 		//conversations page
 		content = (
-			<main className='grid grid-cols-1 md:grid-cols-[1fr_3fr]  xl:grid-cols-[1fr_4fr]'>
-				{children}
+			<main className='grid grid-cols-1 md:grid-cols-[1fr_3fr] xl:grid-cols-[1fr_4fr]'>
+				<div>{children}</div>
 
 				<div className='hidden md:block pl-4 py-6 border-l-2 border-gray-200'>
 					<h3 className='text-2xl font-bold'>Select a message</h3>
-					<p>
-						Choose from your existing conversations, start a new one, or just keep swimming.
-					</p>
+					<p>Choose from your existing conversations, start a new one, or just keep swimming.</p>
 				</div>
 			</main>
 		)

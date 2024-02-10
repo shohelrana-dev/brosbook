@@ -1,13 +1,13 @@
 'use client'
-import { LoadingButton } from '@mui/lab'
-import { Button, IconButton } from '@mui/material'
 import Image from 'next/image'
-import { ChangeEvent, useState } from 'react'
-import toast from 'react-hot-toast'
-import { TbCameraPlus } from 'react-icons/tb'
+import { useState } from 'react'
+import { TbCameraPlus as CameraIcon } from 'react-icons/tb'
 import Modal from 'react-minimal-modal'
+import { toast } from 'sonner'
 import placeholderCoverPhoto from '~/assets/images/placeholder-cover-photo.png'
-import ImageLightbox from '~/components/global/ImageLightbox'
+import Button from '~/components/ui/Button'
+import IconButton from '~/components/ui/IconButton'
+import Lightbox from '~/components/ui/Lightbox'
 import useAuth from '~/hooks/useAuth'
 import useSelectFile from '~/hooks/useSelectFile'
 import { Media } from '~/interfaces/index.interfaces'
@@ -20,20 +20,14 @@ export default function CoverPhoto({ user }: Props) {
 	const { user: currentUser } = useAuth()
 	const [changeCoverPhoto, { isLoading }] = useChangeCoverPhotoMutation()
 	const [coverPhoto, setCoverPhoto] = useState<Media | undefined>(user.profile?.coverPhoto)
-	const {
-		inputRef,
-		selectedFile: selectedPhoto,
-		removeSelectedFile,
-		onClick,
-		onChange,
-	} = useSelectFile()
+	const { inputRef, selectedFile, removeSelectedFile, handleClick, handleChange } = useSelectFile()
 
 	async function handleSubmit() {
-		if (!selectedPhoto) return
+		if (!selectedFile) return
 
 		try {
 			const formData = new FormData()
-			formData.append('coverPhoto', selectedPhoto)
+			formData.append('coverPhoto', selectedFile)
 			const data = await changeCoverPhoto(formData).unwrap()
 
 			removeSelectedFile()
@@ -45,21 +39,21 @@ export default function CoverPhoto({ user }: Props) {
 		}
 	}
 
-	function fileInputChangeHandle(event: ChangeEvent<HTMLInputElement>) {
-		onChange(event)
-	}
-
 	if (user.id !== currentUser?.id) {
 		return (
 			<div className='flex-none'>
 				{coverPhoto ? (
-					<ImageLightbox
-						className='object-cover !h-[200px] !lg:h-[300px]'
-						image={coverPhoto}
-						width={600}
-						height={300}
-						alt='cover photo'
-					/>
+					<Lightbox>
+						<a href={coverPhoto.url}>
+							<Image
+								src={coverPhoto.url}
+								width={600}
+								height={300}
+								alt='cover photo'
+								className='object-cover h-[200px] lg:h-[300px]'
+							/>
+						</a>
+					</Lightbox>
 				) : (
 					<Image
 						src={placeholderCoverPhoto}
@@ -80,18 +74,22 @@ export default function CoverPhoto({ user }: Props) {
 				name='photo'
 				type='file'
 				accept='image/*'
-				onChange={fileInputChangeHandle}
+				onChange={handleChange}
 				ref={inputRef}
 			/>
 			<div>
 				{coverPhoto ? (
-					<ImageLightbox
-						image={coverPhoto}
-						width={600}
-						height={300}
-						className='object-cover !h-[200px] !lg:h-[300px]'
-						alt='cover photo'
-					/>
+					<Lightbox>
+						<a href={coverPhoto.url}>
+							<Image
+								src={coverPhoto.url}
+								width={600}
+								height={300}
+								className='object-cover h-[200px] lg:h-[300px]'
+								alt='cover photo'
+							/>
+						</a>
+					</Lightbox>
 				) : (
 					<Image
 						src={placeholderCoverPhoto}
@@ -104,24 +102,18 @@ export default function CoverPhoto({ user }: Props) {
 			</div>
 
 			<IconButton
-				onClick={onClick}
-				sx={{
-					position: 'absolute',
-					bottom: '8px',
-					right: '10px',
-					background: 'rgba(0, 0, 0, 0.9)',
-					'&:hover': { background: 'rgba(0, 0, 0, 0.7)' },
-				}}
+				onClick={handleClick}
+				className='absolute bottom-2 right-[10px] bg-black hover:!bg-black/70 text-white'
 			>
-				<TbCameraPlus fontSize={25} color='#fff' />
+				<CameraIcon fontSize={25} />
 			</IconButton>
 
-			<Modal open={!!selectedPhoto} toggle={removeSelectedFile} width={625}>
+			<Modal open={!!selectedFile} toggle={removeSelectedFile} width={625}>
 				<>
 					<h3 className='text-xl font-medium text-gray-900 text-center'>Choose cover photo</h3>
-					{selectedPhoto ? (
+					{selectedFile ? (
 						<Image
-							src={URL.createObjectURL(selectedPhoto)}
+							src={URL.createObjectURL(selectedFile)}
 							alt='Cover photo'
 							height={200}
 							width={500}
@@ -129,21 +121,16 @@ export default function CoverPhoto({ user }: Props) {
 						/>
 					) : null}
 					<div className='mt-3'>
-						<LoadingButton
-							variant='contained'
-							size='large'
-							loading={isLoading}
-							fullWidth
-							onClick={handleSubmit}
-						>
+						<Button isLoading={isLoading} fullWidth onClick={handleSubmit}>
 							Save
-						</LoadingButton>
+						</Button>
 						<Button
-							variant='outlined'
-							size='large'
-							sx={{ marginTop: '12px' }}
+							color='primary'
+							variant='bordered'
+							radius='full'
 							fullWidth
-							onClick={onClick}
+							onClick={handleClick}
+							className='mt-3'
 						>
 							Change Photo
 						</Button>

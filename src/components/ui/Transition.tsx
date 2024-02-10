@@ -1,12 +1,10 @@
 'use client'
 import { MotionProps, motion } from 'framer-motion'
-import { ReactNode } from 'react'
+import { HTMLAttributes } from 'react'
 
-interface Props extends MotionProps {
-	children: ReactNode
-}
+interface Props extends HTMLAttributes<HTMLDivElement> {}
 
-export default function Transition({ children, ...rest }: Props) {
+export default function Transition({ children, ...rest }: Props & MotionProps) {
 	return (
 		<motion.div
 			initial={{ opacity: 0, y: 10 }}

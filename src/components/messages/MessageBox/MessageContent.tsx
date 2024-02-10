@@ -1,7 +1,8 @@
 import Linkify from 'linkify-react'
 import moment from 'moment'
-import ImageLightbox from '~/components/global/ImageLightbox'
+import Image from 'next/image'
 import Reactions from '~/components/messages/MessageBox/Reactions'
+import Lightbox from '~/components/ui/Lightbox'
 import { Message } from '~/interfaces/conversation.interfaces'
 import cn from '~/utils/cn'
 
@@ -59,7 +60,11 @@ export default function MessageContent({ message }: Props) {
 			return (
 				<div className={classes.imageMessage}>
 					<Reactions message={message} />
-					<ImageLightbox image={image} width='300' height='200' alt='message image' />
+					<Lightbox>
+						<a href={image?.url}>
+							<Image src={image?.url!} width='300' height='200' alt='Message Photo' />
+						</a>
+					</Lightbox>
 					{timeMarkup}
 				</div>
 			)

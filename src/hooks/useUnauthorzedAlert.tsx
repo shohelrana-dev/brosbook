@@ -1,9 +1,9 @@
-import { Button } from '@mui/material'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { createContext, PropsWithChildren, useContext, useState } from 'react'
 import { BiLogInCircle as LoginIcon } from 'react-icons/bi'
 import Modal, { useToggle } from 'react-minimal-modal'
+import Button from '~/components/ui/Button'
 
 export interface Options {
 	title: string
@@ -11,7 +11,7 @@ export interface Options {
 }
 
 //@ts-ignore
-const UnauthorizedPopupContext = createContext<(options: Options) => void>(null)
+const UnauthorizedPopupContext = createContext<(options: Options) => void | null>(null)
 
 export function UnauthorizedPopupProvider({ children }: PropsWithChildren) {
 	const [options, setOptions] = useState<Options>()
@@ -36,20 +36,23 @@ export function UnauthorizedPopupProvider({ children }: PropsWithChildren) {
 						<p className='text-gray-700'>{options?.message}</p>
 					</div>
 					<div className='w-full mt-4'>
-						<Link
-							onClick={toggle}
+						<Button
+							as={Link}
 							href={`/auth/login?redirect_to=${pathname}`}
-							className='mb-3 w-full inline-block'
+							fullWidth
+							className='mb-3'
 						>
-							<Button variant='contained' size='large' fullWidth>
-								Log in
-							</Button>
-						</Link>
-						<Link onClick={toggle} href='/auth/signup' className='w-full inline-block'>
-							<Button variant='outlined' size='large' fullWidth>
-								Sign up
-							</Button>
-						</Link>
+							Log in
+						</Button>
+						<Button
+							as={Link}
+							href='/auth/signup'
+							variant='bordered'
+							fullWidth
+							onClick={toggle}
+						>
+							Sign up
+						</Button>
 					</div>
 				</div>
 			</Modal>
@@ -58,5 +61,11 @@ export function UnauthorizedPopupProvider({ children }: PropsWithChildren) {
 }
 
 export default function useUnauthorizedAlert() {
-	return useContext(UnauthorizedPopupContext)
+	const context = useContext(UnauthorizedPopupContext)
+
+	if (!context) {
+		throw new Error('Please Use UnauthorizedPopupProvider in parent component.')
+	}
+
+	return context
 }

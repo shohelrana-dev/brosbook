@@ -1,20 +1,19 @@
-import { Popover } from '@mui/material'
-import PopupState, { bindPopover, bindTrigger } from 'material-ui-popup-state'
+import { Dropdown, DropdownItem, DropdownMenu, PopoverTrigger } from '@nextui-org/react'
 import { useState } from 'react'
-import toast from 'react-hot-toast'
 import { AiOutlineUserAdd as FollowIcon } from 'react-icons/ai'
 import { BsThreeDots as ThreeDotsIcon } from 'react-icons/bs'
 import { RiDeleteBin5Line as DeleteIcon, RiUserUnfollowLine as UnfollowIcon } from 'react-icons/ri'
-
-import { IconButton } from '@mui/material'
 import { useConfirmAlert } from 'react-use-confirm-alert'
-import OptionButton from '~/components/global/OptionButton'
+import { toast } from 'sonner'
+import IconButton from '~/components/ui/IconButton'
+import Tooltip from '~/components/ui/Tooltip'
 import useAuth from '~/hooks/useAuth'
 import useUnauthorizedAlert from '~/hooks/useUnauthorzedAlert'
 import { Comment } from '~/interfaces/posts.interfaces'
 import { User } from '~/interfaces/user.interfaces'
 import { useDeleteCommentMutation } from '~/services/commentsApi'
 import { useFollowMutation, useUnfollowMutation } from '~/services/usersApi'
+import siteMetadata from '~/utils/siteMetadata'
 
 interface Props {
 	isCurrentUserAuthor: boolean
@@ -50,7 +49,7 @@ export default function CommentOptions({ comment, isCurrentUserAuthor }: Props) 
 	async function handleFollow() {
 		if (!isAuthenticated) {
 			unauthorizedAlert({
-				title: `Follow ${author.fullName} to see what they share on ${process.env.NEXT_PUBLIC_APP_NAME}.`,
+				title: `Follow ${author.fullName} to see what they share on ${siteMetadata.appName}.`,
 				message: `Sign up so you never miss their Posts.`,
 			})
 			return
@@ -78,47 +77,39 @@ export default function CommentOptions({ comment, isCurrentUserAuthor }: Props) 
 	}
 
 	return (
-		<PopupState variant='popover'>
-			{popupState => (
-				<>
-					<div>
-						<IconButton {...bindTrigger(popupState)}>
-							<ThreeDotsIcon size='18' />
-						</IconButton>
-					</div>
+		<Dropdown placement='bottom'>
+			<Tooltip content='Comment options'>
+				<PopoverTrigger>
+					<IconButton>
+						<ThreeDotsIcon size='18' />
+					</IconButton>
+				</PopoverTrigger>
+			</Tooltip>
 
-					<Popover
-						{...bindPopover(popupState)}
-						anchorOrigin={{
-							vertical: 'bottom',
-							horizontal: 'center',
-						}}
-						transformOrigin={{
-							vertical: 'top',
-							horizontal: 'right',
-						}}
-					>
-						<div className='min-w-[130px]'>
-							{isCurrentUserAuthor ? (
-								<OptionButton onClick={handleDeleteComment}>
-									<DeleteIcon size='18' className='mr-2' />
-									Delete
-								</OptionButton>
-							) : author.isViewerFollow ? (
-								<OptionButton onClick={handleUnfollowClick}>
-									<UnfollowIcon size='18' className='mr-2' />
-									Unfollow @{author.username}
-								</OptionButton>
-							) : (
-								<OptionButton onClick={handleFollow}>
-									<FollowIcon size='18' className='mr-2' />
-									Follow @{author.username}
-								</OptionButton>
-							)}
-						</div>
-					</Popover>
-				</>
-			)}
-		</PopupState>
+			<DropdownMenu variant='faded' aria-label='Comment options'>
+				{isCurrentUserAuthor ? (
+					<DropdownItem
+						key='delete'
+						onClick={handleDeleteComment}
+						startContent={<DeleteIcon size='18' />}
+						title='Delete'
+					/>
+				) : author.isViewerFollow ? (
+					<DropdownItem
+						key='unfollow'
+						onClick={handleUnfollowClick}
+						startContent={<UnfollowIcon size='18' />}
+						title={`Unfollow @${author.username}`}
+					/>
+				) : (
+					<DropdownItem
+						key='follow'
+						onClick={handleFollow}
+						startContent={<FollowIcon size='18' />}
+						title={`Follow @${author.username}`}
+					/>
+				)}
+			</DropdownMenu>
+		</Dropdown>
 	)
 }

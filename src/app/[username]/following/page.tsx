@@ -1,13 +1,13 @@
 'use client'
 import { useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import Error from '~/components/global/Error'
-import Transition from '~/components/global/Transition'
-import UserItem from '~/components/global/UserItem'
 import UsersSkeleton from '~/components/skeletons/UsersSkeleton'
-import { ErrorResponse } from '~/interfaces/index.interfaces'
+import Error from '~/components/ui/Error'
+import Transition from '~/components/ui/Transition'
+import UserItem from '~/components/ui/UserItem'
 import { User } from '~/interfaces/user.interfaces'
 import { useGetFollowingsQuery, useGetUserByUsernameQuery } from '~/services/usersApi'
+import { getErrorData } from '~/utils/error'
 
 interface Props {
 	params: { username: string }
@@ -19,19 +19,19 @@ export default function FollowingPage({ params }: Props) {
 	const { data: user } = useGetUserByUsernameQuery(params.username)
 	const followingsQuery = useGetFollowingsQuery({ userId: user?.id!, page }, { skip: !user?.id })
 
-	const { data: followersData, isLoading, isSuccess, isError } = followingsQuery || {}
-	const { items: followings = [], nextPage } = followersData || {}
-	const error = (followingsQuery.error as ErrorResponse) || {}
+	const { data: followingsData, isLoading, isSuccess, isError, error } = followingsQuery
+	const { items: followings, nextPage } = followingsData || {}
+	const { message } = getErrorData(error) || {}
 
 	//decide content
 	let content = null
 	if (isLoading) {
 		content = <UsersSkeleton />
-	} else if (isSuccess && followings.length === 0) {
+	} else if (isSuccess && followings && followings.length === 0) {
 		content = <p className='text-center'>{user?.fullName}&apos;s haven&apos;t following.</p>
 	} else if (isError) {
-		content = <Error message={error?.data?.message} />
-	} else if (isSuccess && followings.length > 0) {
+		content = <Error message={message} />
+	} else if (isSuccess && followings && followings.length > 0) {
 		content = (
 			<Transition>
 				<InfiniteScroll

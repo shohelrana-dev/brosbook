@@ -1,15 +1,15 @@
 'use client'
-import { IconButton } from '@mui/material'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { BiInfoCircle as InfoIcon } from 'react-icons/bi'
 import { RxCross1 as CrossIcon } from 'react-icons/rx'
 import Modal, { useToggle } from 'react-minimal-modal'
-import Avatar from '~/components/global/Avatar'
-import Loader from '~/components/global/Loader'
-import CreateMessageForm from '~/components/messages/MessageBox/CreateMessageForm'
 import MessageList from '~/components/messages/MessageBox/MessageList'
+import CreateMessageForm from '~/components/messages/MessageBox/form/CreateMessageForm'
 import ParticipantInfo from '~/components/messages/ParticipantInfo'
+import Avatar from '~/components/ui/Avatar'
+import IconButton from '~/components/ui/IconButton'
+import Loader from '~/components/ui/Loader'
 import { useGetConversationByIdQuery } from '~/services/conversationsApi'
 import timeAgo from '~/utils/timeAgo'
 
@@ -34,14 +34,7 @@ export default function MessageBox() {
 	return (
 		<div className={classes.wrapper}>
 			<Modal className={classes.modal} open={isOpen} toggle={toggle} hideIcon>
-				<IconButton
-					sx={{
-						position: 'absolute',
-						top: '8px',
-						right: '8px',
-					}}
-					onClick={toggle}
-				>
+				<IconButton className='absolute top-2 right-2' onClick={toggle}>
 					<CrossIcon size={18} />
 				</IconButton>
 

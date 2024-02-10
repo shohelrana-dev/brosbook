@@ -1,22 +1,22 @@
 'use client'
-import { Button } from '@mui/material'
 import Link from 'next/link'
-import Error from '~/components/global/Error'
-import UserItem from '~/components/global/UserItem'
 import UsersSkeleton from '~/components/skeletons/UsersSkeleton'
+import Button from '~/components/ui/Button'
+import Error from '~/components/ui/Error'
+import UserItem from '~/components/ui/UserItem'
 import WidgetLayout from '~/components/widgets/WidgetLayout'
 import useAuth from '~/hooks/useAuth'
-import { ErrorResponse } from '~/interfaces/index.interfaces'
 import { User } from '~/interfaces/user.interfaces'
 import { useGetSuggestedUsersQuery } from '~/services/usersApi'
+import { getErrorData } from '~/utils/error'
 
 export default function SuggestedPeople() {
 	const { isAuthenticated } = useAuth()
 	const suggestedUsersQuery = useGetSuggestedUsersQuery({ page: 1, limit: 6 })
 
-	const { isError, isLoading } = suggestedUsersQuery
+	const { isError, isLoading, isSuccess, error } = suggestedUsersQuery
 	const { items: users, nextPage } = suggestedUsersQuery?.data || {}
-	const error = (suggestedUsersQuery.error || {}) as ErrorResponse
+	const { message } = getErrorData(error) || {}
 
 	if (!isAuthenticated) return null
 
@@ -25,10 +25,10 @@ export default function SuggestedPeople() {
 	if (isLoading) {
 		content = <UsersSkeleton count={2} />
 	} else if (isError) {
-		content = <Error message={error?.data?.message} />
-	} else if (users && users.length === 0) {
+		content = <Error message={message} />
+	} else if (isSuccess && users && users.length === 0) {
 		content = <p>No suggestions</p>
-	} else if (users && users.length > 0) {
+	} else if (isSuccess && users && users.length > 0) {
 		content = users.map((user: User) => <UserItem user={user} key={user.id} />)
 	}
 
@@ -36,11 +36,11 @@ export default function SuggestedPeople() {
 		<WidgetLayout title='Suggestions for you'>
 			{content}
 
-			{!!nextPage ? (
-				<Link href='/suggestions'>
-					<Button>See More</Button>
-				</Link>
-			) : null}
+			{!!nextPage && (
+				<Button as={Link} href='/suggestions'>
+					See More
+				</Button>
+			)}
 		</WidgetLayout>
 	)
 }

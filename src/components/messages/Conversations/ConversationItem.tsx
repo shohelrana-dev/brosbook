@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { IoCheckmarkCircleOutline as TickIcon } from 'react-icons/io5'
 import TextOverflow from 'react-text-overflow'
-import Avatar from '~/components/global/Avatar'
+import Avatar from '~/components/ui/Avatar'
 import useAuth from '~/hooks/useAuth'
 import { Conversation } from '~/interfaces/conversation.interfaces'
 import cn from '~/utils/cn'
@@ -50,10 +50,10 @@ export default function ConversationItem({ conversation }: Props) {
 		<Link href={`/messages/${conversation.id}`} className={classes.card({ isActiveConversation })}>
 			<Avatar online={active} alt={fullName} src={avatar?.url} />
 			<div className='w-full'>
-				<h3 className={classes.nameWrapper}>
+				<div className={classes.nameWrapper}>
 					<h3 className={classes.name}>{fullName}</h3>
 					<p className={classes.date}>{timeAgo(lastMessage?.createdAt!)}</p>
-				</h3>
+				</div>
 				<div className={classes.messageWrapper}>
 					<p className={classes.messageText(!isLastMessageSenderMe && !lastMessage?.seenAt)}>
 						{messageBody ? <TextOverflow text={messageBody} /> : null}

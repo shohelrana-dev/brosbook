@@ -1,39 +1,8 @@
-import { OutlinedInputProps, TextField, TextFieldProps, alpha, styled } from '@mui/material'
-import { ReactNode } from 'react'
+import { Input, InputProps } from '@nextui-org/react'
+import { MdReportGmailerrorred as ErrorIcon } from 'react-icons/md'
 import ucfirst from '~/utils/ucfirst'
 
-interface CustomTextFieldProps {
-	endAdornment?: ReactNode
-}
-
-const CustomTextField = styled(
-	({ endAdornment, ...restProps }: TextFieldProps & CustomTextFieldProps) => (
-		<TextField
-			InputProps={{ disableUnderline: true, endAdornment } as Partial<OutlinedInputProps>}
-			{...restProps}
-		/>
-	)
-)(({ theme }) => ({
-	'& .MuiFilledInput-root': {
-		overflow: 'hidden',
-		borderRadius: 4,
-		backgroundColor: theme.palette.mode === 'light' ? '#F3F6F9' : '#1A2027',
-		border: '1px solid',
-		borderColor: theme.palette.mode === 'light' ? '#E0E3E7' : '#2D3843',
-		transition: theme.transitions.create(['border-color', 'background-color', 'card-shadow']),
-		'&:hover': {
-			backgroundColor: 'transparent',
-		},
-		'&.Mui-focused': {
-			backgroundColor: 'transparent',
-			boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 2px`,
-			borderColor: theme.palette.primary.main,
-		},
-	},
-}))
-
-export interface AnimatedInputProps
-	extends Omit<TextFieldProps & CustomTextFieldProps, 'error' | 'fullWidth' | 'id' | 'helperText'> {
+export interface AnimatedInputProps extends InputProps {
 	error?: string
 }
 
@@ -41,16 +10,23 @@ export default function AnimatedInput(props: AnimatedInputProps) {
 	let { label, name, error, size = 'medium', ...rest } = props
 
 	name = name ? name : (label as string).toLowerCase().replace(' ', '')
+	const isError = !!error
 
 	return (
-		<CustomTextField
+		<Input
+			type='text'
 			label={label}
-			id={name}
+			variant='bordered'
 			name={name}
-			error={error ? true : false}
-			variant='filled'
-			fullWidth
-			helperText={ucfirst(error)}
+			isInvalid={isError}
+			color='primary'
+			classNames={{
+				label: 'font-medium',
+				inputWrapper: 'bg-[#F3F6F9] hover:bg-white',
+				errorMessage: 'font-medium',
+			}}
+			errorMessage={ucfirst(error)}
+			endContent={isError && <ErrorIcon size={18} className='text-red-600 self-center' />}
 			{...rest}
 		/>
 	)

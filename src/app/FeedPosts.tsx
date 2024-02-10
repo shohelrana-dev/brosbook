@@ -1,8 +1,8 @@
 'use client'
 import { useRef, useState } from 'react'
-import Error from '~/components/global/Error'
 import PostList from '~/components/post/PostList'
 import PostsSkeleton from '~/components/skeletons/PostsSkeleton'
+import Error from '~/components/ui/Error'
 import { ErrorResponse, ListResponse } from '~/interfaces/index.interfaces'
 import { Post } from '~/interfaces/posts.interfaces'
 import { postsApi, useGetFeedPostsQuery } from '~/services/postsApi'
@@ -17,16 +17,16 @@ export default function FeedPosts({ initialPostsData }: Props) {
 	//hooks
 	const [page, setPage] = useState<number>(1)
 	const feedPostsQuery = useGetFeedPostsQuery(page)
-	const loaded = useRef(false)
+	const loadedRef = useRef(false)
 
-	const { isLoading, isError, data = initialPostsData } = feedPostsQuery || {}
+	const { isLoading, isSuccess, isError, data = initialPostsData } = feedPostsQuery
 	const { items: posts, nextPage } = data || {}
 	const error = (feedPostsQuery.error as ErrorResponse) || {}
 
 	//prevent data fetch in client side if data already fetch in server side
-	if (initialPostsData?.currentPage && !isServer && !loaded.current) {
+	if (initialPostsData?.currentPage && !isServer && !loadedRef.current) {
 		store.dispatch(postsApi.util.upsertQueryData('getFeedPosts', page, { ...initialPostsData }))
-		loaded.current = true
+		loadedRef.current = true
 	}
 
 	//decide content

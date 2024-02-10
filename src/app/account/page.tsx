@@ -1,8 +1,8 @@
 'use client'
-import { Button } from '@mui/material'
+import { Button } from '@nextui-org/react'
 import Link from 'next/link'
 import TextOverflow from 'react-text-overflow'
-import Transition from '~/components/global/Transition'
+import Transition from '~/components/ui/Transition'
 import useAuth from '~/hooks/useAuth'
 
 export default function GeneralSettingsPage() {
@@ -28,7 +28,7 @@ export default function GeneralSettingsPage() {
 						</p>
 					</div>
 					<div>
-						<Button variant='outlined' disabled>
+						<Button color='primary' variant='bordered' radius='full' isDisabled>
 							Change
 						</Button>
 					</div>
@@ -41,9 +41,15 @@ export default function GeneralSettingsPage() {
 						</p>
 					</div>
 
-					<Link href='/account/username'>
-						<Button variant='outlined'>Change</Button>
-					</Link>
+					<Button
+						as={Link}
+						href='/account/username'
+						color='primary'
+						variant='bordered'
+						radius='full'
+					>
+						Change
+					</Button>
 				</div>
 				<div className='flex justify-between mt-5'>
 					<div className='mr-1'>
@@ -53,9 +59,15 @@ export default function GeneralSettingsPage() {
 						</p>
 					</div>
 
-					<Link href='/account/password'>
-						<Button variant='outlined'>Change</Button>
-					</Link>
+					<Button
+						as={Link}
+						href='/account/password'
+						color='primary'
+						variant='bordered'
+						radius='full'
+					>
+						Change
+					</Button>
 				</div>
 			</div>
 		</Transition>

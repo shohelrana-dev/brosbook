@@ -1,31 +1,42 @@
 'use client'
-import { LoadingButton } from '@mui/lab'
+import { Button } from '@nextui-org/react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
-import toast from 'react-hot-toast'
+import { FormEvent } from 'react'
 import { FiLock } from 'react-icons/fi'
+import { toast } from 'sonner'
 import PasswordInput from '~/components/form/PasswordInput'
 import { useForm } from '~/hooks/useForm'
 import { ResetPassPayload } from '~/interfaces/auth.interfaces'
 import { useResetPasswordMutation } from '~/services/authApi'
+import { getErrorData } from '~/utils/error'
 
-export default function ResetPassword({ token }: { token: string }) {
+type Props = { token: string }
+
+export default function ResetPassword({ token }: Props) {
 	//hooks
 	const router = useRouter()
-	const [resetPassword, { isLoading, isSuccess }] = useResetPasswordMutation()
-	const { formData, onChange, onSubmit, errors } = useForm<ResetPassPayload>(resetPassword, {
+	const [resetPassword, { isLoading, isSuccess, error }] = useResetPasswordMutation()
+	const { formData, handleChange } = useForm<ResetPassPayload>({
 		token: token,
 		password: '',
 		confirmPassword: '',
 	})
 
-	useEffect(() => {
-		if (isSuccess) {
+	const { errors } = getErrorData<ResetPassPayload>(error) || {}
+
+	async function handleFormSubmit(e: FormEvent) {
+		e.preventDefault()
+
+		try {
+			await resetPassword(formData).unwrap()
+
 			toast.success('Your login password has been changed.')
 			router.push('/auth/login')
+		} catch (err: any) {
+			toast.error(err?.data.message || 'Request failed.')
 		}
-	}, [isSuccess])
+	}
 
 	return (
 		<>
@@ -40,29 +51,24 @@ export default function ResetPassword({ token }: { token: string }) {
 					characters.
 				</small>
 
-				<form className='form' method='post' onSubmit={onSubmit}>
+				<form className='form' method='post' onSubmit={handleFormSubmit}>
 					<PasswordInput
 						label='Password'
 						name='password'
 						value={formData.password}
-						error={errors.password}
-						onChange={onChange}
+						error={errors?.password}
+						onChange={handleChange}
 					/>
 					<PasswordInput
 						label='Confirm Password'
 						name='confirmPassword'
 						value={formData.confirmPassword}
-						error={errors.confirmPassword}
-						onChange={onChange}
+						error={errors?.confirmPassword}
+						onChange={handleChange}
 					/>
-					<LoadingButton
-						variant='contained'
-						type='submit'
-						loading={isLoading || isSuccess}
-						size='large'
-					>
+					<Button type='submit' color='primary' isLoading={isLoading || isSuccess}>
 						Reset
-					</LoadingButton>
+					</Button>
 				</form>
 			</div>
 

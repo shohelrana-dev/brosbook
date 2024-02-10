@@ -1,15 +1,15 @@
 'use client'
 import { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import Error from '~/components/global/Error'
-import SidebarLayout from '~/components/global/SidebarLayout'
-import Transition from '~/components/global/Transition'
-import UserItem from '~/components/global/UserItem'
 import UsersSkeleton from '~/components/skeletons/UsersSkeleton'
+import Error from '~/components/ui/Error'
+import SidebarLayout from '~/components/ui/SidebarLayout'
+import Transition from '~/components/ui/Transition'
+import UserItem from '~/components/ui/UserItem'
 import useAuth from '~/hooks/useAuth'
-import { ErrorResponse } from '~/interfaces/index.interfaces'
 import { User } from '~/interfaces/user.interfaces'
 import { useGetSuggestedUsersQuery } from '~/services/usersApi'
+import { getErrorData } from '~/utils/error'
 
 export default function SuggestionsPage() {
 	//hooks
@@ -17,9 +17,9 @@ export default function SuggestionsPage() {
 	const suggestedUsersQuery = useGetSuggestedUsersQuery({ page })
 	const { isAuthenticated } = useAuth({ require: true })
 
-	const { data: suggestedUsersData, isLoading, isSuccess, isError } = suggestedUsersQuery || {}
-	const { items: users = [], nextPage } = suggestedUsersData || {}
-	const error = (suggestedUsersQuery.error as ErrorResponse) || {}
+	const { data: suggestedUsersData, isLoading, isSuccess, isError, error } = suggestedUsersQuery
+	const { items: users, nextPage } = suggestedUsersData || {}
+	const { message } = getErrorData(error) || {}
 
 	useEffect(() => {
 		document.title = 'Suggestions'
@@ -31,11 +31,11 @@ export default function SuggestionsPage() {
 	let content = null
 	if (isLoading) {
 		content = <UsersSkeleton />
-	} else if (isSuccess && users.length === 0) {
-		content = <p className='card text-center py-6'>You have no suggestion.</p>
 	} else if (isError) {
-		content = <Error message={error?.data?.message} />
-	} else if (isSuccess && users.length > 0) {
+		content = <Error message={message} />
+	} else if (isSuccess && users && users.length === 0) {
+		content = <p className='card text-center py-6'>You have no suggestion.</p>
+	} else if (isSuccess && users && users.length > 0) {
 		content = (
 			<Transition>
 				<InfiniteScroll

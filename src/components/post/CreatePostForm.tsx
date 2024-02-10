@@ -1,18 +1,19 @@
 'use client'
-import { LoadingButton } from '@mui/lab'
-import { IconButton, Tooltip } from '@mui/material'
-import { FormEvent, useEffect, useState } from 'react'
-import toast from 'react-hot-toast'
-import { HiPhotograph } from 'react-icons/hi'
+import Image from 'next/image'
+import { FormEvent, useState } from 'react'
+import { HiPhotograph as GalleryIcon } from 'react-icons/hi'
 import { MdPublic as PublicIcon } from 'react-icons/md'
-import { RxCross2 as CancelIcon } from 'react-icons/rx'
+import { RxCross2 as CrossIcon } from 'react-icons/rx'
+import { toast } from 'sonner'
 
 import { useToggle } from 'react-minimal-modal'
 import BasicInput from '~/components/form/BasicInput'
-import Avatar from '~/components/global/Avatar'
-import DarkOverlay from '~/components/global/DarkOverlay'
+import Avatar from '~/components/ui/Avatar'
+import Button from '~/components/ui/Button'
+import DarkOverlay from '~/components/ui/DarkOverlay'
+import IconButton from '~/components/ui/IconButton'
+import Tooltip from '~/components/ui/Tooltip'
 import useAuth from '~/hooks/useAuth'
-import useFocus from '~/hooks/useFocus'
 import useSelectFile from '~/hooks/useSelectFile'
 import { useCreatePostMutation } from '~/services/postsApi'
 
@@ -20,39 +21,28 @@ export default function CreatePostForm() {
 	//hooks
 	const { user, isAuthenticated } = useAuth()
 	const [createPost, { isLoading }] = useCreatePostMutation()
-	const [messageBody, setMessageBody] = useState<string>('')
-	const {
-		inputRef: fileInputRef,
-		selectedFile: selectedImage,
-		removeSelectedFile,
-		onChange,
-		onClick,
-	} = useSelectFile()
+	const [messageText, setMessageText] = useState<string>('')
+	const { inputRef, handleChange, handleClick, selectedFile, removeSelectedFile } = useSelectFile()
 	const [isOpen, toggleVisibility] = useToggle()
-	const { inputRef, focus } = useFocus()
 
-	useEffect(() => {
-		if (isOpen) focus()
-	}, [isOpen])
+	async function submitForm(e: FormEvent) {
+		e.preventDefault()
 
-	async function submitForm(event: FormEvent) {
-		event.preventDefault()
-
-		if (!messageBody && !selectedImage) return
+		if (!messageText && !selectedFile) return
 
 		const formData = new FormData()
-		if (messageBody) {
-			formData.append('body', messageBody)
+		if (messageText) {
+			formData.append('body', messageText)
 		}
-		if (selectedImage) {
-			formData.append('image', selectedImage)
+		if (selectedFile) {
+			formData.append('image', selectedFile)
 		}
 
 		try {
 			await createPost(formData).unwrap()
 			toast.success('Post published.')
-			if (messageBody) setMessageBody('')
-			if (selectedImage) {
+			if (messageText) setMessageText('')
+			if (selectedFile) {
 				removeSelectedFile()
 			}
 		} catch (err: any) {
@@ -73,34 +63,34 @@ export default function CreatePostForm() {
 					<span className='inline-block mr-3' />
 					<div className='flex-grow'>
 						<BasicInput
-							label="What's your mind?"
-							labelHide
-							onChange={e => setMessageBody(e.target.value)}
-							value={isOpen ? '' : messageBody}
+							placeholder="What's your mind?"
+							onValueChange={setMessageText}
+							value={isOpen ? '' : messageText}
 							onFocus={toggleVisibility}
 							className='focus:border-gray-200'
 						/>
 						<div className='flex flex-wrap justify-between items-center'>
-							<IconButton
-								sx={{
-									padding: '10px',
-									marginTop: '-10px',
-									color: theme => theme.palette.primary.main,
-								}}
-								onClick={toggleVisibility}
-							>
-								<HiPhotograph fontSize={25} />
-							</IconButton>
+							<Tooltip content='Select image'>
+								<IconButton
+									size='lg'
+									onClick={() => {
+										toggleVisibility()
+										setTimeout(handleClick, 300)
+									}}
+									className='text-primary -mt-3'
+								>
+									<GalleryIcon fontSize={22} />
+								</IconButton>
+							</Tooltip>
 							<div>
-								<LoadingButton
-									variant='contained'
-									size='small'
+								<Button
 									type='submit'
-									loading={isLoading}
-									disabled={isLoading || (!messageBody && !selectedImage)}
+									size='sm'
+									isLoading={isLoading}
+									isDisabled={isLoading || (!messageText && !selectedFile)}
 								>
 									Publish Post
-								</LoadingButton>
+								</Button>
 							</div>
 						</div>
 					</div>
@@ -109,13 +99,11 @@ export default function CreatePostForm() {
 
 			{isOpen && (
 				<div className='relative card bg-white p-4 z-20'>
-					<div className='absolute top-1 right-1'>
-						<Tooltip title='Close' onClick={toggleVisibility}>
-							<IconButton>
-								<CancelIcon size={20} />
-							</IconButton>
-						</Tooltip>
-					</div>
+					<Tooltip content='Close' disableWrapper>
+						<IconButton onClick={toggleVisibility} className='absolute top-2 right-2'>
+							<CrossIcon size={18} />
+						</IconButton>
+					</Tooltip>
 
 					<h1 className='text-center text-lg lg:text-xl font-bold border-b border-gray-100 mb-3 pb-2'>
 						Create post
@@ -134,65 +122,53 @@ export default function CreatePostForm() {
 					<form onSubmit={submitForm}>
 						<BasicInput
 							textarea
-							labelHide
-							label="What's your mind?"
-							onChange={e => setMessageBody(e.target.value)}
-							value={messageBody}
-							rows={4}
-							className='text-base'
-							inputRef={inputRef}
+							placeholder="What's your mind?"
+							onValueChange={setMessageText}
+							value={messageText}
+							autoFocus
 						/>
 						<input
-							ref={fileInputRef}
+							ref={inputRef}
 							type='file'
 							hidden
 							name='image'
 							accept='image/*'
-							onChange={onChange}
+							onChange={handleChange}
 						/>
 
-						{selectedImage ? (
+						{!!selectedFile && (
 							<div className='relative max-w-sm m-auto border-3 border-gray-300 rounded-2xl'>
-								<div onClick={removeSelectedFile} className='absolute right-1 top-1'>
-									<IconButton
-										sx={{
-											zIndex: 20,
-											background: '#000',
-											color: '#fff',
-											'&:hover': {
-												background: 'rgba(0, 0, 0, 0.7)',
-											},
-										}}
-									>
-										<CancelIcon size={15} />
-									</IconButton>
-								</div>
-								<img
+								<IconButton
+									color='black'
+									className='absolute right-1 top-1'
+									onClick={removeSelectedFile}
+								>
+									<CrossIcon size={15} />
+								</IconButton>
+
+								<Image
+									width={500}
+									height={300}
 									className='rounded-2xl'
-									src={URL.createObjectURL(selectedImage)}
+									src={URL.createObjectURL(selectedFile)}
 									alt='post image'
 								/>
 							</div>
-						) : null}
+						)}
 
 						<div className='flex flex-wrap mt-4 justify-between items-center'>
-							<IconButton
-								sx={{
-									padding: '10px',
-									color: theme => theme.palette.primary.main,
-								}}
-								onClick={onClick}
-							>
-								<HiPhotograph fontSize={30} />
-							</IconButton>
-							<LoadingButton
-								variant='contained'
+							<Tooltip content='Select image'>
+								<IconButton size='lg' className='text-primary' onClick={handleClick}>
+									<GalleryIcon fontSize={24} />
+								</IconButton>
+							</Tooltip>
+							<Button
 								type='submit'
-								loading={isLoading}
-								disabled={isLoading || (!messageBody && !selectedImage)}
+								isLoading={isLoading}
+								isDisabled={isLoading || (!messageText && !selectedFile)}
 							>
 								Publish Post
-							</LoadingButton>
+							</Button>
 						</div>
 					</form>
 				</div>

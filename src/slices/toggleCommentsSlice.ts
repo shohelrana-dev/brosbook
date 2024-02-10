@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { useSelector } from 'react-redux'
 import { RootState } from '~/store/index'
 
 interface State {
@@ -9,11 +10,11 @@ const initialState: State = {
 	postIds: [],
 }
 
-export const toggleCommentsVisibilitySlice = createSlice({
-	name: 'toggleCommentsVisibility',
+export const toggleCommentsSlice = createSlice({
+	name: 'toggleComments',
 	initialState,
 	reducers: {
-		toggleCommentsVisibility: (state, { payload }: PayloadAction<string>) => {
+		toggleComments: (state, { payload }: PayloadAction<string>) => {
 			if (state.postIds.includes(payload)) {
 				state.postIds = state.postIds.filter(id => id !== payload)
 			} else {
@@ -23,6 +24,6 @@ export const toggleCommentsVisibilitySlice = createSlice({
 	},
 })
 
-export const selectToggleCommentsVisibilityState = (state: RootState) => state.toggleCommentsVisibility
+export const useToggleCommentsState = () => useSelector((state: RootState) => state.toggleComments)
 
-export const { toggleCommentsVisibility } = toggleCommentsVisibilitySlice.actions
+export const { toggleComments } = toggleCommentsSlice.actions

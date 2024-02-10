@@ -1,22 +1,32 @@
 'use client'
-import { LoadingButton } from '@mui/lab'
-import { Button } from '@mui/material'
 import Link from 'next/link'
-import { useEffect } from 'react'
-import toast from 'react-hot-toast'
+import { FormEvent } from 'react'
 import { FiLock } from 'react-icons/fi'
+import { toast } from 'sonner'
 import AnimatedInput from '~/components/form/AnimatedInput'
+import Button from '~/components/ui/Button'
 import { useForm } from '~/hooks/useForm'
 import { useForgotPasswordMutation } from '~/services/authApi'
+import { getErrorData } from '~/utils/error'
 
 export default function ForgotPassword() {
 	//hooks
-	const [forgotPassword, { isLoading, isSuccess }] = useForgotPasswordMutation()
-	const { formData, onChange, onSubmit, errors } = useForm<{ email: string }>(forgotPassword)
+	const [forgotPassword, { isLoading, isSuccess, error }] = useForgotPasswordMutation()
+	const { formData, handleChange } = useForm<{ email: string }>()
 
-	useEffect(() => {
-		if (isSuccess) toast.success('An email has been sent to your email to reset your password.')
-	}, [isSuccess])
+	const { errors } = getErrorData<{ email: string }>(error) || {}
+
+	async function handleFormSubmit(e: FormEvent) {
+		e.preventDefault()
+
+		try {
+			await forgotPassword(formData).unwrap()
+
+			toast.success('A link has been sent to your email to reset your password.')
+		} catch (err: any) {
+			toast.error(err?.data.message || 'Request failed.')
+		}
+	}
 
 	let content = null
 	if (isSuccess) {
@@ -24,11 +34,11 @@ export default function ForgotPassword() {
 			<div className='text-center'>
 				<h1 className='heading-auth'>Reset Password</h1>
 				<p>
-					Check your email for a link to reset your password. If it doesn&apos;t appear within
-					a few minutes, check your spam folder.
+					Check your email for a link to reset your password. If it doesn&apos;t appear within a few
+					minutes, check your spam folder.
 				</p>
 				<Link href='/auth/login' className='inline-block mt-5'>
-					<Button variant='outlined'>Return to login</Button>
+					<Button variant='bordered'>Return to login</Button>
 				</Link>
 			</div>
 		)
@@ -40,23 +50,17 @@ export default function ForgotPassword() {
 					Enter your email address and we will send you a link to get back into your account.
 				</small>
 
-				<form className='form' onSubmit={onSubmit}>
+				<form className='form' onSubmit={handleFormSubmit}>
 					<AnimatedInput
 						label='Email'
 						name='email'
 						value={formData.email}
-						error={errors.email}
-						onChange={onChange}
+						error={errors?.email}
+						onChange={handleChange}
 					/>
-					<LoadingButton
-						variant='contained'
-						type='submit'
-						fullWidth
-						loading={isLoading}
-						size='large'
-					>
+					<Button type='submit' radius='md' isLoading={isLoading}>
 						Send Reset Link
-					</LoadingButton>
+					</Button>
 				</form>
 			</>
 		)

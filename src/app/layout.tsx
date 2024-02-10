@@ -4,8 +4,8 @@ import { cookies } from 'next/headers'
 import { ReactNode } from 'react'
 import 'react-loading-skeleton/dist/skeleton.css'
 import '~/assets/styles/main.css'
-import PreLoader from '~/components/global/PreLoader'
 import Header from '~/components/header/Header'
+import Preload from '~/components/ui/Preload'
 import { getCurrentUser } from '~/services/index'
 import siteMetadata from '~/utils/siteMetadata'
 import Providers from './providers'
@@ -49,29 +49,28 @@ const kanit = Kanit({
 	weight: ['400', '500', '600'],
 	subsets: ['latin'],
 	variable: '--font-kanit',
-	display: 'swap',
 })
 
 interface Props {
 	children: ReactNode
 	auth: ReactNode
-	photo: ReactNode
+	photos: ReactNode
 }
 
-export default async function RootLayout({ children, auth, photo }: Props) {
+export default async function RootLayout({ children, auth, photos }: Props) {
 	const user = await getCurrentUser(cookies())
 
 	return (
-		<html lang='eng'>
+		<html lang='eng' suppressHydrationWarning>
 			<head />
-			<body className={`${kanit.className} bg-primary-gray`}>
+			<body suppressHydrationWarning className={`${kanit.className} bg-primary-gray min-h-screen`}>
 				<Providers>
-					<PreLoader user={user!} />
+					<Preload user={user!} />
 					<Header />
 
 					{children}
 					{auth}
-					{photo}
+					{photos}
 				</Providers>
 			</body>
 		</html>

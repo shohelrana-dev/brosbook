@@ -2,29 +2,22 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
-import toast from 'react-hot-toast'
-
-import { LoadingButton } from '@mui/lab'
-import { useSelector } from 'react-redux'
+import { toast } from 'sonner'
 import mailImage from '~/assets/images/mail-with-value.png'
-import Loader from '~/components/global/Loader'
+import Button from '~/components/ui/Button'
+import Loader from '~/components/ui/Loader'
 import { useResendVerificationLinkMutation } from '~/services/authApi'
-import { selectAuthState } from '~/slices/authSlice'
+import { useAuthState } from '~/slices/authSlice'
 
 export default function RequiredPage() {
 	const router = useRouter()
 	const [resendVerificationLink, { isSuccess: isResentEmail, isLoading }] =
 		useResendVerificationLinkMutation()
-	const { email } = useSelector(selectAuthState)
+	const { email } = useAuthState()
 
-	useEffect(() => {
-		if (!email) {
-			router.push('/auth/login')
-		}
-	}, [router, email])
+	if (!email) router.push('/auth/login')
 
-	async function resendEmail() {
+	async function handleResendEmail() {
 		try {
 			await resendVerificationLink(email!).unwrap()
 			toast.success(`Email verification link has sent to ${email}`)
@@ -61,14 +54,9 @@ export default function RequiredPage() {
 					) : (
 						<div className='flex flex-wrap flex-col items-center'>
 							<p>Didn&apos;t receive the link email?</p>
-							<LoadingButton
-								variant='contained'
-								onClick={resendEmail}
-								loading={isLoading}
-								className='mt-2'
-							>
+							<Button onClick={handleResendEmail} isLoading={isLoading} className='mt-2'>
 								Resend email
-							</LoadingButton>
+							</Button>
 						</div>
 					)}
 				</div>

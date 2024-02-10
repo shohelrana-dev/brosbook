@@ -1,12 +1,14 @@
 'use client'
+import Image from 'next/image'
 import { useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import Error from '~/components/global/Error'
-import ImageLightbox from '~/components/global/ImageLightbox'
-import Loader from '~/components/global/Loader'
-import Transition from '~/components/global/Transition'
-import { ErrorResponse } from '~/interfaces/index.interfaces'
+import Masonry from 'react-responsive-masonry'
+import Error from '~/components/ui/Error'
+import Lightbox from '~/components/ui/Lightbox'
+import Loader from '~/components/ui/Loader'
+import Transition from '~/components/ui/Transition'
 import { useGetMediaListQuery, useGetUserByUsernameQuery } from '~/services/usersApi'
+import { getErrorData } from '~/utils/error'
 
 interface Props {
 	params: { username: string }
@@ -17,23 +19,19 @@ export default function MediaPage({ params }: Props) {
 	const { data: user } = useGetUserByUsernameQuery(params.username)
 	const mediaListQuery = useGetMediaListQuery({ userId: user?.id!, page }, { skip: !user?.id })
 
-	const { data: mediaListData, isLoading, isSuccess, isError } = mediaListQuery || {}
-	const { items: mediaList = [], nextPage } = mediaListData || {}
-	const error = (mediaListQuery.error as ErrorResponse) || {}
+	const { data: mediaListData, isLoading, isSuccess, isError, error } = mediaListQuery
+	const { items: mediaList, nextPage } = mediaListData || {}
+	const { message } = getErrorData(error) || {}
 
 	//decide content
 	let content = null
 	if (isLoading) {
-		content = (
-			<div className='py-3'>
-				<Loader />
-			</div>
-		)
-	} else if (isSuccess && mediaList.length === 0) {
-		content = <p className='text-center py-3'>{user?.fullName} haven&apos;t media.</p>
+		content = <Loader />
 	} else if (isError) {
-		content = <Error message={error?.data?.message} />
-	} else if (isSuccess && mediaList.length > 0) {
+		content = <Error message={message} />
+	} else if (isSuccess && mediaList && mediaList.length === 0) {
+		content = <p className='text-center py-3'>{user?.fullName} haven&apos;t media.</p>
+	} else if (isSuccess && mediaList && mediaList.length > 0) {
 		content = (
 			<Transition>
 				<InfiniteScroll
@@ -42,7 +40,20 @@ export default function MediaPage({ params }: Props) {
 					hasMore={!!nextPage}
 					loader={<Loader />}
 				>
-					<ImageLightbox imageList={mediaList} width={200} height={200} alt='Media' />
+					<Lightbox>
+						<Masonry gutter='10px'>
+							{mediaList.map(({ id, url }) => (
+								<a key={id} href={url}>
+									<Image
+										src={url}
+										width={200}
+										height={150}
+										alt={`${user?.fullName}'s photos`}
+									/>
+								</a>
+							))}
+						</Masonry>
+					</Lightbox>
 				</InfiniteScroll>
 			</Transition>
 		)

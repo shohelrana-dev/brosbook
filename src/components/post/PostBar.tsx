@@ -1,9 +1,10 @@
-import { IconButton, Tooltip } from '@mui/material'
 import { MouseEvent } from 'react'
 import { FaRegComment as CommentIcon } from 'react-icons/fa'
 import LikeButton from '~/components/post/LikeButton'
 import LikesCount from '~/components/post/LikesCount'
 import PostShare from '~/components/post/PostShare'
+import IconButton from '~/components/ui/IconButton'
+import Tooltip from '~/components/ui/Tooltip'
 import useAuth from '~/hooks/useAuth'
 import useCommentsVisibilty from '~/hooks/useCommentsVisibilty'
 import useUnauthorizedAlert from '~/hooks/useUnauthorzedAlert'
@@ -49,7 +50,7 @@ export default function PostBar({ post }: Props) {
 	}
 
 	return (
-		<div className='flex flex-wrap mt-2 border-y border-gray-200 py-1 justify-around'>
+		<div className='flex flex-wrap mt-2 border-y border-gray-200 py-1 justify-around items-center'>
 			<div className='flex flex-wrap items-center gap-1'>
 				<LikeButton
 					isViewerLiked={isViewerLiked}
@@ -60,7 +61,7 @@ export default function PostBar({ post }: Props) {
 				<LikesCount isViewerLiked={isViewerLiked} likesCount={likesCount} />
 			</div>
 			<div className='flex flex-wrap items-center'>
-				<Tooltip title='Comments'>
+				<Tooltip content='Comments' disableWrapper>
 					<IconButton onClick={toggleCommentsVisibility}>
 						<CommentIcon size='18' />
 					</IconButton>

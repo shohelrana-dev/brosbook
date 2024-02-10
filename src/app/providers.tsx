@@ -1,25 +1,26 @@
 'use client'
-import { CssBaseline, ThemeProvider } from '@mui/material'
+import { NextUIProvider } from '@nextui-org/react'
+import { useRouter } from 'next/navigation'
 import { PropsWithChildren } from 'react'
-import { Toaster } from 'react-hot-toast'
 import { Provider } from 'react-redux'
 import { ConfirmAlertProvider } from 'react-use-confirm-alert'
+import { Toaster } from 'sonner'
 import { UnauthorizedPopupProvider } from '~/hooks/useUnauthorzedAlert'
 import { store } from '~/store/index'
-import theme from '~/utils/theme'
 
 export default function Providers({ children }: PropsWithChildren) {
+	const router = useRouter()
+
 	return (
 		<Provider store={store}>
-			<ThemeProvider theme={theme}>
-				<CssBaseline />
+			<NextUIProvider navigate={router.push}>
 				<UnauthorizedPopupProvider>
 					<ConfirmAlertProvider>
 						{children}
-						<Toaster containerStyle={{ zIndex: 99999 }} />
+						<Toaster style={{ zIndex: 99999 }} position='top-right' />
 					</ConfirmAlertProvider>
 				</UnauthorizedPopupProvider>
-			</ThemeProvider>
+			</NextUIProvider>
 		</Provider>
 	)
 }

@@ -1,18 +1,20 @@
 'use client'
+import Image from 'next/image'
 import { useParams } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import useInfiniteScroll from 'react-infinite-scroll-hook'
-import Avatar from '~/components/global/Avatar'
-import Error from '~/components/global/Error'
-import ImageLightbox from '~/components/global/ImageLightbox'
-import Loader from '~/components/global/Loader'
-import Transition from '~/components/global/Transition'
-import { ErrorResponse } from '~/interfaces/index.interfaces'
+import Masonry from 'react-responsive-masonry'
+import Avatar from '~/components/ui/Avatar'
+import Error from '~/components/ui/Error'
+import Lightbox from '~/components/ui/Lightbox'
+import Loader from '~/components/ui/Loader'
+import Transition from '~/components/ui/Transition'
 import {
-	useGetConversationByIdQuery,
-	useGetConversationMediaListQuery,
+   useGetConversationByIdQuery,
+   useGetConversationMediaListQuery,
 } from '~/services/conversationsApi'
 import cn from '~/utils/cn'
+import { getErrorData } from '~/utils/error'
 
 const classes = {
 	card: `card p-5 mb-3`,
@@ -34,15 +36,17 @@ export default function ParticipantInfo() {
 		conversationId: String(conversationId),
 		page,
 	})
-	const { isLoading, isSuccess, isError, data: listData } = conversationMediaListQuery || {}
 	const containerRef = useRef<HTMLDivElement>(null)
 
-	const { items: mediaList = [], nextPage } = listData || {}
-	const error = (conversationMediaListQuery.error as ErrorResponse) || {}
+	const { isLoading, isSuccess, isError, data: listData, error } = conversationMediaListQuery
+	const { items: mediaList, nextPage } = listData || {}
+	const { message } = getErrorData(error) || {}
 
 	useEffect(() => {
-		if (containerRef.current && containerRef.current.parentElement) {
-			containerRef.current.style.height = `${containerRef?.current?.parentElement?.offsetHeight}px`
+		const containerEl = containerRef.current
+
+		if (containerEl?.parentElement) {
+			containerEl.style.height = `${containerEl.parentElement.offsetHeight}px`
 		}
 	}, [])
 
@@ -63,14 +67,22 @@ export default function ParticipantInfo() {
 	let listContent = null
 	if (isLoading) {
 		listContent = <Loader />
-	} else if (isSuccess && mediaList.length === 0) {
-		listContent = <p className='text-center py-4'>No media files.</p>
 	} else if (isError) {
-		listContent = <Error message={error.data?.message} />
-	} else if (isSuccess && mediaList.length > 0) {
+		listContent = <Error message={message} />
+	} else if (isSuccess && mediaList && mediaList.length === 0) {
+		listContent = <p className='text-center py-4'>No media files.</p>
+	} else if (isSuccess && mediaList && mediaList.length > 0) {
 		listContent = (
 			<Transition>
-				<ImageLightbox imageList={mediaList} alt='Chat photo' />
+				<Lightbox>
+					<Masonry gutter='6px'>
+						{mediaList.map(({ id, url }) => (
+							<a key={id} href={url}>
+								<Image src={url} width={200} height={150} alt='Chat photo' />
+							</a>
+						))}
+					</Masonry>
+				</Lightbox>
 			</Transition>
 		)
 	}
@@ -87,26 +99,26 @@ export default function ParticipantInfo() {
 
 			<div className={classes.card}>
 				<h3 className={classes.heading}>Personal Information</h3>
-				{location ? (
+				{!!location && (
 					<div className={classes.infoItem()}>
 						<p className={classes.label}>Address</p>
 						<div>{location}</div>
 					</div>
-				) : null}
+				)}
 
-				{phone ? (
+				{!!phone && (
 					<div className={classes.infoItem()}>
 						<p className={classes.label}>Phone</p>
 						<div>{phone}</div>
 					</div>
-				) : null}
+				)}
 
-				{email ? (
+				{!!email && (
 					<div className={classes.infoItem(true)}>
 						<p className={classes.label}>Email</p>
 						<div>{email}</div>
 					</div>
-				) : null}
+				)}
 			</div>
 
 			<div className={cn(classes.card, classes.mediaWrapper)}>
@@ -114,11 +126,11 @@ export default function ParticipantInfo() {
 
 				{listContent}
 
-				{nextPage ? (
+				{!!nextPage && (
 					<div className='my-4' ref={moreLoadRef}>
 						<Loader />
 					</div>
-				) : null}
+				)}
 			</div>
 		</div>
 	)

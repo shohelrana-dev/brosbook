@@ -1,11 +1,5 @@
-export default function ucfirst(word?: string) {
-	if (!word) return null
+export default function ucfirst(str?: string) {
+	if (!str) return null
 
-	const firstLetter = word.charAt(0)
-
-	const firstLetterCap = firstLetter.toUpperCase()
-
-	const remainingLetters = word.slice(1)
-
-	return firstLetterCap + remainingLetters
+	return str.charAt(0).toUpperCase() + str.slice(1)
 }

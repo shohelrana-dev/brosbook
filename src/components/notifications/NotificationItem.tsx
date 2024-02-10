@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import Avatar from '~/components/global/Avatar'
+import Avatar from '~/components/ui/Avatar'
 import { Notification, NotificationTypes } from '~/interfaces/index.interfaces'
 import timeAgo from '~/utils/timeAgo'
 

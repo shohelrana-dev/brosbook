@@ -1,30 +1,30 @@
 import { useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import Error from '~/components/global/Error'
-import Transition from '~/components/global/Transition'
 import ConversationItem from '~/components/messages/Conversations/ConversationItem'
 import ConversationsSkeleton from '~/components/skeletons/ConversationsSkeleton'
+import Error from '~/components/ui/Error'
+import Transition from '~/components/ui/Transition'
 import { Conversation } from '~/interfaces/conversation.interfaces'
-import { ErrorResponse } from '~/interfaces/index.interfaces'
 import { useGetConversationsQuery } from '~/services/conversationsApi'
+import { getErrorData } from '~/utils/error'
 
 export default function ConversationList() {
 	const [page, setPage] = useState(1)
 	const conversationsQuery = useGetConversationsQuery(page)
 
-	const { isLoading, isSuccess, isError, data: conversationsData } = conversationsQuery || {}
-	const { items: conversations = [], nextPage } = conversationsData || {}
-	const error = (conversationsQuery.error as ErrorResponse) || {}
+	const { isLoading, isError, isSuccess, data: conversationsData, error } = conversationsQuery
+	const { items: conversations, nextPage } = conversationsData || {}
+	const { message } = getErrorData(error) || {}
 
 	//decide content
 	let content = null
 	if (isLoading) {
 		content = <ConversationsSkeleton />
-	} else if (isSuccess && conversations.length === 0) {
-		content = <p className='text-gray-700'>You have no conversation</p>
 	} else if (isError) {
-		content = <Error message={error?.data?.message} />
-	} else if (isSuccess && conversations.length > 0) {
+		content = <Error message={message} />
+	} else if (isSuccess && conversations && conversations.length === 0) {
+		content = <p className='text-gray-700'>You have no conversation</p>
+	} else if (isSuccess && conversations && conversations.length > 0) {
 		content = (
 			<Transition>
 				<InfiniteScroll

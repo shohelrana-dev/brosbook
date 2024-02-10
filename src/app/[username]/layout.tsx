@@ -1,25 +1,27 @@
+import { Metadata } from 'next'
+import { cookies } from 'next/headers'
 import Link from 'next/link'
+import { notFound } from 'next/navigation'
 import { ReactNode } from 'react'
 import { GoLocation } from 'react-icons/go'
 import { HiOutlineCake } from 'react-icons/hi'
+import { IoMailOutline as MessageIcon } from 'react-icons/io5'
 import { MdOutlineSchedule } from 'react-icons/md'
-
-import { Metadata } from 'next'
-import { cookies } from 'next/headers'
-import { notFound } from 'next/navigation'
 import { TbDiscountCheckFilled as BlueBadgeIcon } from 'react-icons/tb'
-import Button from '~/components/global/Button'
-import FollowButton from '~/components/global/FollowButton'
-import SidebarLayout from '~/components/global/SidebarLayout'
-import TabLinkList from '~/components/global/TabLinkList'
 import CoverPhoto from '~/components/profile/CoverPhoto'
 import ExtraOptions from '~/components/profile/ExtraOptions'
 import ProfilePhoto from '~/components/profile/ProfilePhoto'
+import Button from '~/components/ui/Button'
+import FollowButton from '~/components/ui/FollowButton'
+import IconButton from '~/components/ui/IconButton'
+import SidebarLayout from '~/components/ui/SidebarLayout'
+import TabLinkList from '~/components/ui/TabLinkList'
+import Tooltip from '~/components/ui/Tooltip'
 import {
-	getCurrentUser,
-	getFollowersCount,
-	getFollowingsCount,
-	getUserByUsername,
+   getCurrentUser,
+   getFollowersCount,
+   getFollowingsCount,
+   getUserByUsername,
 } from '~/services/index'
 
 export const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
@@ -99,6 +101,9 @@ export default async function ProfileLayout({ children, params }: Props) {
 		{ label: 'Media', pathname: `/${user?.username}/media` },
 	]
 
+	const isAuthenticated = !!currentUser?.id
+	const isAuthAndSameUser = isAuthenticated && currentUser?.username === user?.username
+
 	return (
 		<SidebarLayout>
 			<div>
@@ -110,18 +115,21 @@ export default async function ProfileLayout({ children, params }: Props) {
 
 							<div className='flex flex-wrap items-center gap-2'>
 								<ExtraOptions user={user} />
-								{currentUser && currentUser?.username !== user?.username ? (
-									<div>
-										<FollowButton user={user!} />
-									</div>
-								) : null}
-								{currentUser && currentUser?.username === user?.username ? (
-									<Link href='/account/profile'>
-										<Button variant='outlined' size='large'>
-											Edit Profile
-										</Button>
-									</Link>
-								) : null}
+								{isAuthenticated && !isAuthAndSameUser && (
+									<>
+										<Tooltip content='Messages' disableWrapper>
+											<IconButton as={Link} href={`/messages/${user.username}`}>
+												<MessageIcon size={20} />
+											</IconButton>
+										</Tooltip>
+										<FollowButton user={user!} size='md' />
+									</>
+								)}
+								{isAuthAndSameUser && (
+									<Button as={Link} href='/account/profile' variant='bordered'>
+										Edit Profile
+									</Button>
+								)}
 							</div>
 						</div>
 					</div>
@@ -130,11 +138,7 @@ export default async function ProfileLayout({ children, params }: Props) {
 						<div>
 							<div className='flex flex-wrap items-center'>
 								<h2 className='text:lg md:text-xl font-bold'>{user?.fullName}</h2>
-								<BlueBadgeIcon
-									color='rgb(58,141,245)'
-									size={20}
-									className='ml-[1px] mt-[2px]'
-								/>
+								<BlueBadgeIcon color='rgb(58,141,245)' size={20} className='ml-[1px] mt-[2px]' />
 							</div>
 							<p className='text-gray-600 mb-2'>@{user?.username}</p>
 							<div>{user?.profile?.bio}</div>
@@ -179,9 +183,7 @@ export default async function ProfileLayout({ children, params }: Props) {
 							</li>
 							<li className='text-gray-600 inline-block mr-3'>
 								<Link href={`/${user.username}/followers`}>
-									<strong className='text-gray-900 text-[16px]'>
-										{followersCount?.count}
-									</strong>{' '}
+									<strong className='text-gray-900 text-[16px]'>{followersCount?.count}</strong>{' '}
 									Followers
 								</Link>
 							</li>
