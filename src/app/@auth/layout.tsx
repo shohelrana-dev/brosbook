@@ -14,13 +14,12 @@ export default function AuthModalLayout({ children }: { children: ReactNode }) {
       <Modal
          open={pathname.includes('/auth/login') || pathname.includes('/auth/signup')}
          hideIcon
-         className="!p-[1px]"
-         width={420}
+         className="p-[1px] max-w-[420px]"
          onClose={router.back}
          wrapperClassName="overflow-y-auto"
       >
          <Tooltip content="Go Back" disableWrapper>
-            <IconButton onClick={router.back} className="absolute left-2 top-2">
+            <IconButton onClick={router.back} className="absolute left-2 top-2 z-20">
                <BackIcon size={20} />
             </IconButton>
          </Tooltip>

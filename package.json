@@ -33,7 +33,7 @@
     "react-infinite-scroll-component": "^6.1.0",
     "react-infinite-scroll-hook": "^4.0.4",
     "react-loading-skeleton": "^3.1.1",
-    "react-minimal-modal": "^1.6.0",
+    "react-minimal-modal": "^2.0.1",
     "react-multi-carousel": "^2.8.4",
     "react-password-strength-bar": "^0.4.1",
     "react-redux": "^8.0.4",

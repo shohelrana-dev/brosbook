@@ -16,7 +16,7 @@ const UnauthorizedPopupContext = createContext<(options: Options) => void | null
 export function UnauthorizedPopupProvider({ children }: PropsWithChildren) {
    const [options, setOptions] = useState<Options>()
    const pathname = usePathname()
-   const [isOpen, toggle] = useToggle()
+   const [isOpen, toggle] = useToggle(false)
 
    function unauthorizedAlert(options: Options): void {
       setOptions(() => options)

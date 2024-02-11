@@ -44,7 +44,12 @@ export default function ChangePasswordModal() {
    }
 
    return (
-      <Modal open={isOpen} title="Update your password" width={700} onClose={handleClose}>
+      <Modal
+         open={isOpen}
+         title="Update your password"
+         className="max-w-screen-sm"
+         onClose={handleClose}
+      >
          <p className="mb-6 text-gray-700 -mt-1">
             Do not share your password with anyone. Set new password using current password.
          </p>

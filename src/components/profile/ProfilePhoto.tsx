@@ -80,13 +80,13 @@ export default function ProfilePhoto({ user }: Props) {
             <CameraIcon fontSize={20} />
          </IconButton>
 
-         <Modal open={!!selectedFile} toggle={removeSelectedFile} width={625}>
+         <Modal open={!!selectedFile} toggle={removeSelectedFile} className="max-w-screen-sm">
             <>
                <div className="text-center mb-3 max-w-[450px] m-auto">
                   <h4 className="text-2xl font-medium mb-2 text-gray-900">Looking good!</h4>
                   <p className="text-gray-800">
-                     This photo will be added to your profile. It will also be seen by hosts or
-                     guest, so be sure it doesn’t include any personal or sensitive info.
+                     This photo will be added to your profile. It will also be seen by hosts or guest, so
+                     be sure it doesn’t include any personal or sensitive info.
                   </p>
                </div>
                <div className="flex flex-wrap justify-center items-center my-5">

@@ -16,12 +16,12 @@ export default function LikeButton({ isViewerLiked, handleLike, handleUnlike, si
       <Tooltip content={isViewerLiked ? 'Unlike' : 'Like'}>
          <IconButton
             onClick={isViewerLiked ? handleUnlike : handleLike}
-            className="relative w-8 h-8 min-w-4 mt-1"
+            className="relative siz-8 min-w-4 mt-1"
          >
             <div
                className={cn(
-                  'h-14 w-14 bg-[url("/heart.png")] bg-cover absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2',
-                  { 'animate-like': isViewerLiked, 'h-12 w-12': size === 'small' }
+                  'size-14 bg-[url("/heart.png")] bg-cover absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2',
+                  { 'animate-like': isViewerLiked, 'size-12': size === 'small' }
                )}
             />
          </IconButton>

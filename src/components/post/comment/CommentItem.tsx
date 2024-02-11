@@ -9,6 +9,7 @@ import useAuth from '~/hooks/useAuth'
 import useUnauthorizedAlert from '~/hooks/useUnauthorzedAlert'
 import { Comment, Post } from '~/interfaces/posts.interfaces'
 import { useLikeCommentMutation, useUnlikeCommentMutation } from '~/services/commentsApi'
+import siteMetadata from '~/utils/siteMetadata'
 import timeAgo from '~/utils/timeAgo'
 
 interface Props {
@@ -25,15 +26,13 @@ export default function CommentItem({ post, comment }: Props) {
 
    const { id, body, isViewerLiked, likesCount, author, createdAt } = comment
    const isCurrentUserAuthor =
-      isAuthenticated &&
-      author &&
-      (author.id === currentUser?.id || post.author.id === currentUser?.id)
+      isAuthenticated && author && (author.id === currentUser?.id || post.author.id === currentUser?.id)
 
    async function handleCommentLike() {
       if (!isAuthenticated) {
          unauthorizedAlert({
             title: 'Like a Comment to share the love.',
-            message: `Join ${process.env.NEXT_PUBLIC_APP_NAME} now to let ${author.fullName} know you like their Post and Comment.`,
+            message: `Join ${siteMetadata.appName} now to let ${author.fullName} know you like their Post and Comment.`,
          })
          return
       }

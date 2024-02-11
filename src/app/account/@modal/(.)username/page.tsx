@@ -49,7 +49,7 @@ export default function ChangeUsernameModal() {
    }
 
    return (
-      <Modal open={isOpen} title="Update username" width={700} onClose={handleClose}>
+      <Modal open={isOpen} title="Update username" className="max-w-screen-sm" onClose={handleClose}>
          <p className="mb-6 text-gray-700 -mt-1">Set your new username using password.</p>
          <form className="form" onSubmit={handleFormSubmit} autoComplete="off">
             <AnimatedInput
