@@ -19,10 +19,10 @@ export default function Header() {
    const pathname = usePathname()
 
    return (
-      <Navbar className="h-navbar">
-         <div className="container flex flex-wrap items-center justify-between text-gray-900">
+      <Navbar className='h-navbar'>
+         <div className='container flex flex-wrap items-center justify-between text-gray-900'>
             <NavbarBrand>
-               <Link href="/">
+               <Link href='/'>
                   {isScreenSmall ? (
                      <Image priority src={logo} alt={'Brosbook logo'} width={31} height={40} />
                   ) : (
@@ -32,13 +32,13 @@ export default function Header() {
                         alt={'Brosbook logo'}
                         width={135}
                         height={40}
-                        className="max-w-36"
+                        className='max-w-36'
                      />
                   )}
                </Link>
             </NavbarBrand>
 
-            <NavbarContent as="div" justify="end" className="gap-1">
+            <NavbarContent as='div' justify='end' className='gap-1'>
                <SearchButton />
                {isAuthenticated ? (
                   <>
@@ -54,7 +54,7 @@ export default function Header() {
                         href={`/auth/login${
                            pathname.startsWith('/auth') ? '' : '?redirect_to=' + pathname
                         }`}
-                        size="sm"
+                        size='sm'
                      >
                         Login
                      </Button>

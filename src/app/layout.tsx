@@ -61,12 +61,9 @@ export default async function RootLayout({ children, auth, photos }: Props) {
    const user = await getCurrentUser(cookies())
 
    return (
-      <html lang="eng" suppressHydrationWarning>
+      <html lang='eng' suppressHydrationWarning>
          <head />
-         <body
-            suppressHydrationWarning
-            className={`${kanit.className} bg-primary-gray min-h-screen`}
-         >
+         <body suppressHydrationWarning className={`${kanit.className} bg-light-gray min-h-screen`}>
             <Providers>
                <Preload user={user!} />
                <Header />

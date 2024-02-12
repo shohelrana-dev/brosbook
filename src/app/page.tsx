@@ -15,7 +15,7 @@ export default async function HomePage() {
 
    return (
       <SidebarLayout>
-         <div className="mx-2 lg:mx-0 pt-5 pb-4 h-screen-content overflow-y-auto scrollbar-hide">
+         <div className='mx-2 lg:mx-0 pt-5 pb-4'>
             <CreatePostForm />
 
             <SlidesSuggestions />

@@ -6,7 +6,8 @@
    --body-font-size: 15px;
    --primary-color: #14cb15;
    --secondary-color: #159615;
-   --primary-gray-color: #f1f6fb;
+   --light-gray-color: #f1f6fb;
+   --nav-height: 3.5rem;
 }
 
 * {
@@ -47,7 +48,7 @@ img {
 @layer components {
    /* global components */
    .button {
-      @apply bg-primary-gray text-primary transition duration-300 py-3 text-xs font-bold px-4 block text-center rounded;
+      @apply bg-light-gray text-primary transition duration-300 py-3 text-xs font-bold px-4 block text-center rounded;
    }
    .card {
       @apply bg-white rounded-xl shadow-sm border border-gray-200;

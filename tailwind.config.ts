@@ -5,16 +5,13 @@ import type { Config } from 'tailwindcss'
 
 const config: Config = {
    mode: 'jit',
-   content: [
-      './src/**/*.{js,ts,jsx,tsx}',
-      './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
-   ],
+   content: ['./src/**/*.{js,ts,jsx,tsx}', './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}'],
    theme: {
       extend: {
          colors: {
             primary: 'var(--primary-color)',
             secondary: 'var(--secondary-color)',
-            'primary-gray': 'var(--primary-gray-color)',
+            'light-gray': 'var(--light-gray-color)',
             blue: {
                100: '#cce4f6',
                200: '#99c9ed',
@@ -32,10 +29,10 @@ const config: Config = {
             100: '25rem',
             130: '32.5rem',
             160: '40rem',
-            navbar: '3.5rem',
+            navbar: 'var(--nav-height)',
          },
          height: {
-            'screen-content': 'calc(100dvh - 3.5rem)',
+            'screen-content': 'calc(100dvh - var(--nav-height))',
          },
          zIndex: {
             '99': '99',

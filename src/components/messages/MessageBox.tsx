@@ -15,7 +15,7 @@ import timeAgo from '~/utils/timeAgo'
 
 const classes = {
    wrapper: `h-screen-content overflow-hidden px-2 grid grid-rows-[auto_1fr_auto]`,
-   modal: `max-h-[85vh] !bg-primary-gray flex flex-col !p-[1px] !rounded-xl`,
+   modal: `max-h-[85vh] !bg-light-gray flex flex-col !p-[1px] !rounded-xl`,
    header: `card mt-2 py-3 px-4 lg:px-6 flex flex-wrap justify-between`,
    name: `font-medium text-gray-800`,
    active: `text-gray-500 text-sm`,
@@ -34,7 +34,7 @@ export default function MessageBox() {
    return (
       <div className={classes.wrapper}>
          <Modal className={classes.modal} open={isOpen} toggle={toggle} hideIcon>
-            <IconButton className="absolute top-2 right-2" onClick={toggle}>
+            <IconButton className='absolute top-2 right-2' onClick={toggle}>
                <CrossIcon size={18} />
             </IconButton>
 
@@ -43,11 +43,11 @@ export default function MessageBox() {
 
          {/*User top bar*/}
          <header className={classes.header}>
-            <div className="flex flex-wrap">
-               <div className="mr-4">
+            <div className='flex flex-wrap'>
+               <div className='mr-4'>
                   <Avatar src={avatar?.url} online={active} alt={fullName} />
                </div>
-               <div className="mr-3">
+               <div className='mr-3'>
                   <h3 className={classes.name}>
                      <Link href={`/${username}`}>{fullName}</Link>
                   </h3>
@@ -56,7 +56,7 @@ export default function MessageBox() {
                   </p>
                </div>
             </div>
-            <div className="self-center" onClick={toggle}>
+            <div className='self-center' onClick={toggle}>
                <IconButton>
                   <InfoIcon size={25} />
                </IconButton>

@@ -41,6 +41,7 @@ export function UnauthorizedPopupProvider({ children }: PropsWithChildren) {
                      href={`/auth/login?redirect_to=${pathname}`}
                      fullWidth
                      className="mb-3"
+                     onClick={toggle}
                   >
                      Log in
                   </Button>

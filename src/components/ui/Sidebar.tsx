@@ -10,10 +10,12 @@ export default function Sidebar() {
    if (!isLaptopOrDesktop) return null
 
    return (
-      <aside className="mt-5">
-         <NewUserMessage />
-         <SuggestedPeople />
-         <Followers />
+      <aside className='mt-4'>
+         <div className='sticky top-[calc(var(--nav-height)_+_1rem)]'>
+            <NewUserMessage />
+            <SuggestedPeople />
+            <Followers />
+         </div>
       </aside>
    )
 }
