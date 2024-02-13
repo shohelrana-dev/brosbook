@@ -1,4 +1,4 @@
-import { HTMLAttributes } from 'react'
+import { ComponentProps } from 'react'
 import { useDebounce } from 'use-debounce'
 import UsersSkeleton from '~/components/skeletons/UsersSkeleton'
 import UserItem from '~/components/ui/UserItem'
@@ -6,7 +6,7 @@ import { User } from '~/interfaces/user.interfaces'
 import { useSearchUsersQuery } from '~/services/usersApi'
 import cn from '~/utils/cn'
 
-interface Props extends HTMLAttributes<HTMLDivElement> {
+interface Props extends ComponentProps<'div'> {
    searchText: string
    onUserClick?: (user: User) => void
    hideFollowButton?: boolean
@@ -23,14 +23,14 @@ export default function SearchUserList(props: Props) {
    let content = null
    if (isLoading || isFetching) {
       content = (
-         <div className="px-2">
+         <div className='px-2'>
             <UsersSkeleton count={3} />
          </div>
       )
    } else if (!dSearchText) {
-      content = <p className="text-gray-800 p-3">Try searching for people, topics.</p>
+      content = <p className='text-gray-800 p-3'>Try searching for people, topics.</p>
    } else if (isSuccess && users.length < 1) {
-      content = <p className="text-gray-800 p-3">No results found.</p>
+      content = <p className='text-gray-800 p-3'>No results found.</p>
    } else if (users && users.length > 0) {
       content = users.map((user) => (
          <div

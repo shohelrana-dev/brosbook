@@ -1,7 +1,7 @@
-import { HTMLAttributes } from 'react'
+import { ComponentProps } from 'react'
 import cn from '~/utils/cn'
 
-interface Props extends HTMLAttributes<HTMLDivElement> {
+interface Props extends ComponentProps<'div'> {
    isOpen: boolean
 }
 

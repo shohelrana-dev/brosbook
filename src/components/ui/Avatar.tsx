@@ -1,9 +1,9 @@
 import Image from 'next/image'
-import { ImgHTMLAttributes } from 'react'
+import { ComponentProps } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import cn from '~/utils/cn'
 
-interface AvatarProps extends ImgHTMLAttributes<HTMLImageElement> {
+interface AvatarProps extends ComponentProps<'img'> {
    online?: boolean
    size?: 'small' | 'medium' | 'large'
 }
@@ -36,7 +36,7 @@ export default function Avatar({ online, size = 'medium', src, className }: Avat
    }
 
    return (
-      <div className="relative flex-none rounded-full" style={sizeStyle}>
+      <div className='relative flex-none rounded-full' style={sizeStyle}>
          {src ? (
             <Image
                priority
@@ -45,16 +45,16 @@ export default function Avatar({ online, size = 'medium', src, className }: Avat
                width={_size}
                height={_size}
                style={sizeStyle}
-               placeholder="blur"
+               placeholder='blur'
                blurDataURL={src}
-               alt="User profile photo"
+               alt='User profile photo'
             />
          ) : null}
 
          {online ? (
             <>
-               <div className="bg-green-500 border-2 border-white w-3 h-3 absolute right-0 bottom-0 rounded-full" />
-               <div className="bg-green-500 w-3 h-3 absolute right-0 bottom-0 rounded-full opacity-70 animate-ping" />
+               <div className='bg-green-500 border-2 border-white w-3 h-3 absolute right-0 bottom-0 rounded-full' />
+               <div className='bg-green-500 w-3 h-3 absolute right-0 bottom-0 rounded-full opacity-70 animate-ping' />
             </>
          ) : null}
       </div>
