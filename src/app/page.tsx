@@ -15,7 +15,7 @@ export default async function HomePage() {
 
    return (
       <SidebarLayout>
-         <div className='mx-2 lg:mx-0 pt-5 pb-4'>
+         <div className='mx-2 pb-4 pt-5 lg:mx-0'>
             <CreatePostForm />
 
             <SlidesSuggestions />
