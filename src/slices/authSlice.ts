@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { useSelector } from 'react-redux'
 import { User } from '~/interfaces/user.interfaces'
 import { RootState } from '~/store'
+import isServer from '~/utils/isServer'
 import { getSession } from '~/utils/session'
 
 interface AuthState {
@@ -10,12 +11,12 @@ interface AuthState {
     user: User | null
 }
 
-const session = getSession()
+const session = !isServer ? getSession() : ({} as any)
 
 const initialState: AuthState = {
-    isAuthenticated: session.isLoggedIn,
+    isAuthenticated: session.isLoggedIn || false,
     isChecked: false,
-    user: session.user,
+    user: session.user || null,
 }
 
 export const authSlice = createSlice({

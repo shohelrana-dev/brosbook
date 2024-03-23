@@ -1,18 +1,13 @@
-import { cookies } from 'next/headers'
 import { getCookie, removeCookie, setCookie } from 'tiny-cookie'
 import { User } from '~/interfaces/user.interfaces'
 import isServer from './isServer'
 
-type SetSessionArg = { user: User; accessToken: string }
-type GetSession = { isLoggedIn: boolean; user: User | null }
+export type SetSessionArg = { user: User; accessToken: string }
+export type GetSession = { isLoggedIn: boolean; user: User | null }
 
 export function getSession(): GetSession {
     if (isServer) {
-        const nextCookies = cookies()
-        const isLoggedIn = Boolean(nextCookies.get('isLoggedIn')?.value)
-        const user = (JSON.parse(atob(nextCookies.get('userCache')?.value!)) as User) || null
-
-        return { isLoggedIn, user }
+        throw new Error('use getServerSession() in server side rendering')
     }
 
     const isLoggedIn = Boolean(getCookie('isLoggedIn'))
