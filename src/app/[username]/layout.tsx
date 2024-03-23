@@ -16,12 +16,8 @@ import IconButton from '~/components/ui/IconButton'
 import SidebarLayout from '~/components/ui/SidebarLayout'
 import TabLinkList from '~/components/ui/TabLinkList'
 import Tooltip from '~/components/ui/Tooltip'
-import {
-    getCurrentUser,
-    getFollowersCount,
-    getFollowingsCount,
-    getUserByUsername,
-} from '~/services/index'
+import { getFollowersCount, getFollowingsCount, getUserByUsername } from '~/services/index'
+import { store } from '~/store'
 
 export const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
     const user = await getUserByUsername(params.username)
@@ -81,12 +77,12 @@ interface Props {
 export const revalidate = 0
 
 export default async function ProfileLayout({ children, params }: Props) {
+    const currentUser = store.getState().auth.user
     const user = await getUserByUsername(params.username)
 
     if (!user) return notFound()
 
-    const [currentUser, followersCount, followingsCount] = await Promise.all([
-        getCurrentUser(),
+    const [followersCount, followingsCount] = await Promise.all([
         getFollowersCount(user.id),
         getFollowingsCount(user.id),
     ])
