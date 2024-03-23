@@ -1,4 +1,6 @@
-export interface CredentialPayload {
+import { User } from './user.interfaces'
+
+export interface CredentialsPayload {
     username: string
     password: string
 }
@@ -14,5 +16,11 @@ export interface SignupPayload {
 export interface ResetPassPayload {
     password: string
     confirmPassword: string
-    token: string
+}
+
+export type LoginResponse = {
+    accessToken: string
+    expiresIn: string
+    tokenType: string
+    user: User
 }

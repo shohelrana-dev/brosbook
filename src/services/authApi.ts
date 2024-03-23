@@ -1,110 +1,131 @@
-import { setCookie } from 'tiny-cookie'
-import { CredentialPayload, ResetPassPayload, SignupPayload } from '~/interfaces/auth.interfaces'
+import { toast } from 'sonner'
+import { removeCookie, setCookie } from 'tiny-cookie'
+import {
+    CredentialsPayload,
+    LoginResponse,
+    ResetPassPayload,
+    SignupPayload,
+} from '~/interfaces/auth.interfaces'
 import { User } from '~/interfaces/user.interfaces'
 import { baseApi } from '~/services/baseApi'
-import { userLoggedIn } from '~/slices/authSlice'
-
-export type LoginResponse = {
-   access_token: string
-   expires_in: string
-   token_type: string
-   user: User
-}
+import { userLoggedIn, userLoggedOut } from '~/slices/authSlice'
 
 export const authApi = baseApi.injectEndpoints({
-   endpoints: (build) => ({
-      signup: build.mutation<User, SignupPayload>({
-         query: (payload) => ({
-            url: `/auth/signup`,
-            method: 'POST',
-            body: payload,
-         }),
-      }),
+    endpoints: (build) => ({
+        signup: build.mutation<User, SignupPayload>({
+            query: (payload) => ({
+                url: `/auth/signup`,
+                method: 'POST',
+                body: payload,
+            }),
+            onQueryStarted: async (_, { queryFulfilled }) => {
+                await queryFulfilled
+                toast.success('Account created. Check your email for a link to verify your account.')
+            },
+        }),
 
-      login: build.mutation<LoginResponse, CredentialPayload>({
-         query: (credentials) => ({
-            url: `/auth/login`,
-            method: 'POST',
-            body: credentials,
-         }),
-         invalidatesTags: ['CurrentUser'],
-         onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
-            try {
-               const { data } = await queryFulfilled
-               const { user, expires_in, access_token } = data
+        login: build.mutation<LoginResponse, CredentialsPayload>({
+            query: (credentials) => ({
+                url: `/auth/login`,
+                method: 'POST',
+                body: credentials,
+                credentials: 'include',
+            }),
+            invalidatesTags: ['CurrentUser'],
+            onQueryStarted: async (_, api) => {
+                const { data } = await api.queryFulfilled
+                const { user, accessToken } = data
 
-               dispatch(userLoggedIn(user))
+                toast.success('Logged in.')
+                api.dispatch(baseApi.util.resetApiState())
+                api.dispatch(userLoggedIn(user))
+                setCookie('accessToken', accessToken)
+            },
+        }),
 
-               setCookie('access_token', access_token, {
-                  expires: expires_in.endsWith('d') ? expires_in.toUpperCase() : expires_in,
-                  path: '/',
-               })
-            } catch (err) {
-               throw err
-            }
-         },
-      }),
+        loginWithGoogle: build.mutation<LoginResponse, string>({
+            query: (token) => ({
+                url: `/auth/google`,
+                method: 'POST',
+                body: { token },
+                credentials: 'include',
+            }),
+            invalidatesTags: ['CurrentUser'],
+            onQueryStarted: async (arg, api) => {
+                const { data } = await api.queryFulfilled
+                const { user, accessToken } = data
 
-      loginWithGoogle: build.mutation<LoginResponse, string>({
-         query: (token) => ({
-            url: `/auth/google`,
-            method: 'POST',
-            body: { token },
-         }),
-         invalidatesTags: ['CurrentUser'],
-         onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
-            try {
-               const { data } = await queryFulfilled
-               const { user, expires_in, access_token } = data
+                api.dispatch(userLoggedIn(user))
+                setCookie('accessToken', accessToken)
+            },
+        }),
 
-               dispatch(userLoggedIn(user))
+        forgotPassword: build.mutation<{ message: string }, { email: string }>({
+            query: (payload) => ({
+                url: `/auth/forgot_password`,
+                method: 'POST',
+                body: payload,
+            }),
+            onQueryStarted: async (_, api) => {
+                await api.queryFulfilled
+                toast.success('Check your email for a link to reset your password.')
+            },
+        }),
 
-               setCookie('access_token', access_token, {
-                  expires: expires_in.endsWith('d') ? expires_in.toUpperCase() : expires_in,
-                  path: '/',
-               })
-            } catch (err) {
-               throw err
-            }
-         },
-      }),
+        resetPassword: build.mutation<{ message: string }, ResetPassPayload & { token: string }>({
+            query: ({ token, ...payload }) => ({
+                url: `/auth/reset_password/${token}`,
+                method: 'POST',
+                body: payload,
+            }),
+            onQueryStarted: async (_, api) => {
+                await api.queryFulfilled
+                toast.success('Password resetting completed. You can now login with your new password.')
+            },
+        }),
 
-      forgotPassword: build.mutation<{ message: string }, { email: string }>({
-         query: (data) => ({
-            url: `/auth/forgot_password`,
-            method: 'POST',
-            body: data,
-         }),
-      }),
+        verifyEmail: build.mutation<User, string>({
+            query: (token) => `/auth/email_verification/${token}`,
+            onQueryStarted: async (_, api) => {
+                await api.queryFulfilled
+                toast.success('Email verified. You can now login.')
+            },
+        }),
 
-      resetPassword: build.mutation<{ message: string }, ResetPassPayload>({
-         query: ({ token, ...data }) => ({
-            url: `/auth/reset_password/${token}`,
-            method: 'POST',
-            body: data,
-         }),
-      }),
+        resendVerificationLink: build.mutation<void, string>({
+            query: (email) => ({
+                url: `/auth/email_verification/resend`,
+                method: 'POST',
+                body: { email },
+            }),
+            onQueryStarted: async (arg, api) => {
+                await api.queryFulfilled
+                toast.success(`Email verification link has sent to ${arg}`)
+            },
+        }),
 
-      verifyEmail: build.mutation<User, string>({
-         query: (token) => `/auth/email_verification/${token}`,
-      }),
-
-      resendVerificationLink: build.mutation<void, string>({
-         query: (email) => ({
-            url: `/auth/email_verification/resend`,
-            method: 'POST',
-            body: { email },
-         }),
-      }),
-   }),
+        logout: build.query<void, void>({
+            query: () => ({
+                url: `/auth/logout`,
+                credentials: 'include',
+            }),
+            onQueryStarted: async (_, api) => {
+                await api.queryFulfilled
+                toast.success('Logged out.')
+                api.dispatch(userLoggedOut())
+                removeCookie('accessToken')
+            },
+        }),
+    }),
 })
 
 export const {
-   useSignupMutation,
-   useLoginMutation,
-   useLoginWithGoogleMutation,
-   useForgotPasswordMutation,
-   useResetPasswordMutation,
-   useVerifyEmailMutation,
-   useResendVerificationLinkMutation,
+    useSignupMutation,
+    useLoginMutation,
+    useLoginWithGoogleMutation,
+    useForgotPasswordMutation,
+    useResetPasswordMutation,
+    useVerifyEmailMutation,
+    useResendVerificationLinkMutation,
+    useLazyLogoutQuery,
 } = authApi

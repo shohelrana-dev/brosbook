@@ -1,27 +1,27 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { useSelector } from 'react-redux'
-import { RootState } from '~/store/index'
+import { RootState } from '~/store'
 
 interface State {
-   postIds: string[]
+    postIds: string[]
 }
 
 const initialState: State = {
-   postIds: [],
+    postIds: [],
 }
 
 export const toggleCommentsSlice = createSlice({
-   name: 'toggleComments',
-   initialState,
-   reducers: {
-      toggleComments: (state, { payload }: PayloadAction<string>) => {
-         if (state.postIds.includes(payload)) {
-            state.postIds = state.postIds.filter((id) => id !== payload)
-         } else {
-            state.postIds.push(payload)
-         }
-      },
-   },
+    name: 'toggleComments',
+    initialState,
+    reducers: {
+        toggleComments: (state, { payload }: PayloadAction<string>) => {
+            if (state.postIds.includes(payload)) {
+                state.postIds = state.postIds.filter((id) => id !== payload)
+            } else {
+                state.postIds.push(payload)
+            }
+        },
+    },
 })
 
 export const useToggleCommentsState = () => useSelector((state: RootState) => state.toggleComments)

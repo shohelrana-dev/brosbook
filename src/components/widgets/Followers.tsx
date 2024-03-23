@@ -7,39 +7,36 @@ import UserItem from '~/components/ui/UserItem'
 import WidgetLayout from '~/components/widgets/WidgetLayout'
 import useAuth from '~/hooks/useAuth'
 import { useGetFollowersQuery } from '~/services/usersApi'
-import { getErrorData } from '~/utils/error'
+import { extractErrorMessage } from '~/utils/error'
 
 export default function Followers() {
-   const { isAuthenticated, user } = useAuth()
-   const followersQuery = useGetFollowersQuery({ userId: user?.id!, page: 1 }, { skip: !user?.id })
+    const { user } = useAuth()
+    const followersQuery = useGetFollowersQuery({ userId: user?.id!, page: 1 }, { skip: !user?.id })
 
-   const { isError, isLoading, isSuccess, error } = followersQuery
-   const { items: users, nextPage } = followersQuery.data || {}
-   const { message } = getErrorData(error) || {}
+    const { isError, isLoading, isSuccess, error } = followersQuery
+    const { items: users, nextPage } = followersQuery.data || {}
 
-   if (!isAuthenticated) return null
+    //decide content
+    let content = null
+    if (isLoading) {
+        content = <UsersSkeleton count={2} />
+    } else if (isError) {
+        content = <Error message={extractErrorMessage(error)} />
+    } else if (isSuccess && users && users.length === 0) {
+        content = <p>No one following yet.</p>
+    } else if (isSuccess && users && users.length > 0) {
+        content = users.map((user) => <UserItem user={user} key={user.id} />)
+    }
 
-   //decide content
-   let content = null
-   if (isLoading) {
-      content = <UsersSkeleton count={2} />
-   } else if (isError) {
-      content = <Error message={message} />
-   } else if (isSuccess && users && users.length === 0) {
-      content = <p>No one following yet.</p>
-   } else if (isSuccess && users && users.length > 0) {
-      content = users.map((user) => <UserItem user={user} key={user.id} />)
-   }
+    return (
+        <WidgetLayout title="Who's follownig">
+            {content}
 
-   return (
-      <WidgetLayout title="Who's follownig">
-         {content}
-
-         {!!nextPage && (
-            <Button as={Link} href={`/${user?.username}/followers`}>
-               See More
-            </Button>
-         )}
-      </WidgetLayout>
-   )
+            {!!nextPage && (
+                <Button as={Link} href={`/${user?.username}/followers`}>
+                    See More
+                </Button>
+            )}
+        </WidgetLayout>
+    )
 }
