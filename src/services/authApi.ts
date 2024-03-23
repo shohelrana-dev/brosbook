@@ -1,5 +1,4 @@
 import { toast } from 'sonner'
-import { removeCookie, setCookie } from 'tiny-cookie'
 import {
     CredentialsPayload,
     LoginResponse,
@@ -9,6 +8,7 @@ import {
 import { User } from '~/interfaces/user.interfaces'
 import { baseApi } from '~/services/baseApi'
 import { userLoggedIn, userLoggedOut } from '~/slices/authSlice'
+import { clearSession, setSession } from '~/utils/session'
 
 export const authApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
@@ -37,9 +37,9 @@ export const authApi = baseApi.injectEndpoints({
                 const { user, accessToken } = data
 
                 toast.success('Logged in.')
+                setSession({ user, accessToken })
                 api.dispatch(baseApi.util.resetApiState())
                 api.dispatch(userLoggedIn(user))
-                setCookie('accessToken', accessToken)
             },
         }),
 
@@ -55,8 +55,10 @@ export const authApi = baseApi.injectEndpoints({
                 const { data } = await api.queryFulfilled
                 const { user, accessToken } = data
 
+                toast.success('Logged in.')
+                setSession({ user, accessToken })
+                api.dispatch(baseApi.util.resetApiState())
                 api.dispatch(userLoggedIn(user))
-                setCookie('accessToken', accessToken)
             },
         }),
 
@@ -112,8 +114,8 @@ export const authApi = baseApi.injectEndpoints({
             onQueryStarted: async (_, api) => {
                 await api.queryFulfilled
                 toast.success('Logged out.')
+                clearSession()
                 api.dispatch(userLoggedOut())
-                removeCookie('accessToken')
             },
         }),
     }),

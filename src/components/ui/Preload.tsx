@@ -3,35 +3,17 @@ import { usePathname } from 'next/navigation'
 import { useEffect, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { io } from 'socket.io-client'
-import { removeCookie } from 'tiny-cookie'
 import useAuth from '~/hooks/useAuth'
 import useUnauthorizedAlert from '~/hooks/useUnauthorzedAlert'
-import { User } from '~/interfaces/user.interfaces'
-import { userLoggedIn, userLoggedOut } from '~/slices/authSlice'
 import { addedSocket, removedSocket } from '~/slices/socketSlice'
-import isServer from '~/utils/isServer'
 import siteMetadata from '~/utils/siteMetadata'
 
-type Props = { user: User }
-
-export default function Preload({ user: preLoadedUser }: Props) {
-    const { user, isAuthenticated, isChecked } = useAuth()
+export default function Preload() {
+    const { user, isAuthenticated } = useAuth()
     const unauthorizedAlert = useUnauthorizedAlert()
     const pathname = usePathname()
     const dispatch = useDispatch()
-    const loadedRef = useRef(false)
     const showedPopup = useRef(false)
-
-    if (!loadedRef.current && preLoadedUser) {
-        loadedRef.current = true
-        dispatch(userLoggedIn(preLoadedUser))
-    } else if (!loadedRef.current) {
-        loadedRef.current = true
-        dispatch(userLoggedOut())
-        if (!isServer) {
-            removeCookie('accessToken')
-        }
-    }
 
     useEffect(() => {
         if (!user?.id) return
@@ -59,7 +41,7 @@ export default function Preload({ user: preLoadedUser }: Props) {
     }, [user, dispatch])
 
     useEffect(() => {
-        if (!isChecked || isAuthenticated || showedPopup.current || pathname?.startsWith('/auth/')) {
+        if (isAuthenticated || showedPopup.current || pathname?.startsWith('/auth/')) {
             return
         }
 
@@ -74,7 +56,7 @@ export default function Preload({ user: preLoadedUser }: Props) {
 
         //cleanup timer
         return () => clearTimeout(timerId)
-    }, [isAuthenticated, pathname, isChecked, unauthorizedAlert])
+    }, [isAuthenticated, pathname, unauthorizedAlert])
 
     return null
 }

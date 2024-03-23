@@ -5,9 +5,6 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import '~/assets/styles/main.css'
 import Header from '~/components/header/Header'
 import Preload from '~/components/ui/Preload'
-import { getCurrentUser } from '~/services'
-import { userLoggedIn } from '~/slices/authSlice'
-import { store } from '~/store'
 import siteMetadata from '~/utils/siteMetadata'
 import Providers from './providers'
 
@@ -59,20 +56,12 @@ interface Props {
 }
 
 export default async function RootLayout({ children, auth, photos }: Props) {
-    let user
-    try {
-        user = await getCurrentUser()
-        store.dispatch(userLoggedIn(user))
-    } catch (error: any) {
-        console.error('User unauthorized.')
-    }
-
     return (
         <html lang='eng' suppressHydrationWarning>
             <head />
             <body suppressHydrationWarning className={`${kanit.className} bg-light-gray min-h-screen`}>
                 <Providers>
-                    <Preload user={user!} />
+                    <Preload />
                     <Header />
 
                     {children}
