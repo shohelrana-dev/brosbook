@@ -6,9 +6,8 @@ import { io } from 'socket.io-client'
 import useAuth from '~/hooks/useAuth'
 import useUnauthorizedAlert from '~/hooks/useUnauthorzedAlert'
 import { User } from '~/interfaces/user.interfaces'
-import { userLoggedIn } from '~/slices/authSlice'
+import { userLoggedIn, userLoggedOut } from '~/slices/authSlice'
 import { addedSocket, removedSocket } from '~/slices/socketSlice'
-import isServer from '~/utils/isServer'
 import siteMetadata from '~/utils/siteMetadata'
 
 export default function Preload({ sessionUser }: { sessionUser: User | null }) {
@@ -19,9 +18,12 @@ export default function Preload({ sessionUser }: { sessionUser: User | null }) {
     const showedPopup = useRef(false)
     const loadedRef = useRef(false)
 
-    if (isServer && sessionUser && !loadedRef.current) {
+    if (sessionUser && !loadedRef.current) {
         loadedRef.current = true
         dispatch(userLoggedIn(sessionUser!))
+    } else if (!loadedRef.current) {
+        loadedRef.current = true
+        dispatch(userLoggedOut())
     }
 
     useEffect(() => {
