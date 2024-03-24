@@ -9,10 +9,10 @@ export const socketSlice = createSlice({
     name: 'socket',
     initialState,
     reducers: {
-        addedSocket: (state, { payload }: PayloadAction<Socket>) => {
+        setSocket: (state, { payload }: PayloadAction<Socket>) => {
             state.socket = payload as any
         },
-        removedSocket: (state) => {
+        removeSocket: (state) => {
             state.socket = null
         },
     },
@@ -21,4 +21,4 @@ export const selectSocket = (state: RootState) => state.socket.socket
 
 export const useSocket = (): Socket | null => useSelector(selectSocket)
 
-export const { addedSocket, removedSocket } = socketSlice.actions
+export const { setSocket, removeSocket } = socketSlice.actions

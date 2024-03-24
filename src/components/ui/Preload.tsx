@@ -7,7 +7,7 @@ import useAuth from '~/hooks/useAuth'
 import useUnauthorizedAlert from '~/hooks/useUnauthorzedAlert'
 import { User } from '~/interfaces/user.interfaces'
 import { userLoggedIn, userLoggedOut } from '~/slices/authSlice'
-import { addedSocket, removedSocket } from '~/slices/socketSlice'
+import { removeSocket, setSocket } from '~/slices/socketSlice'
 import siteMetadata from '~/utils/siteMetadata'
 
 export default function Preload({ sessionUser }: { sessionUser: User | null }) {
@@ -34,14 +34,14 @@ export default function Preload({ sessionUser }: { sessionUser: User | null }) {
         socket.on('connect', () => {
             console.log('socket io connected')
 
-            dispatch(addedSocket(socket))
+            dispatch(setSocket(socket))
             socket.emit('user.connect', user)
         })
 
         socket.on('disconnect', () => {
             console.log('socket io disconnected')
 
-            dispatch(removedSocket())
+            dispatch(removeSocket())
         })
 
         //cleanup socket connection

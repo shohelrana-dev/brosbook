@@ -68,7 +68,6 @@ export default async function RootLayout({ children, auth, photos }: Props) {
             <head />
             <body suppressHydrationWarning className={`${kanit.className} bg-light-gray min-h-screen`}>
                 <Providers>
-                    {session.user?.fullName}
                     <Preload sessionUser={session.user} />
                     <Header />
 
