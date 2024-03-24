@@ -8,9 +8,6 @@ interface AuthState {
     isChecked: boolean
     user: User | null
 }
-
-//const session = !isServer ? getSession() : ({} as any)
-
 const initialState: AuthState = {
     isAuthenticated: false,
     isChecked: false,

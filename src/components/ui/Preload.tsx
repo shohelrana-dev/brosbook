@@ -20,7 +20,7 @@ export default function Preload({ sessionUser }: { sessionUser: User | null }) {
 
     if (sessionUser && !loadedRef.current) {
         loadedRef.current = true
-        dispatch(userLoggedIn(sessionUser!))
+        dispatch(userLoggedIn(sessionUser))
     } else if (!loadedRef.current) {
         loadedRef.current = true
         dispatch(userLoggedOut())

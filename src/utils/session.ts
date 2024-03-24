@@ -10,13 +10,21 @@ export function getSession(): GetSession {
         throw new Error('use getServerSession() in server side rendering')
     }
 
-    const isLoggedIn = Boolean(getCookie('isLoggedIn'))
-    const user = (JSON.parse(atob(getCookie('userCache')!)) as User) || null
+    try {
+        const isLoggedIn = Boolean(getCookie('isLoggedIn'))
+        const user = JSON.parse(atob(getCookie('userCache')!)) as User
 
-    return { isLoggedIn, user }
+        return { isLoggedIn, user }
+    } catch (err) {
+        console.error(err)
+        return { isLoggedIn: false, user: null }
+    }
 }
 
 export function setSession({ user, accessToken }: SetSessionArg) {
+    if (!user || !accessToken) {
+        throw new Error('User or accessToken not provided')
+    }
     if (isServer) {
         throw new Error('Session could not be set on server side rendering')
     }
