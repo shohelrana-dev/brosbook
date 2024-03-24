@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import { Kanit } from 'next/font/google'
+import { cookies } from 'next/headers'
 import { ReactNode } from 'react'
 import 'react-loading-skeleton/dist/skeleton.css'
 import '~/assets/styles/main.css'
@@ -7,7 +8,7 @@ import Header from '~/components/header/Header'
 import Preload from '~/components/ui/Preload'
 import { userLoggedIn } from '~/slices/authSlice'
 import { store } from '~/store'
-import { getServerSession } from '~/utils/serverSession'
+import { getServerSession } from '~/utils/session'
 import siteMetadata from '~/utils/siteMetadata'
 import Providers from './providers'
 
@@ -59,15 +60,16 @@ interface Props {
 }
 
 export default async function RootLayout({ children, auth, photos }: Props) {
-    const session = getServerSession()
-    store.dispatch(userLoggedIn(session?.user!))
+    const session = getServerSession(cookies())
+    store.dispatch(userLoggedIn(session.user!))
 
     return (
         <html lang='eng' suppressHydrationWarning>
             <head />
             <body suppressHydrationWarning className={`${kanit.className} bg-light-gray min-h-screen`}>
                 <Providers>
-                    <Preload sessionUser={session?.user} />
+                    {session.user?.fullName}
+                    <Preload sessionUser={session.user} />
                     <Header />
 
                     {children}

@@ -1,9 +1,27 @@
+import { RequestCookies } from 'next/dist/compiled/@edge-runtime/cookies'
+import { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies'
 import { getCookie, removeCookie, setCookie } from 'tiny-cookie'
 import { User } from '~/interfaces/user.interfaces'
 import isServer from './isServer'
 
 export type SetSessionArg = { user: User; accessToken: string }
 export type GetSession = { isLoggedIn: boolean; user: User | null }
+
+export function getServerSession(cookies: ReadonlyRequestCookies | RequestCookies): GetSession {
+    if (isServer) {
+        try {
+            const isLoggedIn = Boolean(cookies.get('isLoggedIn')?.value)
+            const user = JSON.parse(atob(cookies.get('userCache')?.value!)) as User
+
+            return { isLoggedIn, user }
+        } catch (err) {
+            console.error(err)
+            return { isLoggedIn: false, user: null }
+        }
+    } else {
+        throw new Error('Session could not be fetched on client side rendering')
+    }
+}
 
 export function getSession(): GetSession {
     if (isServer) {

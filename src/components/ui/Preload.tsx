@@ -47,7 +47,7 @@ export default function Preload({ sessionUser }: { sessionUser: User | null }) {
         //cleanup socket connection
         return () => {
             socket.close()
-            console.log('Close socket connection')
+            console.log('closed socket connection')
         }
     }, [user, dispatch])
 
