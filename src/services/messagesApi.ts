@@ -1,5 +1,3 @@
-// noinspection TypeScriptValidateJSTypes
-
 import { Message, MessageType } from '~/interfaces/conversation.interfaces'
 import { ListResponse, Media } from '~/interfaces/index.interfaces'
 import { conversationsApi } from '~/services/conversationsApi'

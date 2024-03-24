@@ -18,9 +18,12 @@ export const authApi = baseApi.injectEndpoints({
                 method: 'POST',
                 body: payload,
             }),
-            onQueryStarted: async (_, { queryFulfilled }) => {
-                await queryFulfilled
-                toast.success('Account created. Check your email for a link to verify your account.')
+            onQueryStarted: async (_, api) => {
+                toast.promise(() => api.queryFulfilled, {
+                    loading: 'Creating account...',
+                    success: 'Account created. Check your email for a link to verify your account.',
+                    error: (err) => err.error?.data?.message,
+                })
             },
         }),
 
@@ -33,13 +36,18 @@ export const authApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: ['CurrentUser'],
             onQueryStarted: async (_, api) => {
-                const { data } = await api.queryFulfilled
-                const { user, accessToken } = data
+                toast.promise(() => api.queryFulfilled, {
+                    loading: 'Logging in...',
+                    error: (err) => err.error?.data?.message,
+                    success: ({ data }) => {
+                        const { user, accessToken } = data
 
-                toast.success('Logged in.')
-                setSession({ user, accessToken })
-                api.dispatch(baseApi.util.resetApiState())
-                api.dispatch(userLoggedIn(user))
+                        setSession({ user, accessToken })
+                        api.dispatch(baseApi.util.resetApiState())
+                        api.dispatch(userLoggedIn(user))
+                        return 'Logged in.'
+                    },
+                })
             },
         }),
 
@@ -52,13 +60,18 @@ export const authApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: ['CurrentUser'],
             onQueryStarted: async (arg, api) => {
-                const { data } = await api.queryFulfilled
-                const { user, accessToken } = data
+                toast.promise(() => api.queryFulfilled, {
+                    loading: 'Logging in...',
+                    error: (err) => err.error?.data?.message,
+                    success: ({ data }) => {
+                        const { user, accessToken } = data
 
-                toast.success('Logged in.')
-                setSession({ user, accessToken })
-                api.dispatch(baseApi.util.resetApiState())
-                api.dispatch(userLoggedIn(user))
+                        setSession({ user, accessToken })
+                        api.dispatch(baseApi.util.resetApiState())
+                        api.dispatch(userLoggedIn(user))
+                        return 'Logged in.'
+                    },
+                })
             },
         }),
 
@@ -69,8 +82,11 @@ export const authApi = baseApi.injectEndpoints({
                 body: payload,
             }),
             onQueryStarted: async (_, api) => {
-                await api.queryFulfilled
-                toast.success('Check your email for a link to reset your password.')
+                toast.promise(() => api.queryFulfilled, {
+                    loading: 'Sending email...',
+                    success: 'Check your email for a link to reset your password.',
+                    error: (err) => err.error?.data?.message,
+                })
             },
         }),
 
@@ -81,16 +97,22 @@ export const authApi = baseApi.injectEndpoints({
                 body: payload,
             }),
             onQueryStarted: async (_, api) => {
-                await api.queryFulfilled
-                toast.success('Password resetting completed. You can now login with your new password.')
+                toast.promise(() => api.queryFulfilled, {
+                    loading: 'Resetting password...',
+                    success: 'Resetting password completed. You can now login with your new password.',
+                    error: (err) => err.error?.data?.message,
+                })
             },
         }),
 
         verifyEmail: build.mutation<User, string>({
             query: (token) => `/auth/email_verification/${token}`,
             onQueryStarted: async (_, api) => {
-                await api.queryFulfilled
-                toast.success('Email verified. You can now login.')
+                toast.promise(() => api.queryFulfilled, {
+                    loading: 'Verifying email...',
+                    success: 'Email verified. You can now login.',
+                    error: (err) => err.error?.data?.message,
+                })
             },
         }),
 
@@ -101,8 +123,11 @@ export const authApi = baseApi.injectEndpoints({
                 body: { email },
             }),
             onQueryStarted: async (arg, api) => {
-                await api.queryFulfilled
-                toast.success(`Email verification link has sent to ${arg}`)
+                toast.promise(() => api.queryFulfilled, {
+                    loading: 'Resending email verification link...',
+                    success: 'Email verification link has sent to ' + arg + '. Please check your email.',
+                    error: (err) => err.error?.data?.message,
+                })
             },
         }),
 
@@ -112,10 +137,16 @@ export const authApi = baseApi.injectEndpoints({
                 credentials: 'include',
             }),
             onQueryStarted: async (_, api) => {
-                await api.queryFulfilled
-                toast.success('Logged out.')
-                clearSession()
-                api.dispatch(userLoggedOut())
+                toast.promise(() => api.queryFulfilled, {
+                    loading: 'Logging out...',
+                    error: (err) => err.error?.data?.message,
+                    success: () => {
+                        toast.success('Logged out.')
+                        clearSession()
+                        api.dispatch(userLoggedOut())
+                        return 'Logged out.'
+                    },
+                })
             },
         }),
     }),

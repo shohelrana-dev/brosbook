@@ -46,8 +46,11 @@ export const usersApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: ['CurrentUser'],
             onQueryStarted: async (_, api) => {
-                await api.queryFulfilled
-                toast.success('Profile photo updated.')
+                toast.promise(() => api.queryFulfilled, {
+                    loading: 'Updating profile photo...',
+                    success: 'Profile photo updated.',
+                    error: (err) => err.error?.data?.message,
+                })
             },
         }),
 
@@ -59,8 +62,11 @@ export const usersApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: ['CurrentUser'],
             onQueryStarted: async (_, api) => {
-                await api.queryFulfilled
-                toast.success('Cover photo updated.')
+                toast.promise(() => api.queryFulfilled, {
+                    loading: 'Updating cover photo...',
+                    success: 'Cover photo updated.',
+                    error: (err) => err.error?.data?.message,
+                })
             },
         }),
 
@@ -74,8 +80,11 @@ export const usersApi = baseApi.injectEndpoints({
                 { type: 'User', id: arg },
             ],
             onQueryStarted: async (_, api) => {
-                const { data: user } = await api.queryFulfilled
-                toast.success(`You followed @${user.username}`)
+                toast.promise(() => api.queryFulfilled, {
+                    loading: 'Following...',
+                    success: ({ data }) => `You followed @${data.username}`,
+                    error: (err) => err.error?.data?.message,
+                })
             },
         }),
 
@@ -89,8 +98,11 @@ export const usersApi = baseApi.injectEndpoints({
                 { type: 'User', id: arg },
             ],
             onQueryStarted: async (_, api) => {
-                const { data: user } = await api.queryFulfilled
-                toast.success(`You unfollowed @${user.username}`)
+                toast.promise(() => api.queryFulfilled, {
+                    loading: 'Unfollowing...',
+                    success: ({ data }) => `You unfollowed @${data.username}`,
+                    error: (err) => err.error?.data?.message,
+                })
             },
         }),
 

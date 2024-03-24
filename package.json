@@ -41,7 +41,7 @@
         "react-show-more-text": "^1.7.1",
         "react-spinners": "^0.13.8",
         "react-text-overflow": "^1.0.2",
-        "react-use-confirm-alert": "^2.0.2",
+        "react-use-confirm-alert": "^2.0.4",
         "sharp": "^0.33.3",
         "socket.io-client": "^4.7.5",
         "sonner": "^1.4.41",

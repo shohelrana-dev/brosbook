@@ -4,7 +4,6 @@ import { FormEvent, useState } from 'react'
 import { HiPhotograph as GalleryIcon } from 'react-icons/hi'
 import { MdPublic as PublicIcon } from 'react-icons/md'
 import { RxCross2 as CrossIcon } from 'react-icons/rx'
-import { toast } from 'sonner'
 
 import BasicInput from '~/components/form/BasicInput'
 import Avatar from '~/components/global/Avatar'
@@ -37,16 +36,10 @@ export default function CreatePostForm() {
             formData.append('image', selectedFile)
         }
 
-        try {
-            await createPost(formData).unwrap()
-            toast.success('Post published.')
-            if (messageText) setMessageText('')
-            if (selectedFile) {
-                removeSelectedFile()
-            }
-        } catch (err: any) {
-            console.error(err)
-            toast.error("Post couldn't be saved.")
+        await createPost(formData).unwrap()
+        if (messageText) setMessageText('')
+        if (selectedFile) {
+            removeSelectedFile()
         }
     }
 

@@ -1,3 +1,4 @@
+import { toast } from 'sonner'
 import { Conversation, Message } from '~/interfaces/conversation.interfaces'
 import { ListResponse, Media } from '~/interfaces/index.interfaces'
 import { RootState } from '~/store'
@@ -121,17 +122,23 @@ export const conversationsApi = baseApi.injectEndpoints({
                 body: { participantId },
             }),
             onQueryStarted: async (arg, api) => {
-                const { data } = await api.queryFulfilled
-                //update conversation list
-                api.dispatch(
-                    conversationsApi.util.updateQueryData(
-                        'getConversations',
-                        undefined as any,
-                        (draft: ListResponse<Conversation>) => {
-                            draft.items.unshift(data)
-                        }
-                    )
-                )
+                toast.promise(() => api.queryFulfilled, {
+                    loading: 'Creating conversation...',
+                    error: (err) => err.error?.data?.message,
+                    success: ({ data }) => {
+                        //update conversation list
+                        api.dispatch(
+                            conversationsApi.util.updateQueryData(
+                                'getConversations',
+                                undefined as any,
+                                (draft: ListResponse<Conversation>) => {
+                                    draft.items.unshift(data)
+                                }
+                            )
+                        )
+                        return 'Conversation created'
+                    },
+                })
             },
         }),
 

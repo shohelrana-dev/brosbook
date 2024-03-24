@@ -17,8 +17,11 @@ export const accountApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: ['CurrentUser'],
             onQueryStarted: async (_, api) => {
-                await api.queryFulfilled
-                toast.success('Profile updated.')
+                toast.promise(() => api.queryFulfilled, {
+                    loading: 'Updating profile...',
+                    success: 'Profile updated.',
+                    error: (err) => err.error?.data?.message,
+                })
             },
         }),
 
@@ -30,8 +33,11 @@ export const accountApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: ['CurrentUser'],
             onQueryStarted: async (_, api) => {
-                await api.queryFulfilled
-                toast.success('Username changed.')
+                toast.promise(() => api.queryFulfilled, {
+                    loading: 'Updating username...',
+                    success: 'Username updated.',
+                    error: (err) => err.error?.data?.message,
+                })
             },
         }),
 
@@ -42,8 +48,11 @@ export const accountApi = baseApi.injectEndpoints({
                 body: data,
             }),
             onQueryStarted: async (_, api) => {
-                await api.queryFulfilled
-                toast.success('Password changed.')
+                toast.promise(() => api.queryFulfilled, {
+                    loading: 'Updating password...',
+                    success: 'Password updated.',
+                    error: (err) => err.error?.data?.message,
+                })
             },
         }),
     }),

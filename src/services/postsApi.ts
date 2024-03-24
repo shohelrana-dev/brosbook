@@ -37,17 +37,22 @@ export const postsApi = baseApi.injectEndpoints({
                 body: data,
             }),
             onQueryStarted: async (arg, api) => {
-                const { data } = await api.queryFulfilled
-
-                api.dispatch(
-                    postsApi.util.updateQueryData(
-                        'getPosts',
-                        { authorId: data.author.id } as any,
-                        (draft: ListResponse<Post>) => {
-                            draft.items.unshift(data)
-                        }
-                    )
-                )
+                toast.promise(() => api.queryFulfilled, {
+                    loading: 'Creating Post...',
+                    error: (err) => err.error?.data?.message,
+                    success: ({ data }) => {
+                        api.dispatch(
+                            postsApi.util.updateQueryData(
+                                'getPosts',
+                                { authorId: data.author.id } as any,
+                                (draft: ListResponse<Post>) => {
+                                    draft.items.unshift(data)
+                                }
+                            )
+                        )
+                        return 'Post created'
+                    },
+                })
             },
         }),
 
@@ -57,19 +62,23 @@ export const postsApi = baseApi.injectEndpoints({
                 method: 'DELETE',
             }),
             onQueryStarted: async (arg, api) => {
-                const { data } = await api.queryFulfilled
-                toast.success('Post deleted')
-
-                //pessimistic cache update
-                api.dispatch(
-                    postsApi.util.updateQueryData(
-                        'getPosts',
-                        { authorId: data.author.id } as any,
-                        (draft: ListResponse<Post>) => {
-                            draft.items = draft.items.filter((post) => post.id !== arg)
-                        }
-                    )
-                )
+                toast.promise(() => api.queryFulfilled, {
+                    loading: 'Deleting Post...',
+                    error: (err) => err.error?.data?.message,
+                    success: ({ data }) => {
+                        //remove post from cache
+                        api.dispatch(
+                            postsApi.util.updateQueryData(
+                                'getPosts',
+                                { authorId: data.author.id } as any,
+                                (draft: ListResponse<Post>) => {
+                                    draft.items = draft.items.filter((post) => post.id !== arg)
+                                }
+                            )
+                        )
+                        return 'Post deleted'
+                    },
+                })
             },
         }),
 

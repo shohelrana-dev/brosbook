@@ -1,7 +1,6 @@
 'use client'
 import { useState } from 'react'
 import { useConfirmAlert } from 'react-use-confirm-alert'
-import { toast } from 'sonner'
 import Button from '~/components/global/Button'
 import useAuth from '~/hooks/useAuth'
 import useUnauthorizedAlert from '~/hooks/useUnauthorzedAlert'
@@ -45,11 +44,8 @@ export default function FollowButton({ user: _user, ...rest }: Props) {
             onConfirm: async () => {
                 try {
                     await unfollow(user.id).unwrap()
-
                     setUser({ ...user, isViewerFollow: false })
-                    toast.success(`You unfollowed @${user.username}`)
                 } catch (err: any) {
-                    toast.error(err?.data?.message || 'Something went wrong, Please try again.')
                     console.error(err)
                 }
             },

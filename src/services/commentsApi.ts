@@ -46,12 +46,15 @@ export const commentsApi = baseApi.injectEndpoints({
                         }
                     )
                 )
-                try {
-                    await api.queryFulfilled
-                    toast.success('Comment created.')
-                } catch {
-                    patchResult.undo()
-                }
+
+                toast.promise(() => api.queryFulfilled, {
+                    loading: 'Creating comment...',
+                    success: 'Comment created.',
+                    error: (err) => {
+                        patchResult.undo()
+                        return err.error?.data?.message
+                    },
+                })
             },
         }),
 
@@ -72,13 +75,15 @@ export const commentsApi = baseApi.injectEndpoints({
                         }
                     )
                 )
-                try {
-                    await api.queryFulfilled
-                    toast.success('Comment deleted.')
-                } catch (err) {
-                    patchResult.undo()
-                    throw err
-                }
+
+                toast.promise(() => api.queryFulfilled, {
+                    loading: 'Deleting comment...',
+                    success: 'Comment deleted.',
+                    error: (err) => {
+                        patchResult.undo()
+                        return err.error?.data?.message
+                    },
+                })
             },
         }),
 
