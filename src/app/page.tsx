@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
+import SidebarLayout from '~/components/global/SidebarLayout'
+import SlidesSuggestions from '~/components/global/SlidesSuggestions'
 import CreatePostForm from '~/components/post/CreatePostForm'
-import SidebarLayout from '~/components/ui/SidebarLayout'
-import SlidesSuggestions from '~/components/ui/SlidesSuggestions'
 import { getFeedPosts } from '~/services'
 import FeedPosts from './FeedPosts'
 

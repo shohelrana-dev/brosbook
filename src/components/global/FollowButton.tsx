@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { useConfirmAlert } from 'react-use-confirm-alert'
 import { toast } from 'sonner'
-import Button from '~/components/ui/Button'
+import Button from '~/components/global/Button'
 import useAuth from '~/hooks/useAuth'
 import useUnauthorizedAlert from '~/hooks/useUnauthorzedAlert'
 import { User } from '~/interfaces/user.interfaces'

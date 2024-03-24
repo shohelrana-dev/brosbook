@@ -1,6 +1,6 @@
 import { MouseEvent } from 'react'
-import IconButton from '~/components/ui/IconButton'
-import Tooltip from '~/components/ui/Tooltip'
+import IconButton from '~/components/global/IconButton'
+import Tooltip from '~/components/global/Tooltip'
 import cn from '~/utils/cn'
 
 interface Props {

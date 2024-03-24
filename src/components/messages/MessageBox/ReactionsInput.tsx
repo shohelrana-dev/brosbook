@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import { useState } from 'react'
 import { HiOutlineEmojiHappy as EmojiIcon } from 'react-icons/hi'
-import IconButton from '~/components/ui/IconButton'
+import IconButton from '~/components/global/IconButton'
 import { Message } from '~/interfaces/conversation.interfaces'
 import { Popover, PopoverContent, PopoverTrigger } from '~/lib/nextui'
 import { useSendReactionMutation } from '~/services/messagesApi'

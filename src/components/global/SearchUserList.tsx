@@ -1,7 +1,7 @@
 import { ComponentProps } from 'react'
 import { useDebounce } from 'use-debounce'
+import UserItem from '~/components/global/UserItem'
 import UsersSkeleton from '~/components/skeletons/UsersSkeleton'
-import UserItem from '~/components/ui/UserItem'
 import { User } from '~/interfaces/user.interfaces'
 import { useSearchUsersQuery } from '~/services/usersApi'
 import cn from '~/utils/cn'

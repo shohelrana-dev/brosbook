@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import { IoNotificationsOutline as NotificationIcon } from 'react-icons/io5'
+import IconButton from '~/components/global/IconButton'
+import Tooltip from '~/components/global/Tooltip'
 import NotificationList from '~/components/notifications/NotificationList'
-import IconButton from '~/components/ui/IconButton'
-import Tooltip from '~/components/ui/Tooltip'
 import { Badge, Popover, PopoverContent, PopoverTrigger } from '~/lib/nextui'
 import { useGetUnreadNotificationsCountQuery } from '~/services/notificationsApi'
 

@@ -1,8 +1,8 @@
 import { BiSearch as SearchIcon } from 'react-icons/bi'
 import BasicInput from '~/components/form/BasicInput'
-import IconButton from '~/components/ui/IconButton'
-import SearchUserList from '~/components/ui/SearchUserList'
-import Tooltip from '~/components/ui/Tooltip'
+import IconButton from '~/components/global/IconButton'
+import SearchUserList from '~/components/global/SearchUserList'
+import Tooltip from '~/components/global/Tooltip'
 import useInputValue from '~/hooks/useInputValue'
 import { Popover, PopoverContent, PopoverTrigger } from '~/lib/nextui'
 

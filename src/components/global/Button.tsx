@@ -1,7 +1,7 @@
 'use client'
 import { forwardRef } from 'react'
 import { useFormStatus } from 'react-dom'
-import Loader from '~/components/ui/Loader'
+import Loader from '~/components/global/Loader'
 import { ButtonProps, Button as NextUIButton, extendVariants } from '~/lib/nextui'
 import cn from '~/utils/cn'
 

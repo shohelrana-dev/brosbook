@@ -2,10 +2,10 @@
 import { ReactNode, useEffect } from 'react'
 import { CgProfile as ProfileIcon } from 'react-icons/cg'
 import { MdOutlineManageAccounts as AccountIcon } from 'react-icons/md'
-import Avatar from '~/components/ui/Avatar'
-import Loader from '~/components/ui/Loader'
-import SidebarLayout from '~/components/ui/SidebarLayout'
-import TabLinkList, { TabLink } from '~/components/ui/TabLinkList'
+import Avatar from '~/components/global/Avatar'
+import Loader from '~/components/global/Loader'
+import SidebarLayout from '~/components/global/SidebarLayout'
+import TabLinkList, { TabLink } from '~/components/global/TabLinkList'
 import useAuth from '~/hooks/useAuth'
 
 const tabLinks: TabLink[] = [

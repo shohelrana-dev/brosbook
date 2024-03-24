@@ -5,7 +5,7 @@ import {
     AiOutlineEye as VisibleEyeIcon,
 } from 'react-icons/ai'
 import AnimatedInput, { AnimatedInputProps } from '~/components/form/AnimatedInput'
-import IconButton from '~/components/ui/IconButton'
+import IconButton from '~/components/global/IconButton'
 
 export default function PasswordInput(props: AnimatedInputProps) {
     const [isVisible, setIsVisible] = useState(false)

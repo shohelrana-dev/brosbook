@@ -9,8 +9,8 @@ import {
     WhatsappIcon,
     WhatsappShareButton,
 } from 'react-share'
-import IconButton from '~/components/ui/IconButton'
-import Tooltip from '~/components/ui/Tooltip'
+import IconButton from '~/components/global/IconButton'
+import Tooltip from '~/components/global/Tooltip'
 import { Post } from '~/interfaces/posts.interfaces'
 import { Popover, PopoverContent, PopoverTrigger } from '~/lib/nextui'
 import siteMetadata from '~/utils/siteMetadata'

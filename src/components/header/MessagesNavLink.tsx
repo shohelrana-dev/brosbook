@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { IoMailOutline as MessageIcon } from 'react-icons/io5'
-import IconButton from '~/components/ui/IconButton'
-import Tooltip from '~/components/ui/Tooltip'
+import IconButton from '~/components/global/IconButton'
+import Tooltip from '~/components/global/Tooltip'
 import { Badge } from '~/lib/nextui'
 import { useGetUnreadConversationsCountQuery } from '~/services/conversationsApi'
 

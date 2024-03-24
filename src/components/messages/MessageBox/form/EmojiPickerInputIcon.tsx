@@ -1,6 +1,6 @@
 import EmojiPicker, { EmojiClickData, EmojiStyle } from 'emoji-picker-react'
 import { HiOutlineEmojiHappy as EmojiIcon } from 'react-icons/hi'
-import IconButton from '~/components/ui/IconButton'
+import IconButton from '~/components/global/IconButton'
 import { Popover, PopoverContent, PopoverTrigger } from '~/lib/nextui'
 
 interface Props {

@@ -4,11 +4,11 @@ import { useParams } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import useInfiniteScroll from 'react-infinite-scroll-hook'
 import Masonry from 'react-responsive-masonry'
-import Avatar from '~/components/ui/Avatar'
-import Error from '~/components/ui/Error'
-import Lightbox from '~/components/ui/Lightbox'
-import Loader from '~/components/ui/Loader'
-import Transition from '~/components/ui/Transition'
+import Avatar from '~/components/global/Avatar'
+import Error from '~/components/global/Error'
+import Lightbox from '~/components/global/Lightbox'
+import Loader from '~/components/global/Loader'
+import Transition from '~/components/global/Transition'
 import {
     useGetConversationByIdQuery,
     useGetConversationMediaListQuery,

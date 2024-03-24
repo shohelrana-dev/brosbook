@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link'
 import TextOverflow from 'react-text-overflow'
-import Transition from '~/components/ui/Transition'
+import Transition from '~/components/global/Transition'
 import useAuth from '~/hooks/useAuth'
 import { Button, Chip } from '~/lib/nextui'
 

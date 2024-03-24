@@ -1,4 +1,4 @@
-import SidebarLayout from '~/components/ui/SidebarLayout'
+import SidebarLayout from '~/components/global/SidebarLayout'
 import SuggestionList from './SuggestionList'
 
 export const revalidate = 0

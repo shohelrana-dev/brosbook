@@ -1,6 +1,6 @@
 'use client'
 import { AnimatePresence, motion } from 'framer-motion'
-import Loader from '~/components/ui/Loader'
+import Loader from '~/components/global/Loader'
 
 export default function LoadingOverlay({ isLoading }: { isLoading: boolean }) {
     return (
