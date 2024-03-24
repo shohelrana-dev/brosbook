@@ -32,15 +32,8 @@ export default function FollowButton({ user: _user, ...rest }: Props) {
             return
         }
 
-        try {
-            await follow(user.id).unwrap()
-
-            setUser({ ...user, isViewerFollow: true })
-            toast.success(`You followed @${user.username}`)
-        } catch (err: any) {
-            toast.error(err?.data?.message || 'Something went wrong, Please try again.')
-            console.error(err)
-        }
+        await follow(user.id).unwrap()
+        setUser({ ...user, isViewerFollow: true })
     }
 
     async function handleUnfollow() {
