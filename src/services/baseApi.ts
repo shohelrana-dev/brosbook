@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { getCookie, removeCookie, setCookie } from 'tiny-cookie'
+import { getCookie, setCookie } from 'tiny-cookie'
 import { userLoggedOut } from '~/slices/authSlice'
+import { clearSession } from '~/utils/session'
 
 const BASE_URL = process.env.NEXT_PUBLIC_SERVER_API_URL
 
@@ -38,8 +39,8 @@ export const baseApi = createApi({
                 //retry the failed query
                 return await baseQuery(args, api, extraOptions)
             } else {
+                clearSession()
                 api?.dispatch(userLoggedOut())
-                removeCookie('access_token')
             }
         }
 
