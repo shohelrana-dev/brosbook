@@ -28,7 +28,7 @@ export default function Signup() {
         e.preventDefault()
 
         await signupMutation(formData).unwrap()
-        router.push(`/auth/email_verification/required?${formData.email}`)
+        router.push(`/auth/email_verification/required?email=${formData.email}`)
     }
 
     return (

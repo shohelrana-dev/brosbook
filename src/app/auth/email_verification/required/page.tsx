@@ -2,6 +2,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { useEffect } from 'react'
 import mailImage from '~/assets/images/mail-with-value.png'
 import Button from '~/components/global/Button'
 import Loader from '~/components/global/Loader'
@@ -16,7 +17,9 @@ export default function RequiredPage() {
 
     const email = searchParams.get('email')
 
-    if (!email) router.push('/auth/login')
+    useEffect(() => {
+        if (!email) router.push('/auth/login')
+    }, [email, router])
 
     async function handleResendEmailClick() {
         resendVerificationLinkMutation(email!)
@@ -33,7 +36,13 @@ export default function RequiredPage() {
                 </p>
             </div>
             <div className='card-auth text-center'>
-                <Image src={mailImage} className='text-center m-auto' alt='image' />
+                <Image
+                    src={mailImage}
+                    className='text-center m-auto w-fit mb-3'
+                    alt='image of email'
+                    width={200}
+                    height={200}
+                />
                 <h2 className='text-xl md:text-2xl mb-4'>Verify your email address</h2>
                 <p>Verification email has been sent to:</p>
                 <p className='font-bold mb-4'>{email}</p>
