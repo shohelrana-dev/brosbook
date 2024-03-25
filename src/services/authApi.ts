@@ -141,7 +141,6 @@ export const authApi = baseApi.injectEndpoints({
                     loading: 'Logging out...',
                     error: (err) => err.error?.data?.message,
                     success: () => {
-                        toast.success('Logged out.')
                         clearSession()
                         api.dispatch(userLoggedOut())
                         return 'Logged out.'
