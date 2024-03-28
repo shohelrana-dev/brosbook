@@ -77,7 +77,7 @@ interface Props {
 export const revalidate = 0
 
 export default async function ProfileLayout({ children, params }: Props) {
-    const currentUser = store.getState().auth.user
+    const currentUser = store.getState().session.user
     const user = await getUserByUsername(params.username)
 
     if (!user) return notFound()
