@@ -4,7 +4,7 @@ import useInfiniteScroll from 'react-infinite-scroll-hook'
 import Error from '~/components/global/Error'
 import Transition from '~/components/global/Transition'
 import NotificationsSkeleton from '~/components/skeletons/NotificationsSkeleton'
-import useAuth from '~/hooks/useAuth'
+import useSession from '~/hooks/useSession'
 import { Notification } from '~/interfaces/index.interfaces'
 import { useGetNotificationsQuery, useReadAllNotificationMutation } from '~/services/notificationsApi'
 import { extractErrorMessage } from '~/utils/error'
@@ -16,7 +16,7 @@ export default function NotificationList({ skeletonCount }: Props) {
     const [page, setPage] = useState(1)
     const notificationsQuery = useGetNotificationsQuery(page)
     const [readAllNotification] = useReadAllNotificationMutation()
-    const { isAuthenticated } = useAuth({ require: true })
+    const { isLoggedIn } = useSession({ require: true })
 
     const { data: notificationsData, isLoading, isSuccess, isError, error } = notificationsQuery
     const { items: notifications, nextPage } = notificationsData || {}
@@ -34,7 +34,7 @@ export default function NotificationList({ skeletonCount }: Props) {
         onLoadMore: () => setPage(nextPage!),
     })
 
-    if (!isAuthenticated) return null
+    if (!isLoggedIn) return null
 
     //decide content
     let content = null

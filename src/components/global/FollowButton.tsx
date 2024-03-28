@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { useConfirmAlert } from 'react-use-confirm-alert'
 import Button from '~/components/global/Button'
-import useAuth from '~/hooks/useAuth'
+import useSession from '~/hooks/useSession'
 import useUnauthorizedAlert from '~/hooks/useUnauthorzedAlert'
 import { User } from '~/interfaces/user.interfaces'
 import { ButtonProps } from '~/lib/nextui'
@@ -18,12 +18,12 @@ export default function FollowButton({ user: _user, ...rest }: Props) {
     const [user, setUser] = useState<User>(_user)
     const [follow, { isLoading }] = useFollowMutation()
     const [unfollow] = useUnfollowMutation()
-    const { isAuthenticated } = useAuth()
+    const { isLoggedIn } = useSession()
     const confirmAlert = useConfirmAlert()
     const unauthorizedAlert = useUnauthorizedAlert()
 
     async function handleFollow() {
-        if (!isAuthenticated) {
+        if (!isLoggedIn) {
             unauthorizedAlert({
                 title: `Follow ${user.fullName} to see what they share on ${siteMetadata.appName}.`,
                 message: `Sign up so you never miss their Posts.`,

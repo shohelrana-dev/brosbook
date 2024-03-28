@@ -9,18 +9,18 @@ import Avatar from '~/components/global/Avatar'
 import Error from '~/components/global/Error'
 import FollowButton from '~/components/global/FollowButton'
 import Loader from '~/components/global/Loader'
-import useAuth from '~/hooks/useAuth'
 import useMediaQuery from '~/hooks/useMediaQuery'
+import useSession from '~/hooks/useSession'
 import { User } from '~/interfaces/user.interfaces'
 import { useGetSuggestedUsersQuery } from '~/services/usersApi'
 import { extractErrorMessage } from '~/utils/error'
 
 export default function SlidesSuggestions() {
-    const { isAuthenticated } = useAuth()
+    const { isLoggedIn } = useSession()
     const isMobileDevice = useMediaQuery('(max-width: 768px)')
     const suggestedUsersQuery = useGetSuggestedUsersQuery(
         { page: 1, limit: 12 },
-        { skip: !isMobileDevice || !isAuthenticated }
+        { skip: !isMobileDevice || !isLoggedIn }
     )
     const [isTimeUp, setIsTimeUp] = useState(false)
 
@@ -35,7 +35,7 @@ export default function SlidesSuggestions() {
         return () => clearTimeout(timerId)
     }, [])
 
-    if (!isAuthenticated || !isMobileDevice || !isTimeUp) return null
+    if (!isLoggedIn || !isMobileDevice || !isTimeUp) return null
 
     const responsive = {
         tablet: {

@@ -4,7 +4,7 @@ import { useParams } from 'next/navigation'
 import { IoCheckmarkCircleOutline as TickIcon } from 'react-icons/io5'
 import TextOverflow from 'react-text-overflow'
 import Avatar from '~/components/global/Avatar'
-import useAuth from '~/hooks/useAuth'
+import useSession from '~/hooks/useSession'
 import { Conversation } from '~/interfaces/conversation.interfaces'
 import cn from '~/utils/cn'
 import timeAgo from '~/utils/timeAgo'
@@ -28,7 +28,7 @@ interface Props {
 }
 
 export default function ConversationItem({ conversation }: Props) {
-    const { user: currentUser } = useAuth()
+    const { user: currentUser } = useSession()
     const { conversationId } = useParams<{ conversationId: string }>()
 
     const { lastMessage, unreadMessagesCount, participant } = conversation || {}

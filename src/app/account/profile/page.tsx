@@ -7,8 +7,8 @@ import BasicInput from '~/components/form/BasicInput'
 import Button from '~/components/global/Button'
 import Loader from '~/components/global/Loader'
 import Transition from '~/components/global/Transition'
-import useAuth from '~/hooks/useAuth'
 import { useForm } from '~/hooks/useForm'
+import useSession from '~/hooks/useSession'
 import { ProfilePayload } from '~/interfaces/account.interfaces'
 import { Radio, RadioGroup } from '~/lib/nextui'
 import { useUpdateProfileMutation } from '~/services/accountApi'
@@ -17,7 +17,7 @@ import { extractErrors } from '~/utils/error'
 
 export default function ProfileSettingsPage() {
     //hooks
-    const { user: currentUser } = useAuth()
+    const { user: currentUser } = useSession()
     const { data: user, isLoading: isUserLoading } = useGetUserByIdQuery(currentUser?.id!)
     const [updateProfile, { isLoading, error }] = useUpdateProfileMutation()
     const { formData, handleChange, setFormData } = useForm<ProfilePayload>()

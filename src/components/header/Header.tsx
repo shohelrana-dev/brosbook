@@ -9,13 +9,13 @@ import MessagesNavLink from '~/components/header/MessagesNavLink'
 import NotificationsNavLink from '~/components/header/NotificationsNavLink'
 import SearchButton from '~/components/header/SearchButton'
 import UserMenu from '~/components/header/UserMenu'
-import useAuth from '~/hooks/useAuth'
 import useMediaQuery from '~/hooks/useMediaQuery'
+import useSession from '~/hooks/useSession'
 import { Navbar, NavbarBrand, NavbarContent } from '~/lib/nextui'
 
 export default function Header() {
     const isScreenSmall = useMediaQuery('(max-width: 767px)')
-    const { isAuthenticated } = useAuth()
+    const { isLoggedIn } = useSession()
     const pathname = usePathname()
 
     return (
@@ -40,7 +40,7 @@ export default function Header() {
 
                 <NavbarContent as='div' justify='end' className='gap-1'>
                     <SearchButton />
-                    {isAuthenticated ? (
+                    {isLoggedIn ? (
                         <>
                             <NotificationsNavLink />
                             <MessagesNavLink />

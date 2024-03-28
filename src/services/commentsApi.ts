@@ -26,7 +26,7 @@ export const commentsApi = baseApi.injectEndpoints({
             invalidatesTags: (result, error, arg) => [{ type: 'Comments', id: arg.postId }],
             onQueryStarted: async (arg, api) => {
                 // optimistic cache update
-                const currentUser = (api.getState() as RootState).auth.user
+                const currentUser = (api.getState() as RootState).session.user
                 const patchResult = api.dispatch(
                     commentsApi.util.updateQueryData(
                         'getComments',

@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { getCookie, setCookie } from 'tiny-cookie'
-import { userLoggedOut } from '~/slices/authSlice'
-import { clearSession } from '~/utils/session'
+import { getCookie } from 'tiny-cookie'
+import { userLoggedOut } from '~/slices/sessionSlice'
+import { clearSession, updateSession } from '~/utils/session'
 
 const BASE_URL = process.env.NEXT_PUBLIC_SERVER_API_URL
 
@@ -34,7 +34,7 @@ export const baseApi = createApi({
 
             if (data && typeof data === 'object' && 'accessToken' in data) {
                 console.log('New token generated.')
-                setCookie('accessToken', data.accessToken)
+                updateSession({ accessToken: data.accessToken as string })
 
                 //retry the failed query
                 return await baseQuery(args, api, extraOptions)

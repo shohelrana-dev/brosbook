@@ -1,16 +1,16 @@
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-import isAuthenticated from '~/utils/isAuthenticated'
 import { guestPathnames, protectedPathnames } from '~/utils/pathnames'
+import { getServerSession } from './utils/session'
 
 export async function middleware(request: NextRequest) {
     const currentPathname = request.nextUrl.pathname
-    const isAuth = await isAuthenticated(request.cookies)
+    const { isLoggedIn } = getServerSession(request.cookies)
 
     const isProtectedPath = protectedPathnames.includes(currentPathname)
     const isGuestPath = guestPathnames.includes(currentPathname)
 
-    if (isProtectedPath && !isAuth) {
+    if (isProtectedPath && !isLoggedIn) {
         //unauhorized user should be redirect from protected path
         const response = NextResponse.redirect(
             new URL(`/auth/login?redirect_to=${currentPathname}`, request.url)
@@ -22,7 +22,7 @@ export async function middleware(request: NextRequest) {
         return response
     }
 
-    if (isGuestPath && isAuth) {
+    if (isGuestPath && isLoggedIn) {
         //guest path only accesible for unauthorized users
         return NextResponse.redirect(new URL('/', request.url))
     }

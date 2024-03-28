@@ -9,7 +9,7 @@ import { useConfirmAlert } from 'react-use-confirm-alert'
 import { toast } from 'sonner'
 import IconButton from '~/components/global/IconButton'
 import Tooltip from '~/components/global/Tooltip'
-import useAuth from '~/hooks/useAuth'
+import useSession from '~/hooks/useSession'
 import useUnauthorizedAlert from '~/hooks/useUnauthorzedAlert'
 import { ListResponse } from '~/interfaces/index.interfaces'
 import { Post } from '~/interfaces/posts.interfaces'
@@ -28,14 +28,14 @@ export default function PostOptions({ post }: Props) {
     const [unfollow] = useUnfollowMutation()
     const [deletePostMutation] = useDeletePostMutation()
 
-    const { user: currentUser, isAuthenticated } = useAuth()
+    const { user: currentUser, isLoggedIn } = useSession()
     const [author, setAuthor] = useState<User>(post.author)
     const confirmAlert = useConfirmAlert()
     const unauthorizedAlert = useUnauthorizedAlert()
     const dispatch = useDispatch<AppDispatch>()
     const pathname = usePathname()
 
-    const isCurrentUserAuthor = isAuthenticated && author && author.id === currentUser?.id
+    const isCurrentUserAuthor = isLoggedIn && author && author.id === currentUser?.id
 
     async function handleDeletePostClick() {
         await confirmAlert({
@@ -47,7 +47,7 @@ export default function PostOptions({ post }: Props) {
     }
 
     async function handleFollowClick() {
-        if (!isAuthenticated) {
+        if (!isLoggedIn) {
             unauthorizedAlert({
                 title: `Follow ${author.fullName} to see what they share on ${process.env.NEXT_PUBLIC_APP_NAME}.`,
                 message: `Sign up so you never miss their Posts.`,

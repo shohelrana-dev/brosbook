@@ -6,7 +6,7 @@ import Error from '~/components/global/Error'
 import IconButton from '~/components/global/IconButton'
 import Loader from '~/components/global/Loader'
 import CommentItem from '~/components/post/comment/CommentItem'
-import useAuth from '~/hooks/useAuth'
+import useSession from '~/hooks/useSession'
 import { ErrorResponse } from '~/interfaces/index.interfaces'
 import { Post } from '~/interfaces/posts.interfaces'
 import { Button } from '~/lib/nextui'
@@ -18,7 +18,7 @@ interface Props {
 
 export default function CommentList({ post }: Props) {
     const [page, setPage] = useState(1)
-    const { user: currentUser, isAuthenticated } = useAuth()
+    const { user: currentUser, isLoggedIn } = useSession()
     const commentsQuery = useGetCommentsQuery({ postId: post.id, page })
     const [createComment] = useCreateCommentMutation()
 
@@ -52,7 +52,7 @@ export default function CommentList({ post }: Props) {
 
     return (
         <div className='mt-2'>
-            {isAuthenticated && (
+            {isLoggedIn && (
                 <form onSubmit={handleSaveComment} className='mb-2 flex items-center'>
                     <Avatar src={currentUser?.avatar?.url} online />
                     <div className='relative ml-2 w-full'>

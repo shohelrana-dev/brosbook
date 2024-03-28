@@ -3,24 +3,24 @@ import { usePathname } from 'next/navigation'
 import { useEffect, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { io } from 'socket.io-client'
-import useAuth from '~/hooks/useAuth'
+import useSession from '~/hooks/useSession'
 import useUnauthorizedAlert from '~/hooks/useUnauthorzedAlert'
-import { User } from '~/interfaces/user.interfaces'
-import { userLoggedIn, userLoggedOut } from '~/slices/authSlice'
+import { Session } from '~/interfaces/index.interfaces'
+import { userLoggedIn, userLoggedOut } from '~/slices/sessionSlice'
 import { removeSocket, setSocket } from '~/slices/socketSlice'
 import siteMetadata from '~/utils/siteMetadata'
 
-export default function Preload({ sessionUser }: { sessionUser: User | null }) {
-    const { user, isAuthenticated } = useAuth()
+export default function Preload({ session }: { session: Session }) {
+    const { user, isLoggedIn } = useSession()
     const unauthorizedAlert = useUnauthorizedAlert()
     const pathname = usePathname()
     const dispatch = useDispatch()
     const showedPopup = useRef(false)
     const loadedRef = useRef(false)
 
-    if (sessionUser && !loadedRef.current) {
+    if (session.isLoggedIn && session.user && !loadedRef.current) {
         loadedRef.current = true
-        dispatch(userLoggedIn(sessionUser))
+        dispatch(userLoggedIn(session.user))
     } else if (!loadedRef.current) {
         loadedRef.current = true
         dispatch(userLoggedOut())
@@ -52,7 +52,7 @@ export default function Preload({ sessionUser }: { sessionUser: User | null }) {
     }, [user, dispatch])
 
     useEffect(() => {
-        if (isAuthenticated || showedPopup.current || pathname?.startsWith('/auth/')) {
+        if (isLoggedIn || showedPopup.current || pathname?.startsWith('/auth/')) {
             return
         }
 
@@ -67,7 +67,7 @@ export default function Preload({ sessionUser }: { sessionUser: User | null }) {
 
         //cleanup timer
         return () => clearTimeout(timerId)
-    }, [isAuthenticated, pathname, unauthorizedAlert])
+    }, [isLoggedIn, pathname, unauthorizedAlert])
 
     return null
 }

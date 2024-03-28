@@ -7,7 +7,7 @@ import {
 } from '~/interfaces/auth.interfaces'
 import { User } from '~/interfaces/user.interfaces'
 import { baseApi } from '~/services/baseApi'
-import { userLoggedIn, userLoggedOut } from '~/slices/authSlice'
+import { userLoggedIn, userLoggedOut } from '~/slices/sessionSlice'
 import { clearSession, setSession } from '~/utils/session'
 
 export const authApi = baseApi.injectEndpoints({

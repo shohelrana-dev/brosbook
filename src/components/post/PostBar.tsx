@@ -5,8 +5,8 @@ import Tooltip from '~/components/global/Tooltip'
 import LikeButton from '~/components/post/LikeButton'
 import LikesCount from '~/components/post/LikesCount'
 import PostShare from '~/components/post/PostShare'
-import useAuth from '~/hooks/useAuth'
 import useCommentsVisibilty from '~/hooks/useCommentsVisibilty'
+import useSession from '~/hooks/useSession'
 import useUnauthorizedAlert from '~/hooks/useUnauthorzedAlert'
 import { Post } from '~/interfaces/posts.interfaces'
 import { usePostLikeMutation, usePostUnlikeMutation } from '~/services/postsApi'
@@ -21,14 +21,14 @@ export default function PostBar({ post }: Props) {
     //hooks
     const [postLike] = usePostLikeMutation()
     const [postUnlike] = usePostUnlikeMutation()
-    const { isAuthenticated } = useAuth()
+    const { isLoggedIn } = useSession()
     const unauthorizedAlert = useUnauthorizedAlert()
     const { toggleCommentsVisibility } = useCommentsVisibilty(id)
 
     function handlePostLike(event: MouseEvent<HTMLButtonElement>) {
         event.currentTarget.disabled = true
 
-        if (!isAuthenticated) {
+        if (!isLoggedIn) {
             unauthorizedAlert({
                 title: 'Like a Post to share the love.',
                 message: `Join ${process.env.NEXT_PUBLIC_APP_NAME} now to let ${author.fullName} know you like their Post.`,

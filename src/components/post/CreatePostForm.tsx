@@ -11,13 +11,13 @@ import Button from '~/components/global/Button'
 import DarkOverlay from '~/components/global/DarkOverlay'
 import IconButton from '~/components/global/IconButton'
 import Tooltip from '~/components/global/Tooltip'
-import useAuth from '~/hooks/useAuth'
 import useSelectFile from '~/hooks/useSelectFile'
+import useSession from '~/hooks/useSession'
 import { useCreatePostMutation } from '~/services/postsApi'
 
 export default function CreatePostForm() {
     //hooks
-    const { user, isAuthenticated } = useAuth()
+    const { user, isLoggedIn } = useSession()
     const [createPost, { isLoading }] = useCreatePostMutation()
     const [messageText, setMessageText] = useState<string>('')
     const { inputRef, handleChange, handleClick, selectedFile, removeSelectedFile } = useSelectFile()
@@ -48,7 +48,7 @@ export default function CreatePostForm() {
         setIsOpen(!isOpen)
     }
 
-    if (!isAuthenticated) return null
+    if (!isLoggedIn) return null
 
     return (
         <div className='mb-5'>

@@ -18,7 +18,7 @@ export const conversationsApi = baseApi.injectEndpoints({
             onCacheEntryAdded: async (arg, api) => {
                 const { updateCachedData, cacheEntryRemoved, cacheDataLoaded, getState } = api
                 const rootState = getState() as RootState
-                const currentUser = rootState.auth.user
+                const currentUser = rootState.session.user
                 const socket = rootState.socket.socket
 
                 try {
@@ -97,7 +97,7 @@ export const conversationsApi = baseApi.injectEndpoints({
             onCacheEntryAdded: async (arg, api) => {
                 const { cacheDataLoaded, cacheEntryRemoved, updateCachedData, getState } = api
                 const rootState = getState() as RootState
-                const currentUser = rootState.auth.user
+                const currentUser = rootState.session.user
                 const socket = rootState.socket.socket
 
                 try {

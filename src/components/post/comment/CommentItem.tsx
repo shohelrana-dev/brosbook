@@ -5,7 +5,7 @@ import Avatar from '~/components/global/Avatar'
 import LikeButton from '~/components/post/LikeButton'
 import LikesCount from '~/components/post/LikesCount'
 import CommentOptions from '~/components/post/comment/CommentOptions'
-import useAuth from '~/hooks/useAuth'
+import useSession from '~/hooks/useSession'
 import useUnauthorizedAlert from '~/hooks/useUnauthorzedAlert'
 import { Comment, Post } from '~/interfaces/posts.interfaces'
 import { useLikeCommentMutation, useUnlikeCommentMutation } from '~/services/commentsApi'
@@ -21,17 +21,15 @@ export default function CommentItem({ post, comment }: Props) {
     //hooks
     const [likeComment] = useLikeCommentMutation()
     const [unlikeComment] = useUnlikeCommentMutation()
-    const { user: currentUser, isAuthenticated } = useAuth()
+    const { user: currentUser, isLoggedIn } = useSession()
     const unauthorizedAlert = useUnauthorizedAlert()
 
     const { id, body, isViewerLiked, likesCount, author, createdAt } = comment
     const isCurrentUserAuthor =
-        isAuthenticated &&
-        author &&
-        (author.id === currentUser?.id || post.author.id === currentUser?.id)
+        isLoggedIn && author && (author.id === currentUser?.id || post.author.id === currentUser?.id)
 
     async function handleCommentLike() {
-        if (!isAuthenticated) {
+        if (!isLoggedIn) {
             unauthorizedAlert({
                 title: 'Like a Comment to share the love.',
                 message: `Join ${siteMetadata.appName} now to let ${author.fullName} know you like their Post and Comment.`,

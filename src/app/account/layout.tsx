@@ -6,7 +6,7 @@ import Avatar from '~/components/global/Avatar'
 import Loader from '~/components/global/Loader'
 import SidebarLayout from '~/components/global/SidebarLayout'
 import TabLinkList, { TabLink } from '~/components/global/TabLinkList'
-import useAuth from '~/hooks/useAuth'
+import useSession from '~/hooks/useSession'
 
 const tabLinks: TabLink[] = [
     { label: 'Account', pathname: '/account', icon: <AccountIcon size={20} /> },
@@ -19,13 +19,13 @@ interface Props {
 }
 
 export default function AccountLayout({ children, modal }: Props) {
-    const { user, isAuthenticated } = useAuth()
+    const { user, isLoggedIn } = useSession()
 
     useEffect(() => {
         document.title = 'Your account'
     }, [])
 
-    if (!isAuthenticated) return <Loader />
+    if (!isLoggedIn) return <Loader />
 
     return (
         <SidebarLayout>

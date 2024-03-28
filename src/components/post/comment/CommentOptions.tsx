@@ -6,7 +6,7 @@ import { useConfirmAlert } from 'react-use-confirm-alert'
 import { toast } from 'sonner'
 import IconButton from '~/components/global/IconButton'
 import Tooltip from '~/components/global/Tooltip'
-import useAuth from '~/hooks/useAuth'
+import useSession from '~/hooks/useSession'
 import useUnauthorizedAlert from '~/hooks/useUnauthorzedAlert'
 import { Comment } from '~/interfaces/posts.interfaces'
 import { User } from '~/interfaces/user.interfaces'
@@ -25,7 +25,7 @@ export default function CommentOptions({ comment, isCurrentUserAuthor }: Props) 
     const [unfollow] = useUnfollowMutation()
     const [deleteComment] = useDeleteCommentMutation()
 
-    const { isAuthenticated } = useAuth()
+    const { isLoggedIn } = useSession()
     const confirmAlert = useConfirmAlert()
     const [author, setAuthor] = useState<User>(comment.author)
     const unauthorizedAlert = useUnauthorizedAlert()
@@ -42,7 +42,7 @@ export default function CommentOptions({ comment, isCurrentUserAuthor }: Props) 
     }
 
     async function handleFollow() {
-        if (!isAuthenticated) {
+        if (!isLoggedIn) {
             unauthorizedAlert({
                 title: `Follow ${author.fullName} to see what they share on ${siteMetadata.appName}.`,
                 message: `Sign up so you never miss their Posts.`,

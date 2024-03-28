@@ -6,15 +6,15 @@ import placeholderCoverPhoto from '~/assets/images/placeholder-cover-photo.png'
 import Button from '~/components/global/Button'
 import IconButton from '~/components/global/IconButton'
 import Lightbox from '~/components/global/Lightbox'
-import useAuth from '~/hooks/useAuth'
 import useSelectFile from '~/hooks/useSelectFile'
+import useSession from '~/hooks/useSession'
 import { User } from '~/interfaces/user.interfaces'
 import { useChangeCoverPhotoMutation } from '~/services/usersApi'
 
 type Props = { user: User }
 
 export default function CoverPhoto({ user }: Props) {
-    const { user: currentUser } = useAuth()
+    const { user: currentUser } = useSession()
     const [changeCoverPhoto, { isLoading }] = useChangeCoverPhotoMutation()
     const { inputRef, selectedFile, removeSelectedFile, handleClick, handleChange } = useSelectFile()
 

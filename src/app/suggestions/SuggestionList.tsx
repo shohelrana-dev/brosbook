@@ -5,7 +5,7 @@ import Error from '~/components/global/Error'
 import Transition from '~/components/global/Transition'
 import UserItem from '~/components/global/UserItem'
 import UsersSkeleton from '~/components/skeletons/UsersSkeleton'
-import useAuth from '~/hooks/useAuth'
+import useSession from '~/hooks/useSession'
 import { useGetSuggestedUsersQuery } from '~/services/usersApi'
 import { extractErrorMessage } from '~/utils/error'
 
@@ -13,12 +13,12 @@ export default function SuggestionList() {
     //hooks
     const [page, setPage] = useState(1)
     const suggestedUsersQuery = useGetSuggestedUsersQuery({ page })
-    const { isAuthenticated } = useAuth({ require: true })
+    const { isLoggedIn } = useSession({ require: true })
 
     const { data: suggestedUsersData, isLoading, isSuccess, isError, error } = suggestedUsersQuery
     const { items: users, nextPage } = suggestedUsersData || {}
 
-    if (!isAuthenticated) return null
+    if (!isLoggedIn) return null
 
     //decide content
     let content = null

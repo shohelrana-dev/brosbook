@@ -5,15 +5,15 @@ import Modal from 'react-minimal-modal'
 import Button from '~/components/global/Button'
 import IconButton from '~/components/global/IconButton'
 import Lightbox from '~/components/global/Lightbox'
-import useAuth from '~/hooks/useAuth'
 import useSelectFile from '~/hooks/useSelectFile'
+import useSession from '~/hooks/useSession'
 import { User } from '~/interfaces/user.interfaces'
 import { useChangeProfilePhotoMutation } from '~/services/usersApi'
 
 type Props = { user: User }
 
 export default function ProfilePhoto({ user }: Props) {
-    const { user: currentUser } = useAuth()
+    const { user: currentUser } = useSession()
     const [changeProfilePhoto, { isLoading }] = useChangeProfilePhotoMutation()
     const { handleChange, handleClick, inputRef, selectedFile, removeSelectedFile } = useSelectFile()
 

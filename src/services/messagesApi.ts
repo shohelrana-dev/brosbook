@@ -26,7 +26,7 @@ export const messagesApi = baseApi.injectEndpoints({
             onCacheEntryAdded: async (arg, api) => {
                 const { updateCachedData, cacheEntryRemoved, cacheDataLoaded, getState, dispatch } = api
                 const rootState = getState() as RootState
-                const currentUser = rootState.auth.user
+                const currentUser = rootState.session.user
                 const socket = rootState.socket.socket
 
                 try {
@@ -91,7 +91,7 @@ export const messagesApi = baseApi.injectEndpoints({
                 }
             },
             onQueryStarted: async (arg, api) => {
-                const currentUser = (api.getState() as RootState).auth.user
+                const currentUser = (api.getState() as RootState).session.user
 
                 //optimistic cache update
                 const patchResult = api.dispatch(

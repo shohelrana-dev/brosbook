@@ -6,7 +6,7 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import '~/assets/styles/main.css'
 import Preload from '~/components/global/Preload'
 import Header from '~/components/header/Header'
-import { userLoggedIn } from '~/slices/authSlice'
+import { userLoggedIn, userLoggedOut } from '~/slices/sessionSlice'
 import { store } from '~/store'
 import { getServerSession } from '~/utils/session'
 import siteMetadata from '~/utils/siteMetadata'
@@ -61,14 +61,19 @@ interface Props {
 
 export default async function RootLayout({ children, auth, photos }: Props) {
     const session = getServerSession(cookies())
-    store.dispatch(userLoggedIn(session.user!))
+    if (session.isLoggedIn && !session.user) {
+        store.dispatch(userLoggedIn(session.user!))
+    } else {
+        store.dispatch(userLoggedOut())
+    }
+    delete session.accessToken
 
     return (
         <html lang='eng' suppressHydrationWarning>
             <head />
             <body suppressHydrationWarning className={`${kanit.className} bg-light-gray min-h-screen`}>
                 <Providers>
-                    <Preload sessionUser={session.user} />
+                    <Preload session={session} />
                     <Header />
 
                     {children}

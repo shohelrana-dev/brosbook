@@ -5,8 +5,8 @@ import { FormEvent } from 'react'
 import Modal, { useToggle } from 'react-minimal-modal'
 import PasswordInput from '~/components/form/PasswordInput'
 import Button from '~/components/global/Button'
-import useAuth from '~/hooks/useAuth'
 import { useForm } from '~/hooks/useForm'
+import useSession from '~/hooks/useSession'
 import { ChangePasswordPayload } from '~/interfaces/account.interfaces'
 import { useChangePasswordMutation } from '~/services/accountApi'
 import { extractErrors } from '~/utils/error'
@@ -16,7 +16,7 @@ export default function ChangePasswordModal() {
     const { formData, handleChange } = useForm<ChangePasswordPayload>()
     const router = useRouter()
     const [isOpen, toggle] = useToggle(true)
-    useAuth({ require: true })
+    useSession({ require: true })
 
     const errors = extractErrors<ChangePasswordPayload>(error)
 

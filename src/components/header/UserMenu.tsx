@@ -4,22 +4,22 @@ import { RiUserSettingsFill as SettingIcon } from 'react-icons/ri'
 import { useConfirmAlert } from 'react-use-confirm-alert'
 import Avatar from '~/components/global/Avatar'
 import Tooltip from '~/components/global/Tooltip'
-import useAuth from '~/hooks/useAuth'
+import useSession from '~/hooks/useSession'
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '~/lib/nextui'
 import { useLazyLogoutQuery } from '~/services/authApi'
 import siteMetadata from '~/utils/siteMetadata'
 
 export default function UserMenu() {
-    const { user } = useAuth()
+    const { user } = useSession()
     const confirmAlert = useConfirmAlert()
-    const [logout] = useLazyLogoutQuery()
+    const [logoutMutation] = useLazyLogoutQuery()
 
     async function handleLogout() {
         confirmAlert({
             title: `Log out of ${siteMetadata.appName}?`,
             message: 'You can always log back in at any time. And you can switch another account.',
             confirmButtonLabel: 'Log out',
-            onConfirm: logout as any,
+            onConfirm: logoutMutation,
         })
     }
 

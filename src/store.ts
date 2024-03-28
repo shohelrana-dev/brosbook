@@ -1,13 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { baseApi } from '~/services/baseApi'
-import { authSlice } from '~/slices/authSlice'
+import { sessionSlice } from '~/slices/sessionSlice'
 import { socketSlice } from '~/slices/socketSlice'
 import { toggleCommentsSlice } from '~/slices/toggleCommentsSlice'
 
 export const store = configureStore({
     reducer: {
         [baseApi.reducerPath]: baseApi.reducer,
-        [authSlice.name]: authSlice.reducer,
+        [sessionSlice.name]: sessionSlice.reducer,
         [socketSlice.name]: socketSlice.reducer,
         [toggleCommentsSlice.name]: toggleCommentsSlice.reducer,
     },

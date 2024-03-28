@@ -94,8 +94,8 @@ export default async function ProfileLayout({ children, params }: Props) {
         { label: 'Media', pathname: `/${user?.username}/media` },
     ]
 
-    const isAuthenticated = !!currentUser?.id
-    const isAuthAndSameUser = isAuthenticated && currentUser?.username === user?.username
+    const isLoggedIn = !!currentUser?.id
+    const isAuthAndSameUser = isLoggedIn && currentUser?.username === user?.username
 
     return (
         <SidebarLayout>
@@ -108,7 +108,7 @@ export default async function ProfileLayout({ children, params }: Props) {
 
                             <div className='flex flex-wrap items-center gap-2'>
                                 <ExtraOptions user={user} />
-                                {isAuthenticated && !isAuthAndSameUser && (
+                                {isLoggedIn && !isAuthAndSameUser && (
                                     <>
                                         <Tooltip content='Messages' disableWrapper>
                                             <IconButton as={Link} href={`/messages/${user.username}`}>

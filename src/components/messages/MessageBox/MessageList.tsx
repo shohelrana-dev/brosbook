@@ -6,7 +6,7 @@ import Loader from '~/components/global/Loader'
 import Transition from '~/components/global/Transition'
 import MessageItem from '~/components/messages/MessageBox/MessageItem'
 import ChatSkeleton from '~/components/skeletons/ChatSkeleton'
-import useAuth from '~/hooks/useAuth'
+import useSession from '~/hooks/useSession'
 import { Message } from '~/interfaces/conversation.interfaces'
 import { useGetConversationByIdQuery } from '~/services/conversationsApi'
 import { useGetMessagesQuery, useSeenMessagesMutation } from '~/services/messagesApi'
@@ -14,7 +14,7 @@ import { extractErrorMessage } from '~/utils/error'
 
 export default function MessageList() {
     //hooks
-    const { user } = useAuth()
+    const { user } = useSession()
     const { conversationId } = useParams()
     const { data: conversation } = useGetConversationByIdQuery(conversationId as string)
     const messageListRef = useRef<HTMLUListElement>(null)

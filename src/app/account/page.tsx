@@ -2,11 +2,11 @@
 import Link from 'next/link'
 import TextOverflow from 'react-text-overflow'
 import Transition from '~/components/global/Transition'
-import useAuth from '~/hooks/useAuth'
+import useSession from '~/hooks/useSession'
 import { Button, Chip } from '~/lib/nextui'
 
 export default function GeneralSettingsPage() {
-    const { user } = useAuth()
+    const { user } = useSession()
 
     return (
         <Transition style={{ padding: 16 }}>

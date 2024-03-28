@@ -6,14 +6,14 @@ import Modal, { useToggle } from 'react-minimal-modal'
 import AnimatedInput from '~/components/form/AnimatedInput'
 import PasswordInput from '~/components/form/PasswordInput'
 import Button from '~/components/global/Button'
-import useAuth from '~/hooks/useAuth'
 import { useForm } from '~/hooks/useForm'
+import useSession from '~/hooks/useSession'
 import { ChangeUsernamePayload } from '~/interfaces/account.interfaces'
 import { useChangeUsernameMutation } from '~/services/accountApi'
 import { extractErrors } from '~/utils/error'
 
 export default function ChangeUsernameModal() {
-    const { user } = useAuth()
+    const { user } = useSession()
     const [changeUsername, { isLoading, error }] = useChangeUsernameMutation()
     const { formData, handleChange } = useForm<ChangeUsernamePayload>({
         username: user?.username!,
@@ -21,7 +21,7 @@ export default function ChangeUsernameModal() {
     })
     const [isOpen, toggle] = useToggle(true)
     const router = useRouter()
-    useAuth({ require: true })
+    useSession({ require: true })
 
     const errors = extractErrors<ChangeUsernamePayload>(error)
 

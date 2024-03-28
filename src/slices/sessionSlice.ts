@@ -3,34 +3,34 @@ import { useSelector } from 'react-redux'
 import { User } from '~/interfaces/user.interfaces'
 import { RootState } from '~/store'
 
-interface AuthState {
-    isAuthenticated: boolean
+interface SessionState {
+    isLoggedIn: boolean
     isChecked: boolean
     user: User | null
 }
-const initialState: AuthState = {
-    isAuthenticated: false,
+const initialState: SessionState = {
+    isLoggedIn: false,
     isChecked: false,
     user: null,
 }
 
-export const authSlice = createSlice({
-    name: 'auth',
+export const sessionSlice = createSlice({
+    name: 'session',
     initialState,
     reducers: {
         userLoggedIn: (state, { payload }: PayloadAction<User>) => {
-            state.isAuthenticated = true
+            state.isLoggedIn = true
             state.isChecked = true
             state.user = payload
         },
         userLoggedOut: (state) => {
-            state.isAuthenticated = false
+            state.isLoggedIn = false
             state.isChecked = true
             state.user = null
         },
     },
 })
 
-export const useAuthState = () => useSelector((state: RootState) => state.auth)
+export const useSessionState = () => useSelector((state: RootState) => state.session)
 
-export const { userLoggedIn, userLoggedOut } = authSlice.actions
+export const { userLoggedIn, userLoggedOut } = sessionSlice.actions
