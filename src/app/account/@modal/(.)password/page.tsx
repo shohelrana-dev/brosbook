@@ -8,8 +8,8 @@ import Button from '~/components/global/Button'
 import { useForm } from '~/hooks/useForm'
 import useSession from '~/hooks/useSession'
 import { ChangePasswordPayload } from '~/interfaces/account.interfaces'
+import { extractErrors } from '~/lib/error'
 import { useChangePasswordMutation } from '~/services/accountApi'
-import { extractErrors } from '~/utils/error'
 
 export default function ChangePasswordModal() {
     const [changePassword, { isLoading, error }] = useChangePasswordMutation()

@@ -1,9 +1,9 @@
 import { toast } from 'sonner'
+import { CONVERSATIONS_PER_PAGE, MEDIA_PER_PAGE } from '~/config/constants'
 import { Conversation, Message } from '~/interfaces/conversation.interfaces'
 import { ListResponse, Media } from '~/interfaces/index.interfaces'
-import { RootState } from '~/store'
-import { CONVERSATIONS_PER_PAGE, MEDIA_PER_PAGE } from '~/utils/constants'
-import listQueryExtraDefinitions from '~/utils/listQueryExtraDefinitions'
+import listQueryExtraDefinitions from '~/lib/listQueryExtraDefinitions'
+import { RootState } from '~/lib/store'
 import { baseApi } from './baseApi'
 
 export const conversationsApi = baseApi.injectEndpoints({

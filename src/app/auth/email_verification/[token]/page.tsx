@@ -5,8 +5,8 @@ import { useEffect, useRef } from 'react'
 import { ImCheckmark as CheckmarkIcon, ImCross as CrossIcon } from 'react-icons/im'
 import Button from '~/components/global/Button'
 import Loader from '~/components/global/Loader'
+import siteMetadata from '~/config/siteMetadata'
 import { useResendVerificationLinkMutation, useVerifyEmailMutation } from '~/services/authApi'
-import siteMetadata from '~/utils/siteMetadata'
 
 type Props = {
     params: { token: string }

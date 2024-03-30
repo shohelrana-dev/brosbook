@@ -10,8 +10,8 @@ import Loader from '~/components/global/Loader'
 import MessageList from '~/components/messages/MessageBox/MessageList'
 import CreateMessageForm from '~/components/messages/MessageBox/form/CreateMessageForm'
 import ParticipantInfo from '~/components/messages/ParticipantInfo'
+import timeAgo from '~/lib/timeAgo'
 import { useGetConversationByIdQuery } from '~/services/conversationsApi'
-import timeAgo from '~/utils/timeAgo'
 
 const classes = {
     wrapper: `h-screen-content overflow-hidden px-2 grid grid-rows-[auto_1fr_auto]`,

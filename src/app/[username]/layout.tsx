@@ -16,8 +16,8 @@ import Tooltip from '~/components/global/Tooltip'
 import CoverPhoto from '~/components/profile/CoverPhoto'
 import ExtraOptions from '~/components/profile/ExtraOptions'
 import ProfilePhoto from '~/components/profile/ProfilePhoto'
+import { store } from '~/lib/store'
 import { getFollowersCount, getFollowingsCount, getUserByUsername } from '~/services/index'
-import { store } from '~/store'
 
 export const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
     const user = await getUserByUsername(params.username)

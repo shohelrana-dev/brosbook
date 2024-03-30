@@ -5,9 +5,9 @@ import PostList from '~/components/post/PostList'
 import PostsSkeleton from '~/components/skeletons/PostsSkeleton'
 import { ErrorResponse, ListResponse } from '~/interfaces/index.interfaces'
 import { Post } from '~/interfaces/posts.interfaces'
+import { store } from '~/lib/store'
+import { isServer } from '~/lib/utils'
 import { postsApi, useGetFeedPostsQuery } from '~/services/postsApi'
-import { store } from '~/store'
-import isServer from '~/utils/isServer'
 
 interface Props {
     initialPostsData?: ListResponse<Post>

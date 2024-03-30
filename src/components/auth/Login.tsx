@@ -8,11 +8,11 @@ import PasswordInput from '~/components/form/PasswordInput'
 import Button from '~/components/global/Button'
 import LoadingOverlay from '~/components/global/LoadingOverlay'
 import TextDivider from '~/components/global/TextDivider'
+import siteMetadata from '~/config/siteMetadata'
 import { useForm } from '~/hooks/useForm'
 import { CredentialsPayload } from '~/interfaces/auth.interfaces'
+import { extractErrors } from '~/lib/error'
 import { useLoginMutation, useLoginWithGoogleMutation } from '~/services/authApi'
-import { extractErrors } from '~/utils/error'
-import siteMetadata from '~/utils/siteMetadata'
 import GoogleLoginButton from '../global/GoogleLoginButton'
 
 export default function Login() {

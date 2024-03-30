@@ -6,11 +6,11 @@ import PostsSkeleton from '~/components/skeletons/PostsSkeleton'
 import { ListResponse } from '~/interfaces/index.interfaces'
 import { Post } from '~/interfaces/posts.interfaces'
 import { User } from '~/interfaces/user.interfaces'
+import { extractErrorMessage } from '~/lib/error'
+import { store } from '~/lib/store'
+import { isServer } from '~/lib/utils'
 import { postsApi, useGetPostsQuery } from '~/services/postsApi'
 import { usersApi } from '~/services/usersApi'
-import { store } from '~/store'
-import { extractErrorMessage } from '~/utils/error'
-import isServer from '~/utils/isServer'
 
 interface Props {
     initialPostsData?: ListResponse<Post>

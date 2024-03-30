@@ -4,9 +4,9 @@ import { RiLink as LinkIcon } from 'react-icons/ri'
 import { toast } from 'sonner'
 import IconButton from '~/components/global/IconButton'
 import Tooltip from '~/components/global/Tooltip'
+import siteMetadata from '~/config/siteMetadata'
 import { User } from '~/interfaces/user.interfaces'
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '~/lib/nextui'
-import siteMetadata from '~/utils/siteMetadata'
 
 export default function ExtraOptions({ user }: { user: User }) {
     function handleCopyLink() {

@@ -15,9 +15,9 @@ import { ListResponse } from '~/interfaces/index.interfaces'
 import { Post } from '~/interfaces/posts.interfaces'
 import { User } from '~/interfaces/user.interfaces'
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '~/lib/nextui'
+import { AppDispatch } from '~/lib/store'
 import { postsApi, useDeletePostMutation } from '~/services/postsApi'
 import { useFollowMutation, useUnfollowMutation } from '~/services/usersApi'
-import { AppDispatch } from '~/store'
 
 interface Props {
     post: Post

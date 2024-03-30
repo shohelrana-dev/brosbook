@@ -1,7 +1,7 @@
 'use client'
 import { createPortal } from 'react-dom'
 import { BarLoader } from 'react-spinners'
-import isServer from '~/utils/isServer'
+import { isServer } from '~/lib/utils'
 
 export default function PageLoader() {
     if (isServer) return null

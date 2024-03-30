@@ -12,8 +12,8 @@ import Loader from '~/components/global/Loader'
 import useMediaQuery from '~/hooks/useMediaQuery'
 import useSession from '~/hooks/useSession'
 import { User } from '~/interfaces/user.interfaces'
+import { extractErrorMessage } from '~/lib/error'
 import { useGetSuggestedUsersQuery } from '~/services/usersApi'
-import { extractErrorMessage } from '~/utils/error'
 
 export default function SlidesSuggestions() {
     const { isLoggedIn } = useSession()

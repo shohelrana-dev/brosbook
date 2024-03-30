@@ -1,8 +1,8 @@
 import axios from 'axios'
 import { cookies } from 'next/headers'
 import { getCookie } from 'tiny-cookie'
-import { SERVER_API_URL } from './constants'
-import isServer from './isServer'
+import { SERVER_API_URL } from '~/config/constants'
+import { isServer } from './utils'
 
 const accessToken = isServer ? '' : getCookie('accessToken')
 

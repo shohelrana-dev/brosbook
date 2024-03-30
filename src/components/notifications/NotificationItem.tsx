@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Avatar from '~/components/global/Avatar'
 import { Notification, NotificationTypes } from '~/interfaces/index.interfaces'
-import timeAgo from '~/utils/timeAgo'
+import timeAgo from '~/lib/timeAgo'
 
 interface Props {
     notification: Notification

@@ -1,7 +1,7 @@
 'use client'
 import { usePathname } from 'next/navigation'
 import { ReactNode } from 'react'
-import cn from '~/utils/cn'
+import { cn } from '~/lib/utils'
 
 interface Props {
     children: ReactNode

@@ -6,8 +6,8 @@ import Transition from '~/components/global/Transition'
 import UserItem from '~/components/global/UserItem'
 import UsersSkeleton from '~/components/skeletons/UsersSkeleton'
 import { User } from '~/interfaces/user.interfaces'
+import { extractErrorMessage } from '~/lib/error'
 import { useGetFollowingsQuery, useGetUserByUsernameQuery } from '~/services/usersApi'
-import { extractErrorMessage } from '~/utils/error'
 
 interface Props {
     params: { username: string }

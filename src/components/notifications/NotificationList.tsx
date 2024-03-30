@@ -6,8 +6,8 @@ import Transition from '~/components/global/Transition'
 import NotificationsSkeleton from '~/components/skeletons/NotificationsSkeleton'
 import useSession from '~/hooks/useSession'
 import { Notification } from '~/interfaces/index.interfaces'
+import { extractErrorMessage } from '~/lib/error'
 import { useGetNotificationsQuery, useReadAllNotificationMutation } from '~/services/notificationsApi'
-import { extractErrorMessage } from '~/utils/error'
 import NotificationItem from './NotificationItem'
 
 type Props = { skeletonCount?: number }

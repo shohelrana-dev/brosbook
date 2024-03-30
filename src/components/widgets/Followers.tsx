@@ -6,8 +6,8 @@ import UserItem from '~/components/global/UserItem'
 import UsersSkeleton from '~/components/skeletons/UsersSkeleton'
 import WidgetLayout from '~/components/widgets/WidgetLayout'
 import useSession from '~/hooks/useSession'
+import { extractErrorMessage } from '~/lib/error'
 import { useGetFollowersQuery } from '~/services/usersApi'
-import { extractErrorMessage } from '~/utils/error'
 
 export default function Followers() {
     const { user } = useSession()

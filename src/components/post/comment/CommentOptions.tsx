@@ -6,6 +6,7 @@ import { useConfirmAlert } from 'react-use-confirm-alert'
 import { toast } from 'sonner'
 import IconButton from '~/components/global/IconButton'
 import Tooltip from '~/components/global/Tooltip'
+import siteMetadata from '~/config/siteMetadata'
 import useSession from '~/hooks/useSession'
 import useUnauthorizedAlert from '~/hooks/useUnauthorzedAlert'
 import { Comment } from '~/interfaces/posts.interfaces'
@@ -13,7 +14,6 @@ import { User } from '~/interfaces/user.interfaces'
 import { Dropdown, DropdownItem, DropdownMenu, PopoverTrigger } from '~/lib/nextui'
 import { useDeleteCommentMutation } from '~/services/commentsApi'
 import { useFollowMutation, useUnfollowMutation } from '~/services/usersApi'
-import siteMetadata from '~/utils/siteMetadata'
 
 interface Props {
     isCurrentUserAuthor: boolean

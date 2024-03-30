@@ -8,9 +8,9 @@ import MessageItem from '~/components/messages/MessageBox/MessageItem'
 import ChatSkeleton from '~/components/skeletons/ChatSkeleton'
 import useSession from '~/hooks/useSession'
 import { Message } from '~/interfaces/conversation.interfaces'
+import { extractErrorMessage } from '~/lib/error'
 import { useGetConversationByIdQuery } from '~/services/conversationsApi'
 import { useGetMessagesQuery, useSeenMessagesMutation } from '~/services/messagesApi'
-import { extractErrorMessage } from '~/utils/error'
 
 export default function MessageList() {
     //hooks

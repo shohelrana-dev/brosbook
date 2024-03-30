@@ -1,7 +1,6 @@
 import { forwardRef } from 'react'
 import { Input, InputProps, Textarea, TextAreaProps } from '~/lib/nextui'
-import cn from '~/utils/cn'
-import ucfirst from '~/utils/ucfirst'
+import { cn, ucfirst } from '~/lib/utils'
 
 interface Props {
     error?: string

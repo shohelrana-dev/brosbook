@@ -1,6 +1,6 @@
 import { MdReportGmailerrorred as ErrorIcon } from 'react-icons/md'
 import { Input, InputProps } from '~/lib/nextui'
-import ucfirst from '~/utils/ucfirst'
+import { ucfirst } from '~/lib/utils'
 
 export interface AnimatedInputProps extends InputProps {
     error?: string

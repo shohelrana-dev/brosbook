@@ -6,7 +6,7 @@ import Avatar from '~/components/global/Avatar'
 import FollowButton from '~/components/global/FollowButton'
 import UserPopupCard from '~/components/global/UserPopupCard'
 import { User } from '~/interfaces/user.interfaces'
-import cn from '~/utils/cn'
+import { cn } from '~/lib/utils'
 
 interface Props extends ComponentProps<'div'> {
     user: User

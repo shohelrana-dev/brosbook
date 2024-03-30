@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Lightbox from '~/components/global/Lightbox'
 import Reactions from '~/components/messages/MessageBox/Reactions'
 import { Message } from '~/interfaces/conversation.interfaces'
-import cn from '~/utils/cn'
+import { cn } from '~/lib/utils'
 
 const classes = {
     textMessage: ({ isOwn, hasReaction }: { isOwn: boolean; hasReaction: boolean }) =>

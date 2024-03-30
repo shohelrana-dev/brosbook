@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link'
 import Button from '~/components/global/Button'
-import siteMetadata from '~/utils/siteMetadata'
+import siteMetadata from '~/config/siteMetadata'
 
 export default function NewUserMessage() {
     return (

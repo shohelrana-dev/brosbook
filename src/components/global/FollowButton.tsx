@@ -2,12 +2,12 @@
 import { useState } from 'react'
 import { useConfirmAlert } from 'react-use-confirm-alert'
 import Button from '~/components/global/Button'
+import siteMetadata from '~/config/siteMetadata'
 import useSession from '~/hooks/useSession'
 import useUnauthorizedAlert from '~/hooks/useUnauthorzedAlert'
 import { User } from '~/interfaces/user.interfaces'
 import { ButtonProps } from '~/lib/nextui'
 import { useFollowMutation, useUnfollowMutation } from '~/services/usersApi'
-import siteMetadata from '~/utils/siteMetadata'
 
 interface Props extends ButtonProps {
     user: User

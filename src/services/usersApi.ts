@@ -1,8 +1,8 @@
 import { toast } from 'sonner'
+import { MEDIA_PER_PAGE, SUGGESTIONS_PER_PAGE, USERS_PER_PAGE } from '~/config/constants'
 import { ListResponse, Media } from '~/interfaces/index.interfaces'
 import { User } from '~/interfaces/user.interfaces'
-import { MEDIA_PER_PAGE, SUGGESTIONS_PER_PAGE, USERS_PER_PAGE } from '~/utils/constants'
-import listQueryExtraDefinitions from '~/utils/listQueryExtraDefinitions'
+import listQueryExtraDefinitions from '~/lib/listQueryExtraDefinitions'
 import { baseApi } from './baseApi'
 
 export const usersApi = baseApi.injectEndpoints({

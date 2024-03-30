@@ -11,9 +11,9 @@ import {
 } from 'react-share'
 import IconButton from '~/components/global/IconButton'
 import Tooltip from '~/components/global/Tooltip'
+import siteMetadata from '~/config/siteMetadata'
 import { Post } from '~/interfaces/posts.interfaces'
 import { Popover, PopoverContent, PopoverTrigger } from '~/lib/nextui'
-import siteMetadata from '~/utils/siteMetadata'
 
 export default function PostShare({ post }: { post: Post }) {
     return (

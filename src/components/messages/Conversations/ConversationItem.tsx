@@ -6,8 +6,8 @@ import TextOverflow from 'react-text-overflow'
 import Avatar from '~/components/global/Avatar'
 import useSession from '~/hooks/useSession'
 import { Conversation } from '~/interfaces/conversation.interfaces'
-import cn from '~/utils/cn'
-import timeAgo from '~/utils/timeAgo'
+import timeAgo from '~/lib/timeAgo'
+import { cn } from '~/lib/utils'
 
 const classes = {
     card: ({ isActiveConversation }: { isActiveConversation: boolean }) =>

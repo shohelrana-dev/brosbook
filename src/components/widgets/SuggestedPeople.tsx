@@ -6,8 +6,8 @@ import UserItem from '~/components/global/UserItem'
 import UsersSkeleton from '~/components/skeletons/UsersSkeleton'
 import WidgetLayout from '~/components/widgets/WidgetLayout'
 import { User } from '~/interfaces/user.interfaces'
+import { extractErrorMessage } from '~/lib/error'
 import { useGetSuggestedUsersQuery } from '~/services/usersApi'
-import { extractErrorMessage } from '~/utils/error'
 
 export default function SuggestedPeople() {
     const suggestedUsersQuery = useGetSuggestedUsersQuery({ page: 1, limit: 6 })

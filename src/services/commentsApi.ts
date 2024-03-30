@@ -1,10 +1,10 @@
 import { toast } from 'sonner'
+import { COMMENTS_PER_PAGE } from '~/config/constants'
 import { ListResponse } from '~/interfaces/index.interfaces'
 import { Comment } from '~/interfaces/posts.interfaces'
+import listQueryExtraDefinitions from '~/lib/listQueryExtraDefinitions'
+import { RootState } from '~/lib/store'
 import { baseApi } from '~/services/baseApi'
-import { RootState } from '~/store'
-import { COMMENTS_PER_PAGE } from '~/utils/constants'
-import listQueryExtraDefinitions from '~/utils/listQueryExtraDefinitions'
 
 export const commentsApi = baseApi.injectEndpoints({
     endpoints: (build) => ({

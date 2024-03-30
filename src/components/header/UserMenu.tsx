@@ -4,10 +4,10 @@ import { RiUserSettingsFill as SettingIcon } from 'react-icons/ri'
 import { useConfirmAlert } from 'react-use-confirm-alert'
 import Avatar from '~/components/global/Avatar'
 import Tooltip from '~/components/global/Tooltip'
+import siteMetadata from '~/config/siteMetadata'
 import useSession from '~/hooks/useSession'
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '~/lib/nextui'
 import { useLazyLogoutQuery } from '~/services/authApi'
-import siteMetadata from '~/utils/siteMetadata'
 
 export default function UserMenu() {
     const { user } = useSession()

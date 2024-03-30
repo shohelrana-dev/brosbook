@@ -1,9 +1,9 @@
+import { MESSAGES_PER_PAGE } from '~/config/constants'
 import { Message, MessageType } from '~/interfaces/conversation.interfaces'
 import { ListResponse, Media } from '~/interfaces/index.interfaces'
+import listQueryExtraDefinitions from '~/lib/listQueryExtraDefinitions'
+import { RootState } from '~/lib/store'
 import { conversationsApi } from '~/services/conversationsApi'
-import { RootState } from '~/store'
-import { MESSAGES_PER_PAGE } from '~/utils/constants'
-import listQueryExtraDefinitions from '~/utils/listQueryExtraDefinitions'
 import { baseApi } from './baseApi'
 
 interface MessagePayload {

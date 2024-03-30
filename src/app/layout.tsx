@@ -6,10 +6,10 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import '~/assets/styles/main.css'
 import Preload from '~/components/global/Preload'
 import Header from '~/components/header/Header'
+import siteMetadata from '~/config/siteMetadata'
+import { getServerSession } from '~/lib/session'
+import { store } from '~/lib/store'
 import { userLoggedIn, userLoggedOut } from '~/slices/sessionSlice'
-import { store } from '~/store'
-import { getServerSession } from '~/utils/session'
-import siteMetadata from '~/utils/siteMetadata'
 import Providers from './providers'
 
 export const metadata: Metadata = {

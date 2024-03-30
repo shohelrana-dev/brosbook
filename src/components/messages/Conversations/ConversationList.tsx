@@ -5,8 +5,8 @@ import Transition from '~/components/global/Transition'
 import ConversationItem from '~/components/messages/Conversations/ConversationItem'
 import ConversationsSkeleton from '~/components/skeletons/ConversationsSkeleton'
 import { Conversation } from '~/interfaces/conversation.interfaces'
+import { extractErrorMessage } from '~/lib/error'
 import { useGetConversationsQuery } from '~/services/conversationsApi'
-import { extractErrorMessage } from '~/utils/error'
 
 export default function ConversationList() {
     const [page, setPage] = useState(1)

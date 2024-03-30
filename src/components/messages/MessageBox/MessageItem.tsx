@@ -7,8 +7,8 @@ import MessageContent from '~/components/messages/MessageBox/MessageContent'
 import ReactionsInput from '~/components/messages/MessageBox/ReactionsInput'
 import { Message } from '~/interfaces/conversation.interfaces'
 import { User } from '~/interfaces/user.interfaces'
-import cn from '~/utils/cn'
-import timeAgo from '~/utils/timeAgo'
+import timeAgo from '~/lib/timeAgo'
+import { cn } from '~/lib/utils'
 
 const classes = {
     row: ({ isOwn }: { isOwn: boolean }) =>

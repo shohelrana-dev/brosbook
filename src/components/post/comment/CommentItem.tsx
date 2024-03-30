@@ -5,12 +5,12 @@ import Avatar from '~/components/global/Avatar'
 import LikeButton from '~/components/post/LikeButton'
 import LikesCount from '~/components/post/LikesCount'
 import CommentOptions from '~/components/post/comment/CommentOptions'
+import siteMetadata from '~/config/siteMetadata'
 import useSession from '~/hooks/useSession'
 import useUnauthorizedAlert from '~/hooks/useUnauthorzedAlert'
 import { Comment, Post } from '~/interfaces/posts.interfaces'
+import timeAgo from '~/lib/timeAgo'
 import { useLikeCommentMutation, useUnlikeCommentMutation } from '~/services/commentsApi'
-import siteMetadata from '~/utils/siteMetadata'
-import timeAgo from '~/utils/timeAgo'
 
 interface Props {
     comment: Comment

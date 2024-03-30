@@ -11,8 +11,8 @@ import LoadingOverlay from '~/components/global/LoadingOverlay'
 import TextDivider from '~/components/global/TextDivider'
 import { useForm } from '~/hooks/useForm'
 import { SignupPayload } from '~/interfaces/auth.interfaces'
+import { extractErrors } from '~/lib/error'
 import { useLoginWithGoogleMutation, useSignupMutation } from '~/services/authApi'
-import { extractErrors } from '~/utils/error'
 
 export default function Signup() {
     //hooks

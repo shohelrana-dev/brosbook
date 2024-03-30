@@ -5,8 +5,8 @@ import { FiLock } from 'react-icons/fi'
 import AnimatedInput from '~/components/form/AnimatedInput'
 import Button from '~/components/global/Button'
 import { useForm } from '~/hooks/useForm'
+import { extractErrors } from '~/lib/error'
 import { useForgotPasswordMutation } from '~/services/authApi'
-import { extractErrors } from '~/utils/error'
 
 export default function ForgotPassword() {
     //hooks

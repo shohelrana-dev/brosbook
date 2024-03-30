@@ -1,9 +1,9 @@
 import { toast } from 'sonner'
+import { POSTS_PER_PAGE } from '~/config/constants'
 import { ListResponse } from '~/interfaces/index.interfaces'
 import { Post } from '~/interfaces/posts.interfaces'
+import listQueryExtraDefinitions from '~/lib/listQueryExtraDefinitions'
 import { baseApi } from '~/services/baseApi'
-import { POSTS_PER_PAGE } from '~/utils/constants'
-import listQueryExtraDefinitions from '~/utils/listQueryExtraDefinitions'
 
 export const postsApi = baseApi.injectEndpoints({
     endpoints: (build) => ({

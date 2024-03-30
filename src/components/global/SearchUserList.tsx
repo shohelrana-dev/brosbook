@@ -3,9 +3,9 @@ import { useDebounce } from 'use-debounce'
 import UserItem from '~/components/global/UserItem'
 import UsersSkeleton from '~/components/skeletons/UsersSkeleton'
 import { User } from '~/interfaces/user.interfaces'
+import { extractErrorMessage } from '~/lib/error'
+import { cn } from '~/lib/utils'
 import { useSearchUsersQuery } from '~/services/usersApi'
-import cn from '~/utils/cn'
-import { extractErrorMessage } from '~/utils/error'
 import Error from './Error'
 
 interface Props extends ComponentProps<'div'> {

@@ -10,10 +10,10 @@ import Transition from '~/components/global/Transition'
 import { useForm } from '~/hooks/useForm'
 import useSession from '~/hooks/useSession'
 import { ProfilePayload } from '~/interfaces/account.interfaces'
+import { extractErrors } from '~/lib/error'
 import { Radio, RadioGroup } from '~/lib/nextui'
 import { useUpdateProfileMutation } from '~/services/accountApi'
 import { useGetUserByIdQuery } from '~/services/usersApi'
-import { extractErrors } from '~/utils/error'
 
 export default function ProfileSettingsPage() {
     //hooks

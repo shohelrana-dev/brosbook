@@ -11,8 +11,8 @@ import PostOptions from '~/components/post/PostOptions'
 import CommentList from '~/components/post/comment/CommentList'
 import useCommentsVisibilty from '~/hooks/useCommentsVisibilty'
 import { Post } from '~/interfaces/posts.interfaces'
-import { nl2br } from '~/utils/nl2br'
-import timeAgo from '~/utils/timeAgo'
+import timeAgo from '~/lib/timeAgo'
+import { nl2br } from '~/lib/utils'
 
 interface Props {
     post: Post

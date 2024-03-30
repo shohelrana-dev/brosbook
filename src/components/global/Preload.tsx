@@ -3,12 +3,12 @@ import { usePathname } from 'next/navigation'
 import { useEffect, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { io } from 'socket.io-client'
+import siteMetadata from '~/config/siteMetadata'
 import useSession from '~/hooks/useSession'
 import useUnauthorizedAlert from '~/hooks/useUnauthorzedAlert'
 import { Session } from '~/interfaces/index.interfaces'
 import { userLoggedIn, userLoggedOut } from '~/slices/sessionSlice'
 import { removeSocket, setSocket } from '~/slices/socketSlice'
-import siteMetadata from '~/utils/siteMetadata'
 
 export default function Preload({ session }: { session: Session }) {
     const { user, isLoggedIn } = useSession()

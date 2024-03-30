@@ -1,7 +1,7 @@
+import { NOTIFICATIONS_PER_PAGE } from '~/config/constants'
 import { ListResponse, Notification } from '~/interfaces/index.interfaces'
-import { RootState } from '~/store'
-import { NOTIFICATIONS_PER_PAGE } from '~/utils/constants'
-import listQueryExtraDefinitions from '~/utils/listQueryExtraDefinitions'
+import listQueryExtraDefinitions from '~/lib/listQueryExtraDefinitions'
+import { RootState } from '~/lib/store'
 import { baseApi } from './baseApi'
 
 export const notificationsApi = baseApi.injectEndpoints({

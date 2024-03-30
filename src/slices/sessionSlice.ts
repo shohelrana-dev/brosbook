@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { useSelector } from 'react-redux'
 import { User } from '~/interfaces/user.interfaces'
-import { RootState } from '~/store'
+import { RootState } from '~/lib/store'
 
 interface SessionState {
     isLoggedIn: boolean

@@ -6,8 +6,8 @@ import Transition from '~/components/global/Transition'
 import UserItem from '~/components/global/UserItem'
 import UsersSkeleton from '~/components/skeletons/UsersSkeleton'
 import useSession from '~/hooks/useSession'
+import { extractErrorMessage } from '~/lib/error'
 import { useGetSuggestedUsersQuery } from '~/services/usersApi'
-import { extractErrorMessage } from '~/utils/error'
 
 export default function SuggestionList() {
     //hooks

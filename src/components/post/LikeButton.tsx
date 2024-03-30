@@ -1,7 +1,7 @@
 import { MouseEvent } from 'react'
 import IconButton from '~/components/global/IconButton'
 import Tooltip from '~/components/global/Tooltip'
-import cn from '~/utils/cn'
+import { cn } from '~/lib/utils'
 
 interface Props {
     isViewerLiked: boolean

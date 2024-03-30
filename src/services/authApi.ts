@@ -6,9 +6,9 @@ import {
     SignupPayload,
 } from '~/interfaces/auth.interfaces'
 import { User } from '~/interfaces/user.interfaces'
+import { clearSession, setSession } from '~/lib/session'
 import { baseApi } from '~/services/baseApi'
 import { userLoggedIn, userLoggedOut } from '~/slices/sessionSlice'
-import { clearSession, setSession } from '~/utils/session'
 
 export const authApi = baseApi.injectEndpoints({
     endpoints: (build) => ({

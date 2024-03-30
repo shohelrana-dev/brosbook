@@ -7,8 +7,8 @@ import Error from '~/components/global/Error'
 import Lightbox from '~/components/global/Lightbox'
 import Loader from '~/components/global/Loader'
 import Transition from '~/components/global/Transition'
+import { extractErrorMessage } from '~/lib/error'
 import { useGetMediaListQuery, useGetUserByUsernameQuery } from '~/services/usersApi'
-import { extractErrorMessage } from '~/utils/error'
 
 interface Props {
     params: { username: string }

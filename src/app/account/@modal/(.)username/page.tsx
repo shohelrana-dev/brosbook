@@ -9,8 +9,8 @@ import Button from '~/components/global/Button'
 import { useForm } from '~/hooks/useForm'
 import useSession from '~/hooks/useSession'
 import { ChangeUsernamePayload } from '~/interfaces/account.interfaces'
+import { extractErrors } from '~/lib/error'
 import { useChangeUsernameMutation } from '~/services/accountApi'
-import { extractErrors } from '~/utils/error'
 
 export default function ChangeUsernameModal() {
     const { user } = useSession()

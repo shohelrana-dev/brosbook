@@ -6,8 +6,8 @@ import { useEffect } from 'react'
 import mailImage from '~/assets/images/mail-with-value.png'
 import Button from '~/components/global/Button'
 import Loader from '~/components/global/Loader'
+import siteMetadata from '~/config/siteMetadata'
 import { useResendVerificationLinkMutation } from '~/services/authApi'
-import siteMetadata from '~/utils/siteMetadata'
 
 export default function RequiredPage() {
     const router = useRouter()

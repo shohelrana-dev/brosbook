@@ -1,7 +1,7 @@
 import { ListResponse } from '~/interfaces/index.interfaces'
 import { Post } from '~/interfaces/posts.interfaces'
 import { User } from '~/interfaces/user.interfaces'
-import { http } from '~/utils/axiosInstance'
+import { http } from '~/lib/axiosInstance'
 
 export async function getCurrentUser() {
     return (await http.get<User>(`/users/me`)).data

@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import siteMetadata from '~/config/siteMetadata'
 import { getPostById } from '~/services/index'
-import siteMetadata from '~/utils/siteMetadata'
 import SinglePostPage from './SinglePostPage'
 
 export const generateMetadata = async ({ params }: Props): Promise<Metadata> => {

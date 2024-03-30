@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { getCookie } from 'tiny-cookie'
+import { clearSession, updateSession } from '~/lib/session'
 import { userLoggedOut } from '~/slices/sessionSlice'
-import { clearSession, updateSession } from '~/utils/session'
 
 const BASE_URL = process.env.NEXT_PUBLIC_SERVER_API_URL
 

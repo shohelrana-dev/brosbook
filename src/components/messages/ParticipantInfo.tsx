@@ -9,12 +9,12 @@ import Error from '~/components/global/Error'
 import Lightbox from '~/components/global/Lightbox'
 import Loader from '~/components/global/Loader'
 import Transition from '~/components/global/Transition'
+import { extractErrorMessage } from '~/lib/error'
+import { cn } from '~/lib/utils'
 import {
     useGetConversationByIdQuery,
     useGetConversationMediaListQuery,
 } from '~/services/conversationsApi'
-import cn from '~/utils/cn'
-import { extractErrorMessage } from '~/utils/error'
 
 const classes = {
     card: `card p-5 mb-3`,

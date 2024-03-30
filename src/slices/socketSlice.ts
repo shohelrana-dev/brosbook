@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { useSelector } from 'react-redux'
 import { Socket } from 'socket.io-client'
-import { RootState } from '~/store'
+import { RootState } from '~/lib/store'
 
 const initialState: { socket: Socket | null } = { socket: null }
 
