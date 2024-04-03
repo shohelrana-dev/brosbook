@@ -123,6 +123,7 @@ export default function CreatePostForm() {
                             onValueChange={setMessageText}
                             value={messageText}
                             autoFocus
+                            classNames={{ input: 'min-h-24' }}
                         />
                         <input
                             ref={inputRef}
