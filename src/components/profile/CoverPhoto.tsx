@@ -99,7 +99,7 @@ export default function CoverPhoto({ user }: Props) {
                 <CameraIcon fontSize={25} />
             </IconButton>
 
-            <Modal open={!!selectedFile} toggle={removeSelectedFile} className='max-w-screen-sm'>
+            <Modal open={!!selectedFile} toggle={removeSelectedFile} width={650}>
                 <>
                     <h3 className='text-xl font-medium text-gray-900 text-center'>Choose cover photo</h3>
                     {selectedFile ? (

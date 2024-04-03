@@ -68,7 +68,7 @@ export default function ProfilePhoto({ user }: Props) {
                 <CameraIcon fontSize={20} />
             </IconButton>
 
-            <Modal open={!!selectedFile} toggle={removeSelectedFile} className='max-w-screen-sm'>
+            <Modal open={!!selectedFile} toggle={removeSelectedFile} width={650}>
                 <>
                     <div className='text-center mb-3 max-w-[450px] m-auto'>
                         <h4 className='text-2xl font-medium mb-2 text-gray-900'>Looking good!</h4>

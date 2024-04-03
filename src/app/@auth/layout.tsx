@@ -14,7 +14,8 @@ export default function AuthModalLayout({ children }: { children: ReactNode }) {
         <Modal
             open={pathname.includes('/auth/login') || pathname.includes('/auth/signup')}
             hideIcon
-            className='p-[1px] max-w-[420px]'
+            className='p-[1px]'
+            width={420}
             onClose={router.back}
             wrapperClassName='overflow-y-auto'
         >

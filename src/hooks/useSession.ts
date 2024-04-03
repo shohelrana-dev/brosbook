@@ -1,4 +1,4 @@
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import { useSessionState } from '~/slices/sessionSlice'
 
@@ -11,6 +11,7 @@ type useSessionOptions = {
 export default function useSession(options?: useSessionOptions) {
     const sessionState = useSessionState()
     const pathname = usePathname()
+    const router = useRouter()
 
     const { onLogout, onLogin, require } = options || {}
     const { isLoggedIn, isChecked } = sessionState
@@ -26,10 +27,10 @@ export default function useSession(options?: useSessionOptions) {
             }
 
             if (require && !isLoggedIn) {
-                window.location.href = `/auth/login?redirect_to=${pathname}`
+                location.href = `/auth/login?redirect_to=${pathname}`
             }
         }
-    }, [isChecked, isLoggedIn, require, onLogin, onLogout, pathname])
+    }, [isChecked, isLoggedIn, require, onLogin, onLogout, pathname, router])
 
     return sessionState
 }

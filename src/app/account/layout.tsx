@@ -19,7 +19,7 @@ interface Props {
 }
 
 export default function AccountLayout({ children, modal }: Props) {
-    const { user, isLoggedIn } = useSession()
+    const { user, isLoggedIn } = useSession({ require: true })
 
     useEffect(() => {
         document.title = 'Your account'
